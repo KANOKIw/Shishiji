@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="【世田谷学園】2024年度 | 獅子児祭">
+        <meta property="og:description" content="...2024年度も開催します的なこと">
+        <meta property="og:site_name" content="KANOKIw">
+        <meta property="og:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta property="og:locale" content="ja">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shishijifes">
+        <meta name="twitter:creator" content="@KUMANKENw">
+        <meta name="twitter:title" content="【世田谷学園】2024年度 | 獅子児祭">
+        <meta name="twitter:description" content="...2024年度も開催します的なこと">
+        <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta name="theme-color" content="#ffffff">
+        <title>【世田谷学園】2024年度 | 獅子児祭</title>
+        <link rel="icon" href="/src/resources/img/favicon.ico">
+        <link rel="stylesheet" href="/src/main/shishijimap.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/src/main/propaties.js"></script>
+        <script src="/src/main/create.js"></script>
+        <script src="/src/main/touch.js"></script>
+        <script src="/src/main/mouse.js"></script>
+    </head>
+    <body>
+        <div id="app-mount">
+            <main>
+                <p id="w"></p>
+                <div id="setagaku-map">
+                    <img src="/src/resources/img/logo.png">
+                </div>
+            </main>
+        </div>
+        <script>
+            try{
+            var floor_1 = new ShishijiMap(document.getElementById("setagaku-map"), "/src/resources/img/machida.png");
+            floor_1.create();}
+            catch(e){document.getElementById("w").innerHTML += e}
+        </script>
+    </body>
+</html>
