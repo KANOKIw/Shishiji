@@ -27,7 +27,6 @@ body{
     width: auto;
     height: auto;
     position: absolute;
-    transition: all 0.05s linear;
 }
 
 img{

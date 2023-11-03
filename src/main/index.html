@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        <meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport"></meta>
         <meta property="og:type" content="website">
         <meta property="og:title" content="【世田谷学園】2024年度 | 獅子児祭">
         <meta property="og:description" content="...2024年度も開催します的なこと">
@@ -20,25 +21,23 @@
         <link rel="icon" href="/src/resources/img/favicon.ico">
         <link rel="stylesheet" href="/src/main/shishijimap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="/src/main/propaties.js"></script>
-        <script src="/src/main/create.js"></script>
-        <script src="/src/main/touch.js"></script>
-        <script src="/src/main/mouse.js"></script>
+        <script src="/src/assets/utils.js"></script>
+        <script src="/src/assets/aboutcanvas.js"></script>
+        <script src="/src/assets/globals.v.js"></script>
     </head>
     <body>
         <div id="app-mount">
             <main>
-                <p id="w"></p>
-                <div id="setagaku-map">
-                    <img src="/src/resources/img/logo.png">
-                </div>
+                <canvas id="shishiji-canvas"><!--
+
+                --></canvas>
             </main>
         </div>
         <script>
-            try{
-            var floor_1 = new ShishijiMap(document.getElementById("setagaku-map"), "/src/resources/img/machida.png");
-            floor_1.create();}
-            catch(e){document.getElementById("w").innerHTML += e}
+            /*var floor_1 = new ShishijiMap(document.getElementById("setagaku-map"), "/src/resources/img/machida.png");
+            floor_1.create();*/
         </script>
+        <script src="/src/assets/canvainteract.js"></script>
+        <script src="/src/assets/main.js"></script>
     </body>
 </html>

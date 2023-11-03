@@ -11,8 +11,11 @@ class Random {
      */
     public nextInt(origin?: number, bound?: number): number{
         if (origin === undefined || bound === undefined){
-            const num = Math.random();
-            return num > 0.5 ? 1 : 0;
+            if (origin != undefined) {bound = origin; origin = 0;}
+            else{
+                const num = Math.random();
+                return num > 0.5 ? 1 : 0;
+            }
         }
         return Math.floor(Math.random() * (bound - origin + 1)) + origin;
     }
