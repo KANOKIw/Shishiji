@@ -55,5 +55,5 @@ def transparent(image):
     return image
 
 
-d = divide("./src/resources/img/machida.png", "./src/resources/map_divided/machida", 50, 50, cleardir=True)
+d = divide("./src/resources/img/dokoka.png", "./src/resources/map_divided/dokoka", 100, 100, cleardir=True)
 print(d)
