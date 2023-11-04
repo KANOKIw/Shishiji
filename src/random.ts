@@ -1,5 +1,6 @@
 import crypto from "crypto";
 
+
 class Random {
     /**
      * Returns a pseudorandomly chosen int value between the specified origin (inclusive) and the specified bound (inclusive).

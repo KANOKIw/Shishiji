@@ -3,10 +3,12 @@ interface Position {
     1: number | null,
 }
 
+
 interface Moved {
     left: number,
     top: number,
 }
+
 
 interface Coordinate {
     x: number,

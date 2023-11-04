@@ -6,5 +6,5 @@ const backcanvas = document.createElement("canvas");
 const bctx = backcanvas.getContext("2d");
 
 var zoomPropaties = {
-    scroll: 1.2,
+    scroll: 1.1,
 };

@@ -10,6 +10,7 @@ function getMiddlePos(touches: TouchList): Position{
     return [av_x, av_y];
 }
 
+
 function getTouchesDistance(touches: TouchList): number{
     if (touches.length == 1) return 0;
     var amx = 0;
@@ -27,6 +28,7 @@ function getTouchesDistance(touches: TouchList): number{
     }
     return am/touches.length;
 }
+
 
 function moveMap(mapElement: HTMLElement, moved: Moved): void{
     var left = Number(mapElement.style.left.replace("px", ""));
@@ -64,6 +66,7 @@ function onTouchMove(event: TouchEvent, elm: HTMLElement): void{
     }
     lastTouchPos = movedTo;
 }
+
 
 function onTouchLeave(event: TouchEvent, elm: HTMLElement): void{
     lastTouchPos = [null, null];
