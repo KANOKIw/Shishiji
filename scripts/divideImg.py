@@ -39,14 +39,13 @@ def divide(
     image.close()
     return det
 
-def transparent(image):
-    image = image.convert('RGBA')
+def transparent(image: Image.Image) -> Image.Image:
+    image = image.convert("RGBA")
     data = image.getdata()
     new_data = []
 
     for item in data:
         if item[0] < 10 and item[1] < 10 and item[2] < 10:
-            # kuro
             new_data.append((0, 0, 0, 0))
         else:
             new_data.append(item)
