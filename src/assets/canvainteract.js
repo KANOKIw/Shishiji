@@ -1,12 +1,16 @@
 !function(){
     const map_wrapper = document.getElementById("shishiji-view");
     const canvas = document.getElementById("shishiji-canvas");
+    const ctx = canvas.getContext("2d");
+
     canvas.addEventListener("touchstart", function(e){
+        init_friction();
         set_cursorpos(e.touches);
     });
     canvas.addEventListener("mousedown", function(e){
+        init_friction();
         set_cursorpos(e);
-        canvas.addEventListener("mousemove", wp);
+        canvas.addEventListener("mousemove", mm);
         map_wrapper.style.cursor = "move";
     });
 
@@ -15,21 +19,64 @@
     });
 
     canvas.addEventListener("touchend", function(e){
+        DRAGGING = 0;
         pointerPosition = [ null, null ];
+        frict(pointerVelocity.x, pointerVelocity.y);
     });
-    canvas.addEventListener("mouseup", function(e){
-        pointerPosition = [ null, null ];
-        canvas.removeEventListener("mousemove", wp);
-        map_wrapper.style.cursor = "default";
-    });
+    canvas.addEventListener("mouseup", mouse_lost);
+    canvas.addEventListener("mouseleave", mouse_lost);
+    canvas.addEventListener("mouseout", mouse_lost);
 
-    canvas.addEventListener("wheel", wh);
-    canvas.addEventListener("mousewheel", wh);
-    function wh(e){
+    canvas.addEventListener("wheel", wheel_move);
+    canvas.addEventListener("mousewheel", wheel_move);
+
+    function wheel_move(e){
         canvasonScroll(e, this);
     }
-    function wp(e){
+    function mm(e){
+        DRAGGING = !0;
         onMouseMove(e, this, this.getContext("2d"));
+    }
+    function mouse_lost(e){
+        pointerPosition = [ null, null ];
+        canvas.removeEventListener("mousemove", mm);
+        map_wrapper.style.cursor = "default";
+        var vx = pointerVelocity.x,
+            vy = pointerVelocity.y;
+        if (DRAGGING){
+            DRAGGING = 0;
+            return frict(vx, vy);
+        }
+    }
+    function frict(vx0, vy0){
+        function i(n){
+            return n < 0 ? -1 : 1;
+        }
+        clearInterval(frictInterval);
+        var vx = vx0,
+            vy = vy0,
+            dxa = pointerVelocity.a*i(vx0),
+            dya = pointerVelocity.a*i(vy0);
+        if (isNaN(vx) || isNaN(vy)) return 0;
+        frictInterval = setInterval(function(){
+            var ag = {top: vy/1000, left: vx/1000};
+            if (ag.top*vy0 <= 0) ag.top = 0;
+            if (ag.left*vx0 <= 0) ag.left = 0; 
+            moveMap(canvas, ctx, ag);
+            vx += dxa;
+            vy += dya;
+            if (vx*vx0 <= 0 && vy*vy0 <= 0)
+                clearInterval(frictInterval);
+        }, 1);
+    }
+
+    document.body.addEventListener("mousemove", function(e){
+        cursorPosition = [e.clientX, e.clientY];
+    });
+
+    function init_friction(){
+        DRAGGING = 0;
+        clearInterval(frictInterval);
     }
 }();
 
@@ -74,11 +121,13 @@ function get_midest_touches(touches){
     var amx = 0;
     var amy = 0;
     var am = 0;
+
     for (var touch of Array.from(touches)){
         amx += touch.clientX;
         amy += touch.clientY;
     }
     var middle = {x: amx/touches.length, y: amy/touches.length};
+
     for (var touch of Array.from(touches)){
         var dis = Math.abs(Math.sqrt((touch.clientX - middle.x)**2 
             + (touch.clientY - middle.y)**2));
@@ -90,15 +139,20 @@ function get_midest_touches(touches){
 
 /**
  * 
+ * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {Array} movedTo
- *   {top: number, left: number}
+ * @param {{top: number, left: number}} moved
  */
 function moveMap(canvas, ctx, moved){
-    var x = canvasCoordinate[0]+moved.left;
-    var y = canvasCoordinate[1]+moved.top;
-    canvasCoordinate = [x, y];
-    zoomMap(canvas, ctx, 1, cursorPosition, canvasCoordinate);
+    var x = backcanvas.canvas.coords[0]-moved.left/zoomRatio;
+    var y = backcanvas.canvas.coords[1]-moved.top/zoomRatio;
+    backcanvas.canvas.coords = [x, y];
+    backcanvas.canvas.width = canvas.width/zoomRatio;
+    backcanvas.canvas.height = canvas.height/zoomRatio;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(backcanvas, ...backcanvas.canvas.coords,
+                              backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height,
+        );
 }
 
 
@@ -112,26 +166,30 @@ function moveMap(canvas, ctx, moved){
  * @param {[number, number]} pos
  */
 function zoomMap(canvas, ctx, ratio, origin, pos){
-    if (typeof pos == "undefined") pos = canvasCoordinate;
+    if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
+        || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+        ) return;
+    if (typeof pos == "undefined") pos = backcanvas.canvas.coords;
+
     zoomRatio *= ratio;
-    var delta_width = canvas.width*(zoomRatio - 1);
-    var delta_height = canvas.height*(zoomRatio - 1);
+
     if (origin.length == 2 && ratio != 1){
-        var deltax = origin[0] - pos[0];
-        var deltay = origin[1] - pos[1];
-        console.log(origin)
-        console.log(deltax, deltay)
-        if (ratio > 1)
-            canvasCoordinate = [pos[0]-deltax/ratio, pos[1]-deltay/ratio];
-        else 
-            canvasCoordinate = [pos[0]+deltax/ratio, pos[1]+deltay/ratio];
-        console.log(canvasCoordinate)
+        var transorigin = [
+            (origin[0]*(ratio - 1))/(zoomRatio),
+            (origin[1]*(ratio - 1))/(zoomRatio)
+        ];
+        backcanvas.canvas.coords = [pos[0]+transorigin[0], pos[1]+transorigin[1]];
     }
+    var i = 0;
+    backcanvas.canvas.width = canvas.width/zoomRatio;
+    backcanvas.canvas.height = canvas.height/zoomRatio;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(backcanvas, canvasCoordinate[0], canvasCoordinate[1],
-        backcanvas.width*zoomRatio, backcanvas.height*zoomRatio
+    ctx.drawImage(backcanvas,
+        ...backcanvas.canvas.coords,
+        backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height,
         );
 }
+
 
 /**
  * 
@@ -141,6 +199,7 @@ function zoomMap(canvas, ctx, ratio, origin, pos){
 function onTouchMove(event, canvas, ctx){
     var touches = event.touches;
     var pos = get_middlepos(touches);
+    
     if (!pointerPosition.some(i => i === null)){
         var map_move = {left: pos[0] - pointerPosition[0], top: pos[1] - pointerPosition[1]};
         moveMap(canvas, ctx, map_move);
@@ -157,7 +216,7 @@ function onTouchMove(event, canvas, ctx){
  * @param {HTMLCanvasElement} canvas 
  */
 function canvasonScroll(e, canvas){
-    var delta = zoomPropaties.scroll * 1;
+    var delta = MOVEPROPATY.scroll * 1;
     if (e.deltaY > 0)
         delta = 1/delta;
     zoomMap(canvas, canvas.getContext("2d"), delta, cursorPosition);

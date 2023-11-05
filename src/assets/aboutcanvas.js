@@ -26,7 +26,7 @@ function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src_forma
                     ctx.drawImage(img, 0, 0, tile_width, tile_height, dx, dy, dw, dh);
                     */
                     bctx.drawImage(img, 0, 0, tile_width, tile_height, dx, dy, dw, dh);
-                    ctx.drawImage(backcanvas, canvasCoordinate[0], canvasCoordinate[1]);
+                    ctx.drawImage(backcanvas, ...backcanvas.canvas.coords);
                 }
                 img.src = formatString(src_formatter, y, x);
             }(x, y, dx, dy, dw, dh);

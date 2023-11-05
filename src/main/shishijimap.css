@@ -32,3 +32,12 @@ body{
 img{
     transition: all 0.1s linear;
 }
+
+#noscript_help{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+}
