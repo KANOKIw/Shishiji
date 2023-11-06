@@ -1,3 +1,6 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "files.insertFinalNewline": true,
+    "editor.tabSize": 4,
+    "editor.lightbulb.enabled": false,
 }
