@@ -1,5 +1,5 @@
 node_modules/
 npm-debug.log
 .db/
-src/resources/map_divided/**/*.png
+resources/map_divided/**/*.png
 scripts/*.exe
