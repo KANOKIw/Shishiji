@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        <meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport"></meta>
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="【世田谷学園】2024年度 | 獅子児祭">
+        <meta property="og:description" content="...2024年度も開催します的なこと">
+        <meta property="og:site_name" content="KANOKIw">
+        <meta property="og:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta property="og:locale" content="ja">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shishijifes">
+        <meta name="twitter:creator" content="@KUMANKENw">
+        <meta name="twitter:title" content="【世田谷学園】2024年度 | 獅子児祭">
+        <meta name="twitter:description" content="...2024年度も開催します的なこと">
+        <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta name="theme-color" content="#ffffff">
+        <title>【世田谷学園】2024年度 | 獅子児祭</title>
+        <link rel="icon" href="/resources/img/favicon.ico">
+        <link rel="stylesheet" href="/src/main/shishijimap.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/src/assets/utils.js"></script>
+        <script src="/src/assets/canvasSetup.js"></script>
+        <script src="/src/assets/globals.v.js"></script>
+        <script src="/src/assets/speed.js"></script>
+        <script src="/src/assets/eventCalcu.js"></script>
+    </head>
+    <body>
+        <noscript>
+            <div id="noscript_help">
+                <a href="https://support.google.com/admanager/answer/12654?hl=ja" target="_blank">Javascriptを有効にして獅子児祭マップを表示します。</a>
+            </div>
+        </noscript>
+        <div id="app-mount">
+            <div id="log" style="position: absolute; font-size: 20px;"></div>
+            <div id="middle-pointer" style="position: absolute; width: 6px; height: 6px; background-color: red; border-radius: 50%;"></div>
+            <main>
+                <div id="shishiji-view">
+                    <canvas id="shishiji-canvas" style="background-color: azure;"></canvas>
+                </div>
+            </main>
+        </div>
+        <script src="/src/assets/canvasReact.js"></script>
+        <script src="/src/assets/main.js"></script>
+    </body>
+</html>
