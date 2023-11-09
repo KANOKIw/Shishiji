@@ -41,7 +41,7 @@ def divide(
 
 def transparent(image: Image.Image) -> Image.Image:
     image = image.convert("RGBA")
-    data = image.getdata()
+    data: list[int] = image.getdata()
     new_data = []
 
     for item in data:
@@ -54,5 +54,5 @@ def transparent(image: Image.Image) -> Image.Image:
     return image
 
 
-d = divide("./src/resources/img/dokoka.png", "./src/resources/map_divided/dokoka", 500, 500, cleardir=True)
+d = divide("./resources/img/dokoka.png", "./resources/map_divided/dokoka", 500, 500, cleardir=True)
 print(d)
