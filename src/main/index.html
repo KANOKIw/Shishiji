@@ -18,13 +18,10 @@
         <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
         <meta name="theme-color" content="#ffffff">
         <title>【世田谷学園】2024年度 | 獅子児祭</title>
-        <link rel="icon" href="/src/resources/img/favicon.ico">
+        <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="/src/main/shishijimap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="/src/assets/utils.js"></script>
-        <script src="/src/assets/aboutcanvas.js"></script>
-        <script src="/src/assets/globals.v.js"></script>
-        <script src="/src/assets/speed.js"></script>
+        <script src="/src/assets/builds/main.js"></script>
     </head>
     <body>
         <noscript>
@@ -33,14 +30,12 @@
             </div>
         </noscript>
         <div id="app-mount">
+            <div id="log" style="position: absolute; font-size: 5px;"></div>
             <main>
-                <h1 id="T"></h1>
                 <div id="shishiji-view">
                     <canvas id="shishiji-canvas" style="background-color: azure;"></canvas>
                 </div>
             </main>
         </div>
-        <script src="/src/assets/canvasReact.js"></script>
-        <script src="/src/assets/main.js"></script>
     </body>
 </html>

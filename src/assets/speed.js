@@ -1,4 +1,6 @@
 //@ts-check
+"use strict";
+
 
 !function(){
     !function(){
@@ -13,6 +15,7 @@
             var movementX = 0;
             var movementY = 0;
             var movement = 0;
+
             if (prevEvent && currentEvent){
                 var movementX = currentEvent.screenX - prevEvent.screenX;
                 var movementY = currentEvent.screenY - prevEvent.screenY;
@@ -21,15 +24,18 @@
             
             prevEvent = currentEvent;
             if (pointerVelocity.method == "MOUSE"){
-                pointerVelocity.x = 50*movementX;
-                pointerVelocity.y = 50*movementY;
-                pointerVelocity.v = 50*movement;
+                pointerVelocity.x = 100*movementX;
+                pointerVelocity.y = 100*movementY;
+                pointerVelocity.v = 100*movement;
             }
         }, 20);
-        return !0;
+        return 0;
     }();
     
     !function(){
+        var wait_o2 = 0;
+        /**@type {NodeJS.Timeout} */
+        var t;
         function g(t){
             var k = 0;
             var r = 0;
@@ -52,7 +58,16 @@
             var movementX = 0;
             var movementY = 0;
             var movement = 0;
-            if (prevEvent && currentEvent){
+
+            if (currentEvent && currentEvent.touches.length >= 2){
+                wait_o2 = 1;
+                if (t)
+                    clearTimeout(t);
+                t = setTimeout(()=>{
+                    wait_o2 = 0;
+                }, 250);
+            }
+            if (prevEvent && currentEvent && currentEvent.touches.length == 1 && wait_o2 === 0){
                 var p = g(currentEvent.touches),
                     j = g(prevEvent.touches);
                 movementX = p.x - j.x;
@@ -62,12 +77,12 @@
             
             prevEvent = currentEvent;
             if (pointerVelocity.method == "TOUCH"){
-                pointerVelocity.x = 50*movementX;
-                pointerVelocity.y = 50*movementY;
-                pointerVelocity.v = 50*movement;
+                pointerVelocity.x = 100*movementX;
+                pointerVelocity.y = 100*movementY;
+                pointerVelocity.v = 100*movement;
             }
         }, 20);
-        return !0;
+        return 0;
     }();
-    return !0;
+    return 0;
 }();
