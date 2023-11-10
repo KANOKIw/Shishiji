@@ -98,6 +98,7 @@ function setPrevTouches(touches){
             x: t.clientX,
             y: t.clientY
         });
+        prevTouchINFO.real = touches;
     }
 }
 

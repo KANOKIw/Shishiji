@@ -397,7 +397,7 @@ function onTouchMove(event, canvas, ctx){
         /**@graph */
         const Fx = {
             previous: {
-                slope: (prevTouchINFO.touches[0].y - prevTouchINFO.touches[1].y) / (prevTouchINFO.touches[0].x - prevTouchINFO.touches[1].x),
+                slope: (prevTouchINFO.real[0].clientY - prevTouchINFO.real[1].clientY) / (prevTouchINFO.real[0].clientX - prevTouchINFO.real[1].clientX),
             },
             this: {
                 slope: (touches[0].clientY - touches[1].clientY) / (touches[0].clientX - touches[1].clientX),
@@ -413,12 +413,11 @@ function onTouchMove(event, canvas, ctx){
 
         previousTouchDistance.distance = distance;
 
-        if (Fx.previous.slope == Fx.this.slope || true /**@delete_this */){
+        if (Fx.previous.slope == Fx.this.slope){
             var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
             var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
 
             (D1 === 0 && D2 === 0 || D1+D2 == 0) ? D1 = D2 = 1 : 0;
-            _LOG(D1, D2)
 
             var R = D1 / (abs(D1) + abs(D2));
 
@@ -433,15 +432,25 @@ function onTouchMove(event, canvas, ctx){
             
             prevTouchINFO.middle = middle;
 
-            //#region 
-            //@ts-ignore
-            document.getElementById("middle-pointer").style.left = middle.x-3+"px";
-            //@ts-ignore
-            document.getElementById("middle-pointer").style.top = middle.y-3+"px";
-            //#endregion
+            
 
             //@ts-ignore
             zoomMapAssistingNegative(canvas, ctx, diffRatio, [ middle.x, middle.y ]);
+        } else {
+            const crossX = (
+                prevTouchINFO.real[0].clientY - touches[0].clientY
+                +touches[0].clientX * Fx.this.slope - prevTouchINFO.real[0].clientX * Fx.previous.slope
+                )
+                    /
+                (Fx.this.slope - Fx.previous.slope);
+            const crossY = (
+                Fx.this.slope * (crossX - touches[0].clientX) + touches[0].clientY
+            );
+            /**@type {Position} */
+            const crossPosition = [ crossX, crossY ];
+            
+            //@ts-ignore
+            zoomMapAssistingNegative(canvas, ctx, diffRatio, crossPosition);
         }
 
 
@@ -485,7 +494,9 @@ function onTouchMove(event, canvas, ctx){
             pastRotateMin = !0;
             backcanvas.canvas.rotation += rotation;
             const middle = getMiddlePosForZoom(touches);
-        }//_LOG("rotate: "+toDegrees(backcanvas.canvas.rotation));
+        }
+        
+        //_LOG("rotate: "+toDegrees(backcanvas.canvas.rotation));
 
         rotatedThisTime += rotation;
     

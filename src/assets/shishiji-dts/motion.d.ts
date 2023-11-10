@@ -26,6 +26,9 @@ interface Distance {
 interface touchINFO {
     touches: Coords[],
     middle: Coords,
+    real: TouchList,
+    jorl? : TouchEvent[],
+    pretend?: TouchType[],
 }
 
 
