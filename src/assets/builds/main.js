@@ -85,7 +85,6 @@
     var touchCD = 0;
     
     
-    
     "use strict";
     
     
@@ -121,7 +120,6 @@
         });
         return t/n.length;
     }
-    
     
     
     "use strict";
@@ -164,7 +162,6 @@
             window.scroll({ top: 0, behavior: "instant" });
         });
     }
-    
     
     
     
@@ -256,7 +253,6 @@
         }();
         return 0;
     }();
-    
     
     
     "use strict";
@@ -363,7 +359,6 @@
             )
         );
     }
-    
     
     window.addEventListener("load", function(e){
         
@@ -695,7 +690,7 @@
                 
                 const Fx = {
                     previous: {
-                        slope: (prevTouchINFO.touches[0].y - prevTouchINFO.touches[1].y) / (prevTouchINFO.touches[0].x - prevTouchINFO.touches[1].x),
+                        slope: (prevTouchINFO.real[0].clientY - prevTouchINFO.real[1].clientY) / (prevTouchINFO.real[0].clientX - prevTouchINFO.real[1].clientX),
                     },
                     this: {
                         slope: (touches[0].clientY - touches[1].clientY) / (touches[0].clientX - touches[1].clientX),
@@ -711,7 +706,7 @@
         
                 previousTouchDistance.distance = distance;
         
-                if (Fx.previous.slope == Fx.this.slope || true ){
+                if (Fx.previous.slope == Fx.this.slope){
                     var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
                     var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
         
@@ -731,16 +726,24 @@
                     prevTouchINFO.middle = middle;
         
                     
-                    
-                    document.getElementById("middle-pointer").style.left = middle.x-3+"px";
-                    
-                    document.getElementById("middle-pointer").style.top = middle.y-3+"px";
-                    
-        
-        _LOG(JSON.stringify(middle))
         
                     
                     zoomMapAssistingNegative(canvas, ctx, diffRatio, [ middle.x, middle.y ]);
+                } else {
+                    const crossX = (
+                        prevTouchINFO.real[0].clientY - touches[0].clientY
+                        +touches[0].clientX * Fx.this.slope - prevTouchINFO.real[0].clientX * Fx.previous.slope
+                        )
+                            /
+                        (Fx.this.slope - Fx.previous.slope);
+                    const crossY = (
+                        Fx.this.slope * (crossX - touches[0].clientX) + touches[0].clientY
+                    );
+                    
+                    const crossPosition = [ crossX, crossY ];
+                    
+                    
+                    zoomMapAssistingNegative(canvas, ctx, diffRatio, crossPosition);
                 }
         
         
@@ -783,6 +786,8 @@
                     backcanvas.canvas.rotation += rotation;
                     const middle = getMiddlePosForZoom(touches);
                 }
+                
+                
         
                 rotatedThisTime += rotation;
             
