@@ -7,6 +7,7 @@ from typing import Dict
 from PIL import Image
 
 
+
 def divide(
         src: str, out_path: str, wi: int, he: int, *,
         cleardir: bool=False
@@ -20,6 +21,7 @@ def divide(
 
     w = math.ceil(width / wi)
     h = math.ceil(height / he)
+
     tileW = wi
     tileH = he
 
@@ -38,6 +40,7 @@ def divide(
         json.dump({**det, "width": tileW, "height": tileH, "format": "tile_{y}_{x}"}, f, indent=4)
     image.close()
     return det
+
 
 def transparent(image: Image.Image) -> Image.Image:
     image = image.convert("RGBA")
