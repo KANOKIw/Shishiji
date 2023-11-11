@@ -2,29 +2,30 @@
 #include <fstream>
 #include <vector>
 #include <regex>
+#include <cstdio>
+#include <stdio.h>
+#include <windows.h>
 
 
 
 class Compiler {
 public:
     Compiler(const std::vector<std::string>& onLoads, const std::vector<std::string>& scriptFiles, const std::string& outPath, bool deleteComments = false)
-        : onloads_(onLoads), scriptFiles_(scriptFiles), outPath_(outPath), deleteComments_(deleteComments)
+        : onLoads_(onLoads), scriptFiles_(scriptFiles), outPath_(outPath), deleteComments_(deleteComments)
         {}
 
 
     void compile()
     {
-        std::string script = concatFiles(scriptFiles_);
+        std::string script = mergeFiles(scriptFiles_);
 
-        for (const std::string& filepath : onloads_)
-        {
-            script += "window.addEventListener(\"load\", function(e){\n" + addIndent(readFile(filepath), 4) + "\n});\n";
+        for (const std::string& filepath : onLoads_){
+            script += "window.addEventListener(\"load\", function(e) {\n" + addIndent(loadFile(filepath), 4) + "\n});\n";
         }
 
-        script = "!function(){\n" + addIndent(script, 4) + "\n}();";
+        script = "!function() {\n" + addIndent(script, 4) + "\n}();";
 
-        if (deleteComments_)
-        {
+        if (deleteComments_){
             removeComments(script);
         }
 
@@ -32,47 +33,43 @@ public:
     }
 
 private:
-    std::vector<std::string> onloads_;
+    std::vector<std::string> onLoads_;
     std::vector<std::string> scriptFiles_;
     std::string outPath_;
     bool deleteComments_;
 
 
-    std::string readFile(const std::string& filename)
+    std::string loadFile(const std::string& filename)
     {
         std::ifstream file(filename);
 
-        if (!file.is_open())
-        {
+        if (!file.is_open()){
             std::cerr << "Couldn't open file: " << filename << std::endl;
             exit(EXIT_FAILURE);
-            return "";
         }
 
         return std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     }
 
 
-    std::string concatFiles(const std::vector<std::string>& files, const std::string space = "\n")
+    std::string mergeFiles(const std::vector<std::string>& files, const std::string& space = "\n")
     {
         std::string content;
 
-        for (const std::string& filepath : files)
-        {
-            content += readFile(filepath) + space;
+        for (const std::string& filepath : files){
+            content += loadFile(filepath) + space;
         }
 
         return content;
     }
 
 
-    std::string addIndent(std::string text, int size)
+    std::string addIndent(std::string text, const int& size)
     {
         std::string indent(size, ' ');
         size_t pos = 0;
 
-        while ((pos = text.find('\n', pos)) != std::string::npos)
-        {
+        while ((pos = text.find('\n', pos)) != std::string::npos){
             text.insert(pos + 1, indent);
             pos += (size + 1);
         }
@@ -97,10 +94,15 @@ private:
 
     void writeToFile(const std::string& filename, const std::string& content)
     {
-        static std::ofstream wfile;
+        std::ofstream wfile(filename, std::ios::out);
 
-        wfile.open(filename, std::ios::out);
-        wfile << content << std::endl;
+        if (wfile.is_open()){
+            wfile << content << std::endl;
+            wfile.close();
+        } else {
+            std::cerr << "Failed writing to file: " << filename << std::endl;
+            exit(EXIT_FAILURE);
+        }
     }
 };
 
@@ -123,7 +125,6 @@ int main()
         folder + "speed.js",
         folder + "eventCalcu.js",
     };
-
 
     Compiler compiler(onLoads, scriptFiles, outPath, true);
     compiler.compile();
