@@ -30,6 +30,7 @@ interface touchINFO {
     cross: NonnullPosition,
     jorl? : TouchEvent[],
     pretend?: TouchType[],
+    match?: TouchType[],
 }
 
 
