@@ -38,6 +38,7 @@ def main(source: str) -> None:
 
     label.config(text=coords_fotmat.format(None, None))
 
+
     def showCoords(event):
         x, y = event.x, event.y
 
