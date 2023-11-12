@@ -3,3 +3,4 @@ npm-debug.log
 .db/
 resources/map_divided/**/*.png
 scripts/*.exe
+src/assets/builds/*.js
