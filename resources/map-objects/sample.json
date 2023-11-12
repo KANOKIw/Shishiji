@@ -1,0 +1,34 @@
+{
+    "type": "volunteer",
+    "coordinate": {
+        "x": 803,
+        "y": 564
+    },
+    "title": "甘城なつき",
+    "core_grade": "4年生",
+    "article": "【企画紹介】<br>私が死ぬ前にここにデーモシス国歴史史上最悪の出来事である「人魔大戦」についてここに記そうと思う。\n私は今、死の危機に瀕しているのだ。\nこれを受け取ってほしい...",
+    "theme_color": "green",
+    "schedule": {
+        "10:00": "お客さん入場",
+        "12:00": "営業停止"
+    },
+    "crowd_status": {
+        "level": 40,
+        "estimated": 12
+    },
+    "imageURL": {
+        "icon": "https://cdn.discordapp.com/attachments/1080464875869970463/1173159179716931614/zi---w.png",
+        "header": "https://cdn.discordapp.com/attachments/1080464875869970463/1173248966528344074/daradara.png"
+    },
+    "font_family": "",
+    "custom_tr": [
+        {
+            "title": "ただいまのスペシャル武器",
+            "content": "弓"
+        },
+        {
+            "title": "そうかのき",
+            "content": "インフルエンザ"
+        }
+    ]
+}
