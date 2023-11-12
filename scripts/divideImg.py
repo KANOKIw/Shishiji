@@ -37,7 +37,10 @@ def divide(
 
     det = {"tile_width": wi, "tile_height": he, "xrange": j, "yrange": i}
     with open(f"{out_path}/data.json", "w") as f:
-        json.dump({**det, "width": tileW, "height": tileH, "format": "tile_{y}_{x}"}, f, indent=4)
+        json.dump({**det, "width": tileW, "height": tileH, "format": "tile_{y}_{x}"},
+                f,
+                indent=4
+        )
     image.close()
     return det
 

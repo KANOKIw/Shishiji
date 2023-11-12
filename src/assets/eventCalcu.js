@@ -91,14 +91,14 @@ function getThouchesTheta(touches){
  * 
  * @param {TouchList} touches 
  */
-function setPrevTouches(touches){
+function savePrevTouches(touches){
     prevTouchINFO.touches = [];
     for (var t of touches){
         prevTouchINFO.touches.push({
             x: t.clientX,
             y: t.clientY
         });
-        prevTouchINFO.real = touches;
+        prevTouchINFO.real = Array.from(touches);
     }
 }
 

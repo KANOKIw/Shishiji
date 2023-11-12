@@ -7,6 +7,7 @@ function zoomByWheel(event: WheelEvent, zoomTarget: HTMLElement, ta_p: HTMLEleme
     function i(p: number): number{
         return p < 0 ? -1 : 1;
     }
+    
     function _zoom(elm: HTMLElement, cursorPos?: Position): void{
         cursorPos ??= lastCursorPos;
         var pr = Number(zoomTarget.style.width.replace("%", "") || 100);
@@ -21,6 +22,7 @@ function zoomByWheel(event: WheelEvent, zoomTarget: HTMLElement, ta_p: HTMLEleme
         moveMap(ta_p, delta);
         zoomTarget.style.width = ne + "%";
     }
-    if (lastCursorPos[0] == null || lastCursorPos[1] == null) return;
-    //_zoom(zoomTarget, lastCursorPos);
+    if (lastCursorPos[0] == null || lastCursorPos[1] == null)
+        return;
+    _zoom(zoomTarget, lastCursorPos);
 }

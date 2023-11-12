@@ -11,7 +11,7 @@
  * @param {number} tile_width 
  * @param {number} tile_height 
  * @param {string} src_formatter 
- * @param {Function} callback
+ * @param {Function} [callback]
  * @returns {Promise<any>}
  *   callbacked promise
  */
@@ -25,30 +25,31 @@ async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src
                     dw = tile_height,
                     dx = dw*x,
                     dy = dh*y;
+
                 !function(x, y, dx, dy, dw, dh){
                     var img = new Image();
+
                     img.onload = function(){
                         //@ts-ignore
                         this.loaded = true;
-                        //@ts-ignore
                         bctx.drawImage(img, 0, 0, tile_width, tile_height, dx, dy, dw, dh);
-                        //@ts-ignore
                         ctx.drawImage(backcanvas, ...[ backcanvas.canvas.coords.x ,backcanvas.canvas.coords.y ]);
                         al.push(img);
                         if (al.length >= (xrange+1)*(yrange+1))
                             resolve("canvas loaded");
                     }
-                    //@ts-ignore
+
                     img.src = formatString(src_formatter, y, x);
+
                     return 0;
                 }(x, y, dx, dy, dw, dh);
             }
         }
     }).then(() => {
+        window.scroll({ top: 0, behavior: "instant" });
+        
         if (typeof callback === "function")
             callback(al);
-    }).then(() => {
-        window.scroll({ top: 0, behavior: "instant" });
     });
 }
 

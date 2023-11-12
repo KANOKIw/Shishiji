@@ -1,11 +1,11 @@
-interface Position {
+interface Position extends Array {
     0: number | null,
     1: number | null,
     map: Function,
     some: Function,
 }
 
-interface NonnullPosition {
+interface NonnullPosition extends Array {
     0: number,
     1: number,
     map: Function,
@@ -25,8 +25,9 @@ interface Distance {
 
 interface touchINFO {
     touches: Coords[],
-    middle: Coords,
-    real: TouchList,
+    middle: NonnullPosition,
+    real: Touch[],
+    cross: NonnullPosition,
     jorl? : TouchEvent[],
     pretend?: TouchType[],
 }

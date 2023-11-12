@@ -1,31 +1,39 @@
 function getMiddlePos(touches: TouchList): Position{
     var av_x = 0;
     var av_y = 0;
+    
     for (var t  of Array.from(touches)){
         av_x += t.clientX;
         av_y += t.clientY;
     }
+
     av_x /= touches.length;
     av_y /= touches.length;
+
     return [av_x, av_y];
 }
 
 
 function getTouchesDistance(touches: TouchList): number{
-    if (touches.length == 1) return 0;
+    if (touches.length == 1)
+        return 0;
     var amx = 0;
     var amy = 0;
     var am = 0;
+
     for (var touch of Array.from(touches)){
         amx += touch.clientX;
         amy += touch.clientY;
     }
+
     var middle: Coordinate = {x: amx/touches.length, y: amy/touches.length};
+
     for (var touch of Array.from(touches)){
         var dis = Math.abs(Math.sqrt((touch.clientX - middle.x)**2 
             + (touch.clientY - middle.y)**2));
         am += dis;
     }
+
     return am/touches.length;
 }
 
@@ -38,6 +46,7 @@ function moveMap(mapElement: HTMLElement, moved: Moved): void{
     var my = top + moved.top;
     var w = mapImg.clientWidth;
     var h = mapImg.clientHeight;
+
     if (!(
         mx >= 0 || mx+w <= mapElement.clientWidth 
         ))
@@ -58,8 +67,8 @@ function onTouchDown(event: TouchEvent, elm: HTMLElement): void{
 function onTouchMove(event: TouchEvent, elm: HTMLElement): void{
     var touches = event.touches;
     var movedTo = getMiddlePos(touches);
-    // NonNull' from onTouchDown()
     var map_move: Moved = {left: movedTo[0]! - lastTouchPos[0]!, top: movedTo[1]! - lastTouchPos[1]!};
+
     moveMap(elm, map_move);
     if (touches.length > 1){
         lastTouchesDis = getTouchesDistance(touches);

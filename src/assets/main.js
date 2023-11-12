@@ -2,6 +2,7 @@
 "use strict";
 
 
+
 function set_canvassize(){
     const canvas = document.getElementById("shishiji-canvas");
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -19,6 +20,7 @@ function set_canvassize(){
     const xrange = 3;
     const yrange = 1;
 
+
     set_canvassize();
     
     backcanvas.width = tile_width*(xrange+1);
@@ -28,7 +30,7 @@ function set_canvassize(){
         "/resources/map_divided/dokoka/tile_{0}_{1}.png", callback);
 
     function callback(){
-
+        
     }
     return 0;
 }();

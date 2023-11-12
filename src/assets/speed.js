@@ -2,10 +2,12 @@
 "use strict";
 
 
+
 !function(){
     !function(){
         var prevEvent,
             currentEvent;
+
         document.documentElement.addEventListener("mousemove", function(event){
             pointerVelocity.method = "MOUSE";
             currentEvent = event;
@@ -23,6 +25,7 @@
             }
             
             prevEvent = currentEvent;
+
             if (pointerVelocity.method == "MOUSE"){
                 pointerVelocity.x = 100*movementX;
                 pointerVelocity.y = 100*movementY;
@@ -36,6 +39,7 @@
         var wait_o2 = 0;
         /**@type {NodeJS.Timeout} */
         var t;
+
         function g(t){
             var k = 0;
             var r = 0;
@@ -47,8 +51,10 @@
             r /= t.length;
             return {x: k, y: r};
         }
+
         var prevEvent,
             currentEvent;
+
         document.documentElement.addEventListener("touchmove", function(event){
             pointerVelocity.method = "TOUCH";
             currentEvent = event;
@@ -59,6 +65,7 @@
             var movementY = 0;
             var movement = 0;
 
+
             if (currentEvent && currentEvent.touches.length >= 2){
                 wait_o2 = 1;
                 if (t)
@@ -67,6 +74,7 @@
                     wait_o2 = 0;
                 }, 250);
             }
+
             if (prevEvent && currentEvent && currentEvent.touches.length == 1 && wait_o2 === 0){
                 var p = g(currentEvent.touches),
                     j = g(prevEvent.touches);
@@ -76,6 +84,7 @@
             }
             
             prevEvent = currentEvent;
+
             if (pointerVelocity.method == "TOUCH"){
                 pointerVelocity.x = 100*movementX;
                 pointerVelocity.y = 100*movementY;

@@ -1,16 +1,22 @@
-interface Position {
+export interface Position {
     0: number | null,
     1: number | null,
 }
 
 
-interface Moved {
+export interface Moved {
     left: number,
     top: number,
 }
 
 
-interface Coordinate {
+export interface Coordinate {
     x: number,
     y: number,
 }
+
+
+type BestGame = {};
+
+
+declare const Minecraft: BestGame;

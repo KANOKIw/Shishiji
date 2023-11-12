@@ -28,10 +28,9 @@
             setTheta(e.touches);
     });
     canvas.addEventListener("mousedown", (e) => {
+        e.preventDefault();
         init_friction();
         set_cursorpos(e);
-        
-
 
         canvas.addEventListener("mousemove", mm);
         map_wrapper.style.cursor = "move";
@@ -65,15 +64,18 @@
 
 
     function wheel_move(e){
+        e.preventDefault();
         canvasonScroll(e, this);
     }
 
     function mm(e){
+        e.preventDefault();
         DRAGGING = !0;
         onMouseMove(e, this, this.getContext("2d"));
     }
 
     function mouse_lost(e){
+        e.preventDefault();
         pointerPosition = [ null, null ];
         canvas.removeEventListener("mousemove", mm);
         map_wrapper.style.cursor = "default";
@@ -118,7 +120,8 @@
 
 
     document.body.addEventListener("mousemove", function(e){
-        cursorPosition = [e.clientX, e.clientY];
+        e.preventDefault();
+        cursorPosition = [ e.clientX, e.clientY ];
     });
 
 
@@ -133,10 +136,12 @@
      */
     function initTouch(e){
         touchCD = 0;
+        zoomCD = 0;
         totalRotateThisTime = 0;
         rotatedThisTime = 0;
         prevTheta = -1;
         previousTouchDistance = { x: -1, y: -1, distance: -1 };
+        prevTouchINFO.real = [];
         if (e.touches.length < 2)
             pastRotateMin = false;
     }
@@ -214,8 +219,8 @@ function moveMap(canvas, ctx, moved){
  * @param {number} ratio 
  * @param {[number, number]} origin
  *   (cursorPosition)
- * @param {[number, number]} pos
- * @param {boolean} forceRatio 
+ * @param {[number, number]} [pos]
+ * @param {boolean} [forceRatio] 
  */
 function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
     if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
@@ -238,12 +243,17 @@ function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
                 (origin[i]*(ratio - 1))/(zoomRatio) + pos[i]
             );
         }
-        backcanvas.canvas.coords = { x: transorigin[0], y: transorigin[1] };
+        backcanvas.canvas.coords = {
+            x: transorigin[0],
+            y: transorigin[1]
+        };
     }
     backcanvas.canvas.width = canvas.width/zoomRatio; backcanvas.canvas.height = canvas.height/zoomRatio;
 
     _redraw(canvas, ctx, backcanvas,
-        backcanvas.canvas.coords.x, backcanvas.canvas.coords.y, backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height,
+        backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+        backcanvas.canvas.width, backcanvas.canvas.height,
+        0, 0, canvas.width, canvas.height,
     );
 }
 
@@ -261,6 +271,7 @@ function moveMap(canvas, ctx, ratio, origin, pos){
     if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
         || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
         ) return;
+
     if (pos === void 0)
         pos = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
 
@@ -273,20 +284,24 @@ function moveMap(canvas, ctx, ratio, origin, pos){
                 (origin[i]*(ratio - 1))/(zoomRatio) + pos[i]
             );
         }
-        backcanvas.canvas.coords = { x: transorigin[0], y: transorigin[1] };
+        backcanvas.canvas.coords = {
+            x: transorigin[0],
+            y: transorigin[1]
+        };
     }
     backcanvas.canvas.width = canvas.width/zoomRatio; backcanvas.canvas.height = canvas.height/zoomRatio;
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(backcanvas,
-        backcanvas.canvas.coords.x, backcanvas.canvas.coords.y, backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height,
+        backcanvas.canvas.coords.x, backcanvas.canvas.coords.y, backcanvas.canvas.width, backcanvas.canvas.height,
+        0, 0, canvas.width, canvas.height,
     );
 }
 
 
 /**
- * Safari doesn't work same as chrome, can't get empty of backcanvas.
- * Fill empty in main canvas when negative coords.
+ * iOS browser doesn't get empty of backcanvas.
+ * Fill empty in main canvas when caught negative coords.
  * 
  * USE:: `_redraw(canvas, ctx, backcanvas,
  *      backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
@@ -312,6 +327,7 @@ function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
     var transCoords;
     /**@type {number[]} */
     var args;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (sx < 0 || sy < 0){
@@ -328,7 +344,7 @@ function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
             dh - transCoords[1]*zoomRatio
         ];
     } else {
-        args = [sx, sy, sw, sh, dx, dy, dw, dh];
+        args = [ sx, sy, sw, sh, dx, dy, dw, dh ];
     }
 
     //@ts-ignore
@@ -340,31 +356,33 @@ function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
  * 
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {_Position} origin 
- * @param {number | undefined} absRotation 
+ * @param {NonnullPosition} origin 
+ * @param {number} [rotation] 
  */
-function rotateCanvas(canvas, ctx, origin, absRotation){
-    if (absRotation === void 0){
-        absRotation = backcanvas.canvas.rotation;
+function rotateCanvas(canvas, ctx, origin, rotation){
+    if (rotation === void 0){
+        rotation = backcanvas.canvas.rotation;
     }
-    // rotate to absRotation from 0
+    
+    /*var d = backcanvas.toDataURL();
+    var _img = new Image();
+    _img.src = d;
+    bctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
+    bctx.translate(origin[0] * zoomRatio, origin[1] * zoomRatio);
+    bctx.rotate(rotation);
+    bctx.translate(-origin[0] * zoomRatio, -origin[1] * zoomRatio);
+    
+    _img.onload = function(e){
+        bctx.drawImage(_img, 0, 0);
+    }*/
+
+    _redraw(canvas, ctx, backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+        backcanvas.canvas.width, backcanvas.canvas.height,
+        0, 0, canvas.width, canvas.height
+    );
+
+    backcanvas.canvas.rotation += rotation;
 }
-
-
-
-//#region 
-const log = document.getElementById("log");
-function LOG(...str){
-    if (log!=null)
-    log.innerHTML += str.join(" ")+"<br>";
-}
-function _LOG(...str){
-    if (log!=null)
-    log.innerHTML = str.join(" ")+"<br>";
-}
-
-window.onerror = (e, url, linenumber)=>{_LOG(e, url, linenumber)}
-//#endregion 
 
 
 
@@ -379,7 +397,8 @@ function onTouchMove(event, canvas, ctx){
     const pos = get_middlePos(touches);
     const prevp = pointerPosition;
 
-    const prevMiddle = prevTouchINFO.middle;
+    /**@type {NonnullPosition} */
+    var crossPos = [ -1, -1 ];
 
 
     pointerPosition = pos;
@@ -389,10 +408,12 @@ function onTouchMove(event, canvas, ctx){
         touchCD++;
         return;
     }
+    
 
-
-    if (touches.length >= 2 && prevTouchINFO.touches !== void 0 && prevTouchINFO.touches.length >= 2){
+    if (touches.length >= 2 && prevTouchINFO.real !== void 0 && prevTouchINFO.real.length >= 2){
         const abs = Math.abs;
+
+        zoomCD++;
 
         /**@graph */
         const Fx = {
@@ -413,50 +434,62 @@ function onTouchMove(event, canvas, ctx){
 
         previousTouchDistance.distance = distance;
 
+        //#region 
         if (Fx.previous.slope == Fx.this.slope){
             var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
             var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
 
-            (D1 === 0 && D2 === 0 || D1+D2 == 0) ? D1 = D2 = 1 : 0;
+            (D1 === 0 && D2 === 0 || D1 + D2 == 0) ? D1 = D2 = 1 : 0;
 
-            var R = D1 / (abs(D1) + abs(D2));
+            const R = D1 / (abs(D1) + abs(D2));
 
-            // ignore slope
-            var addD1x = abs(touches[0].clientX - touches[1].clientX) * R;
-            var addD1y = abs(touches[0].clientY - touches[1].clientY) * R;
+            const addD1x = abs(touches[0].clientX - touches[1].clientX) * R;
+            const addD1y = abs(touches[0].clientY - touches[1].clientY) * R;
 
-            var middle = {
-                x: touches[0].clientX + addD1x,
-                y: touches[0].clientY + addD1y,
-            };
+            /**@type {NonnullPosition} */
+            const middle = [
+                touches[0].clientX + addD1x,
+                touches[0].clientY + addD1y,
+            ];
             
             prevTouchINFO.middle = middle;
-
-            
-
-            //@ts-ignore
-            zoomMapAssistingNegative(canvas, ctx, diffRatio, [ middle.x, middle.y ]);
         } else {
             const crossX = (
-                prevTouchINFO.real[0].clientY - touches[0].clientY
-                +touches[0].clientX * Fx.this.slope - prevTouchINFO.real[0].clientX * Fx.previous.slope
+                    prevTouchINFO.real[0].clientX * Fx.previous.slope - touches[0].clientX * Fx.this.slope
+                    - prevTouchINFO.real[0].clientY + touches[0].clientY
                 )
                     /
-                (Fx.this.slope - Fx.previous.slope);
+                (Fx.previous.slope - Fx.this.slope);
             const crossY = (
                 Fx.this.slope * (crossX - touches[0].clientX) + touches[0].clientY
             );
-            /**@type {Position} */
-            const crossPosition = [ crossX, crossY ];
             
-            //@ts-ignore
-            zoomMapAssistingNegative(canvas, ctx, diffRatio, crossPosition);
+            crossPos = [ Math.ceil(crossX), Math.ceil(crossY) ];
+
+            if (!crossPos.some(t => { return isNaN(t) })) 0;
         }
+        //#endregion
 
 
-        /**
-         * rotates
-         */
+        //#region 
+        const x1d = prevTouchINFO.real[0].clientX * diffRatio;
+        const y1d = prevTouchINFO.real[0].clientY * diffRatio;
+
+        const diffx = touches[0].clientX - x1d;
+        const diffy = touches[0].clientY - y1d;
+
+
+        if (zoomCD > MOVEPROPATY.touch.zoomCD){
+            zoomMapAssistingNegative(canvas, ctx, diffRatio, [0, 0]);
+            moveMapAssistingNegative(canvas, ctx, {
+                top: diffy,
+                left: diffx
+            });
+        }
+        //#endregion
+
+
+        //#region 
         const PI = Math.PI;
         const theta = getThouchesTheta(event.touches);
         
@@ -492,38 +525,31 @@ function onTouchMove(event, canvas, ctx){
                 rotatedThisTime -= toRadians(MOVEPROPATY.touch.rotate.min);
             }
             pastRotateMin = !0;
-            backcanvas.canvas.rotation += rotation;
-            const middle = getMiddlePosForZoom(touches);
+            if (zoomCD > MOVEPROPATY.touch.zoomCD)
+                rotateCanvas(canvas, ctx, crossPos, Math.PI/4);
         }
         
-        //_LOG("rotate: "+toDegrees(backcanvas.canvas.rotation));
 
         rotatedThisTime += rotation;
-    
+        //#endregion
     } else {
         pastRotateMin = false;
         rotatedThisTime = 0;
         totalRotateThisTime = 0;
         prevTheta = -1;
+        zoomCD = 0;
+        prevTouchINFO.cross = [ -1, -1 ];
     }
 
 
-    if (!prevp.some(i => i === null)){
-        if (touches.length == 1){
-            //@ts-ignore
-            const map_move = { left: pos[0] - prevp[0], top: pos[1] - prevp[1] };
-            moveMapAssistingNegative(canvas, ctx, map_move);
-        } else {
-            if (prevMiddle !== void 0){
-                   /* moveMapAssistingNegative(canvas, ctx, {
-                        left: prevTouchINFO.middle.x - prevMiddle.x,
-                        top: prevTouchINFO.middle.y - prevMiddle.y,
-                    });*/
-            }
-        }
+    if (!prevp.some(t => t === null) && touches.length == 1){
+        //@ts-ignore
+        const map_move = { left: pos[0] - prevp[0], top: pos[1] - prevp[1] };
+        moveMapAssistingNegative(canvas, ctx, map_move);
     }
 
-    setPrevTouches(touches);
+    prevTouchINFO.cross = crossPos;
+    savePrevTouches(touches);
 }
 
 
@@ -549,7 +575,7 @@ function canvasonScroll(e, canvas){
  */
 function onMouseMove(e, canvas, ctx){
     /**@type {NonnullPosition} */
-    const pos = [e.clientX, e.clientY];
+    const pos = [ e.clientX, e.clientY ];
     //@ts-ignore
     const moved = { left: pos[0] - pointerPosition[0], top: pos[1] - pointerPosition[1] };
 

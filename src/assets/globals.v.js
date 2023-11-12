@@ -24,9 +24,9 @@ var zoomRatio = 1;
 /**
  * @type {BackCanvas} 
  * @readonly
- */
-//@ts-ignore
+ *@ts-ignore*/
 const backcanvas = document.createElement("canvas");
+/**@ts-ignore @type {CanvasRenderingContext2D} */
 const bctx = backcanvas.getContext("2d");
 
 
@@ -60,6 +60,7 @@ const MOVEPROPATY = {
          *   do by velocity
          */
         downCD: 1,
+        zoomCD: -1,
         rotate: {
             // degree
             min: 15,
@@ -119,3 +120,4 @@ var prevTheta = 0;
  * init on touch down
  */
 var touchCD = 0;
+var zoomCD = 0;
