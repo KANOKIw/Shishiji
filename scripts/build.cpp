@@ -8,19 +8,19 @@
 #include <windows.h>
 
 
-class Compiler {
+class Builder {
 public:
-    Compiler(const std::vector<std::string>& onLoads, const std::vector<std::string>& scriptFiles,
-                            const std::string& outPath, bool deleteComments = false)
+    Builder(const std::vector<std::string>& onLoads, const std::vector<std::string>& scriptFiles,
+                            const std::string& outPath, const bool& deleteComments = false)
         : onLoads_(onLoads), scriptFiles_(scriptFiles), outPath_(outPath), deleteComments_(deleteComments){}
 
 
-    void compile()
+    void build()
     {
-        std::string script = mergeFiles(scriptFiles_);
+        std::string script = mergeF(scriptFiles_);
 
         for (const std::string& filepath : onLoads_){
-            std::string _script = loadFile(filepath);
+            std::string _script = readF(filepath);
             addIndent(_script, indent_size);
             script += "window.addEventListener(\"load\", function(e) {\n" + _script + "\n});\n";
         }
@@ -29,10 +29,10 @@ public:
         script = "!function() {\n" + script + "\n}();";
 
         if (deleteComments_){
-            removeComments(script);
+            rmComments(script);
         }
 
-        writeToFile(outPath_, script);
+        wFile(outPath_, script);
     }
 
 private:
@@ -43,7 +43,7 @@ private:
     int indent_size = 4;
 
 
-    std::string loadFile(const std::string& filename)
+    std::string readF(const std::string& filename)
     {
         std::ifstream file(filename);
 
@@ -56,24 +56,24 @@ private:
     }
 
 
-    std::string mergeFiles(const std::vector<std::string>& files, const std::string& space = "\n")
+    std::string mergeF(const std::vector<std::string>& files, const std::string& space = "\n")
     {
         std::string content;
 
         for (const std::string& filepath : files){
-            content += loadFile(filepath) + space;
+            content += readF(filepath) + space;
         }
 
         return content;
     }
 
 
-    void addIndent(std::string& text, const int size)
+    void addIndent(std::string& text, const int& size)
     {
         std::string indent(size, ' ');
         size_t pos = 0;
 
-        while ((pos = text.find('\n', pos)) != std::string::npos){
+        while ((pos = text.find("\n", pos)) != std::string::npos){
             text.insert(pos + 1, indent);
             pos += (size + 1);
         }
@@ -82,7 +82,7 @@ private:
     }
 
 
-    void removeComments(std::string& jscode)
+    void rmComments(std::string& jscode)
     {
         static const std::regex ordinary("//[^\n]*");
         static const std::regex multi("/\\*.*?\\*/");
@@ -94,7 +94,7 @@ private:
     }
 
 
-    void writeToFile(const std::string& filename, const std::string& content)
+    void wFile(const std::string& filename, const std::string& content)
     {
         std::ofstream wfile(filename, std::ios::out);
 
@@ -127,8 +127,8 @@ int main()
         folder + "eventCalcu.js",
     };
 
-    Compiler compiler(onLoads, scriptFiles, outPath, false);
-    compiler.compile();
+    Builder builder(onLoads, scriptFiles, outPath, false);
+    builder.build();
 
     return 0;
 }
