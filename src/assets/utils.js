@@ -53,3 +53,75 @@ function avg(...n){
     });
     return t/n.length;
 }
+
+
+/**
+ * @param {NonnullPosition} backcanvasPos 
+ */
+function toCanvasPos(backcanvasPos){
+    var u = backcanvasPos.map(k => {
+
+    });
+}
+
+
+/**
+ * 
+ * @param {mapObject} elm 
+ * @returns {Coords}
+ */
+function getCoords(elm){
+    /**@ts-ignore @type {number[]} */
+    const r = elm.getAttribute("coords")?.split(" ").map(t => { return Number(t); });
+    return { x: r[0], y: r[1] };
+}
+
+
+/**
+ * 
+ * @param {string} str 
+ * @returns {string}
+ */
+function minecraft_formattingSystem(str){
+    var cl_count = 0;
+    var dec_count = 0;
+    
+    str = "<mcft-cl>§p" + str;
+
+    for (var pat in ColorList) {
+        var str_splited = str.split("\u00A7".concat(pat));
+        cl_count += str_splited.length - 1;
+        str = str_splited.join("<mcft-cl style=\"color: ".concat(ColorList[pat], "\">"));
+    }
+
+    for (var decoration in Dec) {
+        var code = "\u00A7".concat(decoration);
+        while (str.includes(code)) {
+            var code = "\u00A7".concat(decoration);
+            dec_count++;
+            str = str.replace(code, "<mcft-dec ".concat(Dec[decoration], ">"));
+            if (str.indexOf("§r") < str.indexOf(code) || str.indexOf(code) == -1) {
+                var esc = "";
+                for (var i = 0; i < cl_count; i++) {
+                    esc += "</mcft-cl>";
+                }
+                for (var i = -2; i < dec_count; i++) {
+                    esc += "</mcft-dec>";
+                }
+                str = str.replace("§r", esc);
+                cl_count = 0;
+                dec_count = 0;
+            }
+        }
+    }
+
+    for (var i = 0; i <= cl_count; i++) {
+        str += "</mcft-cl>";
+    }
+
+    for (var i = 0; i < dec_count; i++) {
+        str += "</mcft-dec>";
+    }
+
+    return str;
+}

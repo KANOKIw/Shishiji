@@ -12,15 +12,18 @@
  * @param {number} tile_height 
  * @param {string} src_formatter 
  * @param {Function} [callback]
- * @returns {Promise<any>}
- *   callbacked promise
+ * @returns {Promise<any>} 
  */
 async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src_formatter, callback){
     /**@type {HTMLImageElement[]} */
     var al = [];
-    return new Promise((resolve, reject) => {
+
+    backcanvas.width = tile_width*(xrange+1);
+    backcanvas.height = tile_height*(yrange+1);
+
+    return new Promise((resolve) => {
         for (var y = 0; y <= yrange; y++){
-            for (var x=0; x <= xrange; x++){
+            for (var x = 0; x <= xrange; x++){
                 var dh = tile_width,
                     dw = tile_height,
                     dx = dw*x,
@@ -32,11 +35,13 @@ async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src
                     img.onload = function(){
                         //@ts-ignore
                         this.loaded = true;
+
                         bctx.drawImage(img, 0, 0, tile_width, tile_height, dx, dy, dw, dh);
                         ctx.drawImage(backcanvas, ...[ backcanvas.canvas.coords.x ,backcanvas.canvas.coords.y ]);
+                        
                         al.push(img);
                         if (al.length >= (xrange+1)*(yrange+1))
-                            resolve("canvas loaded");
+                            resolve("map loaded");
                     }
 
                     img.src = formatString(src_formatter, y, x);
@@ -52,5 +57,3 @@ async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src
             callback(al);
     });
 }
-
-

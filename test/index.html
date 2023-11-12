@@ -18,6 +18,7 @@
         <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
         <meta name="theme-color" content="#ffffff">
         <title>【世田谷学園】2024年度 | 獅子児祭</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
         <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="/src/main/shishijimap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -27,21 +28,66 @@
         <script src="/src/assets/speed.js"></script>
         <script src="/src/assets/eventCalcu.js"></script>
     </head>
-    <body>
+    <body aria-hidden="true">
         <noscript>
-            <div id="noscript_help">
+            <div id="noscript_help" aria-label="Javascriptを有効にして獅子児祭マップを表示します。">
                 <a href="https://support.google.com/admanager/answer/12654?hl=ja" target="_blank">Javascriptを有効にして獅子児祭マップを表示します。</a>
             </div>
         </noscript>
-        <div id="app-mount">
-            <div id="log" style="position: absolute; font-size: 20px;"></div>
+        <div id="load_spare" style="width: 98vw; height: 98vh;">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+                <div>
+                    <img id="spare_logo" src="/resources/img/logo.png" style="width: 100px; height: 100px;">
+                    <h1 style="text-align: center;">...</h1>
+                </div>
+                <script nonce>
+                    !function(){
+                        const i = document.getElementById("spare_logo");
+                        var t = 0;
+                        var x = -Math.pow(3*100, 1/2);
+                        const p = x;
+                        setInterval(function(){
+                            i.style.transform = `rotateY(${t}deg)`;
+                            t++;
+                        }, 1);
+                    }();
+                </script>
+            </div>
+        </div>
+
+        <h1 id="e"></h1>
+        <script nonce>window.addEventListener("error", function(e){
+            document.getElementById("e").innerHTML += e.message;
+        });</script>
+
+        <div id="app-mount" style="display: none;" aria-label="獅子児祭マップ">
             <main>
-                <div id="shishiji-view">
-                    <canvas id="shishiji-canvas" style="background-color: azure;"></canvas>
+                <div id="shishiji-view" aria-label="地図をドラッグして操作します。写真などをタップ·クリックして詳細を表示します。">
+                    <canvas id="shishiji-canvas"></canvas>
+                </div>
+
+                <div id="shishiji-overview" style="position: absolute; width: 100vw;
+                    height: 100vh; background-color: white; top: 100vh; overflow-y: scroll; overflow-wrap: break-word; overflow-x: hidden;"
+                >
+                    <div style="width: 100%; display: flex; justify-content: end;">
+                        <button id="overview-close"
+                            style="width: 40px; height: 40px; border: none; background-color: white;"
+                            aria-label="閉じる"
+                        >
+                            <span class="material-symbols-outlined" style="color: black; cursor: pointer;">
+                                close
+                            </span>
+                        </button>
+                    </div>
+
+                    <div id="overview-context" style="width: 100vw; margin-bottom: 50vh;">
+
+                    </div>
                 </div>
             </main>
         </div>
         <script src="/src/assets/canvasReact.js"></script>
         <script src="/src/assets/main.js"></script>
+        <script src="/src/assets/eventObj.js"></script>
     </body>
 </html>

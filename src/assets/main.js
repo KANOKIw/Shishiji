@@ -1,9 +1,10 @@
-//@ts-nocheck
+//@ts-check
 "use strict";
 
 
 
 function set_canvassize(){
+    /**@ts-ignore @type {HTMLCanvasElement} */
     const canvas = document.getElementById("shishiji-canvas");
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     canvas.style.width = canvas.width+"px"; canvas.style.height = canvas.height+"px";
@@ -13,7 +14,9 @@ function set_canvassize(){
 
 
 !function(){
+    /**@ts-ignore @type {HTMLCanvasElement} */
     const canvas = document.getElementById("shishiji-canvas");
+    /**@ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
     const tile_width = 500;
     const tile_height = 500;
@@ -22,23 +25,29 @@ function set_canvassize(){
 
 
     set_canvassize();
-    
-    backcanvas.width = tile_width*(xrange+1);
-    backcanvas.height = tile_height*(yrange+1);
 
     drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
         "/resources/map_divided/dokoka/tile_{0}_{1}.png", callback);
 
     function callback(){
-        
+        $("#load_spare").hide();
+        $("#app-mount").show();
+        backcanvas.canvas.coords = {
+            x: (backcanvas.width - backcanvas.canvas.width) / 2,
+            y: (backcanvas.height - backcanvas.canvas.height) / 2
+        };
+        moveMapAssistingNegative(canvas, ctx, {left: 0, top: 0});
+        putObjOnMap();
     }
     return 0;
 }();
 
 
 window.addEventListener("resize", function(e){
+    /**@ts-ignore @type {HTMLCanvasElement} */
     const canvas = document.getElementById("shishiji-canvas");
     set_canvassize();
+    //@ts-ignore
     moveMapAssistingNegative(canvas, canvas.getContext("2d"), {top: 0, left: 0});
     window.scroll({ top: 0, behavior: "instant" });
 }, { passive: false });

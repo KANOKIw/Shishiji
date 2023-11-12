@@ -1,6 +1,12 @@
 *{
     margin: 0;
-    padding: 0;
+}
+
+:root{
+    --font-view: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.protected{
     user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none; 
@@ -16,6 +22,7 @@ body{
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    font-family: var(--font-view);
 }
 
 #setagaku-map{
@@ -43,4 +50,36 @@ img{
     align-items: center;
     justify-content: center;
     font-size: large;
+}
+
+.toOverview{
+    opacity: 0.75;
+    background-color: black;
+}
+
+.ctx-event-detail{
+    margin: 20px;
+}
+
+table{
+    border-collapse: separate;
+    border-spacing: 10px 15px;
+}
+
+.ev_property{
+    margin: 10px;
+}
+
+.ev_property_cell{
+    text-align: left;
+}
+
+.crowded_lim{
+    margin-bottom: 54px; /*30px*/
+}
+
+.crowded_deg_bar{
+    height: 10px;
+    background: linear-gradient(to right, rgb(0, 141, 0) 33.33%, #fdad00 33.33%, #fdad00 66.66%, rgb(177, 0, 0) 66.66%);
+    border-radius: 10px;
 }

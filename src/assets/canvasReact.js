@@ -17,8 +17,22 @@
     const ctx = canvas.getContext("2d");
 
 
+    /**
+     * @param {Event} e  
+     * @returns {boolean}
+     */
+    function illegal(e){
+        const target = e.target;
+        //@ts-ignore
+        if (target?.classList.contains("canvas_interactive") || target?.tagName.toLowerCase() === "canvas"){
+            return !!0;
+        }
+        return !0;
+    }
 
-    canvas.addEventListener("touchstart", (e) => {
+    window.addEventListener("touchstart", (e) => {
+        if (illegal(e))
+            return;
         e.preventDefault();
         init_friction();
         initTouch(e);
@@ -26,58 +40,69 @@
 
         if (e.touches.length >= 2)
             setTheta(e.touches);
-    });
-    canvas.addEventListener("mousedown", (e) => {
+    }, { passive: false });
+    window.addEventListener("mousedown", (e) => {
+        if (illegal(e))
+            return;
         e.preventDefault();
         init_friction();
         set_cursorpos(e);
 
-        canvas.addEventListener("mousemove", mm);
-        map_wrapper.style.cursor = "move";
-    });
+        window.addEventListener("mousemove", mm, { passive: false });
+        //@ts-ignore
+        if (e.target?.tagName.toLowerCase() === "canvas")
+            map_wrapper.style.cursor = "move";
+        else 
+            map_wrapper.style.cursor = "pointer";
+    }, { passive: false });
 
     
 
-    canvas.addEventListener("touchmove", function(e){
+    window.addEventListener("touchmove", function(e){
+        if (illegal(e))
+            return;
         e.preventDefault();
-        onTouchMove(e, this, ctx);
-    });
+        onTouchMove(e, canvas, ctx);
+    }, { passive: false });
 
 
 
-    canvas.addEventListener("touchend", (e) => {
+    window.addEventListener("touchend", (e) => {
+        if (illegal(e))
+            return;
         e.preventDefault();
         initTouch(e);
         DRAGGING = false;
         pointerPosition = [ null, null ];
         frict(pointerVelocity.x, pointerVelocity.y);
-    });
-    canvas.addEventListener("mouseup", mouse_lost);
-    canvas.addEventListener("mouseleave", mouse_lost);
-    canvas.addEventListener("mouseout", mouse_lost);
+    }, { passive: false });
+    window.addEventListener("mouseup", mouse_lost, { passive: false });
+    window.addEventListener("mouseleave", mouse_lost, { passive: false });
+    window.addEventListener("mouseout", mouse_lost, { passive: false });
 
 
 
-    canvas.addEventListener("wheel", wheel_move);
-    canvas.addEventListener("mousewheel", wheel_move);
+    window.addEventListener("wheel", wheel_move, { passive: true });
+    window.addEventListener("mousewheel", wheel_move, { passive: true });
 
 
 
     function wheel_move(e){
-        e.preventDefault();
-        canvasonScroll(e, this);
+        if (illegal(e))
+            return;
+        canvasonScroll(e, canvas);
     }
 
     function mm(e){
         e.preventDefault();
         DRAGGING = !0;
-        onMouseMove(e, this, this.getContext("2d"));
+        onMouseMove(e, canvas, ctx);
     }
 
     function mouse_lost(e){
         e.preventDefault();
         pointerPosition = [ null, null ];
-        canvas.removeEventListener("mousemove", mm);
+        window.removeEventListener("mousemove", mm);
         map_wrapper.style.cursor = "default";
 
         const vx = pointerVelocity.x,
@@ -349,6 +374,8 @@ function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
 
     //@ts-ignore
     ctx.drawImage(image, ...args);
+
+    updatePositions();
 }
 
 
@@ -526,7 +553,7 @@ function onTouchMove(event, canvas, ctx){
             }
             pastRotateMin = !0;
             if (zoomCD > MOVEPROPATY.touch.zoomCD)
-                rotateCanvas(canvas, ctx, crossPos, Math.PI/4);
+                rotateCanvas(canvas, ctx, crossPos, rotation);
         }
         
 

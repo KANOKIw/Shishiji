@@ -1,1 +1,1123 @@
-!function(){"use strict";var t=[null,null];var n=[null,null];var e=false;var o=1;const i=document.createElement("canvas");const a=i.getContext("2d");i.canvas={coords:{x:0,y:0},rotation:0};const c={scroll:1.05,caps:{ratio:{max:Infinity,min:NaN}},touch:{downCD:1,zoomCD:-1,rotate:{min:15}}};const s={x:0,y:0,v:0,a:-150,method:null};var r=null;var l={x:-1,y:-1,distance:-1};var h={};var v=0;var u=0;var d=false;var f=0;var g=0;var m=0;"use strict";function w(t,...n){for(const[e,o]of n.entries()){const n=new RegExp(`\\{${e}\\}`,"g");t=t.replace(n,o)}return t}function p(t){return t*(Math.PI/180)}function y(t){return t*(180/Math.PI)}function x(...t){var n=0;t.forEach((t=>{n+=t}));return n/t.length}"use strict";async function E(t,n,e,o,c,s,r,l){var h=[];return new Promise(((t,l)=>{for(var v=0;v<=o;v++){for(var u=0;u<=e;u++){var d=c,f=s,g=f*u,m=d*v;!function(l,v,u,d,f,g){var m=new Image;m.onload=function(){this.loaded=true;a.drawImage(m,0,0,c,s,u,d,f,g);n.drawImage(i,...[i.canvas.coords.x,i.canvas.coords.y]);h.push(m);if(h.length>=(e+1)*(o+1))t("canvas loaded")};m.src=w(r,v,l);return 0}(u,v,g,m,f,d)}}})).then((()=>{window.scroll({top:0,behavior:"instant"});if(typeof l==="function")l(h)}))}"use strict";!function(){!function(){var t,n;document.documentElement.addEventListener("mousemove",(function(t){s.method="MOUSE";n=t}));setInterval((function(){var e=0;var o=0;var i=0;if(t&&n){var e=n.screenX-t.screenX;var o=n.screenY-t.screenY;var i=Math.sqrt(e*e+o*o)}t=n;if(s.method=="MOUSE"){s.x=100*e;s.y=100*o;s.v=100*i}}),20);return 0}();!function(){var t=0;var n;function e(t){var n=0;var e=0;for(var o of t){n+=o.clientX;e+=o.clientY}n/=t.length;e/=t.length;return{x:n,y:e}}var o,i;document.documentElement.addEventListener("touchmove",(function(t){s.method="TOUCH";i=t}));setInterval((function(){var a=0;var c=0;var r=0;if(i&&i.touches.length>=2){t=1;if(n)clearTimeout(n);n=setTimeout((()=>{t=0}),250)}if(o&&i&&i.touches.length==1&&t===0){var l=e(i.touches),h=e(o.touches);a=l.x-h.x;c=l.y-h.y;r=Math.sqrt(a*a+c*c)}o=i;if(s.method=="TOUCH"){s.x=100*a;s.y=100*c;s.v=100*r}}),20);return 0}();return 0}();"use strict";function X(t){if(t.length==1)return 0;var n=0;var e=0;var o=0;for(var i of Array.from(t)){n+=i.clientX;e+=i.clientY}const a={x:n/t.length,y:e/t.length};for(var i of Array.from(t)){const t=Math.abs(Math.sqrt((i.clientX-a.x)**2+(i.clientY-a.y)**2));o+=t}return 2*o/t.length}function Y(t){var n=0;var e=0;for(var o of t){n+=o.clientX;e+=o.clientY}n/=t.length;e/=t.length;return[n,e]}function M(t){const n=Math.abs,e=Math.sqrt,o=Math.pow;const i=[t[0].clientX,window.innerHeight-t[0].clientY],a=[t[1].clientX,window.innerHeight-t[1].clientY];const c=[i,a];const s=n(e(o(c[0][0]-c[1][0],2)+o(c[0][1]-c[1][1],2)));const r=1/s*(c[1][1]-c[0][1]);const l=1/s*(c[1][0]-c[0][0]);var h=Math.acos(l);if(r<0){h=2*Math.PI-h}if(Math.abs(h-f)>Math.PI/2){}return h}function I(t){h.touches=[];for(var n of t){h.touches.push({x:n.clientX,y:n.clientY});h.real=Array.from(t)}}function L(t){const n=[[t[0].clientX,t[0].clientY],[t[1].clientX,t[1].clientY]];const e=[n[0][0]+n[1][0]/2,n[1][1]+n[0][1]/2];return e}function D(t,n){return Math.abs(Math.sqrt((t.clientX-n.clientX)**2+(t.clientY-n.clientY)**2))}window.addEventListener("load",(function(a){"use strict";!function(){const o=document.getElementById("shishiji-view");const i=document.getElementById("shishiji-canvas");const a=i.getContext("2d");i.addEventListener("touchstart",(t=>{t.preventDefault();Y();M(t);w(t.touches);if(t.touches.length>=2)y(t.touches)}));i.addEventListener("mousedown",(t=>{t.preventDefault();Y();w(t);i.addEventListener("mousemove",p);o.style.cursor="move"}));i.addEventListener("touchmove",(function(t){t.preventDefault();P(t,this,a)}));i.addEventListener("touchend",(n=>{n.preventDefault();M(n);e=false;t=[null,null];X(s.x,s.y)}));i.addEventListener("mouseup",E);i.addEventListener("mouseleave",E);i.addEventListener("mouseout",E);i.addEventListener("wheel",c);i.addEventListener("mousewheel",c);function c(t){t.preventDefault();T(t,this)}function p(t){t.preventDefault();e=!0;B(t,this,this.getContext("2d"))}function E(n){n.preventDefault();t=[null,null];i.removeEventListener("mousemove",p);o.style.cursor="default";const a=s.x,c=s.y;if(e){e=false;return X(a,c)}}function X(t,n){function e(t){return t<0?-1:1}if(r!==null)clearInterval(r);var o=t,c=n,l=s.a*e(t),h=s.a*e(n);if(isNaN(o)||isNaN(c))return 0;r=setInterval((()=>{var e={top:c/1e3,left:o/1e3};if(e.top*n<=0)e.top=0;if(e.left*t<=0)e.left=0;x(i,a,e);o+=l;c+=h;if(o*t<=0&&c*n<=0&&r!==null)clearInterval(r)}),1);return 0}document.body.addEventListener("mousemove",(function(t){t.preventDefault();n=[t.clientX,t.clientY]}));function Y(){e=false;if(r!==null)clearInterval(r)}function M(t){H=0;g=0;m=0;u=0;v=0;f=-1;l={x:-1,y:-1,distance:-1};h.real=[];if(t.touches.length<2)d=false}return 0}();function w(n){if(n instanceof TouchList)t=Y(n);else t=[n.clientX,n.clientY]}function y(t){f=M(t)}function x(t,n,e){const a=i.canvas.coords.x-e.left/o;const c=i.canvas.coords.y-e.top/o;i.canvas.coords={x:a,y:c};i.canvas.width=t.width/o;i.canvas.height=t.height/o;D(t,n,i,...[i.canvas.coords.x,i.canvas.coords.y],i.canvas.width,i.canvas.height,0,0,t.width,t.height)}function E(t,n,e){const a=i.canvas.coords.y-e.left/o;const c=i.canvas.coords.x-e.top/o;i.canvas.coords={x:a,y:c};i.canvas.width=t.width/o;i.canvas.height=t.height/o;n.clearRect(0,0,t.width,t.height);n.drawImage(i,i.canvas.coords.x,i.canvas.coords.y,i.canvas.width,i.canvas.height,0,0,t.width,t.height)}function L(t,n,e,a,s,r){if(c.caps.ratio.max<o&&e>1||c.caps.ratio.min>o&&e<1)return;if(s===void 0)s=[i.canvas.coords.x,i.canvas.coords.y];if(r)o=e;else o*=e;if(a.length==2&&e!=1){var l=[];for(var h=0;h<2;h++){l.push(a[h]*(e-1)/o+s[h])}i.canvas.coords={x:l[0],y:l[1]}}i.canvas.width=t.width/o;i.canvas.height=t.height/o;D(t,n,i,i.canvas.coords.x,i.canvas.coords.y,i.canvas.width,i.canvas.height,0,0,t.width,t.height)}function E(t,n,e,a,s){if(c.caps.ratio.max<o&&e>1||c.caps.ratio.min>o&&e<1)return;if(s===void 0)s=[i.canvas.coords.x,i.canvas.coords.y];o*=e;if(a.length==2&&e!=1){var r=[];for(var l=0;l<2;l++){r.push(a[l]*(e-1)/o+s[l])}i.canvas.coords={x:r[0],y:r[1]}}i.canvas.width=t.width/o;i.canvas.height=t.height/o;n.clearRect(0,0,t.width,t.height);n.drawImage(i,i.canvas.coords.x,i.canvas.coords.y,i.canvas.width,i.canvas.height,0,0,t.width,t.height)}function D(t,n,e,a,c,s,r,l,h,v,u){const d=[a,c];var f;var g;n.clearRect(0,0,t.width,t.height);if(a<0||c<0){f=d.map((t=>-t));g=[0,0,i.canvas.width-f[0],i.canvas.height-f[1],f[0]*o,f[1]*o,v-f[0]*o,u-f[1]*o]}else{g=[a,c,s,r,l,h,v,u]}n.drawImage(e,...g)}function b(t,n,e,o){if(o===void 0){o=i.canvas.rotation}D(t,n,i,i.canvas.coords.x,i.canvas.coords.y,i.canvas.width,i.canvas.height,0,0,t.width,t.height);i.canvas.rotation+=o}const C=document.getElementById("log");function N(...t){if(C!=null)C.innerHTML+=t.join(" ")+"<br>"}function j(...t){if(C!=null)C.innerHTML=t.join(" ")+"<br>"}window.onerror=(t,n,e)=>{j(t,n,e)};var H=0;function P(n,e,o){const i=n.touches;const a=Y(i);const s=t;var r=[-1,-1];t=a;if(g<c.touch.downCD){g++;return}if(i.length>=2&&h.real!==void 0&&h.real.length>=2){const t=Math.abs;m++;const a={previous:{slope:(h.real[0].clientY-h.real[1].clientY)/(h.real[0].clientX-h.real[1].clientX)},this:{slope:(i[0].clientY-i[1].clientY)/(i[0].clientX-i[1].clientX)}};const s=X(i);var w=s/l.distance;if(l.x==-1&&l.y==-1&&l.distance==-1){w=1}l.distance=s;if(a.previous.slope==a.this.slope){var y=i[0].clientX-h.touches[0].x;var E=i[1].clientX-h.touches[1].x;y===0&&E===0||y+E==0?y=E=1:0;const n=y/(t(y)+t(E));const e=t(i[0].clientX-i[1].clientX)*n;const o=t(i[0].clientY-i[1].clientY)*n;const a=[i[0].clientX+e,i[0].clientY+o];h.middle=a}else{const t=(h.real[0].clientX*a.previous.slope-i[0].clientX*a.this.slope-h.real[0].clientY+i[0].clientY)/(a.previous.slope-a.this.slope);const n=a.this.slope*(t-i[0].clientX)+i[0].clientY;r=[Math.ceil(t),Math.ceil(n)];if(!r.some((t=>isNaN(t))))0}const g=h.real[0].clientX*w;const Y=h.real[0].clientY*w;const I=i[0].clientX-g;const C=i[0].clientY-Y;if(m>c.touch.zoomCD){L(e,o,w,[0,0]);x(e,o,{top:C,left:I})}const N=Math.PI;const j=M(n.touches);var D;if(f===-1)D=0;else if(0<=f&&f<=N&&N*(3/2)<=j&&j<=2*N)D=-(2*N-j+f);else if(0<=j&&j<=N&&N*(3/2)<=f&&f<=2*N)D=2*N-f+j;else D=j-f;f=j;u+=Math.abs(D);v+=D;if(Math.abs(v)>p(c.touch.rotate.min)||d){if(!d){v-=p(c.touch.rotate.min)}d=!0;if(m>c.touch.zoomCD)b(e,o,r,Math.PI/4)}v+=D}else{d=false;v=0;u=0;f=-1;m=0;h.cross=[-1,-1]}if(!s.some((t=>t===null))&&i.length==1){const t={left:a[0]-s[0],top:a[1]-s[1]};x(e,o,t)}h.cross=r;I(i)}function T(t,e){var o=c.scroll*1;if(t.deltaY>0)o=1/o;L(e,e.getContext("2d"),o,n)}function B(n,e,o){const i=[n.clientX,n.clientY];const a={left:i[0]-t[0],top:i[1]-t[1]};x(e,o,a);t=i}}));window.addEventListener("load",(function(t){"use strict";function n(){const t=document.getElementById("shishiji-canvas");t.width=window.innerWidth;t.height=window.innerHeight;t.style.width=t.width+"px";t.style.height=t.height+"px";i.canvas.width=t.width;i.canvas.height=t.height}!function(){const t=document.getElementById("shishiji-canvas");const e=t.getContext("2d");const o=500;const a=500;const c=3;const s=1;n();i.width=o*(c+1);i.height=a*(s+1);E(t,e,c,s,o,a,"/resources/map_divided/dokoka/tile_{0}_{1}.png",r);function r(){}return 0}();window.addEventListener("resize",(function(t){const e=document.getElementById("shishiji-canvas");n();moveMapAssistingNegative(e,e.getContext("2d"),{top:0,left:0});window.scroll({top:0,behavior:"instant"})}),{passive:false});window.addEventListener("gesturestart",(function(t){t.preventDefault()}));window.addEventListener("load",(function(t){window.scroll({top:0,behavior:"instant"})}))}))}();
+!function() {
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * @typedef {import("./shishiji-dts/motion").Position} Position
+     * @typedef {import("./shishiji-dts/motion").BackCanvas} BackCanvas
+     * @typedef {import("./shishiji-dts/motion").Distance} Distance
+     * @typedef {import("./shishiji-dts/motion").Coords} Coords
+     * @typedef {import("./shishiji-dts/motion").touchINFO} touchINFO
+     */
+    
+    
+    /**@type {Position} */
+    var pointerPosition = [ null, null ];
+    /**@type {Position} */
+    var cursorPosition = [ null, null ];
+    
+    
+    var DRAGGING = false;
+    var zoomRatio = 1;
+    
+    
+    /**
+     * @type {BackCanvas} 
+     * @readonly
+     *@ts-ignore*/
+    const backcanvas = document.createElement("canvas");
+    /**@ts-ignore @type {CanvasRenderingContext2D} */
+    const bctx = backcanvas.getContext("2d");
+    
+    
+    //@ts-ignore
+    backcanvas.canvas = {
+        coords: { 
+            x: 0,
+            y: 0,
+        },
+        rotation: 0,
+    };
+    
+    
+    /**
+     * limit map motion and set magnification of any
+     * @readonly
+     */
+    const MOVEPROPATY = {
+        scroll: 1.05,
+        caps: {
+            ratio: {
+                max: Infinity, // dev
+                min: NaN, // dev
+            },
+        },
+        touch: {
+            /**
+             * how many events to wait before start moving 
+             * !high value prevents insta scrolling! (makes more likely to iPhone map tho)
+             * @fix
+             *   do by velocity
+             */
+            downCD: 1,
+            zoomCD: -1,
+            rotate: {
+                // degree
+                min: 15,
+            }
+        }
+    };
+    
+    
+    /**
+     * velocities are assigned with (px/sec)
+     * @type {{ x: number, y: number, v: number, a: number, method: "MOUSE" | "TOUCH" | null }}
+     */
+    const pointerVelocity = { 
+        x: 0, y: 0, v: 0, a: -150,
+        method: null 
+    };
+    
+    /**@type {number | null} */
+    var frictInterval = null;
+    
+    
+    /**@type {Distance} */
+    var previousTouchDistance = { 
+        x: -1, y: -1,
+        distance: -1 
+    };
+    /**@type {touchINFO} */
+    //@ts-ignore
+    var prevTouchINFO = {};
+    
+    
+    /**
+     * relative radian
+     * assign on touch move
+     * @type {Radian} 
+     */
+    var rotatedThisTime = 0;
+    /**
+     * rotated amount of one pitch time use to limit start of rotation
+     * init once when passed min
+     * @see {MOVEPROPATY.touch.rotate.min}
+     * @type {Radian}
+     */
+    var totalRotateThisTime = 0;
+    /**
+     * mark rotatedThisTime has been bigger than min even once
+     */
+    var pastRotateMin = false;
+    /**
+     * @type {Radian} 
+     */
+    var prevTheta = 0;
+    
+    /**
+     * use to make smooth map interaction.
+     * not map moved, swiping instantly cause proble.
+     * init on touch down
+     */
+    var touchCD = 0;
+    var zoomCD = 0;
+    
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * @typedef {import("./shishiji-dts/motion").Degree} Degree
+     */
+    
+    /**
+     * 
+     * @param {string} str 
+     * @param  {any[]} args 
+     * @returns {string}
+     */
+    function formatString(str, ...args){
+        for (const [i, arg] of args.entries()){
+            const regExp = new RegExp(`\\{${i}\\}`, "g");
+            str = str.replace(regExp, arg);
+        }
+        return str;
+    }
+    
+    
+    /**
+     * deg -> rad
+     * @param {Degree} deg 
+     * @returns {Radian}
+     */
+    function toRadians(deg){
+        return deg*(Math.PI/180);
+    }
+    
+    
+    /**
+     * rad -> deg
+     * @param {Degree} rad 
+     * @returns {Radian}
+     */
+    function toDegrees(rad){
+        return rad*(180/Math.PI)
+    }
+    
+    
+    /**
+     * 
+     * @param  {...number} n 
+     * @returns {number}
+     */
+    function avg(...n){
+        var t = 0;
+        n.forEach(i => {
+            t += i;
+        });
+        return t/n.length;
+    }
+    
+    
+    /**
+     * @param {NonnullPosition} backcanvasPos 
+     */
+    function toCanvasPos(backcanvasPos){
+        var u = backcanvasPos.map(k => {
+            
+        });
+    }
+    
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * Draw tiles
+     * @param {HTMLCanvasElement} canvas 
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {number} xrange 
+     * @param {number} yrange 
+     * @param {number} tile_width 
+     * @param {number} tile_height 
+     * @param {string} src_formatter 
+     * @param {Function} [callback]
+     * @returns {Promise<any>}
+     *   callbacked promise
+     */
+    async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src_formatter, callback){
+        /**@type {HTMLImageElement[]} */
+        var al = [];
+        return new Promise((resolve, reject) => {
+            for (var y = 0; y <= yrange; y++){
+                for (var x=0; x <= xrange; x++){
+                    var dh = tile_width,
+                        dw = tile_height,
+                        dx = dw*x,
+                        dy = dh*y;
+    
+                    !function(x, y, dx, dy, dw, dh){
+                        var img = new Image();
+    
+                        img.onload = function(){
+                            //@ts-ignore
+                            this.loaded = true;
+                            bctx.drawImage(img, 0, 0, tile_width, tile_height, dx, dy, dw, dh);
+                            ctx.drawImage(backcanvas, ...[ backcanvas.canvas.coords.x ,backcanvas.canvas.coords.y ]);
+                            al.push(img);
+                            if (al.length >= (xrange+1)*(yrange+1))
+                                resolve("canvas loaded");
+                        }
+    
+                        img.src = formatString(src_formatter, y, x);
+    
+                        return 0;
+                    }(x, y, dx, dy, dw, dh);
+                }
+            }
+        }).then(() => {
+            window.scroll({ top: 0, behavior: "instant" });
+            
+            if (typeof callback === "function")
+                callback(al);
+        });
+    }
+    
+    
+    
+    //@ts-check
+    "use strict";
+    
+    
+    
+    !function(){
+        !function(){
+            var prevEvent,
+                currentEvent;
+    
+            document.documentElement.addEventListener("mousemove", function(event){
+                pointerVelocity.method = "MOUSE";
+                currentEvent = event;
+            });
+        
+            setInterval(function(){
+                var movementX = 0;
+                var movementY = 0;
+                var movement = 0;
+    
+                if (prevEvent && currentEvent){
+                    var movementX = currentEvent.screenX - prevEvent.screenX;
+                    var movementY = currentEvent.screenY - prevEvent.screenY;
+                    var movement = Math.sqrt(movementX*movementX + movementY*movementY);
+                }
+                
+                prevEvent = currentEvent;
+    
+                if (pointerVelocity.method == "MOUSE"){
+                    pointerVelocity.x = 100*movementX;
+                    pointerVelocity.y = 100*movementY;
+                    pointerVelocity.v = 100*movement;
+                }
+            }, 20);
+            return 0;
+        }();
+        
+        !function(){
+            var wait_o2 = 0;
+            /**@type {NodeJS.Timeout} */
+            var t;
+    
+            function g(t){
+                var k = 0;
+                var r = 0;
+                for (var w  of t){
+                    k += w.clientX;
+                    r += w.clientY;
+                }
+                k /= t.length;
+                r /= t.length;
+                return {x: k, y: r};
+            }
+    
+            var prevEvent,
+                currentEvent;
+    
+            document.documentElement.addEventListener("touchmove", function(event){
+                pointerVelocity.method = "TOUCH";
+                currentEvent = event;
+            });
+        
+            setInterval(function(){
+                var movementX = 0;
+                var movementY = 0;
+                var movement = 0;
+    
+    
+                if (currentEvent && currentEvent.touches.length >= 2){
+                    wait_o2 = 1;
+                    if (t)
+                        clearTimeout(t);
+                    t = setTimeout(()=>{
+                        wait_o2 = 0;
+                    }, 250);
+                }
+    
+                if (prevEvent && currentEvent && currentEvent.touches.length == 1 && wait_o2 === 0){
+                    var p = g(currentEvent.touches),
+                        j = g(prevEvent.touches);
+                    movementX = p.x - j.x;
+                    movementY = p.y - j.y;
+                    movement = Math.sqrt(movementX*movementX + movementY*movementY);
+                }
+                
+                prevEvent = currentEvent;
+    
+                if (pointerVelocity.method == "TOUCH"){
+                    pointerVelocity.x = 100*movementX;
+                    pointerVelocity.y = 100*movementY;
+                    pointerVelocity.v = 100*movement;
+                }
+            }, 20);
+            return 0;
+        }();
+        return 0;
+    }();
+    
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * @typedef {import("./shishiji-dts/motion").NonnullPosition} NonnullPosition
+     */
+    
+    
+    /**
+     * 
+     * @param {TouchList} touches 
+     * @returns {number}
+     */
+    function get_midestOfTouches(touches){
+        if (touches.length == 1)
+            return 0;
+    
+        var amx = 0;
+        var amy = 0;
+        var am = 0;
+    
+        for (var touch of Array.from(touches)){
+            amx += touch.clientX;
+            amy += touch.clientY;
+        }
+    
+        const middle = {x: amx/touches.length, y: amy/touches.length};
+    
+        for (var touch of Array.from(touches)){
+            const dis = Math.abs(Math.sqrt((touch.clientX - middle.x)**2 
+                + (touch.clientY - middle.y)**2));
+            am += dis;
+        }
+        return 2*am/touches.length;
+    }
+    
+    
+    /**
+     * 
+     * @param {TouchList} touches 
+     * @returns {NonnullPosition}
+     */
+    function get_middlePos(touches){
+        var av_x = 0;
+        var av_y = 0;
+        for (var t  of touches){
+            av_x += t.clientX;
+            av_y += t.clientY;
+        }
+        av_x /= touches.length;
+        av_y /= touches.length;
+        return [av_x, av_y];
+    }
+    
+    
+    /**
+     * get vertical tilt from touches[0:2]
+     * @param {TouchList} touches 
+     * @returns {Radian}
+     */
+    function getThouchesTheta(touches){
+        const abs = Math.abs,
+              sqrt = Math.sqrt,
+              pow = Math.pow;
+        /**@type {NonnullPosition} */
+        const t1 = [touches[0].clientX, window.innerHeight - touches[0].clientY],
+              /**@type {NonnullPosition} */
+              t2 = [touches[1].clientX, window.innerHeight - touches[1].clientY];
+        const S = [t1, t2];
+    
+        const distance = abs(sqrt(pow(S[0][0] - S[1][0], 2) + pow(S[0][1] - S[1][1], 2)));
+        const sinTheta = (1 / distance)*(S[1][1] - S[0][1]);
+        const cosTheta = (1 / distance)*(S[1][0] - S[0][0]);
+    
+        /**@type {Radian} */
+        var theta = Math.acos(cosTheta);
+        
+        if (sinTheta < 0){
+            theta = 2*Math.PI - theta;
+        }
+        // about 1/2
+        if (Math.abs(theta - prevTheta) > Math.PI/2){
+    
+        }
+        return theta;
+    }
+    
+    
+    /**
+     * 
+     * @param {TouchList} touches 
+     */
+    function savePrevTouches(touches){
+        prevTouchINFO.touches = [];
+        for (var t of touches){
+            prevTouchINFO.touches.push({
+                x: t.clientX,
+                y: t.clientY
+            });
+            prevTouchINFO.real = Array.from(touches);
+        }
+    }
+    
+    
+    /**
+     * get middle position between touches[0:2]
+     * @param {TouchList} touches 
+     * @returns {NonnullPosition}
+     */
+    function getMiddlePosForZoom(touches){
+        const S = [[touches[0].clientX, touches[0].clientY], [touches[1].clientX, touches[1].clientY]];
+        /**@type {NonnullPosition} */
+        const middle = [S[0][0] + S[1][0] / 2, S[1][1] + S[0][1] / 2];
+        return middle;
+    }
+    
+    
+    /**
+     * @param {Touch} t1 
+     * @param {Touch} t2 
+     * @returns {number}
+     */
+    function touchDistance(t1, t2){
+        return Math.abs(
+            Math.sqrt(
+                (t1.clientX - t2.clientX)**2 + (t1.clientY - t2.clientY)**2
+            )
+        );
+    }
+    
+    window.addEventListener("load", function(e) {
+        //@ts-check
+        "use strict";
+        
+        
+        /**
+         * @typedef {import("./shishiji-dts/motion").Position} _Position
+         * @typedef {import("./shishiji-dts/motion").Radian} Radian
+         */
+        
+        
+        !function(){
+            /** @ts-ignore @type {HTMLCanvasElement}*/
+            const map_wrapper = document.getElementById("shishiji-view");
+            /** @ts-ignore @type {HTMLCanvasElement}*/
+            const canvas = document.getElementById("shishiji-canvas");
+            /** @ts-ignore @type {CanvasRenderingContext2D} */
+            const ctx = canvas.getContext("2d");
+        
+        
+        
+            canvas.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                init_friction();
+                initTouch(e);
+                set_cursorpos(e.touches);
+        
+                if (e.touches.length >= 2)
+                    setTheta(e.touches);
+            });
+            canvas.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+                init_friction();
+                set_cursorpos(e);
+        
+                canvas.addEventListener("mousemove", mm);
+                map_wrapper.style.cursor = "move";
+            });
+        
+            
+        
+            canvas.addEventListener("touchmove", function(e){
+                e.preventDefault();
+                onTouchMove(e, this, ctx);
+            });
+        
+        
+        
+            canvas.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                initTouch(e);
+                DRAGGING = false;
+                pointerPosition = [ null, null ];
+                frict(pointerVelocity.x, pointerVelocity.y);
+            });
+            canvas.addEventListener("mouseup", mouse_lost);
+            canvas.addEventListener("mouseleave", mouse_lost);
+            canvas.addEventListener("mouseout", mouse_lost);
+        
+        
+        
+            canvas.addEventListener("wheel", wheel_move);
+            canvas.addEventListener("mousewheel", wheel_move);
+        
+        
+        
+            function wheel_move(e){
+                e.preventDefault();
+                canvasonScroll(e, this);
+            }
+        
+            function mm(e){
+                e.preventDefault();
+                DRAGGING = !0;
+                onMouseMove(e, this, this.getContext("2d"));
+            }
+        
+            function mouse_lost(e){
+                e.preventDefault();
+                pointerPosition = [ null, null ];
+                canvas.removeEventListener("mousemove", mm);
+                map_wrapper.style.cursor = "default";
+        
+                const vx = pointerVelocity.x,
+                      vy = pointerVelocity.y;
+        
+                if (DRAGGING){
+                    DRAGGING = false;
+                    return frict(vx, vy);
+                }
+            }
+        
+            function frict(vx0, vy0){
+                function i(n){
+                    return n < 0 ? -1 : 1;
+                }
+                if (frictInterval !== null)
+                    clearInterval(frictInterval);
+        
+                var vx = vx0,
+                    vy = vy0,
+                    dxa = pointerVelocity.a*i(vx0),
+                    dya = pointerVelocity.a*i(vy0);
+        
+                if (isNaN(vx) || isNaN(vy))
+                    return 0;
+        
+                //@ts-ignore
+                frictInterval = setInterval(() => {
+                    var ag = {top: vy/1000, left: vx/1000};
+                    if (ag.top*vy0 <= 0) ag.top = 0;
+                    if (ag.left*vx0 <= 0) ag.left = 0;
+                    moveMapAssistingNegative(canvas, ctx, ag);
+                    vx += dxa;
+                    vy += dya;
+                    if (vx*vx0 <= 0 && vy*vy0 <= 0 && frictInterval !== null)
+                        clearInterval(frictInterval);
+                }, 1);
+                return 0;
+            }
+        
+        
+            document.body.addEventListener("mousemove", function(e){
+                e.preventDefault();
+                cursorPosition = [ e.clientX, e.clientY ];
+            });
+        
+        
+            function init_friction(){
+                DRAGGING = false;
+                if (frictInterval !== null)
+                    clearInterval(frictInterval);
+            }
+            /**
+             * 
+             * @param {TouchEvent} e 
+             */
+            function initTouch(e){
+                touchCD = 0;
+                zoomCD = 0;
+                totalRotateThisTime = 0;
+                rotatedThisTime = 0;
+                prevTheta = -1;
+                previousTouchDistance = { x: -1, y: -1, distance: -1 };
+                prevTouchINFO.real = [];
+                if (e.touches.length < 2)
+                    pastRotateMin = false;
+            }
+            return 0;
+        }();
+        
+        
+        /**
+         * 
+         * @param {TouchList | MouseEvent} y 
+         */
+        function set_cursorpos(y){
+            if (y instanceof TouchList)
+                pointerPosition = get_middlePos(y);
+            else
+                pointerPosition = [ y.clientX, y.clientY ];
+        }
+        
+        
+        /**
+         * 
+         * @param {TouchList} touches 
+         */
+        function setTheta(touches){
+            prevTheta = getThouchesTheta(touches);
+        }
+        
+        
+        /**
+         * 
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         * @param {{top: number, left: number}} moved
+         */
+        function moveMapAssistingNegative(canvas, ctx, moved){
+            const x = backcanvas.canvas.coords.x - moved.left/zoomRatio;
+            const y = backcanvas.canvas.coords.y - moved.top/zoomRatio;
+        
+            backcanvas.canvas.coords = { x: x, y: y };
+            backcanvas.canvas.width = canvas.width/zoomRatio;
+            backcanvas.canvas.height = canvas.height/zoomRatio;
+        
+            _redraw(canvas, ctx, backcanvas,
+                ...[ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ],
+                backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height,
+            );
+        }
+        
+        
+        /**
+         * @deprecated use moveMapAssistingNegative instead for safari support
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         * @param {{top: number, left: number}} moved
+         */
+        function moveMap(canvas, ctx, moved){
+            const x = backcanvas.canvas.coords.y-moved.left/zoomRatio;
+            const y = backcanvas.canvas.coords.x-moved.top/zoomRatio;
+        
+            backcanvas.canvas.coords = { x: x, y: y }; 
+            backcanvas.canvas.width = canvas.width/zoomRatio;
+            backcanvas.canvas.height = canvas.height/zoomRatio;
+        
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+                backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height,
+            );
+        }
+        
+        
+        /**
+         * 
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         * @param {number} ratio 
+         * @param {[number, number]} origin
+         *   (cursorPosition)
+         * @param {[number, number]} [pos]
+         * @param {boolean} [forceRatio] 
+         */
+        function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
+            if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
+                || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+                ) return;
+        
+            if (pos === void 0)
+                pos = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
+        
+            if (forceRatio)
+                zoomRatio = ratio;
+            else
+                zoomRatio *= ratio;
+        
+            if (origin.length == 2 && ratio != 1){
+                /**@type {number[]} */
+                var transorigin = [];
+                for (var i = 0; i < 2; i++){
+                    transorigin.push(
+                        (origin[i]*(ratio - 1))/(zoomRatio) + pos[i]
+                    );
+                }
+                backcanvas.canvas.coords = {
+                    x: transorigin[0],
+                    y: transorigin[1]
+                };
+            }
+            backcanvas.canvas.width = canvas.width/zoomRatio; backcanvas.canvas.height = canvas.height/zoomRatio;
+        
+            _redraw(canvas, ctx, backcanvas,
+                backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+                backcanvas.canvas.width, backcanvas.canvas.height,
+                0, 0, canvas.width, canvas.height,
+            );
+        }
+        
+        
+        /**
+         * @deprecated use zoomMapAssistingNegative instead for safari support
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         * @param {number} ratio 
+         * @param {[number, number]} origin
+         *   (cursorPosition)
+         * @param {[number, number] | undefined} pos
+         */
+        function moveMap(canvas, ctx, ratio, origin, pos){
+            if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
+                || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+                ) return;
+        
+            if (pos === void 0)
+                pos = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
+        
+            zoomRatio *= ratio;
+        
+            if (origin.length == 2 && ratio != 1){
+                var transorigin = [];
+                for (var i = 0; i < 2; i++){
+                    transorigin.push(
+                        (origin[i]*(ratio - 1))/(zoomRatio) + pos[i]
+                    );
+                }
+                backcanvas.canvas.coords = {
+                    x: transorigin[0],
+                    y: transorigin[1]
+                };
+            }
+            backcanvas.canvas.width = canvas.width/zoomRatio; backcanvas.canvas.height = canvas.height/zoomRatio;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(backcanvas,
+                backcanvas.canvas.coords.x, backcanvas.canvas.coords.y, backcanvas.canvas.width, backcanvas.canvas.height,
+                0, 0, canvas.width, canvas.height,
+            );
+        }
+        
+        
+        /**
+         * iOS browser doesn't get empty of backcanvas.
+         * Fill empty in main canvas when caught negative coords.
+         * 
+         * USE:: `_redraw(canvas, ctx, backcanvas,
+         *      backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+         *      backcanvas.canvas.width, backcanvas.canvas.height, 0, 0, canvas.width, canvas.height);`
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         * @param {CanvasImageSource} image 
+         * @param {number} sx 
+         * @param {number} sy 
+         * @param {number} sw 
+         * @param {number} sh 
+         * @param {number} dx 
+         * @param {number} dy 
+         * @param {number} dw 
+         *   canvas width
+         * @param {number} dh 
+         *   canvas height
+         */
+        function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
+            /**@type {_Position} */
+            const canvasCoords = [sx, sy];
+            /**@type {NonnullPosition} */
+            var transCoords;
+            /**@type {number[]} */
+            var args;
+        
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+            if (sx < 0 || sy < 0){
+                transCoords = canvasCoords.map(
+                    n => { return -n; }
+                );
+                args = [
+                    0, 0,
+                    backcanvas.canvas.width - transCoords[0],
+                    backcanvas.canvas.height - transCoords[1],
+                    transCoords[0]*zoomRatio,
+                    transCoords[1]*zoomRatio,
+                    dw - transCoords[0]*zoomRatio,
+                    dh - transCoords[1]*zoomRatio
+                ];
+            } else {
+                args = [ sx, sy, sw, sh, dx, dy, dw, dh ];
+            }
+        
+            //@ts-ignore
+            ctx.drawImage(image, ...args);
+        }
+        
+        
+        /**
+         * 
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         * @param {NonnullPosition} origin 
+         * @param {number} [rotation] 
+         */
+        function rotateCanvas(canvas, ctx, origin, rotation){
+            if (rotation === void 0){
+                rotation = backcanvas.canvas.rotation;
+            }
+            
+            /*var d = backcanvas.toDataURL();
+            var _img = new Image();
+            _img.src = d;
+            bctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
+            bctx.translate(origin[0] * zoomRatio, origin[1] * zoomRatio);
+            bctx.rotate(rotation);
+            bctx.translate(-origin[0] * zoomRatio, -origin[1] * zoomRatio);
+            
+            _img.onload = function(e){
+                bctx.drawImage(_img, 0, 0);
+            }*/
+        
+            _redraw(canvas, ctx, backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+                backcanvas.canvas.width, backcanvas.canvas.height,
+                0, 0, canvas.width, canvas.height
+            );
+        
+            backcanvas.canvas.rotation += rotation;
+        }
+        
+        
+        
+        /**
+         * 
+         * @param {TouchEvent} event 
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         */
+        function onTouchMove(event, canvas, ctx){
+            const touches = event.touches;
+            const pos = get_middlePos(touches);
+            const prevp = pointerPosition;
+        
+            /**@type {NonnullPosition} */
+            var crossPos = [ -1, -1 ];
+        
+        
+            pointerPosition = pos;
+        
+        
+            if (touchCD < MOVEPROPATY.touch.downCD){
+                touchCD++;
+                return;
+            }
+            
+        
+            if (touches.length >= 2 && prevTouchINFO.real !== void 0 && prevTouchINFO.real.length >= 2){
+                const abs = Math.abs;
+        
+                zoomCD++;
+        
+                /**@graph */
+                const Fx = {
+                    previous: {
+                        slope: (prevTouchINFO.real[0].clientY - prevTouchINFO.real[1].clientY) / (prevTouchINFO.real[0].clientX - prevTouchINFO.real[1].clientX),
+                    },
+                    this: {
+                        slope: (touches[0].clientY - touches[1].clientY) / (touches[0].clientX - touches[1].clientX),
+                    }
+                };
+        
+                const distance = get_midestOfTouches(touches);
+                var diffRatio = distance / previousTouchDistance.distance;
+        
+                if (previousTouchDistance.x == -1 && previousTouchDistance.y == -1 && previousTouchDistance.distance == -1){
+                    diffRatio = 1;
+                }
+        
+                previousTouchDistance.distance = distance;
+        
+                //#region 
+                if (Fx.previous.slope == Fx.this.slope){
+                    var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
+                    var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
+        
+                    (D1 === 0 && D2 === 0 || D1 + D2 == 0) ? D1 = D2 = 1 : 0;
+        
+                    const R = D1 / (abs(D1) + abs(D2));
+        
+                    const addD1x = abs(touches[0].clientX - touches[1].clientX) * R;
+                    const addD1y = abs(touches[0].clientY - touches[1].clientY) * R;
+        
+                    /**@type {NonnullPosition} */
+                    const middle = [
+                        touches[0].clientX + addD1x,
+                        touches[0].clientY + addD1y,
+                    ];
+                    
+                    prevTouchINFO.middle = middle;
+                } else {
+                    const crossX = (
+                            prevTouchINFO.real[0].clientX * Fx.previous.slope - touches[0].clientX * Fx.this.slope
+                            - prevTouchINFO.real[0].clientY + touches[0].clientY
+                        )
+                            /
+                        (Fx.previous.slope - Fx.this.slope);
+                    const crossY = (
+                        Fx.this.slope * (crossX - touches[0].clientX) + touches[0].clientY
+                    );
+                    
+                    crossPos = [ Math.ceil(crossX), Math.ceil(crossY) ];
+        
+                    if (!crossPos.some(t => { return isNaN(t) })) 0;
+                }
+                //#endregion
+        
+        
+                //#region 
+                const x1d = prevTouchINFO.real[0].clientX * diffRatio;
+                const y1d = prevTouchINFO.real[0].clientY * diffRatio;
+        
+                const diffx = touches[0].clientX - x1d;
+                const diffy = touches[0].clientY - y1d;
+        
+        
+                if (zoomCD > MOVEPROPATY.touch.zoomCD){
+                    zoomMapAssistingNegative(canvas, ctx, diffRatio, [0, 0]);
+                    moveMapAssistingNegative(canvas, ctx, {
+                        top: diffy,
+                        left: diffx
+                    });
+                }
+                //#endregion
+        
+        
+                //#region 
+                const PI = Math.PI;
+                const theta = getThouchesTheta(event.touches);
+                
+                /**@type {Radian} */
+                var rotation;
+        
+                if (prevTheta === -1)
+                    rotation = 0;
+                else if (
+                    0 <= prevTheta && prevTheta <= PI
+                        &&
+                    PI*(3/2) <= theta && theta <= 2*PI
+                    )
+                    rotation = -(2*PI - theta + prevTheta);
+                else if (
+                    0 <= theta && theta <= PI
+                        &&
+                    PI*(3/2) <= prevTheta && prevTheta <= 2*PI
+                    )
+                    rotation = 2*PI - prevTheta + theta;
+                else 
+                    rotation = theta - prevTheta;
+        
+                prevTheta = theta;
+        
+        
+                totalRotateThisTime += Math.abs(rotation);
+                rotatedThisTime += rotation;
+        
+        
+                if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPATY.touch.rotate.min) || pastRotateMin){
+                    if (!pastRotateMin){
+                        rotatedThisTime -= toRadians(MOVEPROPATY.touch.rotate.min);
+                    }
+                    pastRotateMin = !0;
+                    if (zoomCD > MOVEPROPATY.touch.zoomCD)
+                        rotateCanvas(canvas, ctx, crossPos, Math.PI/4);
+                }
+                
+        
+                rotatedThisTime += rotation;
+                //#endregion
+            } else {
+                pastRotateMin = false;
+                rotatedThisTime = 0;
+                totalRotateThisTime = 0;
+                prevTheta = -1;
+                zoomCD = 0;
+                prevTouchINFO.cross = [ -1, -1 ];
+            }
+        
+        
+            if (!prevp.some(t => t === null) && touches.length == 1){
+                //@ts-ignore
+                const map_move = { left: pos[0] - prevp[0], top: pos[1] - prevp[1] };
+                moveMapAssistingNegative(canvas, ctx, map_move);
+            }
+        
+            prevTouchINFO.cross = crossPos;
+            savePrevTouches(touches);
+        }
+        
+        
+        /**
+         * zoom canvas by scrolling mouse wheel
+         * @param {WheelEvent} e 
+         * @param {HTMLCanvasElement} canvas 
+         */
+        function canvasonScroll(e, canvas){
+            var delta = MOVEPROPATY.scroll * 1;
+            if (e.deltaY > 0)
+                delta = 1/delta;
+            //@ts-ignore
+            zoomMapAssistingNegative(canvas, canvas.getContext("2d"), delta, cursorPosition);
+        }
+        
+        
+        /**
+         * 
+         * @param {MouseEvent} e 
+         * @param {HTMLCanvasElement} canvas 
+         * @param {CanvasRenderingContext2D} ctx 
+         */
+        function onMouseMove(e, canvas, ctx){
+            /**@type {NonnullPosition} */
+            const pos = [ e.clientX, e.clientY ];
+            //@ts-ignore
+            const moved = { left: pos[0] - pointerPosition[0], top: pos[1] - pointerPosition[1] };
+        
+            moveMapAssistingNegative(canvas, ctx, moved);
+            pointerPosition = pos;
+        }
+        
+    });
+    window.addEventListener("load", function(e) {
+        //@ts-nocheck
+        "use strict";
+        
+        
+        
+        function set_canvassize(){
+            const canvas = document.getElementById("shishiji-canvas");
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            canvas.style.width = canvas.width+"px"; canvas.style.height = canvas.height+"px";
+            backcanvas.canvas.width = canvas.width;
+            backcanvas.canvas.height = canvas.height;
+        }
+        
+        
+        !function(){
+            const canvas = document.getElementById("shishiji-canvas");
+            const ctx = canvas.getContext("2d");
+            const tile_width = 500;
+            const tile_height = 500;
+            const xrange = 3;
+            const yrange = 1;
+        
+        
+            set_canvassize();
+            
+            backcanvas.width = tile_width*(xrange+1);
+            backcanvas.height = tile_height*(yrange+1);
+        
+            drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
+                "/resources/map_divided/dokoka/tile_{0}_{1}.png", callback);
+        
+            function callback(){
+                
+            }
+            return 0;
+        }();
+        
+        
+        window.addEventListener("resize", function(e){
+            const canvas = document.getElementById("shishiji-canvas");
+            set_canvassize();
+            moveMapAssistingNegative(canvas, canvas.getContext("2d"), {top: 0, left: 0});
+            window.scroll({ top: 0, behavior: "instant" });
+        }, { passive: false });
+        
+        
+        window.addEventListener("gesturestart", function(e){
+            e.preventDefault();
+        });
+        
+        
+        window.addEventListener("load", function(e){
+            window.scroll({ top: 0, behavior: "instant" });
+        });
+        
+    });
+    
+}();
