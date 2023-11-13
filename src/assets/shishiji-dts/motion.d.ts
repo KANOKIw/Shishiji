@@ -28,6 +28,7 @@ interface touchINFO {
     middle: NonnullPosition,
     real: Touch[],
     cross: NonnullPosition,
+    zoom: boolean,
     jorl? : TouchEvent[],
     pretend?: TouchType[],
     match?: TouchType[],
