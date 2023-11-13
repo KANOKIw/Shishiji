@@ -60,5 +60,5 @@ def transparent(image: Image.Image) -> Image.Image:
     return image
 
 
-d = divide("./resources/img/dokoka.png", "./resources/map_divided/dokoka", 500, 500, cleardir=True)
+d = divide("./resources/img/minecraft_map.png", "./resources/map_divided/minecraft", 500, 500, cleardir=True)
 print(d)
