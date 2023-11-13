@@ -8,6 +8,9 @@
  * @typedef {import("./shishiji-dts/motion").Distance} Distance
  * @typedef {import("./shishiji-dts/motion").Coords} Coords
  * @typedef {import("./shishiji-dts/motion").touchINFO} touchINFO
+ * @typedef {import("./shishiji-dts/objects").mapObjComponent} mapObjComponent
+ * 
+ * @typedef {import("socket.io").Socket} Socket
  */
 
 
@@ -16,6 +19,9 @@ var pointerPosition = [ null, null ];
 /**@type {Position} */
 var cursorPosition = [ null, null ];
 
+
+/**@ts-ignore @type {Socket} */
+const ws = io();
 
 var DRAGGING = false;
 var zoomRatio = 1;
@@ -78,8 +84,22 @@ var pointerVelocity = {
     method: null 
 };
 
+var touchZoomVelocity = {
+    0: {
+        x: 0,
+        y: 0,
+    },
+    1: {
+        x: 0,
+        y: 0,
+    },
+    a: -150,
+};
+
 /**@type {number | null} */
 var frictInterval = null;
+/**@type {number | null} */
+var zoomFrictInterval = null;
 
 
 /**@type {Distance} */
@@ -130,6 +150,9 @@ var Intervals = {
 }
 
 
+/**@type {mapObjComponent} */
+var mapObjectComponent = {};
+
 
 /**
  * Minecraft formatting system
@@ -153,7 +176,7 @@ const ColorList = {
     "f": "#FFFFFF",  // White
 };
 const Dec = {
-    "k": 'class="--lgr-obfuscated"',
+    "k": 'class="--mcf-obfuscated"',
     "l": 'style="font-weight: bolder;"',
     "m": 'style="text-decoration: line-through;"',
     "n": 'style="text-decoration: underline;"',

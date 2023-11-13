@@ -83,3 +83,46 @@ table{
     background: linear-gradient(to right, rgb(0, 141, 0) 33.33%, #fdad00 33.33%, #fdad00 66.66%, rgb(177, 0, 0) 66.66%);
     border-radius: 10px;
 }
+
+.mapObj{
+    cursor: pointer;
+}
+
+.mapObj_mainctx{
+    border: solid 4px white;
+    background-color: white;
+    border-radius: 5px;
+    min-width: 60px;
+    min-height: 60px;
+    max-width: 60px;
+    max-height: 60px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.mapObj_centerAlign{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.article.header{
+    width: 100vw;
+}
+
+#shishiji-canvas{
+    position: absolute;
+}
+
+.article.titleC{
+    display: flex;
+    align-items: center;
+    margin: 15px;
+}
+
+.preview-video{
+    width: 100%;
+}

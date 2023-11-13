@@ -21,26 +21,56 @@ function set_canvassize(){
     const tile_width = 500;
     const tile_height = 500;
     const xrange = 3;
-    const yrange = 1;
+    const yrange = 3;
 
 
     set_canvassize();
 
-    drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
-        "/resources/map_divided/dokoka/tile_{0}_{1}.png", callback);
+    backcanvas.width = tile_width*(xrange+1);
+    backcanvas.height = tile_height*(yrange+1);
 
+    drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
+        "/resources/map_divided/minecraft/tile_{0}_{1}.png", callback);
+    var loaded = 0;
     function callback(){
-        $("#load_spare").hide();
-        $("#app-mount").show();
+        loaded++;
         backcanvas.canvas.coords = {
             x: (backcanvas.width - backcanvas.canvas.width) / 2,
             y: (backcanvas.height - backcanvas.canvas.height) / 2
         };
         moveMapAssistingNegative(canvas, ctx, {left: 0, top: 0});
-        putObjOnMap();
+        if (loaded == 2)
+            _loaded();
+    }
+
+    !function(){
+        $.get("/data/map-objects")
+        .done((objdata) => {
+            loaded++;
+            mapObjectComponent = objdata;
+
+            for (var key in mapObjectComponent){
+                const data = mapObjectComponent[key];
+
+                putObjOnMap(data);
+            }
+
+            if (loaded == 2)
+                _loaded();
+        })
+        .fail((err) => {
+            
+        });
+        return 0;
+    }();
+
+    function _loaded(){
+        $("#load_spare").hide();
+        $("#app-mount").show();
     }
     return 0;
 }();
+
 
 
 window.addEventListener("resize", function(e){

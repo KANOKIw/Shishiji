@@ -22,6 +22,7 @@
         <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="/src/main/shishijimap.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
         <script src="/src/assets/utils.js"></script>
         <script src="/src/assets/canvasSetup.js"></script>
         <script src="/src/assets/globals.v.js"></script>
@@ -57,7 +58,7 @@
 
         <h1 id="e"></h1>
         <script nonce>window.addEventListener("error", function(e){
-            document.getElementById("e").innerHTML += e.message;
+            document.getElementById("e").innerHTML += e.message+"<br>"+e.error.stack;
         });</script>
 
         <div id="app-mount" style="display: none;" aria-label="獅子児祭マップ">
@@ -66,15 +67,13 @@
                     <canvas id="shishiji-canvas"></canvas>
                 </div>
 
-                <div id="shishiji-overview" style="position: absolute; width: 100vw;
-                    height: 100vh; background-color: white; top: 100vh; overflow-y: scroll; overflow-wrap: break-word; overflow-x: hidden;"
-                >
-                    <div style="width: 100%; display: flex; justify-content: end;">
+                <div id="shishiji-overview" class="protected" style="position: absolute; width: 100vw; display: none; user-select: none; -webkit-user-select: auto;
+                    height: 100vh; background-color: white; top: 100vh; overflow-y: scroll; overflow-wrap: break-word; overflow-x: hidden;">
+                    <div style="width: 100%; display: flex; justify-content: end; position: absolute;">
                         <button id="overview-close"
-                            style="width: 40px; height: 40px; border: none; background-color: white;"
-                            aria-label="閉じる"
-                        >
-                            <span class="material-symbols-outlined" style="color: black; cursor: pointer;">
+                            style="width: 40px; height: 40px; border: none; background-color: white; border-radius: 50%;"
+                            aria-label="閉じる">
+                            <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;">
                                 close
                             </span>
                         </button>
@@ -87,7 +86,7 @@
             </main>
         </div>
         <script src="/src/assets/canvasReact.js"></script>
-        <script src="/src/assets/main.js"></script>
         <script src="/src/assets/eventObj.js"></script>
+        <script src="/src/assets/main.js"></script>
     </body>
 </html>

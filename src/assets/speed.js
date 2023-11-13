@@ -93,5 +93,65 @@
         }, 20);
         return 0;
     }();
+
+    !function(){
+        /**@type {NodeJS.Timeout} */
+        var t;
+
+        function g(t){
+            var k = 0;
+            var r = 0;
+            for (var w  of t){
+                k += w.clientX;
+                r += w.clientY;
+            }
+            k /= t.length;
+            r /= t.length;
+            return {x: k, y: r};
+        }
+
+        var prevEvent,
+            currentEvent;
+
+        document.documentElement.addEventListener("touchmove", function(event){
+            pointerVelocity.method = "TOUCH";
+            currentEvent = event;
+        });
+    
+        setInterval(function(){
+            var movements = {
+                0: {
+                    x: 0,
+                    y: 0,
+                },
+                1: {
+                    x: 0,
+                    y: 0,
+                },
+            };
+
+            if (!currentEvent && !prevEvent || currentEvent.touches.length == 1) 
+                return;
+
+            if (prevEvent && currentEvent && currentEvent.touches.length == 1){
+                for (var i = 0; i < 2; i++){
+                    var p = currentEvent.touches[i];
+                    var j = prevEvent.touches[i];
+                    movements[i].x = p.clientX - j.clientX;
+                    movements[i].y = p.clientY - j.clientY;
+                }
+            }
+            
+            prevEvent = currentEvent;
+
+            if (pointerVelocity.method == "TOUCH"){
+                for (var i = 0; i < 2; i++){
+                    touchZoomVelocity[i].x = 100*movements[i].x;
+                    touchZoomVelocity[i].y = 100*movements[i].y;
+                }
+            }
+        }, 20);
+        return 0;
+    }();
     return 0;
 }();

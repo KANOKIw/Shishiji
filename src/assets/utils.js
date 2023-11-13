@@ -67,7 +67,7 @@ function toCanvasPos(backcanvasPos){
 
 /**
  * 
- * @param {mapObject} elm 
+ * @param {mapObjectElement} elm 
  * @returns {Coords}
  */
 function getCoords(elm){
@@ -79,12 +79,38 @@ function getCoords(elm){
 
 /**
  * 
+ * @param {mapObjectElement} elm 
+ * @returns {string}
+ */
+function getBehavior(elm){
+    /**@ts-ignore @type {number[]} */
+    return elm.getAttribute("behavior");
+}
+
+
+/**
+ * 
+ * @param {mapObjectElement} elm 
+ * @returns {{width: number, height: number}}
+ */
+function getDefaultSize(elm){
+    /**@ts-ignore @type {number[]} */
+    const r = elm.getAttribute("dfsize")?.split(" ").map(t => { return Number(t); });
+    return { width: r[0], height: r[1] };
+}
+
+
+/**
+ * 
  * @param {string} str 
  * @returns {string}
  */
 function minecraft_formattingSystem(str){
     var cl_count = 0;
     var dec_count = 0;
+
+    if (str.length < 1)
+        return "";
     
     str = "<mcft-cl>§p" + str;
 
@@ -102,7 +128,7 @@ function minecraft_formattingSystem(str){
             str = str.replace(code, "<mcft-dec ".concat(Dec[decoration], ">"));
             if (str.indexOf("§r") < str.indexOf(code) || str.indexOf(code) == -1) {
                 var esc = "";
-                for (var i = 0; i < cl_count; i++) {
+                for (var i = 0; i <= cl_count; i++) {
                     esc += "</mcft-cl>";
                 }
                 for (var i = -2; i < dec_count; i++) {
@@ -125,3 +151,29 @@ function minecraft_formattingSystem(str){
 
     return str;
 }
+
+
+/**
+ * Obfucated font
+ */
+!function(){
+    const abc = "123456789abcdefghijklmnopqrstuvwxyz";
+    const obfuscaters = abc.split("").concat(abc.slice(9).toUpperCase().split(""));
+
+    setInterval(function(){
+        var obfs = document.getElementsByClassName("--mcf-obfuscated");
+        for (var obf of obfs){
+            for (var ch of obf.childNodes){
+                var content = "";
+                if (ch.textContent == null)
+                    continue;
+                for (var char of ch.textContent.split("")){
+                    var c = Math.round(Math.random() * (obfuscaters.length -1));
+                    content += obfuscaters[c];
+                }
+                ch.textContent = content;
+            }
+        }
+    }, 10);
+    return 0;
+}();

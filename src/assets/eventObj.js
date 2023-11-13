@@ -3,86 +3,83 @@
 
 
 /**
- * @typedef {import("./shishiji-dts/objects").mapObj} mapObject
+ * @typedef {import("./shishiji-dts/objects").mapObjElement} mapObjectElement
+ * @typedef {import("./shishiji-dts/objects").mapObject} mapObject
  */
 
 
 /**
  * use /scripts/coords.py to find coordinate
+ * @param {mapObject} objectData 
  */
-function putObjOnMap(){
+function putObjOnMap(objectData){
     /**@ts-ignore @type {HTMLElement} */
     const viewer = document.getElementById("shishiji-view");
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
-
-    /**@parameter */
-    const obj = {
-        "type": "volunteer",
-        "coordinate": {
-            x: 803,
-            y: 564
-        },
-        "title": "甘城なつき",
-        "core_grade": "4年生",
-        "article": "【企画紹介】<br>私が死ぬ前にここにデーモシス国歴史史上最悪の出来事である「人魔大戦」についてここに記そうと思う。\n私は今、死の危機に瀕しているのだ。\nこれを受け取ってほしい...",
-        "theme_color": "green",
-        "schedule": {
-            "10:00": "お客さん入場",
-            "12:00": "営業停止"
-        },
-        "crowd_status": {
-            "level": 40,
-            "estimated": 12,
-        },
-        "imageURL": {
-            "icon": "https://cdn.discordapp.com/attachments/1080464875869970463/1173159179716931614/zi---w.png",
-            "header": "https://cdn.discordapp.com/attachments/1080464875869970463/1173248966528344074/daradara.png"
-        },
-        "font_family": "",
-        "custom_tr": [
-            {
-                "title": "ただいまのスペシャル武器",
-                "content": "弓"
-            },
-            {
-                "title": "そうかのき",
-                "content": "インフルエンザ"
-            },
-        ]
-    };
+    const behavior = objectData.object.type.behavior;
 
     const objectCoords_fromCanvas = {
-        x: (obj.coordinate.x - backcanvas.canvas.coords.x) * zoomRatio,
-        y: (obj.coordinate.y - backcanvas.canvas.coords.y) * zoomRatio,
+        x: (objectData.object.coordinate.x - backcanvas.canvas.coords.x) * zoomRatio,
+        y: (objectData.object.coordinate.y - backcanvas.canvas.coords.y) * zoomRatio,
     };
+    var styles = "";
+    var attrs = "";
+
+
+    switch (behavior){
+        case "dynamic":
+
+            break;
+        default:
+        case "static":
+            if (!objectData.object.type.border)
+                styles += "border: none; border-radius: 0; background-color: transparent;"
+            if (!objectData.article)
+                styles += "cursor: default;"
+            break;
+    }
+
+
 
     const element_outerHTML = `
-        <div class="mapObj" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; display: flex; align-items: center;
-            justify-content: center; width: 0; height: 0; position: absolute;"
-            coords="${obj.coordinate.x} ${obj.coordinate.y}"
-        >
-            <div class="canvas_interactive" style="border: solid 2px white; border-radius: 5px; min-width: 60px; min-height: 60px; max-width: 60px; max-height: 60px;
-                background-image: url('${obj.imageURL.icon}');
-                background-size: 100%;
-                background-repeat: no-repeat;"
-            >
+        <div class="mapObj mapObj_centerAlign" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px;"
+            coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
+            behavior="${objectData.object.type.behavior}"
+            dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
+            <div class="canvas_interactive mapObj_mainctx" style="background-image: url('${objectData.object.images.icon}');
+                min-width: ${objectData.object.size.width}px;
+                min-height: ${objectData.object.size.height}px;
+                max-width: ${objectData.object.size.width}px;
+                max-height: ${objectData.object.size.height}px; ${styles}">
 
             </div>
         </div>
     `;
 
-    $(viewer).prepend(element_outerHTML)
-    const el = $(viewer).children()[0];
-    $(el).on("touchend click", function(event){
-        $("#overview-close").on("click", reduceOverview);
-        const eventDetails = obj;
-        /**@ts-ignore @type {HTMLCanvasElement} */
-        const canvas = document.getElementById("shishiji-canvas");
-
-        raiseOverview();
-        writeOverview(eventDetails);
-    });
+    $(viewer).append(element_outerHTML)
+    const el = $(viewer).children()[$(viewer).children().length - 1];
+    if (objectData.article){
+        $(el).on("touchstart mousedown", function(event){
+            var moved = !!0;
+            function ch(){
+                moved = !0;
+            }
+            function rm(){
+                if (!moved){
+                    raiseOverview();
+                    writeOverview(eventDetails);
+                }
+                $(this).off("touchmove mousemove", ch);
+                $(this).off("touchend mouseup", rm);
+            }
+            $(el).on("touchmove mousemove", ch);
+            $(el).on("touchend mouseup", rm);
+            const eventDetails = objectData;
+            /**@ts-ignore @type {HTMLCanvasElement} */
+            const canvas = document.getElementById("shishiji-canvas");
+        });
+    }
 }
 
 
@@ -91,14 +88,18 @@ function raiseOverview(){
     clearInterval(Intervals.reduce);
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
+    $(overview).show();
     var he = 100;
     //@ts-ignore
     Intervals.raise = setInterval(function(){
         overview.style.top = he+"vh";
-        he -= 1.25;
-        if (he < 0)
+        if (he < 0){
+            overview.style.top = "0vh";
             clearInterval(Intervals.raise);
+        }
+        he -= 1.5;
     }, 5);
+    $("#overview-close").on("click", reduceOverview);
 }
 
 
@@ -111,66 +112,84 @@ function reduceOverview(){
     //@ts-ignore
     Intervals.reduce = setInterval(function(){
         overview.style.top = he+"vh";
-        if (he > 100)
+        if (he > 100){
+            /**@ts-ignore @type {HTMLElement} */
+            const ctx = document.getElementById("overview-context");
+            overview.style.top = "100vh";
+            $(overview).hide();
+            $(ctx).html(`
+                <div style="position: absolute; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;">
+                    <h3>読み込んでいます...</h3>
+                </div>
+            `);
             clearInterval(Intervals.reduce);
-        he += 3;
+        }
+        he += 4;
     }, 5);
+    $("#overview-close").off("click", reduceOverview);
 }
 
 
+/**
+ * 
+ * @param {mapObject} details 
+ */
 function writeOverview(details){
     /**@ts-ignore @type {HTMLElement} */
     const ctx = document.getElementById("overview-context");
-    const color = (details.theme_color) ? details.theme_color : "black";
-    const font = (details.font_family) ? details.font_family : "";
+    /**@ts-ignore @type {HTMLElement} */
+    const overview  = document.getElementById("shishiji-overview");
+    const color = (details.article.theme_color) ? details.article.theme_color : "black";
+    const font = (details.article.font_family) ? details.article.font_family : "";
+
+    var article_mainctx = minecraft_formattingSystem(details.article.content.replace(/\n/g, "<br>"));
+
+    if (article_mainctx.length < 1){
+        article_mainctx = '<h4 style="width: 100%; text-align: center;">このイベントに関する記載はありません</h4>';
+    }
 
     var custom_tr = "";
 
-    for (var tr of details.custom_tr){
+    for (var tr of details.article.custom_tr){
         if (tr.title && tr.content)
             custom_tr += `
                 <tr class="ev_property">
-                    <th class="ev_property_cell">
+                    <th class="ev_property_cell" aria-label="${tr.title}">
                         ${tr.title}
                     </th>
-                    <th class="ev_property_cell">
+                    <th class="ev_property_cell" aria-label="${tr.content}">
                         ${tr.content}
                     </th>
                 </tr>
             `;
     }
+
     
-    $("#shishiji-overview").css("border-top", "solid 10px "+color);
-    $("#shishiji-overview").css("font-family", font);
+    overview.style.borderTop = "solid 10px "+color;
+    $(overview).css("font-family", font);
+
 
     $(ctx).html(`
-        <div style="position: absolute; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;">
-            <h3>読み込んでいます...</h3>
-        </div>
-    `);
-
-    $(ctx).html(`
-        <img src="${details.imageURL.header}" style="width: 100vw">
-        <div style="display: flex; align-items: center; margin: 15px;">
-            <img src="${details.imageURL.icon}" style="width: 48px">
-            <h1 id="ctx-title" style="margin: 5px">${details.title}</h1>
+        <img class="article header" src="${details.article.images.header}" aria-label="ヘッダー画像">
+        <div class="article titleC">
+            <img src="${details.object.images.icon}" style="width: 48px" alt="アイコン">
+            <h1 id="ctx-title" style="margin: 5px">${details.article.title}</h1>
         </div>
         <div id="ctx-article" style="margin: 10px;">
-            <h2>セタガクエスト</h2>
             <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
-                <p>▷中心学年: ${details.core_grade}</p>
+                <p>▷中心学年: ${details.article.core_grade}</p>
             </div>
-            ${minecraft_formattingSystem(details.article.replace("\n", "<br>"))}
+            ${article_mainctx}
             <hr style="margin-top: 20px;">
             <div class="ev_property">
                 <table style="width: 100%;">
                     <tbody>
                         <tr class="ev_property">
-                            <th class="ev_property_cell">
+                            <th class="ev_property_cell" aria-label="開催場所">
                                 開催場所
                             </th>
-                            <th class="ev_property_cell">
-                                3年E組
+                            <th class="ev_property_cell" aria-label="${details.article.venue}">
+                                ${details.article.venue}
                             </th>
                         </tr>
                         <tr class="ev_property">
@@ -178,7 +197,7 @@ function writeOverview(details){
                                 時間
                             </th>
                             <th class="ev_property_cell">
-                                9:00 ~ 17:00
+                                ${details.article.schedule}
                             </th>
                         </tr>
                         ${custom_tr}
@@ -186,21 +205,20 @@ function writeOverview(details){
                             <th class="ev_property_cell">
                                 予想待ち時間
                             </th>
-                            <th class="ev_property_cell">
-                                ${details.crowd_status.estimated}分
+                            <th class="ev_property_cell" aria-label="${details.article.crowd_status.estimated}分">
+                                ${details.article.crowd_status.estimated}分
                             </th>
                         </tr>
                     </tbody>
                 </table>
                 <div class="crowded_lim">
-                    <p style="font-weight: bold; margin: 10px; margin-top: 0; margin-bottom: 5px;">
+                    <p style="font-weight: bold; margin: 10px; margin-top: 0; margin-bottom: 5px;" aria-label="混み具合">
                         混み具合
                     </p>
                     <div class="crowded_deg_bar"></div>
                     <div id="crowed_pointer">
                         <span class="material-symbols-outlined"
-                            style="position: absolute; left: ${details.crowd_status.level}%; margin-top: 5px;"
-                        >
+                            style="position: absolute; left: ${details.article.crowd_status.level}%; margin-top: 5px;">
                             north
                         </span>
                     </div>
@@ -214,7 +232,7 @@ function writeOverview(details){
 
 function updatePositions(){
     for (var _mapObj of document.getElementsByClassName("mapObj")){
-        /**@ts-ignore @type {mapObject} */
+        /**@ts-ignore @type {mapObjectElement} */
         const mapObj = _mapObj;
         const coords = getCoords(mapObj);
 
@@ -223,8 +241,30 @@ function updatePositions(){
             y: (coords.y - backcanvas.canvas.coords.y) * zoomRatio,
         };
 
+        const behavior = getBehavior(mapObj);
+        const dfsize = getDefaultSize(mapObj);
+
+        var size = dfsize;
+
+        switch (behavior){
+            case "static":
+                size.width = dfsize.width*zoomRatio;
+                size.height = dfsize.height*zoomRatio;
+                break;
+            case "dynamic":
+            default:
+
+                break;
+        }
+
         mapObj.style.top = objectCoords_fromCanvas.y+"px";
         mapObj.style.left = objectCoords_fromCanvas.x+"px";
+        
+        $($(mapObj).children()[0])
+            .css("min-width", size.width+"px")
+            .css("min-height", size.height+"px")
+            .css("max-width", size.width+"px")
+            .css("max-height", size.height+"px");
     }
 }
 
