@@ -50,6 +50,12 @@
 
         window.addEventListener("mousemove", mm, { passive: false });
         map_wrapper.style.cursor = "move";
+        Array.from(document.getElementsByClassName("mapObj_static")).forEach(
+            p => {
+                //@ts-ignore
+                p.style.cursor = "move";
+            }
+        );
     }, { passive: false });
 
     
@@ -101,6 +107,12 @@
         pointerPosition = [ null, null ];
         window.removeEventListener("mousemove", mm);
         map_wrapper.style.cursor = "default";
+        Array.from(document.getElementsByClassName("mapObj_static")).forEach(
+            p => {
+                //@ts-ignore
+                p.style.cursor = "default";
+            }
+        )
 
         const vx = pointerVelocity.x,
               vy = pointerVelocity.y;

@@ -109,6 +109,22 @@ table{
     position: absolute;
 }
 
+.ccENTER_A{
+    display: flex;
+    align-items: center;
+}
+
+.ccENTER_B{
+    display: flex;
+    justify-content: center;
+}
+
+.ccENTER_Z{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .article.header{
     width: 100vw;
 }

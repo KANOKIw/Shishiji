@@ -25,6 +25,7 @@ function putObjOnMap(objectData){
     };
     var styles = "";
     var attrs = "";
+    var classes = "";
 
 
     switch (behavior){
@@ -33,6 +34,7 @@ function putObjOnMap(objectData){
             break;
         default:
         case "static":
+            classes += "mapObj_static"
             if (!objectData.object.type.border)
                 styles += "border: none; border-radius: 0; background-color: transparent;"
             if (!objectData.article)
@@ -47,7 +49,7 @@ function putObjOnMap(objectData){
             coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
             behavior="${objectData.object.type.behavior}"
             dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
-            <div class="canvas_interactive mapObj_mainctx" style="background-image: url('${objectData.object.images.icon}');
+            <div class="canvas_interactive mapObj_mainctx ${classes}" style="background-image: url('${objectData.object.images.icon}');
                 min-width: ${objectData.object.size.width}px;
                 min-height: ${objectData.object.size.height}px;
                 max-width: ${objectData.object.size.width}px;
@@ -145,7 +147,7 @@ function writeOverview(details){
     var article_mainctx = minecraft_formattingSystem(details.article.content.replace(/\n/g, "<br>"));
 
     if (article_mainctx.length < 1){
-        article_mainctx = '<h4 style="width: 100%; text-align: center;">このイベントに関する記載はありません</h4>';
+        article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';
     }
 
     var custom_tr = "";
@@ -216,11 +218,13 @@ function writeOverview(details){
                         混み具合
                     </p>
                     <div class="crowded_deg_bar"></div>
-                    <div id="crowed_pointer">
-                        <span class="material-symbols-outlined"
-                            style="position: absolute; left: ${details.article.crowd_status.level}%; margin-top: 5px;">
-                            north
-                        </span>
+                    <div id="crowed_pointer" style="position: relative;">
+                        <div class="ccENTER_B" style="position: absolute; left: ${details.article.crowd_status.level}%;">
+                            <span class="material-symbols-outlined"
+                                style="position: absolute; margin-top: 5px;">
+                                north
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
