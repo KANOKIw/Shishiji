@@ -26,7 +26,7 @@ function putObjOnMap(objectData){
     var styles = "";
     var attrs = "";
     var classes = "";
-
+    var dfcursor = "pointer";
 
     switch (behavior){
         case "dynamic":
@@ -37,8 +37,10 @@ function putObjOnMap(objectData){
             classes += "mapObj_static"
             if (!objectData.object.type.border)
                 styles += "border: none; border-radius: 0; background-color: transparent;"
-            if (!objectData.article)
-                styles += "cursor: default;"
+            if (!objectData.article){
+                styles += "cursor: default;";
+                dfcursor = "default";
+            }
             break;
     }
 
@@ -53,7 +55,7 @@ function putObjOnMap(objectData){
                 min-width: ${objectData.object.size.width}px;
                 min-height: ${objectData.object.size.height}px;
                 max-width: ${objectData.object.size.width}px;
-                max-height: ${objectData.object.size.height}px; ${styles}">
+                max-height: ${objectData.object.size.height}px; ${styles}" dfcs="${dfcursor}">
 
             </div>
         </div>

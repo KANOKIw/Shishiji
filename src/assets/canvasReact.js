@@ -49,13 +49,6 @@
         set_cursorpos(e);
 
         window.addEventListener("mousemove", mm, { passive: false });
-        map_wrapper.style.cursor = "move";
-        Array.from(document.getElementsByClassName("mapObj_static")).forEach(
-            p => {
-                //@ts-ignore
-                p.style.cursor = "move";
-            }
-        );
     }, { passive: false });
 
     
@@ -98,6 +91,13 @@
 
     function mm(e){
         e.preventDefault();
+        map_wrapper.style.cursor = "move";
+        Array.from(document.getElementsByClassName("mapObj_static")).forEach(
+            p => {
+                //@ts-ignore
+                p.style.cursor = "move";
+            }
+        );
         DRAGGING = !0;
         onMouseMove(e, canvas, ctx);
     }
@@ -110,7 +110,7 @@
         Array.from(document.getElementsByClassName("mapObj_static")).forEach(
             p => {
                 //@ts-ignore
-                p.style.cursor = "default";
+                p.style.cursor = p.getAttribute("dfcs");
             }
         )
 
