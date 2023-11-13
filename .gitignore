@@ -1,6 +1,10 @@
 node_modules/
 npm-debug.log
 .db/
+
+resources/img/**
 resources/map_divided/**/*.png
+resources/map-objects/*.json
+
 scripts/*.exe
 src/assets/builds/*.js
