@@ -1,9 +1,13 @@
 #include <iostream>
+#include <streambuf>
 #include <fstream>
 #include <vector>
 #include <regex>
 #include <cstdio>
 
+#include <stdint.h>
+#include <math.h>
+#include <time.h>
 #include <stdio.h>
 #include <windows.h>
 
