@@ -26,7 +26,7 @@ app.use(express.static("./"));
 ws.on("connection", (socket) => {
 	
 	socket.on("/data/update/map-objects", (data) => {
-		const mapobjects_ = mapObjAPI.getAllObjects(false);
+		const mapobjects_ = mapObjAPI.getAllObjects(true);
 		socket.emit("/client/update/map-objects", mapobjects_);
 	});
 });
@@ -37,9 +37,10 @@ app.post("/api/addobject/", (req, res) => {
 	var alr = 0;
 	try{
 		var e = JSON.parse(req.body.c);
-		var y = "./resources/map-objects/third-party"+ req.body.n + ".json";
-		if (fs.existsSync(y)) {alr = 1;throw new Error();}
+		var y = "./resources/map-objects/third-party/"+ req.body.n + ".json";
+		if (fs.existsSync(y)) alr = 1;
 		fs.writeFileSync(y, JSON.stringify(e, null, 4));
+		mapObjAPI.updateObject();
 		res.status(200).send("ok");
 	} catch (E){
 		res.status(500).send(alr);

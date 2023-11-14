@@ -16,7 +16,7 @@ function getAllObjects(cache: boolean=true){
 }
 
 function updateObject(){
-
+    ALLOBJECTS = readAllObjectFiles();
 }
 
 function readAllObjectFiles(): mapObjComponent{
@@ -27,7 +27,21 @@ function readAllObjectFiles(): mapObjComponent{
         const files = fs.readdirSync(dirpath);
 
         for (const file of files) {
+            if (file == ".sample.json")
+                continue;
             const _path = path.join(dirpath, file);
+            const _data: mapObject = JSON.parse(fs.readFileSync(_path, "utf8"));
+            const _name = path.basename(file, path.extname(file));
+            data[_name] = _data;
+        }
+    } catch (e){}
+    var dp = "./resources/map-objects/third-party/";
+
+    try{
+        const files = fs.readdirSync(dp);
+
+        for (const file of files) {
+            const _path = path.join(dp, file);
             const _data: mapObject = JSON.parse(fs.readFileSync(_path, "utf8"));
             const _name = path.basename(file, path.extname(file));
             data[_name] = _data;
@@ -38,4 +52,6 @@ function readAllObjectFiles(): mapObjComponent{
 }
 
 
-export { getAllObjects }
+export {
+    getAllObjects, updateObject
+}
