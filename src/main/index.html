@@ -23,17 +23,56 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/src/assets/builds/main.js"></script>
     </head>
-    <body>
+    <body aria-hidden="true">
         <noscript>
-            <div id="noscript_help">
+            <div id="noscript_help" aria-label="Javascriptを有効にして獅子児祭マップを表示します。">
                 <a href="https://support.google.com/admanager/answer/12654?hl=ja" target="_blank">Javascriptを有効にして獅子児祭マップを表示します。</a>
             </div>
         </noscript>
-        <div id="app-mount">
-            <div id="log" style="position: absolute; font-size: 5px;"></div>
+        <div id="load_spare" style="width: 100vw; height: 100vh;">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+                <div>
+                    <img id="spare_logo" src="/resources/img/logo.png" style="width: 100px; height: 100px;">
+                    <h1 style="text-align: center;">...</h1>
+                </div>
+                <script nonce>
+                    !function(){
+                        const i = document.getElementById("spare_logo");
+                        var t = 0;
+                        var x = -Math.pow(3*100, 1/2);
+                        const p = x;
+                        setInterval(function(){
+                            i.style.transform = `rotateY(${t}deg)`;
+                            t++;
+                        }, 1);
+                    }();
+                </script>
+            </div>
+        </div>
+
+        <div id="app-mount" style="display: none;" aria-label="獅子児祭マップ">
             <main>
-                <div id="shishiji-view">
-                    <canvas id="shishiji-canvas" style="background-color: azure;"></canvas>
+                <div id="shishiji-view" aria-label="地図をドラッグして操作します。写真などをタップ·クリックして詳細を表示します。">
+                    <canvas id="shishiji-canvas" style="width: 100vw; height: 100vh;"></canvas>
+                </div>
+
+                <div id="shishiji-overview" class="protected" style="position: absolute; width: 100vw; display: none; z-index: 2000;
+                    height: 100vh; background-color: white; top: 100vh; overflow-y: scroll; overflow-wrap: break-word; overflow-x: hidden;">
+                    <div style="width: 100%; display: flex; justify-content: end; position: absolute;">
+                        <div id="overview-close" style="cursor: pointer;">
+                            <div class="ccENTER_Z"
+                                style="width: 40px; height: 40px; border: none; background-color: white; border-radius: 50%; pointer-events: none;"
+                                aria-label="閉じる">
+                                <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;">
+                                    close
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="overview-context" style="width: 100vw; margin-bottom: 50vh;">
+
+                    </div>
                 </div>
             </main>
         </div>
