@@ -1,0 +1,41 @@
+{
+    "article": {
+        "title": "",
+        "core_grade": "",
+        "theme_color": "#ffffff",
+        "content": "<Minecraft § color format; see http://kanokiw.com/view?s=w7jhTJhGN3admAZ1>",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [
+            {
+                "title": "",
+                "content": ""
+            }
+        ],
+        "images": {
+            "header": "PATH | URL"
+        },
+        "venue": "",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "volunteer",
+            "behavior": "dynamic | static"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "PATH | URL"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        }
+    }
+}
