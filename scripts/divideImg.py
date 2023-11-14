@@ -7,7 +7,6 @@ from typing import Dict
 from PIL import Image
 
 
-
 def divide(
         src: str, out_path: str, wi: int, he: int, *,
         cleardir: bool=False

@@ -7,7 +7,6 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 
-
 class CoordinateWindow:
     def __init__(self, bgi: str) -> None:
         self.bgi = bgi
