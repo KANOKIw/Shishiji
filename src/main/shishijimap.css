@@ -25,6 +25,12 @@ body{
     font-family: var(--font-view);
 }
 
+#shishiji-view{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
 #setagaku-map{
     width: 100vw;
     height: 100vh;

@@ -151,29 +151,3 @@ function minecraft_formattingSystem(str){
 
     return str;
 }
-
-
-/**
- * Obfucated font
- */
-!function(){
-    const abc = "123456789abcdefghijklmnopqrstuvwxyz";
-    const obfuscaters = abc.split("").concat(abc.slice(9).toUpperCase().split(""));
-
-    setInterval(function(){
-        var obfs = document.getElementsByClassName("--mcf-obfuscated");
-        for (var obf of obfs){
-            for (var ch of obf.childNodes){
-                var content = "";
-                if (ch.textContent == null)
-                    continue;
-                for (var char of ch.textContent.split("")){
-                    var c = Math.round(Math.random() * (obfuscaters.length -1));
-                    content += obfuscaters[c];
-                }
-                ch.textContent = content;
-            }
-        }
-    }, 10);
-    return 0;
-}();

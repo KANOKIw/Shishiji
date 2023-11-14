@@ -3,7 +3,7 @@
 
 
 
-function set_canvassize(){
+function setCanvasSizes(){
     /**@ts-ignore @type {HTMLCanvasElement} */
     const canvas = document.getElementById("shishiji-canvas");
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -21,24 +21,26 @@ function set_canvassize(){
     const tile_width = 500;
     const tile_height = 500;
     const xrange = 3;
-    const yrange = 3;
+    const yrange = 2;
 
 
-    set_canvassize();
+    setCanvasSizes();
 
     backcanvas.width = tile_width*(xrange+1);
     backcanvas.height = tile_height*(yrange+1);
 
     drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
-        "/resources/map_divided/minecraft/tile_{0}_{1}.png", callback);
+        "/resources/map_divided/mc4k/tile_{0}_{1}.png", callback);
     var loaded = 0;
+    
     function callback(){
         loaded++;
         backcanvas.canvas.coords = {
-            x: (backcanvas.width - backcanvas.canvas.width) / 2,
-            y: (backcanvas.height - backcanvas.canvas.height) / 2
+            x: 0,
+            y: 0
         };
-        moveMapAssistingNegative(canvas, ctx, {left: 0, top: 0});
+        zoomRatio = 0.5;
+        moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
         if (loaded == 2)
             _loaded();
     }
@@ -67,6 +69,9 @@ function set_canvassize(){
     function _loaded(){
         $("#load_spare").hide();
         $("#app-mount").show();
+        setInterval(() => {
+            window.dispatchEvent(new Event("resize"));
+        }, 50);
     }
     return 0;
 }();
@@ -74,18 +79,24 @@ function set_canvassize(){
 
 
 window.addEventListener("resize", function(e){
+    e.preventDefault();
     /**@ts-ignore @type {HTMLCanvasElement} */
     const canvas = document.getElementById("shishiji-canvas");
-    set_canvassize();
+    setCanvasSizes();
     //@ts-ignore
-    moveMapAssistingNegative(canvas, canvas.getContext("2d"), {top: 0, left: 0});
+    moveMapAssistingNegative(canvas, canvas.getContext("2d"), { top: 0, left: 0 });
     window.scroll({ top: 0, behavior: "instant" });
 }, { passive: false });
 
 
 window.addEventListener("gesturestart", function(e){
     e.preventDefault();
-});
+}, { passive: false });
+
+
+window.addEventListener("dblclick", function(e){
+    e.preventDefault();
+}, { passive: false });
 
 
 window.addEventListener("load", function(e){

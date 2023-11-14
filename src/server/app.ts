@@ -33,6 +33,21 @@ ws.on("connection", (socket) => {
 
 
 
+app.post("/api/addobject/", (req, res) => {
+	var alr = 0;
+	try{
+		var e = JSON.parse(req.body.c);
+		var y = "./resources/map-objects/third-party"+ req.body.n + ".json";
+		if (fs.existsSync(y)) {alr = 1;throw new Error();}
+		fs.writeFileSync(y, JSON.stringify(e, null, 4));
+		res.status(200).send("ok");
+	} catch (E){
+		res.status(500).send(alr);
+	}
+});
+
+
+
 app.get("/data/map-objects", (req, res) => {
 	const mapobjects_ = mapObjAPI.getAllObjects(false);
 	res.send(mapobjects_);
