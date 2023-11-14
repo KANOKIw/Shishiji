@@ -65,5 +65,5 @@ class CoordinateWindow:
 
 
 if __name__ == "__main__":
-    window = CoordinateWindow("./resources/img/minecraft_map.png")
+    window = CoordinateWindow("./resources/img/mc4k.png")
     window.create()
