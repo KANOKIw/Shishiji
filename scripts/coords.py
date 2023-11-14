@@ -1,3 +1,6 @@
+import os
+import sys
+import re
 import tkinter as tk
 
 from tkinter import ttk
@@ -12,6 +15,7 @@ class CoordinateWindow:
         self.root.title("Get Coordinate")
         self.canvas = tk.Canvas(self.root)
         self.prevID = None
+        self.coords_fotmat = "Coords: {{ x: {0}, y: {1} }}"
 
 
     def create(self) -> None:
@@ -21,7 +25,6 @@ class CoordinateWindow:
         self.canvas.pack(fill="both", expand=True)
         self.canvas.create_image(0, 0, image=photo, anchor="nw")
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
-
 
         vcrlbar = ttk.Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
         vcrlbar.pack(side="right", fill="y")
@@ -33,15 +36,11 @@ class CoordinateWindow:
 
         self.canvas.configure(xscrollcommand=crlbar.set)
 
-
         label = tk.Label(self.root, text="", font=("Helvetica", 24))
         label.pack()
+        label.config(text=self.coords_fotmat.format(None, None))
 
-        coords_fotmat = "Coords: {{ x: {0}, y: {1} }}"
-
-        label.config(text=coords_fotmat.format(None, None))
-
-        self.canvas.bind("<Button-1>", lambda e: self.showCoords(e, label, coords_fotmat))
+        self.canvas.bind("<Button-1>", lambda e: self.showCoords(e, label, self.coords_fotmat))
 
         self.root.mainloop()
 
@@ -55,7 +54,6 @@ class CoordinateWindow:
         label.config(text=format_.format(canvas_x, canvas_y))
 
         id = self.canvas.create_oval(canvas_x-5, canvas_y-5, canvas_x+5, canvas_y+5, fill="red")
-
 
         if self.prevID:
             self.canvas.delete(self.prevID)
