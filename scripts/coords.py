@@ -7,6 +7,13 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 
+
+"""
+set map full image path on main
+creates a window and will be able to get obj coordinate by clicking on map
+"""
+
+
 class CoordinateWindow:
     def __init__(self, bgi: str) -> None:
         self.bgi = bgi

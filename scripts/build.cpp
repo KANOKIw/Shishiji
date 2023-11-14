@@ -12,6 +12,13 @@
 #include <windows.h>
 
 
+
+/**
+ * set js path on main
+ * build new js file by concatting them as one
+*/
+
+
 class Builder {
 public:
     Builder(const std::vector<std::string>& onLoads, const std::vector<std::string>& scriptFiles,
