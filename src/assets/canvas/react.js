@@ -84,8 +84,8 @@ function moveMap(canvas, ctx, moved){
  * @param {boolean} [forceRatio] 
  */
 function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
-    if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
-        || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+    if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
+        || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
         ) return;
 
     if (pos === void 0)
@@ -129,8 +129,8 @@ function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
  * @param {[number, number] | undefined} pos
  */
 function moveMap(canvas, ctx, ratio, origin, pos){
-    if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
-        || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+    if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
+        || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
         ) return;
 
     if (pos === void 0)
@@ -267,7 +267,7 @@ function onTouchMove(event, canvas, ctx){
     pointerPosition = pos;
 
 
-    if (touchCD < MOVEPROPATY.touch.downCD){
+    if (touchCD < MOVEPROPERTY.touch.downCD){
         touchCD++;
         return;
     }
@@ -357,7 +357,7 @@ function onTouchMove(event, canvas, ctx){
  * @param {HTMLCanvasElement} canvas 
  */
 function canvasonScroll(e, canvas){
-    var delta = MOVEPROPATY.scroll * 1;
+    var delta = MOVEPROPERTY.scroll * 1;
     if (e.deltaY > 0)
         delta = 1/delta;
     //@ts-ignore

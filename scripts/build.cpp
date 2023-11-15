@@ -4,6 +4,8 @@
 #include <vector>
 #include <regex>
 #include <cstdio>
+#include <cstdlib>
+#include <filesystem>
 
 #include <stdint.h>
 #include <math.h>
@@ -44,6 +46,17 @@ public:
         }
 
         wFile(outPath_, script);
+    }
+
+
+    void minify()
+    {
+        const size_t dp = outPath_.find_last_of(".");
+        const std::string basename = outPath_.substr(0, dp);
+        
+        const std::string cmd = "npx terser " + outPath_ + " --mangle -o " + basename+".min.js";
+
+        system(cmd.c_str());
     }
 
 private:
@@ -144,7 +157,9 @@ int main()
     };
 
     Builder builder(onLoads, scriptFiles, outPath, false);
+    
     builder.build();
+    builder.minify();
 
     return 0;
 }

@@ -968,6 +968,8 @@
         /**@type {HTMLImageElement[]} */
         var al = [];
     
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
         backcanvas.width = tile_width*(xrange+1);
         backcanvas.height = tile_height*(yrange+1);
     
@@ -1479,6 +1481,11 @@
                 const canvas = document.getElementById("shishiji-canvas");
             });
         }
+    }
+    
+    
+    function clearObj(){
+        $(".mapObj").remove();
     }
     
     

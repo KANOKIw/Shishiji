@@ -31,7 +31,7 @@ function putObjOnMap(objectData){
 
     switch (behavior){
         case "dynamic":
-            classes += "popups "
+            classes += "popups shadowedObj "
             break;
         default:
         case "static":
@@ -74,7 +74,7 @@ function putObjOnMap(objectData){
             function rm(){
                 if (!moved){
                     raiseOverview();
-                    writeOverview(eventDetails);
+                    writeOverview(eventDetails, true);
                 }
                 $(this).off("touchmove mousemove", ch);
                 $(this).off("touchend mouseup", rm);
@@ -86,6 +86,11 @@ function putObjOnMap(objectData){
             const canvas = document.getElementById("shishiji-canvas");
         });
     }
+}
+
+
+function clearObj(){
+    $(".mapObj").remove();
 }
 
 
@@ -136,4 +141,18 @@ function normalCanvas(canvas){
     }
     
     ctx.putImageData(imageData, 0, 0);
+}
+
+
+/**
+ * 
+ * @param {string} currentfloor 
+ * @param {mapObjComponent} objects 
+ */
+function showDigitsOnFloor(currentfloor, objects){
+    for (const y in objects){
+        if (objects[y].object.floor == currentfloor){
+            putObjOnMap(objects[y]);
+        }
+    }
 }

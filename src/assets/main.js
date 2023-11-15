@@ -24,55 +24,67 @@ function setCanvasSizes(){
     const yrange = 2;
 
 
+    startLoad();
     setCanvasSizes();
 
-    backcanvas.width = tile_width*(xrange+1);
-    backcanvas.height = tile_height*(yrange+1);
+    $.get("/data/map-data/conf")
+    .done(function(data){
+        MAPDATA = data;
 
-    drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
-        "/resources/map_divided/mc4k/tile_{0}_{1}.png", callback);
-    var loaded = 0;
-    
-    function callback(){
-        loaded++;
-        backcanvas.canvas.coords = {
-            x: 0,
-            y: 0
-        };
-        zoomRatio = 0.5;
-        moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
-        if (loaded == 2)
-            _loaded();
-    }
+        const initial_data = data[data.initial_floor];
 
-    !function(){
-        $.get("/data/map-objects")
-        .done((objdata) => {
+        backcanvas.width = initial_data.tile_width*(initial_data.xrange+1);
+        backcanvas.height = initial_data.tile_height*(initial_data.yrange+1);
+
+        drawMap(canvas, ctx, initial_data, callback);
+        
+        var loaded = 0;
+        
+        function callback(){
             loaded++;
-            mapObjectComponent = objdata;
-
-            for (var key in mapObjectComponent){
-                const data = mapObjectComponent[key];
-
-                putObjOnMap(data);
-            }
-
+            backcanvas.canvas.coords = {
+                x: 0,
+                y: 0
+            };
+            zoomRatio = 0.5;
+            moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
             if (loaded == 2)
                 _loaded();
-        })
-        .fail((err) => {
-            
-        });
-        return 0;
-    }();
+        }
+    
+        !function(){
+            $.get("/data/map-objects")
+            .done((objdata) => {
+                loaded++;
+                mapObjectComponent = objdata;
+    
+                showDigitsOnFloor(data.initial_floor, mapObjectComponent);
+    
+                CURRENT_FLOOR = data.initial_floor;
 
-    function _loaded(){
-        $("#load_spare").hide();
-        $("#app-mount").show();
-        setInterval(() => {
-            window.dispatchEvent(new Event("resize"));
-        }, 50);
-    }
+                setPlaceSelColor();
+
+                if (loaded == 2)
+                    _loaded();
+            })
+            .fail((err) => {
+                
+            });
+            return 0;
+        }();
+    
+        function _loaded(){
+            endLoad();
+            $("#app-mount").show();
+            setInterval(() => {
+                window.dispatchEvent(new Event("resize"));
+            }, 50);
+        }
+        return 0;
+    })
+    .fail(function(e){
+
+    });
     return 0;
 }();
 

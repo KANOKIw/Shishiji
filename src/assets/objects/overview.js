@@ -1,55 +1,46 @@
 function raiseOverview(){
+    strictMap();
     clearInterval(Intervals.raise);
     clearInterval(Intervals.reduce);
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
+    overview.style.top = "0vh";
+    $(overview).removeClass("reducedown").addClass("raiseup");
     $(overview).show();
-    var he = 100;
-    //@ts-ignore
-    Intervals.raise = setInterval(function(){
-        overview.style.top = he+"vh";
-        if (he < 0){
-            overview.style.top = "0vh";
-            clearInterval(Intervals.raise);
-        }
-        he -= 1.5;
-    }, 5);
-    $("#overview-close").on("click", reduceOverview);
+    $("#overview-close").css("pointer-events", "auto");
+    $("#overview-close").on("touchstart mousedown", reduceOverview);
+}
+
+
+function strictMap(){
+    $("#user-stricter").addClass("active").show();
+}
+
+
+function restrictMap(){
+    $("#user-stricter").removeClass("active").hide();
 }
 
 
 function reduceOverview(){
+    restrictMap();
     clearInterval(Intervals.raise);
     clearInterval(Intervals.reduce);
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
-    var he = 0;
-    //@ts-ignore
-    Intervals.reduce = setInterval(function(){
-        overview.style.top = he+"vh";
-        if (he > 100){
-            /**@ts-ignore @type {HTMLElement} */
-            const ctx = document.getElementById("overview-context");
-            overview.style.top = "100vh";
-            $(overview).hide();
-            $(ctx).html(`
-                <div style="position: absolute; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;">
-                    <h3>読み込んでいます...</h3>
-                </div>
-            `);
-            clearInterval(Intervals.reduce);
-        }
-        he += 4;
-    }, 5);
-    $("#overview-close").off("click", reduceOverview);
+    overview.style.top = "100vh";
+    $(overview).removeClass("raiseup").addClass("reducedown");
+    $("#overview-close").css("pointer-events", "none");
+    $("#overview-close").off("touchstart mousedown", reduceOverview);
 }
 
 
 /**
  * 
  * @param {mapObject} details 
+ * @param {boolean} fadein 
  */
-function writeOverview(details){
+function writeOverview(details, fadein){
     /**@ts-ignore @type {HTMLElement} */
     const ctx = document.getElementById("overview-context");
     /**@ts-ignore @type {HTMLElement} */
@@ -80,6 +71,8 @@ function writeOverview(details){
             `;
     }
 
+    if (fadein)
+        $(ctx).addClass("fadein");
     
     overview.style.borderTop = "solid 20px "+color;
     $(overview).css("font-family", font);

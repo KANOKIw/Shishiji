@@ -76,7 +76,7 @@ function touchZoom(canvas, ctx, event){
     const diffy = touches[0].clientY - y1d;
 
 
-    if (zoomCD > MOVEPROPATY.touch.zoomCD){
+    if (zoomCD > MOVEPROPERTY.touch.zoomCD){
         zoomMapAssistingNegative(canvas, ctx, diffRatio, [0, 0]);
         moveMapAssistingNegative(canvas, ctx, {
             top: diffy,
@@ -117,12 +117,12 @@ function touchZoom(canvas, ctx, event){
     rotatedThisTime += rotation;
 
 
-    if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPATY.touch.rotate.min) || pastRotateMin){
+    if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPERTY.touch.rotate.min) || pastRotateMin){
         if (!pastRotateMin){
-            rotatedThisTime -= toRadians(MOVEPROPATY.touch.rotate.min);
+            rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
         }
         pastRotateMin = !0;
-        if (zoomCD > MOVEPROPATY.touch.zoomCD)
+        if (zoomCD > MOVEPROPERTY.touch.zoomCD)
             rotateCanvas(canvas, ctx, crossPos, rotation);
     }
     
@@ -138,17 +138,19 @@ function touchZoom(canvas, ctx, event){
  * Draw tiles
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx
- * @param {number} xrange 
- * @param {number} yrange 
- * @param {number} tile_width 
- * @param {number} tile_height 
- * @param {string} src_formatter 
  * @param {Function} [callback]
  * @returns {Promise<any>} 
  */
-async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src_formatter, callback){
+async function drawMap(canvas, ctx, data, callback){
+    const xrange = data.xrange;
+    const yrange = data.yrange;
+    const tile_width = data.tile_width;
+    const tile_height = data.tile_height;
+    const src_formatter = data.format;
     /**@type {HTMLImageElement[]} */
     var al = [];
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     backcanvas.width = tile_width*(xrange+1);
     backcanvas.height = tile_height*(yrange+1);

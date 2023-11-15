@@ -9,6 +9,7 @@
  * @typedef {import("./shishiji-dts/motion").Coords} Coords
  * @typedef {import("./shishiji-dts/motion").touchINFO} touchINFO
  * @typedef {import("./shishiji-dts/objects").mapObjComponent} mapObjComponent
+ * @typedef {import("./shishiji-dts/objects").intervals} intervals
  * 
  * @typedef {import("socket.io").Socket} Socket
  */
@@ -50,7 +51,7 @@ backcanvas.canvas = {
  * limit map motion and set magnification of any
  * @readonly
  */
-const MOVEPROPATY = {
+const MOVEPROPERTY = {
     scroll: 1.05,
     caps: {
         ratio: {
@@ -121,7 +122,7 @@ var rotatedThisTime = 0;
 /**
  * rotated amount of one pitch time use to limit start of rotation
  * init once when passed min
- * @see {MOVEPROPATY.touch.rotate.min}
+ * @see {MOVEPROPERTY.touch.rotate.min}
  * @type {Radian}
  */
 var totalRotateThisTime = 0;
@@ -143,11 +144,10 @@ var touchCD = 0;
 var zoomCD = 0;
 
 
-
+/**@type {intervals} */
 var Intervals = {
-    raise: 0,
-    reduce: 0,
-}
+    
+};
 
 
 /**@type {mapObjComponent} */
@@ -208,3 +208,9 @@ const Color = {
     RESET: "§r",
 };
 
+
+var MAPDATA = {
+
+};
+
+var CURRENT_FLOOR = "";

@@ -100,6 +100,44 @@ function getDefaultSize(elm){
 }
 
 
+function startLoad(){
+    $("#place-selector").hide();
+    $("#load_spare").removeClass("loaddoneman").show();
+    const i = document.getElementById("spare_logo");
+    var t = 0;
+    var x = -Math.pow(3*100, 1/2);
+    const p = x;
+    Intervals.load = setInterval(function(){
+        //@ts-ignore
+        i.style.transform = `rotateY(${t}deg)`;
+        t++;
+    }, 1);
+}
+
+
+function endLoad(){
+    $("#load_spare").addClass("loaddoneman");
+    clearInterval(Intervals.load);
+    setTimeout(() => {
+        $("#load_spare").hide();
+        $("#place-selector").addClass("hello").show();
+    }, 1000);
+}
+
+
+function setPlaceSelColor(p){
+    if (p === void 0) p = CURRENT_FLOOR;
+    $(".placeOpt").each(function(index, elm){
+        if (!this.textContent) return;
+        const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
+        if (text === p)
+            $(this).css("background-color", "rgba(0, 100, 0, 0.699)");
+        else if (text.length > 1)
+            $(this).css("background-color", "rgba(188, 255, 255, 0.699)");
+    });
+}
+
+
 /**
  * 
  * @param {string} str 

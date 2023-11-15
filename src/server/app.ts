@@ -15,6 +15,23 @@ const https_cert = {
   	key: "",
   	cert: "",
 }
+const mapConfData = {
+	initial_floor: "1F",
+	"1F": {
+		tile_width: 500,
+		tile_height: 500,
+		xrange: 3,
+		yrange: 2,
+		format: "/resources/map_divided/mc4k/tile_{0}_{1}.png"
+	},
+	"2F": {
+		tile_width: 500,
+		tile_height: 500,
+		xrange: 4,
+		yrange: 2,
+		format: "/resources/map_divided/good_view/tile_{0}_{1}.png"
+	}
+}
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -43,7 +60,7 @@ app.post("/api/addobject/", (req, res) => {
 		mapObjAPI.updateObject();
 		res.status(200).send("ok");
 	} catch (E){
-		res.status(500).send(alr);
+		res.status(500).send({a: alr});
 	}
 });
 
@@ -52,6 +69,10 @@ app.post("/api/addobject/", (req, res) => {
 app.get("/data/map-objects", (req, res) => {
 	const mapobjects_ = mapObjAPI.getAllObjects(false);
 	res.send(mapobjects_);
+});
+
+app.get("/data/map-data/conf", (req, res) => {
+	res.send(mapConfData);
 });
 
 

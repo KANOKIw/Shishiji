@@ -65,7 +65,7 @@ $("#sum").on("click", (e) => {
             $("#sum").css("background-color", "#ffffff");
         }, 5000);
     }).fail(e=>{
-        if (e == 1){
+        if (e.a == 1){
             $("#sum").text("that name already exists");
             clearTimeout(y);
             y = setTimeout(() => {

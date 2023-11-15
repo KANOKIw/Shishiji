@@ -38,6 +38,7 @@ interface mapObject {
             width: number,
             height: number
         },
+        floor: string,
     }
 }
 
@@ -46,10 +47,15 @@ interface mapObjComponent {
     [key: string]: mapObject
 }
 
+interface intervals{
+    // lie
+    load?: NodeJS.Timeout
+}
+
 
 export {
-    mapObj,
     mapObject,
     mapObjComponent,
-    mapObjElement
+    mapObjElement,
+    intervals
 }
