@@ -432,7 +432,6 @@ table{
     height: 100vh;
     z-index: 1002;
     background-color: white;
-    display: none;
 }
 
 #load_spare_c{

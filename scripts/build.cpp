@@ -178,6 +178,7 @@ int main()
 
     std::vector<std::string> onLoads = {
         folder + "canvas/setup.js",
+        folder + "objects/listeners.js",
         folder + "main.js",
     };
 
@@ -186,12 +187,15 @@ int main()
         folder + "utils.js",
         folder + "mcformat.js",
         folder + "speed.js",
+
         folder + "canvas/calculate.js",
         folder + "canvas/display.js",
         folder + "canvas/react.js",
+
         folder + "objects/create.js",
         folder + "objects/move.js",
         folder + "objects/overview.js",
+        folder + "objects/selector.js",
     };
 
     Builder builder(onLoads, scriptFiles, outPath, false);

@@ -5,6 +5,7 @@ import fs from "fs";
 import https from "https";
 import { Random } from "./random";
 import * as mapObjAPI from "./mapObjs";
+import sharp from "sharp";
 
 
 const PORT = 443;
