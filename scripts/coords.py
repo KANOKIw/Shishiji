@@ -1,17 +1,27 @@
-import os
-import sys
-import re
+"""
+set full map image path on main
+creates a window to get obj coordinate by clicking on it
+"""
 import tkinter as tk
 
+from collections import namedtuple
+from typing import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 
 
-
-"""
-set map full image path on main
-creates a window and will be able to get obj coordinate by clicking on map
-"""
+class Coords:
+    def __init__(self, x: int, y: int) -> None:
+        self._x = x; self._y = y
+    # editor hint
+    @property
+    def x(self): return self._x
+    @property
+    def y(self): return self._y
+    @x.setter
+    def x(self, x: int): self._x = x
+    @y.setter
+    def y(self, y: int): self._y = y
 
 
 class CoordinateWindow:
@@ -20,51 +30,56 @@ class CoordinateWindow:
         self.root = tk.Tk()
         self.root.title("Get Coordinate")
         self.canvas = tk.Canvas(self.root)
-        self.prevID = None
-        self.coords_fotmat = "Coords: {{ x: {0}, y: {1} }}"
+        self.prev_id = None
+        self.coords_format = "Coords: {{ x: {0}, y: {1} }}"
+        self.image = Image.open(self.bgi)
 
 
     def create(self) -> None:
-        image = Image.open(self.bgi)
-        photo = ImageTk.PhotoImage(image)
+        photo = ImageTk.PhotoImage(self.image)
 
         self.canvas.pack(fill="both", expand=True)
         self.canvas.create_image(0, 0, image=photo, anchor="nw")
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
-        vcrlbar = ttk.Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
-        vcrlbar.pack(side="right", fill="y")
+        v_scrollbar = ttk.Scrollbar(self.root, orient="vertical", command=self.canvas.yview)
+        v_scrollbar.pack(side="right", fill="y")
+        self.canvas.configure(yscrollcommand=v_scrollbar.set)
 
-        self.canvas.configure(yscrollcommand=vcrlbar.set)
-
-        crlbar = ttk.Scrollbar(self.root, orient="horizontal", command=self.canvas.xview)
-        crlbar.pack(side="bottom", fill="x")
-
-        self.canvas.configure(xscrollcommand=crlbar.set)
+        h_scrollbar = ttk.Scrollbar(self.root, orient="horizontal", command=self.canvas.xview)
+        h_scrollbar.pack(side="bottom", fill="x")
+        self.canvas.configure(xscrollcommand=h_scrollbar.set)
 
         label = tk.Label(self.root, text="", font=("Helvetica", 24))
         label.pack()
-        label.config(text=self.coords_fotmat.format(None, None))
+        label.config(text=self.coords_format.format(None, None))
 
-        self.canvas.bind("<Button-1>", lambda e: self.showCoords(e, label, self.coords_fotmat))
+        self.canvas.bind("<Button-1>", lambda e: self.show_coords(e, label, self.coords_format))
 
         self.root.mainloop()
 
 
-    def showCoords(self, event, label: tk.Label, format_: str) -> None:
-        x, y = event.x, event.y
+    def show_coords(self, event: tk.Event, label: tk.Label, format_: str) -> None:
+        position = Coords(event.x, event.y)
 
-        canvas_x = self.canvas.canvasx(x)
-        canvas_y = self.canvas.canvasy(y)
+        canvas_x = self.canvas.canvasx(position.x)
+        canvas_y = self.canvas.canvasy(position.y)
 
         label.config(text=format_.format(canvas_x, canvas_y))
 
-        id = self.canvas.create_oval(canvas_x-5, canvas_y-5, canvas_x+5, canvas_y+5, fill="red")
+        icolor = self.get_inversed_color(self.image, position)
 
-        if self.prevID:
-            self.canvas.delete(self.prevID)
+        current_id = self.canvas.create_oval(canvas_x - 5, canvas_y - 5, canvas_x + 5, canvas_y + 5, fill=icolor)
 
-        self.prevID = id
+        if self.prev_id:
+            self.canvas.delete(self.prev_id)
+
+        self.prev_id = current_id
+
+    
+    def get_inversed_color(self, img: Image.Image, position: Coords) -> str:
+        colorL = self.image.getpixel((position.x, position.y))
+        return "#{:02x}{:02x}{:02x}".format(255 - colorL[0], 255 - colorL[1], 255 - colorL[2])
 
 
 

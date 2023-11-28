@@ -1,11 +1,15 @@
+/**
+ * set js path on main
+ * build new js file by concatting them as one
+*/
 #include <iostream>
 #include <streambuf>
 #include <fstream>
 #include <vector>
 #include <regex>
-#include <cstdio>
-#include <cstdlib>
 #include <filesystem>
+#include <functional>
+#include <codecvt>
 
 #include <stdint.h>
 #include <math.h>
@@ -13,12 +17,6 @@
 #include <stdio.h>
 #include <windows.h>
 
-
-
-/**
- * set js path on main
- * build new js file by concatting them as one
-*/
 
 
 class Builder {
@@ -54,9 +52,21 @@ public:
         const size_t dp = outPath_.find_last_of(".");
         const std::string basename = outPath_.substr(0, dp);
         
-        const std::string cmd = "npx terser " + outPath_ + " --mangle -o " + basename+".min.js";
+        const std::string cmd = "npx terser "+outPath_+" --mangle -o "+basename+".min.js";
 
         system(cmd.c_str());
+    }
+
+
+    void watch(const std::string& dirPath, const std::function<void()>& callback){
+        std::string _path = dirPath;
+        if (dirPath.back() == L'/'){
+            _path.erase(_path.length() -1);
+        }
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        std::wstring _dirpath = converter.from_bytes(_path);
+        std::cout << "watching directory: " << dirPath << std::endl;
+        watchDir(_dirpath, callback);
     }
 
 private:
@@ -130,6 +140,34 @@ private:
             exit(EXIT_FAILURE);
         }
     }
+
+
+    void watchDir(const std::wstring& dirpath, const std::function<void()>& callback)
+    {
+        HANDLE hDir = CreateFileW(
+            dirpath.c_str(),
+            FILE_LIST_DIRECTORY,
+            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL,
+            OPEN_EXISTING,
+            FILE_FLAG_BACKUP_SEMANTICS,
+            NULL
+        );
+
+        if (hDir == INVALID_HANDLE_VALUE) {
+            std::cerr << "Error opening directory\n";
+            return;
+        }
+
+        while (true){callback();
+            if (WaitForSingleObject(hDir, INFINITE) == WAIT_OBJECT_0){
+                callback();
+                FindNextChangeNotification(hDir);
+            }
+        }
+
+        CloseHandle(hDir);
+    }
 };
 
 
@@ -160,6 +198,11 @@ int main()
     
     builder.build();
     builder.minify();
+    
+    builder.watch("./", [&builder]{
+        builder.build();
+        builder.minify();
+    });
 
     return 0;
 }

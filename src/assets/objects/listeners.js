@@ -10,8 +10,6 @@
     /**@ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
 
-    var openned = !!0;
-
     $("#place-options").children().each(function(index, elm){
         if (!this.textContent)
             return;
@@ -20,13 +18,16 @@
             return;
 
         function addListener(name){
-            this.addEventListener("click", function(){
+            this.addEventListener("click", function(e){
+                e.preventDefault();
                 const data = MAPDATA[name];
-                if (CURRENT_FLOOR === name || data === undefined)
+                if (CURRENT_FLOOR === name || data === undefined){
                     return;
+                }
 
-                toggleFeslOn.apply($(fselector), [!0]);
                 startLoad();
+                toggleFeslOn.apply($(fselector), [!0]);
+                overlay_modes.fselector.opened = !!0;
 
                 backcanvas.width = data.tile_width*(data.xrange+1);
                 backcanvas.height = data.tile_height*(data.yrange+1);
@@ -43,7 +44,7 @@
                 });
                 CURRENT_FLOOR = name;
                 setPlaceSelColor();
-            });
+            }, { passive: false });
             return 0;
         };
 
@@ -51,8 +52,10 @@
     });
     $(fselector)
     .on("click", function(e){
-        toggleFeslOn.apply($(fselector), [openned]);
-        openned = !openned;
+        if (e.target.classList.contains("fselector-btn") || e.target.id == "psdummy"){
+            toggleFeslOn.apply($(fselector), [overlay_modes.fselector.opened]);
+            overlay_modes.fselector.opened = !overlay_modes.fselector.opened;
+        }
     });
     return 0;
 }();

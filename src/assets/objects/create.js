@@ -31,7 +31,7 @@ function putObjOnMap(objectData){
 
     switch (behavior){
         case "dynamic":
-            classes += "popups shadowedObj "
+            classes += "popups realshadow "
             break;
         default:
         case "static":
@@ -66,25 +66,11 @@ function putObjOnMap(objectData){
     $(viewer).append(element_outerHTML)
     const el = $(viewer).children()[$(viewer).children().length - 1];
     if (objectData.article){
-        $(el).on("touchstart mousedown", function(event){
-            var moved = !!0;
-            function ch(){
-                moved = !0;
-            }
-            function rm(){
-                if (!moved){
-                    raiseOverview();
-                    writeOverview(eventDetails, true);
-                }
-                $(this).off("touchmove mousemove", ch);
-                $(this).off("touchend mouseup", rm);
-            }
-            $(el).on("touchmove mousemove", ch);
-            $(el).on("touchend mouseup", rm);
+        listenInterOnEnd(el, function(e){
             const eventDetails = objectData;
-            /**@ts-ignore @type {HTMLCanvasElement} */
-            const canvas = document.getElementById("shishiji-canvas");
-        });
+            raiseOverview();
+            writeOverview(eventDetails, true);
+        }, { forceLeft: true });
     }
 }
 

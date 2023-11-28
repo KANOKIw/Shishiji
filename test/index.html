@@ -2,8 +2,7 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-        <meta content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" name="viewport"></meta>
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
         <meta property="og:type" content="website">
         <meta property="og:title" content="【世田谷学園】2024年度 | 獅子児祭">
         <meta property="og:description" content="...2024年度も開催します的なこと">
@@ -19,8 +18,11 @@
         <meta name="theme-color" content="#ffffff">
         <title>【世田谷学園】2024年度 | 獅子児祭</title>
         <link rel="icon" href="/resources/img/favicon.ico">
+        <link rel="shortcut icon" href="/resources/img/favicon.ico">
+        <link rel="apple-touch-icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
         <link rel="stylesheet" href="/src/main/shishijimap.css">
+        <!--script src="/test/db-logger.js"></script-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/src/assets/utils.js"></script>
@@ -35,42 +37,43 @@
         <script src="/src/assets/objects/overview.js"></script>
         <script src="/src/assets/objects/selector.js"></script>
     </head>
-    <body aria-hidden="true">
-        <noscript>
+    <body>
+        <noscript aria-hidden="true">
             <div id="noscript_help" aria-label="Javascriptを有効にして獅子児祭マップを表示します。">
                 <a href="https://support.google.com/admanager/answer/12654?hl=ja" target="_blank">Javascriptを有効にして獅子児祭マップを表示します。</a>
             </div>
         </noscript>
-        <div id="load_spare">
-            <div id="load_spare_c">
+        <div id="load_spare" class="protected">
+            <div id="load_spare_c" aria-hidden="true">
                 <div>
-                    <img id="spare_logo" src="/resources/img/logo.png" style="width: 100px; height: 100px;">
+                    <img id="spare_logo" src="/resources/img/logo.png" style="width: 100px; height: 100px;" aria-label="獅子児祭のロゴ">
                     <h1 style="text-align: center;">...</h1>
                 </div>
             </div>
         </div>
 
-        <h1 id="e"></h1>
+        <h1 id="e" style="position: absolute; z-index: 9999;"></h1>
         <script nonce>window.addEventListener("error", function(e){
             document.getElementById("e").innerHTML += e.message+"<br>"+e.error.stack;
         });</script>
 
-        <div id="app-mount" style="display: none; z-index: 999;" aria-label="獅子児祭マップ">
-            <main>
-                <div id="place-selector" class="protected">
+        <div id="app-mount" aria-hidden="true">
+            <main aria-label="獅子児祭マップ">
+                <div id="place-selector" class="protected fselector-btn">
+                    <div id="psdummy"></div>
                     <div id="place-options-w">
                         <div id="place-options">
-                            <div class="placeOpt">
+                            <div class="placeOpt fselector-btn" style="width: 67px; height: 67px;">
 
                             </div>
-                            <div class="placeOpt realshadow" style="background-color: rgba(188, 255, 255, 0.699);">
-                                <h3>1F</h3>
+                            <div class="placeOpt realshadow" aria-label="">
+                                <h3>F1</h3>
                             </div>
-                            <div class="placeOpt realshadow" style="background-color: rgba(188, 255, 255, 0.699);">
-                                <h3>2F</h3>
+                            <div class="placeOpt realshadow" aria-label="">
+                                <h3>F2</h3>
                             </div>
-                            <div class="placeOpt realshadow" style="background-color: rgba(188, 255, 255, 0.699);">
-                                <h3>3F</h3>
+                            <div class="placeOpt realshadow" aria-label="">
+                                <h3>F3</h3>
                             </div>
                         </div>
                     </div>
@@ -84,13 +87,12 @@
                     <div id="overview-close-w">
                         <div id="overview-close">
                             <div class="ccENTER_Z" id="overview-close-c" aria-label="閉じる">
-                                <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;">
+                                <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-hidden="true">
                                     close
                                 </span>
                             </div>
                         </div>
                     </div>
-
                     <div id="overview-context" style="width: 100vw; margin-bottom: 50vh;">
 
                     </div>

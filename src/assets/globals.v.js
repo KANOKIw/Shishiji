@@ -154,10 +154,23 @@ var Intervals = {
 var mapObjectComponent = {};
 
 
-/**
- * Minecraft formatting system
- */
-const ColorList = {
+var MAPDATA = {
+
+};
+
+var CURRENT_FLOOR = "";
+
+const overlay_modes = {
+    fselector: {
+        opened: !!0,
+        colors: {
+            current: "rgba(0, 100, 0, 0.699)",
+            else: "rgba(188, 255, 255, 0.699)",
+        }
+    },
+};
+
+const _mcColorList = {
     "0": "#000000",  // Black
     "1": "#0000AA",  // Dark Blue
     "2": "#00AA00",  // Dark Green
@@ -175,7 +188,7 @@ const ColorList = {
     "e": "#FFFF55",  // Yellow
     "f": "#FFFFFF",  // White
 };
-const Dec = {
+const _mcDec = {
     "k": 'class="--mcf-obfuscated"',
     "l": 'style="font-weight: bolder;"',
     "m": 'style="text-decoration: line-through;"',
@@ -183,7 +196,7 @@ const Dec = {
     "o": 'style="font-style: italic;"',
     "p": 'style=""',
 };
-const Color = {
+const _mcColor = {
     BLACK: "§0",
     DARK_BLUE: "§1",
     DARK_GREEN: "§2",
@@ -207,10 +220,3 @@ const Color = {
     ITALIC: "§o",
     RESET: "§r",
 };
-
-
-var MAPDATA = {
-
-};
-
-var CURRENT_FLOOR = "";

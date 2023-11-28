@@ -1,18 +1,16 @@
 function raiseOverview(){
     strictMap();
-    clearInterval(Intervals.raise);
-    clearInterval(Intervals.reduce);
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
     overview.style.top = "0vh";
-    $(overview).removeClass("reducedown").addClass("raiseup");
+    $(overview).removeClass("reducedown").addClass("raiseup").scrollTop(0);
     $(overview).show();
-    $("#overview-close").css("pointer-events", "auto");
-    $("#overview-close").on("touchstart mousedown", reduceOverview);
+    $("#overview-close").on("click", reduceOverview);
 }
 
 
 function strictMap(){
+    clearInterval(Intervals.reduceOverview);
     $("#user-stricter").addClass("active").show();
 }
 
@@ -24,14 +22,16 @@ function restrictMap(){
 
 function reduceOverview(){
     restrictMap();
-    clearInterval(Intervals.raise);
-    clearInterval(Intervals.reduce);
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
     overview.style.top = "100vh";
     $(overview).removeClass("raiseup").addClass("reducedown");
-    $("#overview-close").css("pointer-events", "none");
-    $("#overview-close").off("touchstart mousedown", reduceOverview);
+    $("#overview-close").off("click", reduceOverview);
+    $("#overview-context").removeClass("fadein");
+    Intervals.reduceOverview = setTimeout(() => {
+        $("#overview-context").html(`<h4 style="text-align: center;">詳細情報を処理中...</h4>`);
+        $(overview).scrollTop(0).hide();
+    }, 190);
 }
 
 
@@ -49,7 +49,7 @@ function writeOverview(details, fadein){
     const font = (details.article.font_family) ? details.article.font_family : "";
     const imgOnError = `onerror="this.src='/resources/img/noimg.png';"`
 
-    var article_mainctx = mcFormat(details.article.content.replace(/\n/g, "<br>"));
+    var article_mainctx = mcFormat(details.article.content);
     
     if (article_mainctx === "<span></span>"){
         article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';

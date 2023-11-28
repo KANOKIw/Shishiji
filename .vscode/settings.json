@@ -79,6 +79,9 @@
         "set": "cpp",
         "stack": "cpp",
         "unordered_set": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "codecvt": "cpp",
+        "functional": "cpp",
+        "unordered_map": "cpp"
     },
 }

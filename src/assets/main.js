@@ -53,7 +53,7 @@ function setCanvasSizes(){
         }
     
         !function(){
-            $.get("/data/map-objects")
+            $.get("/data/map-data/objects")
             .done((objdata) => {
                 loaded++;
                 mapObjectComponent = objdata;
@@ -114,3 +114,5 @@ window.addEventListener("dblclick", function(e){
 window.addEventListener("load", function(e){
     window.scroll({ top: 0, behavior: "instant" });
 });
+
+document.oncontextmenu = () => { return false; }

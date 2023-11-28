@@ -10,6 +10,7 @@
      * @typedef {import("./shishiji-dts/motion").Coords} Coords
      * @typedef {import("./shishiji-dts/motion").touchINFO} touchINFO
      * @typedef {import("./shishiji-dts/objects").mapObjComponent} mapObjComponent
+     * @typedef {import("./shishiji-dts/objects").intervals} intervals
      * 
      * @typedef {import("socket.io").Socket} Socket
      */
@@ -51,7 +52,7 @@
      * limit map motion and set magnification of any
      * @readonly
      */
-    const MOVEPROPATY = {
+    const MOVEPROPERTY = {
         scroll: 1.05,
         caps: {
             ratio: {
@@ -122,7 +123,7 @@
     /**
      * rotated amount of one pitch time use to limit start of rotation
      * init once when passed min
-     * @see {MOVEPROPATY.touch.rotate.min}
+     * @see {MOVEPROPERTY.touch.rotate.min}
      * @type {Radian}
      */
     var totalRotateThisTime = 0;
@@ -144,21 +145,33 @@
     var zoomCD = 0;
     
     
-    
+    /**@type {intervals} */
     var Intervals = {
-        raise: 0,
-        reduce: 0,
-    }
+        
+    };
     
     
     /**@type {mapObjComponent} */
     var mapObjectComponent = {};
     
     
-    /**
-     * Minecraft formatting system
-     */
-    const ColorList = {
+    var MAPDATA = {
+    
+    };
+    
+    var CURRENT_FLOOR = "";
+    
+    const overlay_modes = {
+        fselector: {
+            opened: !!0,
+            colors: {
+                current: "rgba(0, 100, 0, 0.699)",
+                else: "rgba(188, 255, 255, 0.699)",
+            }
+        },
+    };
+    
+    const _mcColorList = {
         "0": "#000000",  // Black
         "1": "#0000AA",  // Dark Blue
         "2": "#00AA00",  // Dark Green
@@ -176,7 +189,7 @@
         "e": "#FFFF55",  // Yellow
         "f": "#FFFFFF",  // White
     };
-    const Dec = {
+    const _mcDec = {
         "k": 'class="--mcf-obfuscated"',
         "l": 'style="font-weight: bolder;"',
         "m": 'style="text-decoration: line-through;"',
@@ -184,7 +197,7 @@
         "o": 'style="font-style: italic;"',
         "p": 'style=""',
     };
-    const Color = {
+    const _mcColor = {
         BLACK: "§0",
         DARK_BLUE: "§1",
         DARK_GREEN: "§2",
@@ -208,7 +221,6 @@
         ITALIC: "§o",
         RESET: "§r",
     };
-    
     
     //@ts-check
     "use strict";
@@ -312,12 +324,51 @@
     }
     
     
+    function startLoad(){
+        $("#place-selector").hide();
+        $("#load_spare").removeClass("loaddoneman").show();
+        const i = document.getElementById("spare_logo");
+        var t = 0;
+        var x = -Math.pow(3*100, 1/2);
+        /*Intervals.load = setInterval(function(){
+            //@ts-ignore
+            i.style.transform = `rotateY(${t}deg)`;
+            t += 3;
+        }, 1);*/
+    }
+    
+    
+    function endLoad(){
+        setTimeout(() => {
+            $("#load_spare").addClass("loaddoneman");
+            setTimeout(() => {
+                clearInterval(Intervals.load);
+                $("#load_spare").hide();
+                $("#place-selector").addClass("hello").show();
+            }, 950);
+        }, 1000);
+    }
+    
+    
+    function setPlaceSelColor(p){
+        if (p === void 0) p = CURRENT_FLOOR;
+        $(".placeOpt").each(function(index, elm){
+            if (!this.textContent) return;
+            const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
+            if (text === p)
+                $(this).css("background-color", overlay_modes.fselector.colors.current);
+            else if (text.length > 1)
+                $(this).css("background-color", overlay_modes.fselector.colors.else);
+        });
+    }
+    
+    
     /**
-     * 
+     * @deprecated use {@link mcFormat} instead
      * @param {string} str 
      * @returns {string}
      */
-    function minecraft_formattingSystem(str){
+    function parseMCFormat(str){
         var cl_count = 0;
         var dec_count = 0;
     
@@ -326,18 +377,18 @@
         
         str = "<mcft-cl>§p" + str;
     
-        for (var pat in ColorList) {
+        for (var pat in _mcColorList){
             var str_splited = str.split("\u00A7".concat(pat));
             cl_count += str_splited.length - 1;
-            str = str_splited.join("<mcft-cl style=\"color: ".concat(ColorList[pat], "\">"));
+            str = str_splited.join("<mcft-cl style=\"color: ".concat(_mcColorList[pat], "\">"));
         }
     
-        for (var decoration in Dec) {
+        for (var decoration in _mcDec){
             var code = "\u00A7".concat(decoration);
             while (str.includes(code)) {
                 var code = "\u00A7".concat(decoration);
                 dec_count++;
-                str = str.replace(code, "<mcft-dec ".concat(Dec[decoration], ">"));
+                str = str.replace(code, "<mcft-dec ".concat(_mcDec[decoration], ">"));
                 if (str.indexOf("§r") < str.indexOf(code) || str.indexOf(code) == -1) {
                     var esc = "";
                     for (var i = 0; i <= cl_count; i++) {
@@ -364,40 +415,94 @@
         return str;
     }
     
+    
+    /**
+     * 
+     * @param {JQuery.PlainObject<any>} element 
+     * @param {(event: Event) => void} callback 
+     * @param {{forceLeft?: boolean}} [options] 
+     */
+    function listenInterOnEnd(element, callback, options){
+        if (typeof options === "undefined")
+            options = {};
+        $(element).on("touchstart mousedown", function(e){
+            if (options){
+                if (options.forceLeft && e.button && e.button != 0)
+                    return;
+            }
+            
+            var moved = !!0;
+            $(this)
+            .on("touchmove mousemove wheel mousewheel", onmove)
+            .on("touchend mouseup mouseleave touchleave", onleave);
+    
+            function onmove(){
+                moved = !0;
+            }
+            /**@this {HTMLElement}*/
+            function onleave(e){
+                if (!moved)
+                    callback(e);
+                $(this)
+                .off("touchmove mousemove wheel mousewheel", onmove)
+                .off("touchend mouseup mouseleave touchleave", onleave);
+            }
+        });
+    }
+    
+    
+    /**
+     * 
+     * @param {string} str 
+     * @returns 
+     */
+    function escapeHTML(str){
+        str = str.replace(/ /g, "&nbsp;");
+        str = str.replace(/&/g, "&amp;");
+        str = str.replace(/</g, "&lt;");
+        str = str.replace(/>/g, "&gt;");
+        str = str.replace(/"/g, "&quot;");
+        str = str.replace(/'/g, "&#39;");
+        return str;
+    }
+    
     //@ts-check
     "use strict";
     
     
-    var obfuscators = [];
-    var STYLES = {
-        "§4": "font-weight:normal;text-decoration:none;color:#be0000",
-        "§c": "font-weight:normal;text-decoration:none;color:#fe3f3f",
-        "§6": "font-weight:normal;text-decoration:none;color:#d9a334",
-        "§e": "font-weight:normal;text-decoration:none;color:#fefe3f",
-        "§2": "font-weight:normal;text-decoration:none;color:#00be00",
-        "§a": "font-weight:normal;text-decoration:none;color:#3ffe3f",
-        "§b": "font-weight:normal;text-decoration:none;color:#3ffefe",
-        "§3": "font-weight:normal;text-decoration:none;color:#00bebe",
-        "§1": "font-weight:normal;text-decoration:none;color:#0000be",
-        "§9": "font-weight:normal;text-decoration:none;color:#3f3ffe",
-        "§d": "font-weight:normal;text-decoration:none;color:#fe3ffe",
-        "§5": "font-weight:normal;text-decoration:none;color:#be00be",
-        "§f": "font-weight:normal;text-decoration:none;color:#ffffff",
-        "§7": "font-weight:normal;text-decoration:none;color:#bebebe",
-        "§8": "font-weight:normal;text-decoration:none;color:#3f3f3f",
-        "§0": "font-weight:normal;text-decoration:none;color:#000000",
-        "§l": "font-weight:bold",
-        "§n": "text-decoration:underline;text-decoration-skip:spaces",
-        "§o": "font-style:italic",
-        "§m": "text-decoration:line-through;text-decoration-skip:spaces",
     
-        "§x": "font-size:36px;line-height:1.333",
-        "§y": "font-size:24px;line-height:1",
+    var STYLES = {
+        "§0": "color:#000000",
+        "§1": "color:#0000AA",
+        "§2": "color:#00AA00",
+        "§3": "color:#00AAAA",
+        "§4": "color:#AA0000",
+        "§5": "color:#AA00AA",
+        "§6": "color:#FFAA00",
+        "§7": "color:#AAAAAA",
+        "§8": "color:#555555",
+        "§9": "color:#5555FF",
+        "§a": "color:#55FF55",
+        "§b": "color:#55FFFF",
+        "§c": "color:#FF5555",
+        "§d": "color:#FF55FF",
+        "§e": "color:#FFFF55",
+        "§f": "color:#FFFFFF",
+        "§l": "font-weight:bold",
+        "§n": "text-decoration:underline", 
+        "§o": "font-style:italic",
+        "§m": "text-decoration:line-through",
+    
+        "§L": "font-weight:bolder",
+        "§x": "font-size:48px;line-height:1.5",
+        "§y": "font-size:36px;line-height:1.333",
+        "§z": "font-size:24px;line-height:1",
     };
     
     
     function MCobfuscate(elem){
-        elem.classList.add("mc_obfucated");
+        elem.classList.add("MCOBF");
+        elem.style.fontFamily = "monospace";
     }
     
     
@@ -428,7 +533,7 @@
     /**
      * 
      * @param {string} string 
-     * @returns 
+     * @returns {DocumentFragment}
      */
     function _parseMCFormat(string){
         var codes = string.match(/§.{1}/g) || [],
@@ -442,7 +547,7 @@
             string = string.replace(/\n|\\n/g, "<br>");
         
         for(var i = 0; i < len; i++){
-            indexes.push( string.indexOf(codes[i]));
+            indexes.push(string.indexOf(codes[i]));
             string = string.replace(codes[i], "\x00\x00");
         }
     
@@ -454,7 +559,7 @@
         	indexDelta = indexes[i + 1] - indexes[i];
             if(indexDelta === 2){
                 while(indexDelta === 2){
-                    apply.push (codes[i]);
+                    apply.push(codes[i]);
                     i++;
                     indexDelta = indexes[i + 1] - indexes[i];
                 }
@@ -463,37 +568,22 @@
                 apply.push(codes[i]);
             }
             if (apply.lastIndexOf("§r") > -1){
-                apply = apply.slice( apply.lastIndexOf("§r") + 1 );
+                apply = apply.slice(apply.lastIndexOf("§r") + 1);
             }
-            tmpStr = string.substring( indexes[i], indexes[i + 1] );
-            final.appendChild( applyMCCode(tmpStr, apply) );
+            tmpStr = string.substring(indexes[i], indexes[i + 1]);
+            final.appendChild(applyMCCode(tmpStr, apply));
         }
         return final;
     }
     
     
     /**
-     * void
-     */
-    function clearObfuscators(){
-        var i = obfuscators.length;
-    
-        for(;i--;){
-            clearInterval(obfuscators[i]);
-        }
-    
-        obfuscators = [];
-    }
-    
-    
-    /**
-     * module.exports this
      * @param {string} str 
      * @returns {string}
      */
     function mcFormat(str){
+        //str = escapeHTML(str);
         var r = "";
-        clearObfuscators();
         const el = _parseMCFormat(str);
         for (var e of Array.from(el.children)){
             r += e.outerHTML;
@@ -510,7 +600,7 @@
         const obfuscaters = abc.split("").concat(abc.slice(9).toUpperCase().split(""));
     
         setInterval(function(){
-            var obfs = document.getElementsByClassName("mc_obfucated");
+            var obfs = document.getElementsByClassName("MCOBF");
             for (var obf of obfs){
                 for (var ch of obf.childNodes){
                     var content = "";
@@ -894,7 +984,7 @@
         const diffy = touches[0].clientY - y1d;
     
     
-        if (zoomCD > MOVEPROPATY.touch.zoomCD){
+        if (zoomCD > MOVEPROPERTY.touch.zoomCD){
             zoomMapAssistingNegative(canvas, ctx, diffRatio, [0, 0]);
             moveMapAssistingNegative(canvas, ctx, {
                 top: diffy,
@@ -935,12 +1025,12 @@
         rotatedThisTime += rotation;
     
     
-        if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPATY.touch.rotate.min) || pastRotateMin){
+        if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPERTY.touch.rotate.min) || pastRotateMin){
             if (!pastRotateMin){
-                rotatedThisTime -= toRadians(MOVEPROPATY.touch.rotate.min);
+                rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
             }
             pastRotateMin = !0;
-            if (zoomCD > MOVEPROPATY.touch.zoomCD)
+            if (zoomCD > MOVEPROPERTY.touch.zoomCD)
                 rotateCanvas(canvas, ctx, crossPos, rotation);
         }
         
@@ -956,15 +1046,15 @@
      * Draw tiles
      * @param {HTMLCanvasElement} canvas 
      * @param {CanvasRenderingContext2D} ctx
-     * @param {number} xrange 
-     * @param {number} yrange 
-     * @param {number} tile_width 
-     * @param {number} tile_height 
-     * @param {string} src_formatter 
      * @param {Function} [callback]
      * @returns {Promise<any>} 
      */
-    async function drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height, src_formatter, callback){
+    async function drawMap(canvas, ctx, data, callback){
+        const xrange = data.xrange;
+        const yrange = data.yrange;
+        const tile_width = data.tile_width;
+        const tile_height = data.tile_height;
+        const src_formatter = data.format;
         /**@type {HTMLImageElement[]} */
         var al = [];
     
@@ -1096,8 +1186,8 @@
      * @param {boolean} [forceRatio] 
      */
     function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
-        if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
-            || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+        if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
+            || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
             ) return;
     
         if (pos === void 0)
@@ -1141,8 +1231,8 @@
      * @param {[number, number] | undefined} pos
      */
     function moveMap(canvas, ctx, ratio, origin, pos){
-        if (MOVEPROPATY.caps.ratio.max < zoomRatio && ratio > 1
-            || MOVEPROPATY.caps.ratio.min > zoomRatio && ratio < 1
+        if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
+            || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
             ) return;
     
         if (pos === void 0)
@@ -1279,7 +1369,7 @@
         pointerPosition = pos;
     
     
-        if (touchCD < MOVEPROPATY.touch.downCD){
+        if (touchCD < MOVEPROPERTY.touch.downCD){
             touchCD++;
             return;
         }
@@ -1369,7 +1459,7 @@
      * @param {HTMLCanvasElement} canvas 
      */
     function canvasonScroll(e, canvas){
-        var delta = MOVEPROPATY.scroll * 1;
+        var delta = MOVEPROPERTY.scroll * 1;
         if (e.deltaY > 0)
             delta = 1/delta;
         //@ts-ignore
@@ -1426,7 +1516,7 @@
     
         switch (behavior){
             case "dynamic":
-                classes += "popups "
+                classes += "popups realshadow "
                 break;
             default:
             case "static":
@@ -1461,25 +1551,11 @@
         $(viewer).append(element_outerHTML)
         const el = $(viewer).children()[$(viewer).children().length - 1];
         if (objectData.article){
-            $(el).on("touchstart mousedown", function(event){
-                var moved = !!0;
-                function ch(){
-                    moved = !0;
-                }
-                function rm(){
-                    if (!moved){
-                        raiseOverview();
-                        writeOverview(eventDetails);
-                    }
-                    $(this).off("touchmove mousemove", ch);
-                    $(this).off("touchend mouseup", rm);
-                }
-                $(el).on("touchmove mousemove", ch);
-                $(el).on("touchend mouseup", rm);
+            listenInterOnEnd(el, function(e){
                 const eventDetails = objectData;
-                /**@ts-ignore @type {HTMLCanvasElement} */
-                const canvas = document.getElementById("shishiji-canvas");
-            });
+                raiseOverview();
+                writeOverview(eventDetails, true);
+            }, { forceLeft: true });
         }
     }
     
@@ -1538,6 +1614,20 @@
         ctx.putImageData(imageData, 0, 0);
     }
     
+    
+    /**
+     * 
+     * @param {string} currentfloor 
+     * @param {mapObjComponent} objects 
+     */
+    function showDigitsOnFloor(currentfloor, objects){
+        for (const y in objects){
+            if (objects[y].object.floor == currentfloor){
+                putObjOnMap(objects[y]);
+            }
+        }
+    }
+    
     function updatePositions(){
         for (var _mapObj of document.getElementsByClassName("mapObj")){
             /**@ts-ignore @type {mapObjectElement} */
@@ -1577,57 +1667,48 @@
     }
     
     function raiseOverview(){
-        clearInterval(Intervals.raise);
-        clearInterval(Intervals.reduce);
+        strictMap();
         /**@ts-ignore @type {HTMLElement} */
         const overview = document.getElementById("shishiji-overview");
+        overview.style.top = "0vh";
+        $(overview).removeClass("reducedown").addClass("raiseup").scrollTop(0);
         $(overview).show();
-        var he = 100;
-        //@ts-ignore
-        Intervals.raise = setInterval(function(){
-            overview.style.top = he+"vh";
-            if (he < 0){
-                overview.style.top = "0vh";
-                clearInterval(Intervals.raise);
-            }
-            he -= 1.5;
-        }, 5);
         $("#overview-close").on("click", reduceOverview);
     }
     
     
+    function strictMap(){
+        clearInterval(Intervals.reduceOverview);
+        $("#user-stricter").addClass("active").show();
+    }
+    
+    
+    function restrictMap(){
+        $("#user-stricter").removeClass("active").hide();
+    }
+    
+    
     function reduceOverview(){
-        clearInterval(Intervals.raise);
-        clearInterval(Intervals.reduce);
+        restrictMap();
         /**@ts-ignore @type {HTMLElement} */
         const overview = document.getElementById("shishiji-overview");
-        var he = 0;
-        //@ts-ignore
-        Intervals.reduce = setInterval(function(){
-            overview.style.top = he+"vh";
-            if (he > 100){
-                /**@ts-ignore @type {HTMLElement} */
-                const ctx = document.getElementById("overview-context");
-                overview.style.top = "100vh";
-                $(overview).hide();
-                $(ctx).html(`
-                    <div style="position: absolute; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;">
-                        <h3>読み込んでいます...</h3>
-                    </div>
-                `);
-                clearInterval(Intervals.reduce);
-            }
-            he += 4;
-        }, 5);
+        overview.style.top = "100vh";
+        $(overview).removeClass("raiseup").addClass("reducedown");
         $("#overview-close").off("click", reduceOverview);
+        $("#overview-context").removeClass("fadein");
+        Intervals.reduceOverview = setTimeout(() => {
+            $("#overview-context").html(`<h4 style="text-align: center;">詳細情報を処理中...</h4>`);
+            $(overview).scrollTop(0).hide();
+        }, 190);
     }
     
     
     /**
      * 
      * @param {mapObject} details 
+     * @param {boolean} fadein 
      */
-    function writeOverview(details){
+    function writeOverview(details, fadein){
         /**@ts-ignore @type {HTMLElement} */
         const ctx = document.getElementById("overview-context");
         /**@ts-ignore @type {HTMLElement} */
@@ -1636,7 +1717,7 @@
         const font = (details.article.font_family) ? details.article.font_family : "";
         const imgOnError = `onerror="this.src='/resources/img/noimg.png';"`
     
-        var article_mainctx = mcFormat(details.article.content.replace(/\n/g, "<br>"));
+        var article_mainctx = mcFormat(details.article.content);
         
         if (article_mainctx === "<span></span>"){
             article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';
@@ -1658,6 +1739,8 @@
                 `;
         }
     
+        if (fadein)
+            $(ctx).addClass("fadein");
         
         overview.style.borderTop = "solid 20px "+color;
         $(overview).css("font-family", font);
@@ -1747,6 +1830,8 @@
             const canvas = document.getElementById("shishiji-canvas");
             /** @ts-ignore @type {CanvasRenderingContext2D} */
             const ctx = canvas.getContext("2d");
+            /** @ts-ignore @type {HTMLElement}*/
+            const fselector = document.getElementById("place-selector");
         
         
             /**
@@ -1765,7 +1850,12 @@
             window.addEventListener("touchstart", (e) => {
                 if (illegal(e))
                     return;
+        
                 e.preventDefault();
+        
+                toggleFeslOn.apply($(fselector), [!0]);
+                overlay_modes.fselector.opened = !!0;
+                
                 init_friction();
                 initTouch(e);
                 set_cursorpos(e.touches);
@@ -1776,7 +1866,12 @@
             window.addEventListener("mousedown", (e) => {
                 if (illegal(e))
                     return;
+        
                 e.preventDefault();
+        
+                toggleFeslOn.apply($(fselector), [!0]);
+                overlay_modes.fselector.opened = !!0;
+        
                 init_friction();
                 set_cursorpos(e);
         
@@ -1944,55 +2039,67 @@
             const yrange = 2;
         
         
+            startLoad();
             setCanvasSizes();
         
-            backcanvas.width = tile_width*(xrange+1);
-            backcanvas.height = tile_height*(yrange+1);
+            $.get("/data/map-data/conf")
+            .done(function(data){
+                MAPDATA = data;
         
-            drawMap(canvas, ctx, xrange, yrange, tile_width, tile_height,
-                "/resources/map_divided/mc4k/tile_{0}_{1}.png", callback);
-            var loaded = 0;
-            
-            function callback(){
-                loaded++;
-                backcanvas.canvas.coords = {
-                    x: 0,
-                    y: 0
-                };
-                zoomRatio = 0.5;
-                moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
-                if (loaded == 2)
-                    _loaded();
-            }
+                const initial_data = data[data.initial_floor];
         
-            !function(){
-                $.get("/data/map-objects")
-                .done((objdata) => {
+                backcanvas.width = initial_data.tile_width*(initial_data.xrange+1);
+                backcanvas.height = initial_data.tile_height*(initial_data.yrange+1);
+        
+                drawMap(canvas, ctx, initial_data, callback);
+                
+                var loaded = 0;
+                
+                function callback(){
                     loaded++;
-                    mapObjectComponent = objdata;
-        
-                    for (var key in mapObjectComponent){
-                        const data = mapObjectComponent[key];
-        
-                        putObjOnMap(data);
-                    }
-        
+                    backcanvas.canvas.coords = {
+                        x: 0,
+                        y: 0
+                    };
+                    zoomRatio = 0.5;
+                    moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                     if (loaded == 2)
                         _loaded();
-                })
-                .fail((err) => {
-                    
-                });
-                return 0;
-            }();
+                }
+            
+                !function(){
+                    $.get("/data/map-data/objects")
+                    .done((objdata) => {
+                        loaded++;
+                        mapObjectComponent = objdata;
+            
+                        showDigitsOnFloor(data.initial_floor, mapObjectComponent);
+            
+                        CURRENT_FLOOR = data.initial_floor;
         
-            function _loaded(){
-                $("#load_spare").hide();
-                $("#app-mount").show();
-                setInterval(() => {
-                    window.dispatchEvent(new Event("resize"));
-                }, 50);
-            }
+                        setPlaceSelColor();
+        
+                        if (loaded == 2)
+                            _loaded();
+                    })
+                    .fail((err) => {
+                        
+                    });
+                    return 0;
+                }();
+            
+                function _loaded(){
+                    endLoad();
+                    $("#app-mount").show();
+                    setInterval(() => {
+                        window.dispatchEvent(new Event("resize"));
+                    }, 50);
+                }
+                return 0;
+            })
+            .fail(function(e){
+        
+            });
             return 0;
         }();
         
@@ -2022,6 +2129,8 @@
         window.addEventListener("load", function(e){
             window.scroll({ top: 0, behavior: "instant" });
         });
+        
+        document.oncontextmenu = () => { return false; }
         
     });
     

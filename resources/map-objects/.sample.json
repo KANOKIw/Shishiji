@@ -3,7 +3,7 @@
         "title": "",
         "core_grade": "",
         "theme_color": "#ffffff",
-        "content": "<Minecraft § color format; see http://kanokiw.com/view?s=w7jhTJhGN3admAZ1>",
+        "content": "<Minecraft § color format; @see {@link http://kanokiw.com/view?s=w7jhTJhGN3admAZ1}>",
         "crowd_status": {
             "level": 0,
             "estimated": 0

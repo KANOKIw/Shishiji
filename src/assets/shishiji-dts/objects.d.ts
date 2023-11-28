@@ -48,8 +48,8 @@ interface mapObjComponent {
 }
 
 interface intervals{
-    // lie
-    load?: NodeJS.Timeout
+    /**dummy */
+    [key: string]: NodeJS.Timeout,
 }
 
 
@@ -57,5 +57,5 @@ export {
     mapObject,
     mapObjComponent,
     mapObjElement,
-    intervals
+    intervals,
 }

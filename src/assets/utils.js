@@ -106,21 +106,22 @@ function startLoad(){
     const i = document.getElementById("spare_logo");
     var t = 0;
     var x = -Math.pow(3*100, 1/2);
-    const p = x;
-    Intervals.load = setInterval(function(){
+    /*Intervals.load = setInterval(function(){
         //@ts-ignore
         i.style.transform = `rotateY(${t}deg)`;
-        t++;
-    }, 1);
+        t += 3;
+    }, 1);*/
 }
 
 
 function endLoad(){
-    $("#load_spare").addClass("loaddoneman");
-    clearInterval(Intervals.load);
     setTimeout(() => {
-        $("#load_spare").hide();
-        $("#place-selector").addClass("hello").show();
+        $("#load_spare").addClass("loaddoneman");
+        setTimeout(() => {
+            clearInterval(Intervals.load);
+            $("#load_spare").hide();
+            $("#place-selector").addClass("hello").show();
+        }, 950);
     }, 1000);
 }
 
@@ -131,19 +132,19 @@ function setPlaceSelColor(p){
         if (!this.textContent) return;
         const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
         if (text === p)
-            $(this).css("background-color", "rgba(0, 100, 0, 0.699)");
+            $(this).css("background-color", overlay_modes.fselector.colors.current);
         else if (text.length > 1)
-            $(this).css("background-color", "rgba(188, 255, 255, 0.699)");
+            $(this).css("background-color", overlay_modes.fselector.colors.else);
     });
 }
 
 
 /**
- * 
+ * @deprecated use {@link mcFormat} instead
  * @param {string} str 
  * @returns {string}
  */
-function minecraft_formattingSystem(str){
+function parseMCFormat(str){
     var cl_count = 0;
     var dec_count = 0;
 
@@ -152,18 +153,18 @@ function minecraft_formattingSystem(str){
     
     str = "<mcft-cl>§p" + str;
 
-    for (var pat in ColorList) {
+    for (var pat in _mcColorList){
         var str_splited = str.split("\u00A7".concat(pat));
         cl_count += str_splited.length - 1;
-        str = str_splited.join("<mcft-cl style=\"color: ".concat(ColorList[pat], "\">"));
+        str = str_splited.join("<mcft-cl style=\"color: ".concat(_mcColorList[pat], "\">"));
     }
 
-    for (var decoration in Dec) {
+    for (var decoration in _mcDec){
         var code = "\u00A7".concat(decoration);
         while (str.includes(code)) {
             var code = "\u00A7".concat(decoration);
             dec_count++;
-            str = str.replace(code, "<mcft-dec ".concat(Dec[decoration], ">"));
+            str = str.replace(code, "<mcft-dec ".concat(_mcDec[decoration], ">"));
             if (str.indexOf("§r") < str.indexOf(code) || str.indexOf(code) == -1) {
                 var esc = "";
                 for (var i = 0; i <= cl_count; i++) {
@@ -187,5 +188,56 @@ function minecraft_formattingSystem(str){
         str += "</mcft-dec>";
     }
 
+    return str;
+}
+
+
+/**
+ * 
+ * @param {JQuery.PlainObject<any>} element 
+ * @param {(event: Event) => void} callback 
+ * @param {{forceLeft?: boolean}} [options] 
+ */
+function listenInterOnEnd(element, callback, options){
+    if (typeof options === "undefined")
+        options = {};
+    $(element).on("touchstart mousedown", function(e){
+        if (options){
+            if (options.forceLeft && e.button && e.button != 0)
+                return;
+        }
+        
+        var moved = !!0;
+        $(this)
+        .on("touchmove mousemove wheel mousewheel", onmove)
+        .on("touchend mouseup mouseleave touchleave", onleave);
+
+        function onmove(){
+            moved = !0;
+        }
+        /**@this {HTMLElement}*/
+        function onleave(e){
+            if (!moved)
+                callback(e);
+            $(this)
+            .off("touchmove mousemove wheel mousewheel", onmove)
+            .off("touchend mouseup mouseleave touchleave", onleave);
+        }
+    });
+}
+
+
+/**
+ * 
+ * @param {string} str 
+ * @returns 
+ */
+function escapeHTML(str){
+    str = str.replace(/ /g, "&nbsp;");
+    str = str.replace(/&/g, "&amp;");
+    str = str.replace(/</g, "&lt;");
+    str = str.replace(/>/g, "&gt;");
+    str = str.replace(/"/g, "&quot;");
+    str = str.replace(/'/g, "&#39;");
     return str;
 }

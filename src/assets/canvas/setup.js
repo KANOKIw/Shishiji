@@ -11,6 +11,8 @@
     const canvas = document.getElementById("shishiji-canvas");
     /** @ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
+    /** @ts-ignore @type {HTMLElement}*/
+    const fselector = document.getElementById("place-selector");
 
 
     /**
@@ -29,7 +31,12 @@
     window.addEventListener("touchstart", (e) => {
         if (illegal(e))
             return;
+
         e.preventDefault();
+
+        toggleFeslOn.apply($(fselector), [!0]);
+        overlay_modes.fselector.opened = !!0;
+        
         init_friction();
         initTouch(e);
         set_cursorpos(e.touches);
@@ -40,7 +47,12 @@
     window.addEventListener("mousedown", (e) => {
         if (illegal(e))
             return;
+
         e.preventDefault();
+
+        toggleFeslOn.apply($(fselector), [!0]);
+        overlay_modes.fselector.opened = !!0;
+
         init_friction();
         set_cursorpos(e);
 

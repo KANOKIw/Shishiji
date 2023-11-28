@@ -1,9 +1,12 @@
+"""
+divide map image by pixel for *lazy load
+"""
 import json
 import math
 import os
 import shutil
 
-from typing import Dict
+from typing import *
 from PIL import Image
 
 
@@ -59,5 +62,6 @@ def transparent(image: Image.Image) -> Image.Image:
     return image
 
 
-d = divide("./resources/img/good_view.png", "./resources/map_divided/good_view", 500, 500, cleardir=True)
-print(d)
+if __name__ == "__main__":
+    d = divide("./resources/img/skyblock.png", "./resources/map_divided/skyblock", 500, 500, cleardir=True)
+    print(d)
