@@ -10,4 +10,3 @@ resources/map-objects/**
 .cert/
 
 scripts/*.exe
-src/assets/builds/*.js
