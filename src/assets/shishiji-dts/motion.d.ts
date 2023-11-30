@@ -39,11 +39,7 @@ type Radian = number;
 type Degree = number;
 
 
-/**
- * assign when interacted
- * pointerPosition: temp variable to get previous controler pos (get diff)
- * cursorPosition: current mouse cursor position (zoom origin)
-*/
+
 declare var pointerPosition: Position;
 declare var cursorPosition: Position;
 

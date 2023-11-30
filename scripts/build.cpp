@@ -179,6 +179,7 @@ int main()
     std::vector<std::string> onLoads = {
         folder + "canvas/setup.js",
         folder + "objects/listeners.js",
+        folder + "objects/popup.js",
         folder + "main.js",
     };
 

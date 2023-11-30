@@ -39,7 +39,8 @@ interface mapObject {
             height: number
         },
         floor: string,
-    }
+    },
+    discriminator: string
 }
 
 

@@ -1,3 +1,6 @@
+//@ts-check
+"use strict";
+
 function updatePositions(){
     for (var _mapObj of document.getElementsByClassName("mapObj")){
         /**@ts-ignore @type {mapObjectElement} */

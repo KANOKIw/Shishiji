@@ -32,15 +32,22 @@
         </noscript>
         <div id="load_spare" class="protected">
             <div id="load_spare_c" aria-hidden="true">
-                <div>
+                <div style="display: flex; align-items: center; justify-content: center; flex-flow: column;">
                     <img id="spare_logo" src="/resources/img/logo-loader.png" style="width: 100px; height: 100px;" aria-label="獅子児祭のロゴ">
-                    <h1 style="text-align: center;">...</h1>
+                    <h4 style="text-align: center; margin-top: 5px;">please wait...</h4>
                 </div>
             </div>
         </div>
 
         <div id="app-mount" aria-hidden="true">
             <main aria-label="獅子児祭マップ">
+                <div id="shishiji-popup-container">
+                    <div id="shishiji-popup-container-c">
+                        <!--popup window content-->
+                    </div>
+                </div>
+                <shishiji-mx-overlay></shishiji-mx-overlay>
+
                 <div id="place-selector" class="protected fselector-btn">
                     <div id="psdummy"></div>
                     <div id="place-options-w">
@@ -66,16 +73,25 @@
                 </div>
 
                 <div id="shishiji-overview" class="protected">
-                    <div id="overview-close-w">
-                        <div id="overview-close">
-                            <div class="ccENTER_Z" id="overview-close-c" aria-label="閉じる">
-                                <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-hidden="true">
-                                    <!--google font=x-->
-                                    close
+                    <div id="overview-options">
+                        <div class="overview-option" id="overview-share">
+                            <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-share-c" aria-label="閉じる">
+                                <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="共有">
+                                    ios_share
                                 </span>
                             </div>
                         </div>
+                        <div id="overview-close-w">
+                            <div class="overview-option" id="overview-close">
+                                <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-close-c" aria-label="閉じる">
+                                    <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="閉じる">
+                                        close
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div id="overview-context" style="width: 100vw; margin-bottom: 50vh;">
 
                     </div>

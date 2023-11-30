@@ -17,6 +17,7 @@
         if (text.length < 1)
             return;
 
+        /**@this {HTMLElement} @param {string} name */
         function addListener(name){
             this.addEventListener("click", function(e){
                 e.preventDefault();
@@ -29,20 +30,25 @@
                 toggleFeslOn.apply($(fselector), [!0]);
                 overlay_modes.fselector.opened = !!0;
 
-                backcanvas.width = data.tile_width*(data.xrange+1);
-                backcanvas.height = data.tile_height*(data.yrange+1);
+                const data_size = {
+                    width: data.tile_width*(data.xrange+1),
+                    height: data.tile_height*(data.yrange+1)
+                };
+                backcanvas.width = data_size.width;
+                backcanvas.height = data_size.height;
                 drawMap(canvas, ctx, data, function(){
                     backcanvas.canvas.coords = {
                         x: 0,
                         y: 0
                     };
-                    zoomRatio = 0.5;
+                    zoomRatio = 1;
                     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                     clearObj();
                     showDigitsOnFloor(name, mapObjectComponent);
                     endLoad();
                 });
                 CURRENT_FLOOR = name;
+                setParam("fl", CURRENT_FLOOR);
                 setPlaceSelColor();
             }, { passive: false });
             return 0;

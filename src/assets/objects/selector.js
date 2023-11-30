@@ -2,7 +2,7 @@
 "use strict";
 
 
-/**@type {NodeJS.Timeout} LIE*/
+/**@type {NodeJS.Timeout} FAKE*/
 var lst;
 function toggleFeslOn(openned){
     if (!openned){
@@ -19,6 +19,6 @@ function toggleFeslOn(openned){
             $("#place-options-w")
             .hide()
             .removeClass("toSel undoSel");
-        }, 200);
+        }, 190);
     }
 }

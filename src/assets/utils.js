@@ -233,11 +233,76 @@ function listenInterOnEnd(element, callback, options){
  * @returns 
  */
 function escapeHTML(str){
-    str = str.replace(/ /g, "&nbsp;");
     str = str.replace(/&/g, "&amp;");
     str = str.replace(/</g, "&lt;");
     str = str.replace(/>/g, "&gt;");
     str = str.replace(/"/g, "&quot;");
     str = str.replace(/'/g, "&#39;");
+    str = str.replace(/ /g, "&nbsp;");
     return str;
+}
+
+
+/**
+ * 
+ * @param {string} key 
+ * @param {string | number} value 
+ */
+function setParam(key, value){
+    const here = window.location.href;
+    const urlParams = new URLSearchParams(window.location.search);
+
+    urlParams.set(key, encodeURIComponent(String(value)));
+
+    const yhere = here.split("?")[0] + "?" + urlParams.toString();
+    window.history.replaceState("", "", yhere);
+}
+
+
+/**
+ * 
+ * @param {string} key 
+ * @param {string} [value] 
+ */
+function delParam(key, value){
+    const here = window.location.href;
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (value) value = encodeURIComponent(value);
+
+    urlParams.delete(key, value);
+
+    const yhere = here.split("?")[0] + "?" + urlParams.toString();
+    window.history.replaceState("", "", yhere);
+}
+
+
+/**
+ * 
+ * @param {string} key 
+ * @param {string} [url] 
+ * @returns {string | null}
+ */
+function getParam(key, url){
+    if (url === void 0)
+        url = window.location.href;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const val = urlParams.get(key);
+
+    return val ? decodeURIComponent(val) : null;
+}
+
+
+/**
+ * 
+ * @param {string} discriminator 
+ * @returns {mapObject | null}
+ */
+function searchObject(discriminator){
+    for (const key in mapObjectComponent){
+        const data = mapObjectComponent[key];
+        if (data.discriminator == discriminator) return data;
+    }
+    return null;
 }

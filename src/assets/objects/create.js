@@ -70,6 +70,8 @@ function putObjOnMap(objectData){
             const eventDetails = objectData;
             raiseOverview();
             writeOverview(eventDetails, true);
+
+            setParam("art", objectData.discriminator);
         }, { forceLeft: true });
     }
 }

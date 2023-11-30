@@ -4,6 +4,8 @@
 
 :root{
     --font-view: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --shishiji-mx-overlay-background-opacity: 0.3;
+    --shishiji-btn-active-color: rgba(190, 190, 190, 0.75);
 }
 
 .protected{
@@ -19,12 +21,104 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+shishiji-mx-overlay{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: auto;
+    opacity: var(--shishiji-mx-overlay-background-opacity, 0.6);
+    pointer-events: auto;
+    background-color: #000000;
+    display: none;
+}
+
+shishiji-mx-overlay.popen{
+    display: block;
+    z-index: 3001;
+    animation: alternative 0.3s linear;
+}
+
+shishiji-mx-overlay.pipe{
+    opacity: 0;
+    z-index: 3001;
+    display: block;
+    pointer-events: none;
+    animation: _alternative 0.3s linear;
+}
+
+@keyframes alternative{
+    from { opacity: 0; }
+    to { opacity: var(--shishiji-mx-overlay-background-opacity, 0.6); }
+}
+
+@keyframes _alternative{
+    from { opacity: var(--shishiji-mx-overlay-background-opacity, 0.6); }
+    to {  opacity: 0; }
+}
+
+#ppc-title{
+    width: 100%;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.loading-symbol{
+    animation: kkl 1s infinite;
+}
+
+@keyframes kkl{
+    from { rotate: 0deg; }
+    to { rotate: 360deg; }
+}
+
+.flxxt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mx-text-center{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+hr.ppc-cc{
+    margin: 20px;
+    margin-top: 30px;
+}
+
 body{
     width: 100vw;
     height: 100vh;
     overflow: hidden;
     font-family: var(--font-view);
     touch-action: none;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    appearance: none;
+}
+
+#ppcls{
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    top: 12px;
+    right: 12px;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+}
+
+#ppcls:active{
+    background-color: var(--shishiji-btn-active-color);
 }
 
 @media screen {
@@ -122,7 +216,7 @@ table{
 }
 
 /*#2*/
-#overview-close-w{
+#overview-options{
     z-index: 1000;
     width: 100%;
     display: flex;
@@ -134,7 +228,10 @@ table{
     z-index: 999;
 }
 
-#overview-close{
+.overview-option{
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
     cursor: pointer;
 }
 
@@ -191,6 +288,62 @@ table{
     scrollbar-width: none;
 }
 
+#shishiji-popup-container{
+    z-index: 99999;
+    position: absolute;
+    display: block;
+}
+
+.share-icon{
+    border-radius: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.share-icon-c{
+    background-color: transparent;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.share-title{
+    margin-top: 15px;
+    width: 60px;
+    text-align: center;
+    font-size: small;
+}
+
+#shishiji-popup-container-c{
+    display: none;
+    position: absolute;
+    width: 500px;
+    height: 450px;
+    margin: 24px;
+}
+
+.share_ebtn{
+    width: fit-content;
+}
+
+.share-icon-w:active{
+    background-color: var(--shishiji-btn-active-color);
+}
+
+.__ppwf{
+    background-color: transparent;
+    color: white;
+}
+
 /*#2*/
 #shishiji-overview::-webkit-scrollbar {
     display: none;
@@ -223,7 +376,7 @@ table{
     }
 }
 
-#overview-close-c{
+.overview-c{
     width: 40px;
     height: 40px;
     border: none;
@@ -352,6 +505,15 @@ table{
     0 101px 74px rgba(0, 0, 0, 0.13);
 }
 
+.ovv-btn{
+    margin: 5px;
+    margin-left: 0;
+}
+
+.premiumshadow{
+    box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.4);
+}
+
 #place-options-w{
     display: none;
 }
@@ -362,6 +524,11 @@ table{
 
 #place-selector.hello{
     animation: slideup 1s ease;
+}
+
+.share-icon-w{
+    margin-right: 12px;
+    border-radius: 3px;
 }
 
 #psdummy{       /*#1*/
@@ -426,12 +593,30 @@ table{
     to {opacity: 0;}
 }
 
+#ppupds{
+    background-color: #212121;
+    width: 100%;
+    height: 100%;
+    color: white;
+    border-radius: 20px;
+}
+
+#ppupir{
+    display: flex;
+    height: 150px;
+    margin: 15px;
+    margin-top: 25px;
+    overflow-x: scroll;
+    overflow-y: visible;
+}
+
 #load_spare{
     position: absolute;
     width: 100vw;
     height: 100vh;
     z-index: 1002;
     background-color: white;
+    display: none;
 }
 
 #load_spare_c{

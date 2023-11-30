@@ -16,7 +16,12 @@
      */
     
     
-    /**@type {Position} */
+    
+    /**
+     * assign on interaction
+     * pointerPosition: temp variable to get previous controler pos (get diff)
+     * cursorPosition: current mouse cursor position (zoom origin)
+     * @type {Position} */
     var pointerPosition = [ null, null ];
     /**@type {Position} */
     var cursorPosition = [ null, null ];
@@ -82,7 +87,7 @@
      * @type {{ x: number, y: number, v: number, a: number, method: "MOUSE" | "TOUCH" | null }}
      */
     var pointerVelocity = { 
-        x: 0, y: 0, v: 0, a: -150,
+        x: 0, y: 0, v: 0, a: -100,
         method: null 
     };
     
@@ -170,6 +175,10 @@
             }
         },
     };
+    
+    
+    // digit
+    const paramAbstractDeg = 4;
     
     const _mcColorList = {
         "0": "#000000",  // Black
@@ -457,13 +466,78 @@
      * @returns 
      */
     function escapeHTML(str){
-        str = str.replace(/ /g, "&nbsp;");
         str = str.replace(/&/g, "&amp;");
         str = str.replace(/</g, "&lt;");
         str = str.replace(/>/g, "&gt;");
         str = str.replace(/"/g, "&quot;");
         str = str.replace(/'/g, "&#39;");
+        str = str.replace(/ /g, "&nbsp;");
         return str;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} key 
+     * @param {string | number} value 
+     */
+    function setParam(key, value){
+        const here = window.location.href;
+        const urlParams = new URLSearchParams(window.location.search);
+    
+        urlParams.set(key, encodeURIComponent(String(value)));
+    
+        const yhere = here.split("?")[0] + "?" + urlParams.toString();
+        window.history.replaceState("", "", yhere);
+    }
+    
+    
+    /**
+     * 
+     * @param {string} key 
+     * @param {string} [value] 
+     */
+    function delParam(key, value){
+        const here = window.location.href;
+        const urlParams = new URLSearchParams(window.location.search);
+    
+        if (value) value = encodeURIComponent(value);
+    
+        urlParams.delete(key, value);
+    
+        const yhere = here.split("?")[0] + "?" + urlParams.toString();
+        window.history.replaceState("", "", yhere);
+    }
+    
+    
+    /**
+     * 
+     * @param {string} key 
+     * @param {string} [url] 
+     * @returns {string | null}
+     */
+    function getParam(key, url){
+        if (url === void 0)
+            url = window.location.href;
+    
+        const urlParams = new URLSearchParams(window.location.search);
+        const val = urlParams.get(key);
+    
+        return val ? decodeURIComponent(val) : null;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} discriminator 
+     * @returns {mapObject | null}
+     */
+    function searchObject(discriminator){
+        for (const key in mapObjectComponent){
+            const data = mapObjectComponent[key];
+            if (data.discriminator == discriminator) return data;
+        }
+        return null;
     }
     
     //@ts-check
@@ -668,7 +742,7 @@
                 }
                 k /= t.length;
                 r /= t.length;
-                return {x: k, y: r};
+                return { x: k, y: r };
             }
     
             var prevEvent,
@@ -1098,6 +1172,21 @@
             if (typeof callback === "function")
                 callback(al);
         });
+    }
+    
+    
+    /**
+     * 
+     * @param {boolean} [accurated] 
+     */
+    function setBehavParam(accurated){
+        const abstraction = 10**paramAbstractDeg;
+        const K = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
+        const zr = accurated ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
+        const at = accurated ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
+        
+        setParam("zr", zr);
+        setParam("at", at);
     }
     
     //@ts-check
@@ -1555,6 +1644,8 @@
                 const eventDetails = objectData;
                 raiseOverview();
                 writeOverview(eventDetails, true);
+    
+                setParam("art", objectData.discriminator);
             }, { forceLeft: true });
         }
     }
@@ -1628,6 +1719,9 @@
         }
     }
     
+    //@ts-check
+    "use strict";
+    
     function updatePositions(){
         for (var _mapObj of document.getElementsByClassName("mapObj")){
             /**@ts-ignore @type {mapObjectElement} */
@@ -1666,14 +1760,81 @@
         }
     }
     
+    //@ts-check
+    "use strict";
+    
+    
     function raiseOverview(){
         strictMap();
         /**@ts-ignore @type {HTMLElement} */
         const overview = document.getElementById("shishiji-overview");
+        const $cp = $("#shishiji-popup-container-c");
+        const loadgingsymbol = `<span class="material-symbols-outlined loading-symbol">progress_activity</span>`;
+    
         overview.style.top = "0vh";
         $(overview).removeClass("reducedown").addClass("raiseup").scrollTop(0);
         $(overview).show();
         $("#overview-close").on("click", reduceOverview);
+        $("#overview-share").on("click", shareContent);
+    
+        function shareContent(){
+            Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt">${loadgingsymbol}</div></div>`);
+            function onerr(){
+                Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt"><h4>エラーが発生しました！<br>ページを再読み込みしてみてください！</h4></div></div>`);
+            }
+            $.get("/resources/html-ctx/share.html").done(t => {
+                if (Popup.popupping){
+                    Popup.popupContent(t, function(){
+                        const shareURL = window.location.href;
+                        $("#share-copy").on("click", function(){
+                            window.navigator.clipboard.writeText(shareURL);
+                        });
+    
+                        const discriminator = getParam("art") || "";
+                        const data = searchObject(discriminator);
+    
+                        if (data == null){
+                            onerr();
+                            return;
+                        }
+                        
+                        const message = encodeURIComponent(`世田谷学園 獅子児祭のイベント: ${data.article.title}`);
+                    
+                        for (const ch of document.getElementsByClassName("share_ebtn")){
+                            const appname = ch.id.replace("share-", "");
+                            const $ch = $(ch);
+                            const here = encodeURIComponent(shareURL);
+                            var href = "";
+                            
+                            switch (appname){
+                                case "line":
+                                    href = `http://line.me/R/msg/text/?${message}%0A${here}`;
+                                    break;
+                                case "twitter":
+                                    href = `https://x.com/intent/tweet?url=${here}&text=${message}&related=shishiji&via=shishijifes&hashtags=${encodeURIComponent("獅子児祭")}`;
+                                    break;
+                                case "facebook":
+                                    href = `http://www.facebook.com/share.php?u=${here}`;
+                                    break;
+                                case "whatsapp":
+                                    href = `https://api.whatsapp.com/send/?text=${message}%0A${here}&type=custom_url&app_absent=0`
+                                    break;
+                                default:
+                                    continue;
+                            }
+            
+                            !function(_href){
+                                $ch.on("click", function(){
+                                    window.open(_href, "_blank");
+                                });
+                                return 0;
+                            }(href);
+                        }
+                    });
+                }
+            })
+            .catch(onerr);
+        }
     }
     
     
@@ -1696,10 +1857,13 @@
         $(overview).removeClass("raiseup").addClass("reducedown");
         $("#overview-close").off("click", reduceOverview);
         $("#overview-context").removeClass("fadein");
+        
         Intervals.reduceOverview = setTimeout(() => {
             $("#overview-context").html(`<h4 style="text-align: center;">詳細情報を処理中...</h4>`);
             $(overview).scrollTop(0).hide();
         }, 190);
+    
+        setParam("art", "");
     }
     
     
@@ -1820,7 +1984,7 @@
     "use strict";
     
     
-    /**@type {NodeJS.Timeout} LIE*/
+    /**@type {NodeJS.Timeout} FAKE*/
     var lst;
     function toggleFeslOn(openned){
         if (!openned){
@@ -1837,7 +2001,7 @@
                 $("#place-options-w")
                 .hide()
                 .removeClass("toSel undoSel");
-            }, 200);
+            }, 190);
         }
     }
     
@@ -1857,7 +2021,8 @@
             const ctx = canvas.getContext("2d");
             /** @ts-ignore @type {HTMLElement}*/
             const fselector = document.getElementById("place-selector");
-        
+            /**window.location.href replace timeout */
+            var tout = 0;
         
             /**
              * @param {Event} e  
@@ -1878,6 +2043,10 @@
         
                 e.preventDefault();
         
+                
+                clearTimeout(tout);
+        
+        
                 toggleFeslOn.apply($(fselector), [!0]);
                 overlay_modes.fselector.opened = !!0;
                 
@@ -1893,6 +2062,10 @@
                     return;
         
                 e.preventDefault();
+        
+        
+                clearTimeout(tout);
+        
         
                 toggleFeslOn.apply($(fselector), [!0]);
                 overlay_modes.fselector.opened = !!0;
@@ -1925,19 +2098,26 @@
             }, { passive: false });
             window.addEventListener("mouseup", mouse_lost, { passive: false });
         
-            //window.addEventListener("mouseleave", mouse_lost, { passive: false });
-            //window.addEventListener("mouseout", mouse_lost, { passive: false });
-        
-        
         
             window.addEventListener("wheel", wheel_move, { passive: true });
             window.addEventListener("mousewheel", wheel_move, { passive: true });
         
         
-        
             function wheel_move(e){
                 if (illegal(e))
                     return;
+                clearInterval(tout);
+                //@ts-ignore
+                tout = setTimeout(() => {
+                    setBehavParam();
+                }, 500);
+                map_wrapper.style.cursor = "move";
+                Array.from(document.getElementsByClassName("canvas_interactive")).forEach(
+                    p => {
+                        //@ts-ignore
+                        p.style.cursor = "move";
+                    }
+                );
                 canvasonScroll(e, canvas);
             }
         
@@ -1975,6 +2155,7 @@
                 }
             }
         
+            
             function frict(vx0, vy0){
                 function i(n){
                     return n < 0 ? -1 : 1;
@@ -1998,8 +2179,13 @@
                     moveMapAssistingNegative(canvas, ctx, ag);
                     vx += dxa;
                     vy += dya;
-                    if (vx*vx0 <= 0 && vy*vy0 <= 0 && frictInterval !== null)
+                    if (vx*vx0 <= 0 && vy*vy0 <= 0 && frictInterval !== null){
+                        //@ts-ignore
+                        tout = setTimeout(function(){
+                            setBehavParam();
+                        }, 500)
                         clearInterval(frictInterval);
+                    }
                 }, 1);
                 return 0;
             }
@@ -2057,6 +2243,7 @@
                 if (text.length < 1)
                     return;
         
+                /**@this {HTMLElement} @param {string} name */
                 function addListener(name){
                     this.addEventListener("click", function(e){
                         e.preventDefault();
@@ -2069,20 +2256,25 @@
                         toggleFeslOn.apply($(fselector), [!0]);
                         overlay_modes.fselector.opened = !!0;
         
-                        backcanvas.width = data.tile_width*(data.xrange+1);
-                        backcanvas.height = data.tile_height*(data.yrange+1);
+                        const data_size = {
+                            width: data.tile_width*(data.xrange+1),
+                            height: data.tile_height*(data.yrange+1)
+                        };
+                        backcanvas.width = data_size.width;
+                        backcanvas.height = data_size.height;
                         drawMap(canvas, ctx, data, function(){
                             backcanvas.canvas.coords = {
                                 x: 0,
                                 y: 0
                             };
-                            zoomRatio = 0.5;
+                            zoomRatio = 1;
                             moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                             clearObj();
                             showDigitsOnFloor(name, mapObjectComponent);
                             endLoad();
                         });
                         CURRENT_FLOOR = name;
+                        setParam("fl", CURRENT_FLOOR);
                         setPlaceSelColor();
                     }, { passive: false });
                     return 0;
@@ -2107,6 +2299,93 @@
         "use strict";
         
         
+        !function(){
+            const $cp = $("#shishiji-popup-container-c");
+        
+            /**@param {string} str  */
+            function delpxToNum(str){
+                return Number(str.replace("px", ""));
+            }
+        
+            const base = {
+                width: delpxToNum($cp.css("width")),
+                height: delpxToNum($cp.css("height")),
+                margin: delpxToNum($cp.css("margin"))
+            };
+            
+            $(window).on("resize", function(e){
+                var width = delpxToNum($cp.css("width"));
+                var height = delpxToNum($cp.css("height"));
+                var margin = delpxToNum($cp.css("margin"));
+                
+                
+                if (window.innerWidth < width+margin*2){
+                    $cp.css("width", window.innerWidth-margin*2+"px");
+                    width = window.innerWidth-margin*2;
+                } else {
+                    $cp.css("width", base.width+"px");
+                }
+        
+                $cp
+                .css("top", (window.innerHeight-(margin*2+height))/2+"px")
+                .css("left", (window.innerWidth-(margin*2+width))/2+"px");
+            });
+        
+            window.dispatchEvent(new Event("resize"));
+        
+            return 0;
+        }();
+        
+        
+        
+        class Popup{
+            static me = document.getElementById("shishiji-popup-container-c");
+            static ppcls = `<div id="ppcls"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;"><path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z" fill="#ffffff"></path></svg></div>`;
+        
+            static popupContent(_innerHTML, callback){
+                new Promise((resolve, reject) => {
+                    $("shishiji-mx-overlay")
+                    .removeClass("pipe")
+                    .addClass("popen")
+                    .on("click", this._dispose);
+                    $("#shishiji-popup-container-c")
+                    .html(this.ppcls+_innerHTML)
+                    .show();
+                    resolve("");
+                }).then(() => {
+                    $("#ppcls").on("click", this.disPop);
+                    if (callback !== void 0)
+                        callback();
+                });
+            }
+            
+            static disPop(){
+                $("#ppcls").off("click", this.disPop);
+                $("shishiji-mx-overlay")
+                .removeClass("popen")
+                .addClass("pipe")
+                .off("click", this._dispose);
+                $("#shishiji-popup-container-c")
+                .hide()
+                .empty();
+            }
+        
+            static get popupping(){
+                return (this.me?.style.display != "none") ? true : false;
+            }
+        
+            static _dispose(){
+                if (Popup.popupping)
+                    Popup.disPop();
+            }
+        }
+        
+    });
+    window.addEventListener("load", function(e) {
+        //@ts-check
+        "use strict";
+        
+        
         
         function setCanvasSizes(){
             /**@ts-ignore @type {HTMLCanvasElement} */
@@ -2123,11 +2402,22 @@
             const canvas = document.getElementById("shishiji-canvas");
             /**@ts-ignore @type {CanvasRenderingContext2D} */
             const ctx = canvas.getContext("2d");
-            const tile_width = 500;
-            const tile_height = 500;
-            const xrange = 3;
-            const yrange = 2;
+            /**@ts-ignore @type {string} */
+            const loadType = window.performance?.getEntriesByType("navigation")[0].type;
+            const PARAMS = {
+                article: getParam("art"),
+                zoomRatio: Number(getParam("zr")) || 1,
+                floor: getParam("fl"),
+                coords: getParam("at")?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+            };
+            if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
         
+            if (loadType == "reload"){
+                PARAMS.article = null;
+                //PARAMS.zoomRatio = 1;
+                //PARAMS.coords = [0, 0];
+                setParam("art", "");
+            }
         
             startLoad();
             setCanvasSizes();
@@ -2135,8 +2425,13 @@
             $.get("/data/map-data/conf")
             .done(function(data){
                 MAPDATA = data;
+                var initial_floor = data.initial_floor;
+                var initial_data = data[data.initial_floor];
         
-                const initial_data = data[data.initial_floor];
+                if (PARAMS.floor && Object.keys(data).includes(PARAMS.floor)){
+                    initial_floor = PARAMS.floor;
+                    initial_data = data[PARAMS.floor];
+                }
         
                 backcanvas.width = initial_data.tile_width*(initial_data.xrange+1);
                 backcanvas.height = initial_data.tile_height*(initial_data.yrange+1);
@@ -2148,11 +2443,12 @@
                 function callback(){
                     loaded++;
                     backcanvas.canvas.coords = {
-                        x: 0,
-                        y: 0
+                        //@ts-ignore
+                        x: PARAMS.coords[0], y: PARAMS.coords[1]
                     };
-                    zoomRatio = 0.5;
+                    zoomRatio = PARAMS.zoomRatio;
                     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
+                    setBehavParam();
                     if (loaded == 2)
                         _loaded();
                 }
@@ -2163,9 +2459,9 @@
                         loaded++;
                         mapObjectComponent = objdata;
             
-                        showDigitsOnFloor(data.initial_floor, mapObjectComponent);
+                        showDigitsOnFloor(initial_floor, mapObjectComponent);
             
-                        CURRENT_FLOOR = data.initial_floor;
+                        CURRENT_FLOOR = initial_floor;
         
                         setPlaceSelColor();
         
@@ -2181,9 +2477,18 @@
                 function _loaded(){
                     endLoad();
                     $("#app-mount").show();
-                    setInterval(() => {
-                        window.dispatchEvent(new Event("resize"));
-                    }, 50);
+                    if (PARAMS.article){
+                        const data = searchObject(PARAMS.article);
+                        
+                        if (data == null){
+                            setParam("art", "");
+                            return;
+                        }
+                        setTimeout(() => {
+                            raiseOverview();
+                            writeOverview(data, true);
+                        }, 1000);
+                    }
                 }
                 return 0;
             })

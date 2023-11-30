@@ -191,3 +191,18 @@ async function drawMap(canvas, ctx, data, callback){
             callback(al);
     });
 }
+
+
+/**
+ * 
+ * @param {boolean} [accurated] 
+ */
+function setBehavParam(accurated){
+    const abstraction = 10**paramAbstractDeg;
+    const K = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
+    const zr = accurated ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
+    const at = accurated ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
+    
+    setParam("zr", zr);
+    setParam("at", at);
+}

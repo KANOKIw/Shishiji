@@ -13,7 +13,8 @@
     const ctx = canvas.getContext("2d");
     /** @ts-ignore @type {HTMLElement}*/
     const fselector = document.getElementById("place-selector");
-
+    /**window.location.href replace timeout */
+    var tout = 0;
 
     /**
      * @param {Event} e  
@@ -34,6 +35,10 @@
 
         e.preventDefault();
 
+        
+        clearTimeout(tout);
+
+
         toggleFeslOn.apply($(fselector), [!0]);
         overlay_modes.fselector.opened = !!0;
         
@@ -49,6 +54,10 @@
             return;
 
         e.preventDefault();
+
+
+        clearTimeout(tout);
+
 
         toggleFeslOn.apply($(fselector), [!0]);
         overlay_modes.fselector.opened = !!0;
@@ -81,19 +90,26 @@
     }, { passive: false });
     window.addEventListener("mouseup", mouse_lost, { passive: false });
 
-    //window.addEventListener("mouseleave", mouse_lost, { passive: false });
-    //window.addEventListener("mouseout", mouse_lost, { passive: false });
-
-
 
     window.addEventListener("wheel", wheel_move, { passive: true });
     window.addEventListener("mousewheel", wheel_move, { passive: true });
 
 
-
     function wheel_move(e){
         if (illegal(e))
             return;
+        clearInterval(tout);
+        //@ts-ignore
+        tout = setTimeout(() => {
+            setBehavParam();
+        }, 500);
+        map_wrapper.style.cursor = "move";
+        Array.from(document.getElementsByClassName("canvas_interactive")).forEach(
+            p => {
+                //@ts-ignore
+                p.style.cursor = "move";
+            }
+        );
         canvasonScroll(e, canvas);
     }
 
@@ -131,6 +147,7 @@
         }
     }
 
+    
     function frict(vx0, vy0){
         function i(n){
             return n < 0 ? -1 : 1;
@@ -154,8 +171,13 @@
             moveMapAssistingNegative(canvas, ctx, ag);
             vx += dxa;
             vy += dya;
-            if (vx*vx0 <= 0 && vy*vy0 <= 0 && frictInterval !== null)
+            if (vx*vx0 <= 0 && vy*vy0 <= 0 && frictInterval !== null){
+                //@ts-ignore
+                tout = setTimeout(function(){
+                    setBehavParam();
+                }, 500)
                 clearInterval(frictInterval);
+            }
         }, 1);
         return 0;
     }

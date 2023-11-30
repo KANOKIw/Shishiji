@@ -2,21 +2,16 @@
     "article": {
         "title": "",
         "core_grade": "",
-        "theme_color": "#ffffff",
-        "content": "<Minecraft § color format; @see {@link http://kanokiw.com/view?s=w7jhTJhGN3admAZ1}>",
+        "theme_color": "#000000",
+        "content": "",
         "crowd_status": {
             "level": 0,
             "estimated": 0
         },
         "font_family": "",
-        "custom_tr": [
-            {
-                "title": "",
-                "content": ""
-            }
-        ],
+        "custom_tr": [],
         "images": {
-            "header": "PATH | URL"
+            "header": ""
         },
         "venue": "",
         "schedule": ""
@@ -24,19 +19,21 @@
     "object": {
         "type": {
             "event": "volunteer",
-            "behavior": "dynamic | static"
+            "behavior": "static | dynamic",
+            "border": null
         },
         "coordinate": {
             "x": 0,
             "y": 0
         },
         "images": {
-            "icon": "PATH | URL"
+            "icon": ""
         },
         "size": {
-            "width": 50,
-            "height": 50
+            "width": 0,
+            "height": 0
         },
-        "floor": "1"
-    }
+        "floor": ""
+    },
+    "discriminator": 0
 }

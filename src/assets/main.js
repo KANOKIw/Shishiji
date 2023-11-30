@@ -18,11 +18,22 @@ function setCanvasSizes(){
     const canvas = document.getElementById("shishiji-canvas");
     /**@ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
-    const tile_width = 500;
-    const tile_height = 500;
-    const xrange = 3;
-    const yrange = 2;
+    /**@ts-ignore @type {string} */
+    const loadType = window.performance?.getEntriesByType("navigation")[0].type;
+    const PARAMS = {
+        article: getParam("art"),
+        zoomRatio: Number(getParam("zr")) || 1,
+        floor: getParam("fl"),
+        coords: getParam("at")?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+    };
+    if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
 
+    if (loadType == "reload"){
+        PARAMS.article = null;
+        //PARAMS.zoomRatio = 1;
+        //PARAMS.coords = [0, 0];
+        setParam("art", "");
+    }
 
     startLoad();
     setCanvasSizes();
@@ -30,8 +41,13 @@ function setCanvasSizes(){
     $.get("/data/map-data/conf")
     .done(function(data){
         MAPDATA = data;
+        var initial_floor = data.initial_floor;
+        var initial_data = data[data.initial_floor];
 
-        const initial_data = data[data.initial_floor];
+        if (PARAMS.floor && Object.keys(data).includes(PARAMS.floor)){
+            initial_floor = PARAMS.floor;
+            initial_data = data[PARAMS.floor];
+        }
 
         backcanvas.width = initial_data.tile_width*(initial_data.xrange+1);
         backcanvas.height = initial_data.tile_height*(initial_data.yrange+1);
@@ -43,11 +59,12 @@ function setCanvasSizes(){
         function callback(){
             loaded++;
             backcanvas.canvas.coords = {
-                x: 0,
-                y: 0
+                //@ts-ignore
+                x: PARAMS.coords[0], y: PARAMS.coords[1]
             };
-            zoomRatio = 0.5;
+            zoomRatio = PARAMS.zoomRatio;
             moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
+            setBehavParam();
             if (loaded == 2)
                 _loaded();
         }
@@ -58,9 +75,9 @@ function setCanvasSizes(){
                 loaded++;
                 mapObjectComponent = objdata;
     
-                showDigitsOnFloor(data.initial_floor, mapObjectComponent);
+                showDigitsOnFloor(initial_floor, mapObjectComponent);
     
-                CURRENT_FLOOR = data.initial_floor;
+                CURRENT_FLOOR = initial_floor;
 
                 setPlaceSelColor();
 
@@ -76,9 +93,18 @@ function setCanvasSizes(){
         function _loaded(){
             endLoad();
             $("#app-mount").show();
-            setInterval(() => {
-                window.dispatchEvent(new Event("resize"));
-            }, 50);
+            if (PARAMS.article){
+                const data = searchObject(PARAMS.article);
+                
+                if (data == null){
+                    setParam("art", "");
+                    return;
+                }
+                setTimeout(() => {
+                    raiseOverview();
+                    writeOverview(data, true);
+                }, 1000);
+            }
         }
         return 0;
     })

@@ -15,7 +15,12 @@
  */
 
 
-/**@type {Position} */
+
+/**
+ * assign on interaction
+ * pointerPosition: temp variable to get previous controler pos (get diff)
+ * cursorPosition: current mouse cursor position (zoom origin)
+ * @type {Position} */
 var pointerPosition = [ null, null ];
 /**@type {Position} */
 var cursorPosition = [ null, null ];
@@ -81,7 +86,7 @@ const MOVEPROPERTY = {
  * @type {{ x: number, y: number, v: number, a: number, method: "MOUSE" | "TOUCH" | null }}
  */
 var pointerVelocity = { 
-    x: 0, y: 0, v: 0, a: -150,
+    x: 0, y: 0, v: 0, a: -100,
     method: null 
 };
 
@@ -169,6 +174,10 @@ const overlay_modes = {
         }
     },
 };
+
+
+// digit
+const paramAbstractDeg = 4;
 
 const _mcColorList = {
     "0": "#000000",  // Black

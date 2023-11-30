@@ -49,7 +49,7 @@
             }
             k /= t.length;
             r /= t.length;
-            return {x: k, y: r};
+            return { x: k, y: r };
         }
 
         var prevEvent,
