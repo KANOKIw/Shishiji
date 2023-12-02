@@ -224,6 +224,18 @@
     
     const ZOOMRATIO_ON_SHARE = 3;
     
+    
+    var Notifier = {
+        /**@ts-ignore @type {NodeJS.Timeout} FAKE */
+        Timeout: 0,
+        /**@ts-ignore @type {NodeJS.Timeout} FAKE */
+        _Timeout: 0,
+        /**@ts-ignore @type {NodeJS.Timeout} FAKE */
+        __Timeout: 0,
+        current: "",
+        notifying: !!0,
+    }
+    
     const _mcColorList = {
         "0": "#000000",  // Black
         "1": "#0000AA",  // Dark Blue
@@ -273,6 +285,21 @@
         UNDERLINE: "§n",
         ITALIC: "§o",
         RESET: "§r",
+    };
+    
+    const GPATH = {
+        LINK: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 311 311" enable-background="new 0 0 311 311" xml:space="preserve">
+        <path fill="rgba(0, 0, 0, 0)" opacity="1.000000" stroke="none" d=" M171.000000,312.000000   C115.333359,312.000000 60.166618,311.959625 5.000321,312.097198   C1.575440,312.105743 0.900468,311.424225 0.904463,307.999969   C1.022283,207.000168 1.022267,106.000160 0.904507,5.000339   C0.900515,1.576757 1.575329,0.900450 4.999880,0.904445   C105.999702,1.022284 206.999710,1.022256 307.999512,0.904528   C311.422791,0.900538 312.099579,1.574891 312.095581,4.999732   C311.977722,105.999550 311.977722,206.999557 312.095428,307.999359   C312.099426,311.422302 311.426880,312.109009 308.000214,312.097961   C262.500488,311.951172 217.000168,312.000000 171.000000,312.000000  z"/>
+        <path fill="#4169e1" opacity="1.000000" stroke="none" d=" M212.588440,62.751225   C203.905151,61.807106 197.318359,64.825386 191.542114,70.667397   C173.146027,89.272934 154.611465,107.742149 136.053268,126.186432   C130.662643,131.543976 127.557449,137.786102 128.348419,145.417740   C128.770218,149.487381 125.725365,150.953064 123.608177,153.027985   C121.330856,155.259842 119.174591,159.867798 116.427277,158.862595   C113.518204,157.798218 113.486778,152.886185 112.890381,149.474075   C110.634079,136.565109 114.234146,125.198303 123.279854,115.974342   C142.766052,96.104149 162.411880,76.382927 182.324997,56.941437   C197.565002,42.062393 221.385269,42.463470 236.456772,57.271034   C251.419540,71.971771 252.308945,96.159264 237.592758,111.384216   C217.905685,131.751923 197.864868,151.796082 177.468582,171.452698   C166.175644,182.336105 152.354523,184.355377 137.501022,179.340317   C134.675583,178.386368 133.868240,177.296005 136.440430,175.062469   C138.072174,173.645538 139.615051,172.101028 141.037430,170.473572   C143.872650,167.229599 146.826492,165.301910 151.682220,165.693344   C157.522110,166.164124 162.672089,163.329041 166.853622,159.153671   C186.194168,139.841492 205.643143,120.635231 224.787735,101.130394   C237.990891,87.678795 231.749924,67.824394 212.588440,62.751225  z"/>
+        <path fill="#4169e1" opacity="1.000000" stroke="none" d=" M125.359390,180.359985   C113.330795,192.396744 101.505661,204.137421 89.785324,215.981796   C79.940681,225.930618 79.530716,239.891037 88.669243,248.997726   C97.777161,258.073914 111.812653,257.593933 121.709610,247.737167   C140.482590,229.040421 159.169144,210.256866 177.947128,191.565155   C182.793091,186.741470 185.845337,181.129318 185.354355,174.229935   C185.114212,170.855316 186.130493,168.631439 188.465485,166.387619   C191.451920,163.517807 194.064056,160.258469 197.369263,156.574265   C202.845032,167.292648 203.189789,177.088394 199.851089,187.131454   C197.871994,193.084702 194.467590,198.173920 190.034927,202.601547   C170.818253,221.796356 151.686020,241.076416 132.376938,260.177734   C120.836800,271.593658 103.995110,274.511047 89.358406,268.032440   C74.855324,261.612915 65.525002,246.854904 66.195305,230.890778   C66.609032,221.037491 70.263245,212.376877 77.253769,205.349472   C96.761551,185.738739 116.196274,166.050919 135.974030,146.714890   C147.204605,135.735138 160.803604,133.218796 175.776215,137.693924   C179.222443,138.723923 181.039978,140.034164 177.200104,143.019241   C176.025284,143.932526 174.995834,145.060364 174.013992,146.189240   C170.686951,150.014450 167.343384,152.809952 161.436050,152.308777   C155.639404,151.817017 150.620224,155.047577 146.461792,159.252014   C139.548523,166.241776 132.563232,173.160309 125.359390,180.359985  z"/>
+        </svg>`,
+        X: `<div id="ppcls"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;">
+        <path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z" fill="#ffffff"></path>
+        </svg></div>`,
+        ERROR: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 150 150" enable-background="new 0 0 150 150" xml:space="preserve">
+        <path fill="rgba(0, 0, 0, 0)" opacity="1.000000" stroke="none" d=" M91.000000,151.000000   C61.857235,151.000000 33.214314,150.958221 4.571959,151.066559   C1.799039,151.077042 0.890779,150.769745 0.900395,147.577240   C1.044349,99.784233 1.034018,51.990562 0.915765,4.197404   C0.908644,1.319584 1.631624,0.924331 4.297526,0.929724   C52.090782,1.026403 99.884331,1.024516 147.677612,0.933526   C150.291916,0.928548 151.094894,1.241225 151.087357,4.172537   C150.964233,52.132198 150.973221,100.092323 151.072662,148.052094   C151.078110,150.673111 150.330460,151.068909 147.952454,151.056152   C129.135422,150.955200 110.317589,151.000000 91.000000,151.000000  z"/>
+        <path fill="#FE0510" opacity="1.000000" stroke="none" d=" M16.015171,127.594406   C15.389500,122.791283 17.365780,119.574692 20.453056,116.653770   C33.155266,104.636032 45.714687,92.466881 58.466724,80.502739   C60.807846,78.306259 61.034233,77.145973 58.545311,74.817696   C45.411064,62.531193 32.477421,50.030434 19.447935,37.631584   C17.110323,35.407112 15.048482,33.097363 14.779860,29.665586   C14.403472,24.857042 16.140718,21.108147 20.510757,18.976870   C25.255600,16.662802 29.536678,17.749695 33.302704,21.350452   C44.978779,32.514137 56.687225,43.643967 68.362610,54.808376   C76.802582,62.878979 76.785889,62.891991 85.404640,54.679249   C96.858330,43.765102 108.243118,32.777084 119.806976,21.980894   C124.489128,17.609571 130.914474,17.980312 134.985580,22.378096   C138.958405,26.669752 138.802704,32.653728 134.564240,37.221241   C133.659515,38.196201 132.649765,39.073826 131.686584,39.994411   C119.526939,51.616405 107.433807,63.309513 95.150948,74.799805   C92.679291,77.111969 92.804733,78.301476 95.195732,80.544357   C108.556068,93.077042 121.744354,105.793007 135.013336,118.423332   C138.602264,121.839523 140.081070,125.806725 138.278412,130.595840   C136.639862,134.948944 133.301636,137.184692 128.739456,137.434219   C125.197502,137.627945 122.423683,135.944504 119.899986,133.519150   C106.691513,120.825432 93.335205,108.284325 80.223328,95.492310   C77.629730,92.961967 76.252014,92.721878 73.532562,95.384254   C60.800266,107.849289 47.860424,120.103752 34.913631,132.347702   C27.748919,139.123489 19.840908,137.235489 16.015171,127.594406  z"/>
+        </svg>`,
     };
     
     //@ts-check
@@ -942,7 +969,7 @@
         window.dispatchEvent(new Event("resize"));
         setInterval(() => {
             window.dispatchEvent(new Event("resize"));
-        }, 150);
+        }, 500);
         
         return 0;
     }();
@@ -1896,7 +1923,7 @@
             openSharePopup(
                 {
                     title: "イベントをシェア",
-                    subtitle: "共有されたリンクを開くとこの記事を開き、このイベントが地図の中心に配置されます",
+                    subtitle: "共有されたリンクを開くとマップがこのイベントを中心に移動し、この記事が開かれます",
                 },
                 shareURL,
                 {
@@ -2164,6 +2191,11 @@
                     }
                     $("#share-copy").on("click", function(){
                         window.navigator.clipboard.writeText(shareURL);
+                        notifyHTML(
+                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}リンクをコピーしました！</div>`,
+                            2500,
+                            "copy artshare",
+                        );
                     });
                     
                     message = encodeURIComponent(message);
@@ -2213,6 +2245,75 @@
             }
         })
         .catch(() => { onerr(); });
+    }
+    
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * 
+     * @param {string} html 
+     * @param {number} term 
+     *      millisecond
+     * @param {string} discriminator
+     * @param {boolean} [do_not_keep] 
+     */
+    function notifyHTML(html, term, discriminator, do_not_keep){
+        const $notifier = $("#--yd-notifier");
+        
+        
+        if (Notifier.notifying && Notifier.current == discriminator && !do_not_keep)
+            return;
+    
+        Notifier.current = discriminator;
+    
+        clearTimeout(Notifier.Timeout);
+        clearTimeout(Notifier._Timeout);
+        clearTimeout(Notifier.__Timeout);
+        
+        if (Notifier.notifying){
+            closeNotifier(!!0);
+            Notifier._Timeout = setTimeout(() => {
+                doOpen();
+            }, 75);
+            return;
+        }
+    
+        function doOpen(){
+            $("#--ott-us")
+            .html(html);
+            $notifier
+            .show()
+            .removeClass("hpipe")
+            .addClass("vpopen");
+        
+            Notifier.notifying = !0;
+        
+            Notifier.Timeout = setTimeout(() => {
+                closeNotifier(!0);
+            }, term);
+        }
+        doOpen();
+    }
+    
+    
+    /**
+     * 
+     * @param {boolean} setclosed 
+     */
+    function closeNotifier(setclosed){
+        clearTimeout(Notifier.__Timeout);
+        $("#--yd-notifier")
+        .removeClass("vpopen")
+        .addClass("hpipe");
+        if (setclosed)
+            Notifier.notifying = !!0;
+        Notifier.__Timeout = setTimeout(() => {
+            $("#--ott-us").empty();
+            $("#--yd-notifier").hide();
+            Notifier.current = "";
+        }, 70);
     }
     
     window.addEventListener("load", function(e){
@@ -2510,9 +2611,21 @@
         "use strict";
         
         
+        !function(){
+            // overview
+            writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
+        
+            return 0;
+        }();
+        
+        
+        //@ts-check
+        "use strict";
+        
+        
         class Popup{
             static me = document.getElementById("shishiji-popup-container-c");
-            static ppcls = `<div id="ppcls"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;"><path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z" fill="#ffffff"></path></svg></div>`;
+            static ppcls = GPATH.X;
         
             
             /**
@@ -2569,41 +2682,52 @@
         
         !function(){
             // popup
-            const $cp = $("#shishiji-popup-container-c");
+            !function(){
+                const $cp = $("#shishiji-popup-container-c");
         
-            /**@param {string} str  */
-            function delpxToNum(str){
-                return Number(str.replace("px", ""));
-            }
-        
-            const base = {
-                width: delpxToNum($cp.css("width")),
-                height: delpxToNum($cp.css("height")),
-                margin: delpxToNum($cp.css("margin"))
-            };
-            
-            $(window).on("resize", function(e){
-                var width = delpxToNum($cp.css("width"));
-                var height = delpxToNum($cp.css("height"));
-                var margin = delpxToNum($cp.css("margin"));
-                
-                if (window.innerWidth <= width+margin*2){
-                    $cp.css("width", window.innerWidth-margin*2+"px");
-                    width = window.innerWidth-margin*2;
-                } else {
-                    $cp.css("width", base.width+"px");
+                /**@param {string} str  */
+                function delpxToNum(str){
+                    return Number(str.replace("px", ""));
                 }
         
-                $cp
-                .css("top", (window.innerHeight-(margin*2+height))/2+"px")
-                .css("left", (window.innerWidth-(margin*2+width))/2+"px");
-            });
+                const base = {
+                    width: delpxToNum($cp.css("width")),
+                    height: delpxToNum($cp.css("height")),
+                    margin: delpxToNum($cp.css("margin"))
+                };
+                
+                $(window).on("resize", function(e){
+                    var width = delpxToNum($cp.css("width"));
+                    var height = delpxToNum($cp.css("height"));
+                    var margin = delpxToNum($cp.css("margin"));
+                    
+                    if (window.innerWidth <= width+margin*2){
+                        $cp.css("width", window.innerWidth-margin*2+"px");
+                        width = window.innerWidth-margin*2;
+                    } else {
+                        $cp.css("width", base.width+"px");
+                    }
         
-            window.dispatchEvent(new Event("resize"));
+                    $cp
+                    .css("top", (window.innerHeight-(margin*2+height))/2+"px")
+                    .css("left", (window.innerWidth-(margin*2+width))/2+"px");
+                });
         
-            
-            // overview
-            writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
+                window.dispatchEvent(new Event("resize"));
+                return 0;
+            }();
+        
+        
+            // notify
+            !function(){
+                const $notifier = $("#--yd-notifier");
+                
+                $notifier.on("touchstart mousedown", function(e){
+                    e.preventDefault();
+                    closeNotifier(!0);
+                });
+                return 0;
+            }();
         
             return 0;
         }();
@@ -2731,9 +2855,15 @@
         
                         if (data == null){
                             if (fromshare){
-                                // say error
+                                setTimeout(() => {
+                                    notifyHTML(
+                                        `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}シェアされたイベントが見つかりませんでした</div>`,
+                                        7500,
+                                        "share not found",
+                                    );
+                                }, 500);
                             }
-                            setParam(ParamNames.ARTICLE_ID, "");
+                            delParam(ParamNames.ARTICLE_ID);
                             return;
                         }
         

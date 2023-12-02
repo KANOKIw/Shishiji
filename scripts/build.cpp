@@ -199,13 +199,15 @@ int main()
     std::vector<std::string> onLoads = {
         folder + "canvas/setup.js",
         folder + "objects/listeners.js",
-        folder + "objects/popup.js",
         folder + "objects/setup.js",
+        folder + "supports/popup.js",
+        folder + "supports/setup.js",
         folder + "main.js",
     };
 
     std::vector<std::string> scriptFiles = {
         folder + "globals.v.js",
+        folder + "gpath.js",
         folder + "utils.js",
         folder + "mcformat.js",
         folder + "speed.js",
@@ -219,7 +221,9 @@ int main()
         folder + "objects/move.js",
         folder + "objects/overview.js",
         folder + "objects/selector.js",
-        folder + "objects/share.js",
+
+        folder + "supports/share.js",
+        folder + "supports/notify.js",
     };
 
     Builder jsbuilder(onLoads, scriptFiles, outFolder+"main.js", false);

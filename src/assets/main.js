@@ -120,9 +120,15 @@ function setCanvasSizes(){
 
                 if (data == null){
                     if (fromshare){
-                        // say error
+                        setTimeout(() => {
+                            notifyHTML(
+                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}シェアされたイベントが見つかりませんでした</div>`,
+                                7500,
+                                "share not found",
+                            );
+                        }, 500);
                     }
-                    setParam(ParamNames.ARTICLE_ID, "");
+                    delParam(ParamNames.ARTICLE_ID);
                     return;
                 }
 

@@ -223,6 +223,18 @@ const objectIdFormat = "disc-{0}";
 
 const ZOOMRATIO_ON_SHARE = 3;
 
+
+var Notifier = {
+    /**@ts-ignore @type {NodeJS.Timeout} FAKE */
+    Timeout: 0,
+    /**@ts-ignore @type {NodeJS.Timeout} FAKE */
+    _Timeout: 0,
+    /**@ts-ignore @type {NodeJS.Timeout} FAKE */
+    __Timeout: 0,
+    current: "",
+    notifying: !!0,
+}
+
 const _mcColorList = {
     "0": "#000000",  // Black
     "1": "#0000AA",  // Dark Blue

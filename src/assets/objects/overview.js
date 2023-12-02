@@ -34,7 +34,7 @@ function raiseOverview(){
         openSharePopup(
             {
                 title: "イベントをシェア",
-                subtitle: "共有されたリンクを開くとこの記事を開き、このイベントが地図の中心に配置されます",
+                subtitle: "共有されたリンクを開くとマップがこのイベントを中心に移動し、この記事が開かれます",
             },
             shareURL,
             {

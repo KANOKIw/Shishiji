@@ -18,7 +18,7 @@
     window.dispatchEvent(new Event("resize"));
     setInterval(() => {
         window.dispatchEvent(new Event("resize"));
-    }, 150);
+    }, 500);
     
     return 0;
 }();

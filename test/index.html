@@ -29,6 +29,7 @@
         <script src="/src/assets/mcformat.js"></script>
         <script src="/src/assets/speed.js"></script>
         <script src="/src/assets/cssroot.js"></script>
+        <script src="/src/assets/gpath.js"></script>
         <script src="/src/assets/globals.v.js"></script>
         <script src="/src/assets/canvas/calculate.js"></script>
         <script src="/src/assets/canvas/display.js"></script>
@@ -37,7 +38,8 @@
         <script src="/src/assets/objects/move.js"></script>
         <script src="/src/assets/objects/overview.js"></script>
         <script src="/src/assets/objects/selector.js"></script>
-        <script src="/src/assets/objects/share.js"></script>
+        <script src="/src/assets/supports/share.js"></script>
+        <script src="/src/assets/supports/notify.js"></script>
     </head>
     <body>
         <noscript aria-hidden="true">
@@ -61,6 +63,11 @@
 
         <div id="app-mount" aria-hidden="true">
             <main aria-label="獅子児祭マップ">
+                <shishiji-yd-notify>
+                    <shishiji-yd-notifier id="--yd-notifier" class="hpipe protected">
+                        <div id="--ott-us" class="flxxt"></div>
+                    </shishiji-yd-notifier>
+                </shishiji-yd-notify>
                 <div id="shishiji-popup-container">
                     <div id="shishiji-popup-container-c">
                         <!--popup window content-->
@@ -118,8 +125,9 @@
                 </div>
             </main>
         </div>
+        <script src="/src/assets/supports/popup.js"></script>
+        <script src="/src/assets/supports/setup.js"></script>
         <script src="/src/assets/objects/listeners.js"></script>
-        <script src="/src/assets/objects/popup.js"></script>
         <script src="/src/assets/objects/setup.js"></script>
         <script src="/src/assets/canvas/setup.js"></script>
         <script src="/src/assets/main.js"></script>
