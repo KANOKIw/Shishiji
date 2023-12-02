@@ -693,6 +693,18 @@
         setBehavParam();
     }
     
+    
+    /**
+     * 
+     * @param {string | null} lang 
+     */
+    function isThereLang(lang){
+        if (lang == null)
+            return null;
+        const langs = [ "JA", "EN" ];
+        return langs.includes(lang) ? lang : null;
+    }
+    
     //@ts-check
     "use strict";
     
@@ -2297,6 +2309,7 @@
     
                     /**except japanese */
                     function translate(){
+                        $("#--share-bru").text("Share");
                         $("#--trans-MAIL").text("Email");
                         $("#--trans-MESSAGE").text("Messages");
                         $("#--trans-COPYLINK").text("Copy Link");
@@ -2824,7 +2837,7 @@
                 floor: getParam(ParamNames.FLOOR),
                 coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
                 from: getParam(ParamNames.URL_FROM),
-                lang: getParam(ParamNames.LANGUAGE) || "JA",
+                lang: isThereLang(getParam(ParamNames.LANGUAGE)) || "JA",
             };
             LANGUAGE = PARAMS.lang;
             if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];

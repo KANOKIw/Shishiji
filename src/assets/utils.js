@@ -341,3 +341,15 @@ function setCoordsOnMiddle(coords, abs_zoomRatio){
     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
     setBehavParam();
 }
+
+
+/**
+ * 
+ * @param {string | null} lang 
+ */
+function isThereLang(lang){
+    if (lang == null)
+        return null;
+    const langs = [ "JA", "EN" ];
+    return langs.includes(lang) ? lang : null;
+}

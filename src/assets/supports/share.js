@@ -107,6 +107,7 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
 
                 /**except japanese */
                 function translate(){
+                    $("#--share-bru").text("Share");
                     $("#--trans-MAIL").text("Email");
                     $("#--trans-MESSAGE").text("Messages");
                     $("#--trans-COPYLINK").text("Copy Link");

@@ -26,7 +26,7 @@ function setCanvasSizes(){
         floor: getParam(ParamNames.FLOOR),
         coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
         from: getParam(ParamNames.URL_FROM),
-        lang: getParam(ParamNames.LANGUAGE) || "JA",
+        lang: isThereLang(getParam(ParamNames.LANGUAGE)) || "JA",
     };
     LANGUAGE = PARAMS.lang;
     if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
