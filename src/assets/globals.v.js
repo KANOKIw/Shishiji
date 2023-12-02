@@ -15,6 +15,7 @@
  */
 
 
+var LANGUAGE = "EN";
 
 /**
  * assign on interaction
@@ -183,7 +184,7 @@ const Symbol_Span = {
 };
 /**@enum {string} */
 const ERROR_HTML = {
-    CONNECTION_ERROR: "通信エラーが発生しました。<br>ネットワーク状況をご確認いただき、再度お試しください。",
+    CONNECTION_ERROR: TEXT[LANGUAGE].ERROR_CONNECTION,
 };
 
 /**
@@ -213,7 +214,8 @@ const ParamNames = {
     COORDS: "at",
     ARTICLE_ID: "art",
     FLOOR: "fl",
-    URL_FROM: "storm"
+    URL_FROM: "storm",
+    LANGUAGE: "lang"
 };
 /**@enum {string} */
 const ParamValues = {
@@ -221,7 +223,7 @@ const ParamValues = {
 }
 const objectIdFormat = "disc-{0}";
 
-const ZOOMRATIO_ON_SHARE = 3;
+const ZOOMRATIO_ON_SHARE = 2;
 
 
 var Notifier = {
@@ -233,7 +235,7 @@ var Notifier = {
     __Timeout: 0,
     current: "",
     notifying: !!0,
-}
+};
 
 const _mcColorList = {
     "0": "#000000",  // Black

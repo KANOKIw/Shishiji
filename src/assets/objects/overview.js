@@ -22,23 +22,23 @@ function raiseOverview(){
         const discriminator = getParam(ParamNames.ARTICLE_ID);
         const data = searchObject(discriminator);
         const _url = new URL(window.location.href);
-        var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+        var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${data?.object.floor}&${ParamNames.ARTICLE_ID}=${discriminator}`;
 
         if (data == null || discriminator == null){
             openSharePopup({ title: "" }, "", {}, "", "", true);
             return;
         }
 
-        const message = `世田谷学園 獅子児祭のイベント: ${data.article.title}`;
+        const message = `${TEXT[LANGUAGE].SHARE_EVENT_MESSAGE} ${data.article.title}`;
         
         openSharePopup(
             {
-                title: "イベントをシェア",
-                subtitle: "共有されたリンクを開くと、マップがこのイベントを中心に移動しこの記事が開かれます",
+                title: TEXT[LANGUAGE].SHARE_EVENT_POPUP_TITLE,
+                subtitle: TEXT[LANGUAGE].SHARE_EVENT_POPUP_SUBTITLE,
             },
             shareURL,
             {
-                title: "獅子児祭",
+                title: TEXT[LANGUAGE].SHARE_EVENT_DATA_TITLE,
                 text: `${message}\n{__SHARE_URL__}`,
             },
             /**
@@ -108,7 +108,7 @@ function writeArticleOverview(details, fadein){
     }
     
     if (article_mainctx === "<span></span>"){
-        article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';
+        article_mainctx = `<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">${TEXT[LANGUAGE].ARTICLE_NO_ARTICLE}</h4>`;
     }
 
     var custom_tr = "";
@@ -134,14 +134,14 @@ function writeArticleOverview(details, fadein){
     $(overview).css("font-family", font);
 
     writeOverviewContent(`
-        <img class="article-image article header" src="${details.article.images.header}" aria-label="ヘッダー画像" ${imgOnError}>
+        <img class="article-image article header" src="${details.article.images.header}" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}" ${imgOnError}>
         <div class="article titleC">
-            <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="アイコン" ${imgOnError}>
-            <h1 id="ctx-title" style="margin: 5px">${details.article.title}</h1>
+            <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}" ${imgOnError}>
+            <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${details.article.title}</h1>
         </div>
         <div id="ctx-article" style="margin: 10px;">
             <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
-                <p>▷中心学年: ${details.article.core_grade}</p>
+                <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
             </div>
             ${article_mainctx}
             <hr style="margin-top: 20px;">

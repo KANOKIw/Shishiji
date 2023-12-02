@@ -26,7 +26,7 @@
                     return;
                 }
 
-                startLoad();
+                startLoad(TEXT[LANGUAGE].LOADING_MAP);
                 toggleFeslOn.apply($(fselector), [!0]);
                 overlay_modes.fselector.opened = !!0;
 
@@ -45,7 +45,7 @@
                     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                     clearObj();
                     showDigitsOnFloor(name, mapObjectComponent);
-                    endLoad();
+                    endLoad(TEXT[LANGUAGE].MAP_LOADED);
                 });
                 CURRENT_FLOOR = name;
                 setParam(ParamNames.FLOOR, CURRENT_FLOOR);

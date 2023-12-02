@@ -206,6 +206,7 @@ int main()
     };
 
     std::vector<std::string> scriptFiles = {
+        folder + "lang.js",
         folder + "globals.v.js",
         folder + "gpath.js",
         folder + "utils.js",

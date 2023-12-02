@@ -26,7 +26,9 @@ function setCanvasSizes(){
         floor: getParam(ParamNames.FLOOR),
         coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
         from: getParam(ParamNames.URL_FROM),
+        lang: getParam(ParamNames.LANGUAGE) || "JA",
     };
+    LANGUAGE = PARAMS.lang;
     if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
 
     if (loadType == "reload"){
@@ -52,7 +54,7 @@ function setCanvasSizes(){
 
     delParam(ParamNames.URL_FROM);
 
-    startLoad();
+    startLoad(TEXT[LANGUAGE].LOADING_MAP);
     setCanvasSizes();
 
     $.get("/data/map-data/conf")
@@ -96,6 +98,8 @@ function setCanvasSizes(){
     
                 CURRENT_FLOOR = initial_floor;
 
+                setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+
                 setPlaceSelColor();
 
                 if (loaded == 2)
@@ -108,21 +112,21 @@ function setCanvasSizes(){
         }();
     
         function _loaded(){
-            endLoad();
+            endLoad(TEXT[LANGUAGE].MAP_LOADED);
             $("#app-mount").show();
             if (PARAMS.article){
                 const data = searchObject(PARAMS.article);
-                var fromshare = !!0;
+                var fromARTshare = !!0;
                 
                 if (PARAMS.from == ParamValues.FROM_ARTICLE_SHARE){
-                    fromshare = !0;
+                    fromARTshare = !0;
                 }
 
-                if (data == null){
-                    if (fromshare){
+                if (data == null || CURRENT_FLOOR != data.object.floor){
+                    if (fromARTshare){
                         setTimeout(() => {
                             notifyHTML(
-                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}シェアされたイベントが見つかりませんでした</div>`,
+                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFY_EVENT_NOT_FOUND}</div>`,
                                 7500,
                                 "share not found",
                             );
@@ -132,10 +136,10 @@ function setCanvasSizes(){
                     return;
                 }
 
-                if (fromshare){
+                if (fromARTshare){
                     const coords = data.object.coordinate;
                     
-                    screenCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
+                    setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                 }
 
                 setTimeout(() => {

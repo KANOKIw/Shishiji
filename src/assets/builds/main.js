@@ -4,6 +4,51 @@
     
     
     /**
+     * @typedef {import("./shishiji-dts/objects").LanguageComponent} LanguageComponent
+     */
+    
+    
+    /**@type {LanguageComponent} */
+    const TEXT = {
+        JA: {
+            LOADING_MAP: "マップを読み込んでいます...",
+            MAP_LOADED: "読み込み完了！",
+            PROCESSING: "処理中...",
+            NOTIFY_COPIED_LINK: "リンクをコピーしました！",
+            NOTIFY_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
+            SHARE_EVENT_MESSAGE: "世田谷学園 獅子児祭のイベント:",
+            SHARE_EVENT_POPUP_TITLE: "イベントをシェア",
+            SHARE_EVENT_POPUP_SUBTITLE: "共有されたリンクを開くと、マップがこのイベントを中心に移動しこの記事が開かれます",
+            SHARE_EVENT_DATA_TITLE: "獅子児祭",
+            ARTICLE_NO_ARTICLE: "このイベントに関する記載はありません",
+            ARTICLE_CORE_GRADE: "中心学年",
+            ERROR_CONNECTION: "通信エラー<br>ネットワーク状況をご確認の上、再度お試しください。",
+            ARIA_ARTICLE_HEADER: "ヘッダー画像",
+            ARIA_ARTICLE_ICON: "アイコン画像",
+        },
+        EN: {
+            LOADING_MAP: "Loading map...",
+            MAP_LOADED: "Load Completed!",
+            PROCESSING: "Processing...",
+            NOTIFY_COPIED_LINK: "Link Copied!",
+            NOTIFY_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
+            SHARE_EVENT_MESSAGE: "Shishiji festival event, Setagayagakuen; ",
+            SHARE_EVENT_POPUP_TITLE: "Share Event",
+            SHARE_EVENT_POPUP_SUBTITLE: "The map moves to middle focusing on this event and opens this article, when openning a shared Link",
+            SHARE_EVENT_DATA_TITLE: "Shishiji festival",
+            ARTICLE_NO_ARTICLE: "There is no article for this event.",
+            ARTICLE_CORE_GRADE: "Core Grade",
+            ERROR_CONNECTION: "Connection Error<br>Please check your network status and try again.",
+            ARIA_ARTICLE_HEADER: "header image",
+            ARIA_ARTICLE_ICON: "icon image",
+        },
+    };
+    
+    //@ts-check
+    "use strict";
+    
+    
+    /**
      * @typedef {import("./shishiji-dts/motion").Position} Position
      * @typedef {import("./shishiji-dts/motion").BackCanvas} BackCanvas
      * @typedef {import("./shishiji-dts/motion").Distance} Distance
@@ -16,6 +61,7 @@
      */
     
     
+    var LANGUAGE = "EN";
     
     /**
      * assign on interaction
@@ -184,7 +230,7 @@
     };
     /**@enum {string} */
     const ERROR_HTML = {
-        CONNECTION_ERROR: "通信エラーが発生しました。<br>ネットワーク状況をご確認いただき、再度お試しください。",
+        CONNECTION_ERROR: TEXT[LANGUAGE].ERROR_CONNECTION,
     };
     
     /**
@@ -214,7 +260,8 @@
         COORDS: "at",
         ARTICLE_ID: "art",
         FLOOR: "fl",
-        URL_FROM: "storm"
+        URL_FROM: "storm",
+        LANGUAGE: "lang"
     };
     /**@enum {string} */
     const ParamValues = {
@@ -222,7 +269,7 @@
     }
     const objectIdFormat = "disc-{0}";
     
-    const ZOOMRATIO_ON_SHARE = 3;
+    const ZOOMRATIO_ON_SHARE = 2;
     
     
     var Notifier = {
@@ -234,7 +281,7 @@
         __Timeout: 0,
         current: "",
         notifying: !!0,
-    }
+    };
     
     const _mcColorList = {
         "0": "#000000",  // Black
@@ -404,21 +451,25 @@
     }
     
     
-    function startLoad(){
+    /**
+     * 
+     * @param {string} message 
+     */
+    function startLoad(message){
         $("#place-selector").hide();
-        $("#load_spare").removeClass("loaddoneman").show();
-        const i = document.getElementById("spare_logo");
-        var t = 0;
-        var x = -Math.pow(3*100, 1/2);
-        /*Intervals.load = setInterval(function(){
-            //@ts-ignore
-            i.style.transform = `rotateY(${t}deg)`;
-            t += 3;
-        }, 1);*/
+        $("#load_spare")
+        .removeClass("loaddoneman")
+        .show();
+        $("#spare_message").text(message);
     }
     
     
-    function endLoad(){
+    /**
+     * 
+     * @param {string} message 
+     */
+    function endLoad(message){
+        $("#spare_message").text(message);
         setTimeout(() => {
             $("#load_spare").addClass("loaddoneman");
             setTimeout(() => {
@@ -543,6 +594,7 @@
         str = str.replace(/"/g, "&quot;");
         str = str.replace(/'/g, "&#39;");
         str = str.replace(/ /g, "&nbsp;");
+    
         return str;
     }
     
@@ -617,7 +669,7 @@
      * @param {Coords} coords 
      * @param {number} [abs_zoomRatio] 
      */
-    function screenCoordsOnMiddle(coords, abs_zoomRatio){
+    function setCoordsOnMiddle(coords, abs_zoomRatio){
         if (abs_zoomRatio === void 0){
             abs_zoomRatio = zoomRatio;
         }
@@ -1911,23 +1963,23 @@
             const discriminator = getParam(ParamNames.ARTICLE_ID);
             const data = searchObject(discriminator);
             const _url = new URL(window.location.href);
-            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${data?.object.floor}&${ParamNames.ARTICLE_ID}=${discriminator}`;
     
             if (data == null || discriminator == null){
                 openSharePopup({ title: "" }, "", {}, "", "", true);
                 return;
             }
     
-            const message = `世田谷学園 獅子児祭のイベント: ${data.article.title}`;
+            const message = `${TEXT[LANGUAGE].SHARE_EVENT_MESSAGE} ${data.article.title}`;
             
             openSharePopup(
                 {
-                    title: "イベントをシェア",
-                    subtitle: "共有されたリンクを開くと、マップがこのイベントを中心に移動しこの記事が開かれます",
+                    title: TEXT[LANGUAGE].SHARE_EVENT_POPUP_TITLE,
+                    subtitle: TEXT[LANGUAGE].SHARE_EVENT_POPUP_SUBTITLE,
                 },
                 shareURL,
                 {
-                    title: "獅子児祭",
+                    title: TEXT[LANGUAGE].SHARE_EVENT_DATA_TITLE,
                     text: `${message}\n{__SHARE_URL__}`,
                 },
                 /**
@@ -1997,7 +2049,7 @@
         }
         
         if (article_mainctx === "<span></span>"){
-            article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';
+            article_mainctx = `<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">${TEXT[LANGUAGE].ARTICLE_NO_ARTICLE}</h4>`;
         }
     
         var custom_tr = "";
@@ -2023,14 +2075,14 @@
         $(overview).css("font-family", font);
     
         writeOverviewContent(`
-            <img class="article-image article header" src="${details.article.images.header}" aria-label="ヘッダー画像" ${imgOnError}>
+            <img class="article-image article header" src="${details.article.images.header}" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}" ${imgOnError}>
             <div class="article titleC">
-                <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="アイコン" ${imgOnError}>
-                <h1 id="ctx-title" style="margin: 5px">${details.article.title}</h1>
+                <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}" ${imgOnError}>
+                <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${details.article.title}</h1>
             </div>
             <div id="ctx-article" style="margin: 10px;">
                 <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
-                    <p>▷中心学年: ${details.article.core_grade}</p>
+                    <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
                 </div>
                 ${article_mainctx}
                 <hr style="margin-top: 20px;">
@@ -2192,7 +2244,7 @@
                     $("#share-copy").on("click", function(){
                         window.navigator.clipboard.writeText(shareURL);
                         notifyHTML(
-                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}リンクをコピーしました！</div>`,
+                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFY_COPIED_LINK}</div>`,
                             2500,
                             "copy artshare",
                         );
@@ -2241,6 +2293,16 @@
                             return 0;
                         }(href);
                     }
+    
+                    /**except japanese */
+                    function translate(){
+                        $("#--trans-MAIL").text("Email");
+                        $("#--trans-MESSAGE").text("Messages");
+                        $("#--trans-COPYLINK").text("Copy Link");
+                        $("#--trans-OTHERS").text("Others");
+                    }
+                    if (LANGUAGE != "JA")
+                        translate();
                 });
             }
         })
@@ -2566,7 +2628,7 @@
                             return;
                         }
         
-                        startLoad();
+                        startLoad(TEXT[LANGUAGE].LOADING_MAP);
                         toggleFeslOn.apply($(fselector), [!0]);
                         overlay_modes.fselector.opened = !!0;
         
@@ -2585,7 +2647,7 @@
                             moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                             clearObj();
                             showDigitsOnFloor(name, mapObjectComponent);
-                            endLoad();
+                            endLoad(TEXT[LANGUAGE].MAP_LOADED);
                         });
                         CURRENT_FLOOR = name;
                         setParam(ParamNames.FLOOR, CURRENT_FLOOR);
@@ -2613,7 +2675,7 @@
         
         !function(){
             // overview
-            writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
+            writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">${TEXT[LANGUAGE].PROCESSING}</h4></div>`, );
         
             return 0;
         }();
@@ -2761,7 +2823,9 @@
                 floor: getParam(ParamNames.FLOOR),
                 coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
                 from: getParam(ParamNames.URL_FROM),
+                lang: getParam(ParamNames.LANGUAGE) || "JA",
             };
+            LANGUAGE = PARAMS.lang;
             if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
         
             if (loadType == "reload"){
@@ -2787,7 +2851,7 @@
         
             delParam(ParamNames.URL_FROM);
         
-            startLoad();
+            startLoad(TEXT[LANGUAGE].LOADING_MAP);
             setCanvasSizes();
         
             $.get("/data/map-data/conf")
@@ -2831,6 +2895,8 @@
             
                         CURRENT_FLOOR = initial_floor;
         
+                        setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+        
                         setPlaceSelColor();
         
                         if (loaded == 2)
@@ -2843,21 +2909,21 @@
                 }();
             
                 function _loaded(){
-                    endLoad();
+                    endLoad(TEXT[LANGUAGE].MAP_LOADED);
                     $("#app-mount").show();
                     if (PARAMS.article){
                         const data = searchObject(PARAMS.article);
-                        var fromshare = !!0;
+                        var fromARTshare = !!0;
                         
                         if (PARAMS.from == ParamValues.FROM_ARTICLE_SHARE){
-                            fromshare = !0;
+                            fromARTshare = !0;
                         }
         
-                        if (data == null){
-                            if (fromshare){
+                        if (data == null || CURRENT_FLOOR != data.object.floor){
+                            if (fromARTshare){
                                 setTimeout(() => {
                                     notifyHTML(
-                                        `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}シェアされたイベントが見つかりませんでした</div>`,
+                                        `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFY_EVENT_NOT_FOUND}</div>`,
                                         7500,
                                         "share not found",
                                     );
@@ -2867,10 +2933,10 @@
                             return;
                         }
         
-                        if (fromshare){
+                        if (fromARTshare){
                             const coords = data.object.coordinate;
                             
-                            screenCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
+                            setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                         }
         
                         setTimeout(() => {

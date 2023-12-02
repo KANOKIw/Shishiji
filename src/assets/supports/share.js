@@ -55,7 +55,7 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                 $("#share-copy").on("click", function(){
                     window.navigator.clipboard.writeText(shareURL);
                     notifyHTML(
-                        `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}リンクをコピーしました！</div>`,
+                        `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFY_COPIED_LINK}</div>`,
                         2500,
                         "copy artshare",
                     );
@@ -104,6 +104,16 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                         return 0;
                     }(href);
                 }
+
+                /**except japanese */
+                function translate(){
+                    $("#--trans-MAIL").text("Email");
+                    $("#--trans-MESSAGE").text("Messages");
+                    $("#--trans-COPYLINK").text("Copy Link");
+                    $("#--trans-OTHERS").text("Others");
+                }
+                if (LANGUAGE != "JA")
+                    translate();
             });
         }
     })

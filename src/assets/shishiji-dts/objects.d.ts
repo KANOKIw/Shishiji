@@ -53,8 +53,15 @@ interface intervals{
     [key: string]: NodeJS.Timeout,
 }
 
+interface LANGUAGE_TEXT{
+    [key: string]: {
+        [key: string]: string
+    }
+}
+
 
 export {
+    LANGUAGE_TEXT as LanguageComponent,
     mapObject,
     mapObjComponent,
     mapObjElement,

@@ -100,21 +100,25 @@ function getDefaultSize(elm){
 }
 
 
-function startLoad(){
+/**
+ * 
+ * @param {string} message 
+ */
+function startLoad(message){
     $("#place-selector").hide();
-    $("#load_spare").removeClass("loaddoneman").show();
-    const i = document.getElementById("spare_logo");
-    var t = 0;
-    var x = -Math.pow(3*100, 1/2);
-    /*Intervals.load = setInterval(function(){
-        //@ts-ignore
-        i.style.transform = `rotateY(${t}deg)`;
-        t += 3;
-    }, 1);*/
+    $("#load_spare")
+    .removeClass("loaddoneman")
+    .show();
+    $("#spare_message").text(message);
 }
 
 
-function endLoad(){
+/**
+ * 
+ * @param {string} message 
+ */
+function endLoad(message){
+    $("#spare_message").text(message);
     setTimeout(() => {
         $("#load_spare").addClass("loaddoneman");
         setTimeout(() => {
@@ -239,6 +243,7 @@ function escapeHTML(str){
     str = str.replace(/"/g, "&quot;");
     str = str.replace(/'/g, "&#39;");
     str = str.replace(/ /g, "&nbsp;");
+
     return str;
 }
 
@@ -313,7 +318,7 @@ function searchObject(discriminator){
  * @param {Coords} coords 
  * @param {number} [abs_zoomRatio] 
  */
-function screenCoordsOnMiddle(coords, abs_zoomRatio){
+function setCoordsOnMiddle(coords, abs_zoomRatio){
     if (abs_zoomRatio === void 0){
         abs_zoomRatio = zoomRatio;
     }
