@@ -14,8 +14,8 @@
             LOADING_MAP: "マップを読み込んでいます...",
             MAP_LOADED: "読み込み完了！",
             PROCESSING: "処理中...",
-            NOTIFY_COPIED_LINK: "リンクをコピーしました！",
-            NOTIFY_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
+            NOTIFICATION_COPIED_LINK: "リンクをコピーしました！",
+            NOTIFICATION_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
             SHARE_EVENT_MESSAGE: "世田谷学園 獅子児祭のイベント:",
             SHARE_EVENT_POPUP_TITLE: "イベントをシェア",
             SHARE_EVENT_POPUP_SUBTITLE: "共有されたリンクを開くと、マップがこのイベントを中心に移動しこの記事が開かれます",
@@ -30,8 +30,8 @@
             LOADING_MAP: "Loading map...",
             MAP_LOADED: "Load Completed!",
             PROCESSING: "Processing...",
-            NOTIFY_COPIED_LINK: "Link Copied!",
-            NOTIFY_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
+            NOTIFICATION_COPIED_LINK: "Link Copied!",
+            NOTIFICATION_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
             SHARE_EVENT_MESSAGE: "Shishiji festival event, Setagayagakuen; ",
             SHARE_EVENT_POPUP_TITLE: "Share Event",
             SHARE_EVENT_POPUP_SUBTITLE: "The map moves to middle focusing on this event and opens this article, when openning a shared Link",
@@ -2244,7 +2244,7 @@
                     $("#share-copy").on("click", function(){
                         window.navigator.clipboard.writeText(shareURL);
                         notifyHTML(
-                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFY_COPIED_LINK}</div>`,
+                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
                             2500,
                             "copy artshare",
                         );
@@ -2923,7 +2923,7 @@
                             if (fromARTshare){
                                 setTimeout(() => {
                                     notifyHTML(
-                                        `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFY_EVENT_NOT_FOUND}</div>`,
+                                        `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_EVENT_NOT_FOUND}</div>`,
                                         7500,
                                         "share not found",
                                     );

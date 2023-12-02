@@ -126,7 +126,7 @@ function setCanvasSizes(){
                     if (fromARTshare){
                         setTimeout(() => {
                             notifyHTML(
-                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFY_EVENT_NOT_FOUND}</div>`,
+                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_EVENT_NOT_FOUND}</div>`,
                                 7500,
                                 "share not found",
                             );

@@ -55,7 +55,7 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                 $("#share-copy").on("click", function(){
                     window.navigator.clipboard.writeText(shareURL);
                     notifyHTML(
-                        `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFY_COPIED_LINK}</div>`,
+                        `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
                         2500,
                         "copy artshare",
                     );
