@@ -76,7 +76,6 @@ function setCanvasSizes(){
         var loaded = 0;
         
         function callback(){
-            loaded++;
             backcanvas.canvas.coords = {
                 //@ts-ignore
                 x: PARAMS.coords[0], y: PARAMS.coords[1]
@@ -84,6 +83,8 @@ function setCanvasSizes(){
             zoomRatio = PARAMS.zoomRatio;
             moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
             setBehavParam();
+
+            loaded++;
             if (loaded == 2)
                 _loaded();
         }
@@ -91,17 +92,33 @@ function setCanvasSizes(){
         !function(){
             $.get("/data/map-data/objects")
             .done((objdata) => {
-                loaded++;
                 mapObjectComponent = objdata;
     
                 showDigitsOnFloor(initial_floor, mapObjectComponent);
     
                 CURRENT_FLOOR = initial_floor;
 
+                /**
+                 * handles if wrong floor with shared article
+                 * for shorter share link
+                 */
+                if (PARAMS.article){
+                    const data = searchObject(PARAMS.article);
+                    if (data && CURRENT_FLOOR != data.object.floor && MAPDATA[data.object.floor]){
+                        changeFloor(data.object.floor, MAPDATA[data.object.floor], function(){
+                            loaded++;
+                            if (loaded == 2)
+                                _loaded();
+                        });
+                        return;
+                    }
+                }
+
                 setParam(ParamNames.FLOOR, CURRENT_FLOOR);
 
                 setPlaceSelColor();
-
+                
+                loaded++;
                 if (loaded == 2)
                     _loaded();
             })

@@ -22,7 +22,7 @@ function raiseOverview(){
         const discriminator = getParam(ParamNames.ARTICLE_ID);
         const data = searchObject(discriminator);
         const _url = new URL(window.location.href);
-        var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${data?.object.floor}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+        var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.ARTICLE_ID}=${discriminator}`;
 
         if (data == null || discriminator == null){
             openSharePopup({ title: "" }, "", {}, "", "", true);

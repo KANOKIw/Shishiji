@@ -118,7 +118,9 @@ function startLoad(message){
  * @param {string} message 
  */
 function endLoad(message){
-    $("#spare_message").text(message);
+    setTimeout(() => {
+        $("#spare_message").text(message);
+    }, 200);
     setTimeout(() => {
         $("#load_spare").addClass("loaddoneman");
         setTimeout(() => {

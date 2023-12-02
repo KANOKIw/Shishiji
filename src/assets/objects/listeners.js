@@ -26,30 +26,7 @@
                     return;
                 }
 
-                startLoad(TEXT[LANGUAGE].LOADING_MAP);
-                toggleFeslOn.apply($(fselector), [!0]);
-                overlay_modes.fselector.opened = !!0;
-
-                const data_size = {
-                    width: data.tile_width*(data.xrange+1),
-                    height: data.tile_height*(data.yrange+1)
-                };
-                backcanvas.width = data_size.width;
-                backcanvas.height = data_size.height;
-                drawMap(canvas, ctx, data, function(){
-                    backcanvas.canvas.coords = {
-                        x: 0,
-                        y: 0
-                    };
-                    zoomRatio = 1;
-                    moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
-                    clearObj();
-                    showDigitsOnFloor(name, mapObjectComponent);
-                    endLoad(TEXT[LANGUAGE].MAP_LOADED);
-                });
-                CURRENT_FLOOR = name;
-                setParam(ParamNames.FLOOR, CURRENT_FLOOR);
-                setPlaceSelColor();
+                changeFloor(name, data);
             }, { passive: false });
             return 0;
         };

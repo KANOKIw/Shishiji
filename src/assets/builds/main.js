@@ -469,7 +469,9 @@
      * @param {string} message 
      */
     function endLoad(message){
-        $("#spare_message").text(message);
+        setTimeout(() => {
+            $("#spare_message").text(message);
+        }, 200);
         setTimeout(() => {
             $("#load_spare").addClass("loaddoneman");
             setTimeout(() => {
@@ -1976,7 +1978,7 @@
             const discriminator = getParam(ParamNames.ARTICLE_ID);
             const data = searchObject(discriminator);
             const _url = new URL(window.location.href);
-            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${data?.object.floor}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.ARTICLE_ID}=${discriminator}`;
     
             if (data == null || discriminator == null){
                 openSharePopup({ title: "" }, "", {}, "", "", true);
@@ -2203,6 +2205,50 @@
                 .removeClass("toSel undoSel");
             }, 190);
         }
+    }
+    
+    
+    /**
+     * 
+     * @param {string} floor 
+     * @param {{[key: string]: number}} data 
+     * @param {() => void} [callback] 
+     */
+    function changeFloor(floor, data, callback){
+        /**@ts-ignore @type {HTMLElement} */
+        const fselector = document.getElementById("place-selector");
+        /**@ts-ignore @type {HTMLCanvasElement} */
+        const canvas = document.getElementById("shishiji-canvas");
+        /**@ts-ignore @type {CanvasRenderingContext2D} */
+        const ctx = canvas.getContext("2d");
+    
+    
+        startLoad(TEXT[LANGUAGE].LOADING_MAP);
+        toggleFeslOn.apply($(fselector), [!0]);
+        overlay_modes.fselector.opened = !!0;
+    
+        const data_size = {
+            width: data.tile_width*(data.xrange+1),
+            height: data.tile_height*(data.yrange+1)
+        };
+        backcanvas.width = data_size.width;
+        backcanvas.height = data_size.height;
+        drawMap(canvas, ctx, data, function(){
+            backcanvas.canvas.coords = {
+                x: 0,
+                y: 0
+            };
+            zoomRatio = 1;
+            moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
+            clearObj();
+            showDigitsOnFloor(floor, mapObjectComponent);
+            endLoad(TEXT[LANGUAGE].MAP_LOADED);
+            if (callback !== void 0)
+                callback();
+        });
+        CURRENT_FLOOR = floor;
+        setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+        setPlaceSelColor();
     }
     
     //@ts-check
@@ -2647,30 +2693,7 @@
                             return;
                         }
         
-                        startLoad(TEXT[LANGUAGE].LOADING_MAP);
-                        toggleFeslOn.apply($(fselector), [!0]);
-                        overlay_modes.fselector.opened = !!0;
-        
-                        const data_size = {
-                            width: data.tile_width*(data.xrange+1),
-                            height: data.tile_height*(data.yrange+1)
-                        };
-                        backcanvas.width = data_size.width;
-                        backcanvas.height = data_size.height;
-                        drawMap(canvas, ctx, data, function(){
-                            backcanvas.canvas.coords = {
-                                x: 0,
-                                y: 0
-                            };
-                            zoomRatio = 1;
-                            moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
-                            clearObj();
-                            showDigitsOnFloor(name, mapObjectComponent);
-                            endLoad(TEXT[LANGUAGE].MAP_LOADED);
-                        });
-                        CURRENT_FLOOR = name;
-                        setParam(ParamNames.FLOOR, CURRENT_FLOOR);
-                        setPlaceSelColor();
+                        changeFloor(name, data);
                     }, { passive: false });
                     return 0;
                 };
@@ -2892,7 +2915,6 @@
                 var loaded = 0;
                 
                 function callback(){
-                    loaded++;
                     backcanvas.canvas.coords = {
                         //@ts-ignore
                         x: PARAMS.coords[0], y: PARAMS.coords[1]
@@ -2900,6 +2922,8 @@
                     zoomRatio = PARAMS.zoomRatio;
                     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                     setBehavParam();
+        
+                    loaded++;
                     if (loaded == 2)
                         _loaded();
                 }
@@ -2907,17 +2931,33 @@
                 !function(){
                     $.get("/data/map-data/objects")
                     .done((objdata) => {
-                        loaded++;
                         mapObjectComponent = objdata;
             
                         showDigitsOnFloor(initial_floor, mapObjectComponent);
             
                         CURRENT_FLOOR = initial_floor;
         
+                        /**
+                         * handles if wrong floor with shared article
+                         * for shorter share link
+                         */
+                        if (PARAMS.article){
+                            const data = searchObject(PARAMS.article);
+                            if (data && CURRENT_FLOOR != data.object.floor && MAPDATA[data.object.floor]){
+                                changeFloor(data.object.floor, MAPDATA[data.object.floor], function(){
+                                    loaded++;
+                                    if (loaded == 2)
+                                        _loaded();
+                                });
+                                return;
+                            }
+                        }
+        
                         setParam(ParamNames.FLOOR, CURRENT_FLOOR);
         
                         setPlaceSelColor();
-        
+                        
+                        loaded++;
                         if (loaded == 2)
                             _loaded();
                     })
