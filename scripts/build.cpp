@@ -1,6 +1,6 @@
 /**
  * set js path on main
- * build new js file by concatting them as one
+ * builds new js file by concatting them as one
 */
 #include <iostream>
 #include <streambuf>
