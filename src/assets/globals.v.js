@@ -176,8 +176,52 @@ const overlay_modes = {
 };
 
 
+/**@enum {string} */
+const Symbol_Span = {
+    loadgingsymbol: `<span class="material-symbols-outlined loading-symbol">progress_activity</span>`,
+    refreshsymbol: `<span class="material-symbols-outlined">refresh</span>`,
+};
+/**@enum {string} */
+const ERROR_HTML = {
+    CONNECTION_ERROR: "通信エラーが発生しました。<br>ネットワーク状況をご確認いただき、再度お試しください。",
+};
+
+/**
+ * :literal:
+ * @enum {number} 
+ */
+const reloadInitializeLevels = {
+    DO_NOTHING: 0,
+    CLOSE_ARTICLE: 1,
+    INIT_ZOOMRADIO: 2,
+    INIT_COORDS: 3,
+    INIT_FLOOR: 4,
+    DO_EVERYTHING: 5,
+}
+
+/**
+ * @see {@link reloadInitializeLevels}
+ */
+const reloadInitializeLevel = reloadInitializeLevels.DO_NOTHING;
+
+
 // digit
 const paramAbstractDeg = 4;
+/**@enum {string} */
+const ParamNames = {
+    ZOOM_RATIO: "zr",
+    COORDS: "at",
+    ARTICLE_ID: "art",
+    FLOOR: "fl",
+    URL_FROM: "storm"
+};
+/**@enum {string} */
+const ParamValues = {
+    FROM_ARTICLE_SHARE: "artshare",
+}
+const objectIdFormat = "disc-{0}";
+
+const ZOOMRATIO_ON_SHARE = 3;
 
 const _mcColorList = {
     "0": "#000000",  // Black

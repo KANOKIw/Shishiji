@@ -28,16 +28,20 @@ public:
 
     void build()
     {
-        std::string script = mergeF(scriptFiles_);
+        std::string script;
+        if (endsWith(outPath_, ".css")){
+            script = mergeF(scriptFiles_);
 
-        for (const std::string& filepath : onLoads_){
-            std::string _script = readF(filepath);
-            addIndent(_script, indent_size);
-            script += "window.addEventListener(\"load\", function(e) {\n" + _script + "\n});\n";
+        } else {
+            script = mergeF(scriptFiles_);
+            std::string _onload = mergeF(onLoads_, "\n\n");
+
+            addIndent(_onload, 4);
+            script += "window.addEventListener(\"load\", function(e){\n" + _onload + "\n});\n";
+
+            addIndent(script, indent_size);
+            script = "!function(){\n" + script + "\n    return 0;\n}();";
         }
-
-        addIndent(script, indent_size);
-        script = "!function() {\n" + script + "\n}();";
 
         if (deleteComments_){
             rmComments(script);
@@ -51,8 +55,16 @@ public:
     {
         const size_t dp = outPath_.find_last_of(".");
         const std::string basename = outPath_.substr(0, dp);
-        
-        const std::string cmd = "npx terser "+outPath_+" --mangle -o "+basename+".min.js";
+        std::string cmd;
+
+        std::string file_extension = "js";
+
+        if (endsWith(outPath_, ".css")){
+            file_extension = "css";
+            cmd = "cleancss -o "+basename+".min."+file_extension+" "+outPath_;
+        } else {
+            cmd = "npx terser "+outPath_+" --mangle -o "+basename+".min."+file_extension;
+        }
 
         system(cmd.c_str());
     }
@@ -168,18 +180,27 @@ private:
 
         CloseHandle(hDir);
     }
+
+    bool endsWith(const std::string& str, const std::string& suffix)
+    {
+        if (str.length() < suffix.length()) {
+            return false;
+        }
+        return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+    }
 };
 
 
 int main()
 {
     std::string folder = "../src/assets/";
-    std::string outPath = folder + "builds/main.js";
+    std::string outFolder = folder + "builds/";
 
     std::vector<std::string> onLoads = {
         folder + "canvas/setup.js",
         folder + "objects/listeners.js",
         folder + "objects/popup.js",
+        folder + "objects/setup.js",
         folder + "main.js",
     };
 
@@ -188,6 +209,7 @@ int main()
         folder + "utils.js",
         folder + "mcformat.js",
         folder + "speed.js",
+        folder + "cssroot.js",
 
         folder + "canvas/calculate.js",
         folder + "canvas/display.js",
@@ -197,16 +219,25 @@ int main()
         folder + "objects/move.js",
         folder + "objects/overview.js",
         folder + "objects/selector.js",
+        folder + "objects/share.js",
     };
 
-    Builder builder(onLoads, scriptFiles, outPath, false);
+    Builder jsbuilder(onLoads, scriptFiles, outFolder+"main.js", false);
+    Builder cssbuilder({}, { folder + "css/shishijimap.css" }, outFolder+"shishijimap.css", false);
     
-    builder.build();
-    builder.minify();
+    jsbuilder.build();
+    jsbuilder.minify();
+
+    cssbuilder.build();
+    cssbuilder.minify();
     
-    builder.watch("./", [&builder]{
-        builder.build();
-        builder.minify();
+    
+    jsbuilder.watch("./", [&jsbuilder, &cssbuilder]{
+        jsbuilder.build();
+        jsbuilder.minify();
+
+        cssbuilder.build();
+        cssbuilder.minify();
     });
 
     return 0;

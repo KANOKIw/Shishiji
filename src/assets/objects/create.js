@@ -28,6 +28,7 @@ function putObjOnMap(objectData){
     var attrs = "";
     var classes = "";
     var dfcursor = "pointer";
+    const obj_id = formatString(objectIdFormat, objectData.discriminator);
 
     switch (behavior){
         case "dynamic":
@@ -49,7 +50,7 @@ function putObjOnMap(objectData){
 
 
     const element_outerHTML = `
-        <div class="mapObj mapObj_centerAlign" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; z-index: ${zIndex};"
+        <div id="${obj_id}" class="mapObj mapObj_centerAlign" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; z-index: ${zIndex};"
             coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
             behavior="${objectData.object.type.behavior}"
             dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
@@ -69,9 +70,9 @@ function putObjOnMap(objectData){
         listenInterOnEnd(el, function(e){
             const eventDetails = objectData;
             raiseOverview();
-            writeOverview(eventDetails, true);
+            writeArticleOverview(eventDetails, true);
 
-            setParam("art", objectData.discriminator);
+            setParam(ParamNames.ARTICLE_ID, objectData.discriminator);
         }, { forceLeft: true });
     }
 }

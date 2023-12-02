@@ -296,7 +296,7 @@ function getParam(key, url){
 
 /**
  * 
- * @param {string} discriminator 
+ * @param {string | null} discriminator 
  * @returns {mapObject | null}
  */
 function searchObject(discriminator){
@@ -305,4 +305,33 @@ function searchObject(discriminator){
         if (data.discriminator == discriminator) return data;
     }
     return null;
+}
+
+
+/**
+ * 
+ * @param {Coords} coords 
+ * @param {number} [abs_zoomRatio] 
+ */
+function screenCoordsOnMiddle(coords, abs_zoomRatio){
+    if (abs_zoomRatio === void 0){
+        abs_zoomRatio = zoomRatio;
+    }
+    /**@ts-ignore @type {HTMLCanvasElement} */
+    const canvas = document.getElementById("shishiji-canvas");
+    /**@ts-ignore @type {CanvasRenderingContext2D} */
+    const ctx = canvas.getContext("2d");
+    const style = {
+        top: window.innerHeight/2,
+        left: window.innerWidth/2,
+    };
+    /**@type {Coords} */
+    const bcoords = {
+        x: (abs_zoomRatio*coords.x - style.left)/abs_zoomRatio,
+        y: (abs_zoomRatio*coords.y - style.top)/abs_zoomRatio,
+    };
+
+    zoomRatio = abs_zoomRatio;
+    backcanvas.canvas.coords = bcoords;
+    moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
 }

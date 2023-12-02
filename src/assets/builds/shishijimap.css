@@ -6,6 +6,12 @@
     --font-view: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
     --shishiji-mx-overlay-background-opacity: 0.3;
     --shishiji-btn-active-color: rgba(190, 190, 190, 0.75);
+    --shishiji-load-icon-size: 100px;
+    --window-width: 100vw;
+    --window-height: 100vh;
+    --window-half-width: 50vw;
+    --window-half-height: 50vh;
+    --shishiji-share-icon-width: 70px;
 }
 
 .protected{
@@ -23,19 +29,19 @@
 
 shishiji-mx-overlay{
     position: fixed;
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     pointer-events: auto;
     opacity: var(--shishiji-mx-overlay-background-opacity, 0.6);
-    pointer-events: auto;
     background-color: #000000;
     display: none;
+    touch-action: pan-x pan-y;
 }
 
 shishiji-mx-overlay.popen{
     display: block;
     z-index: 3001;
-    animation: alternative 0.3s linear;
+    animation: alternative 0.2s linear;
 }
 
 shishiji-mx-overlay.pipe{
@@ -78,9 +84,10 @@ shishiji-mx-overlay.pipe{
 }
 
 .mx-text-center{
-    width: 100%;
+    max-width: 100%;
     height: 100%;
     text-align: center;
+    margin: 0 20px 0 20px;
 }
 
 hr.ppc-cc{
@@ -89,8 +96,8 @@ hr.ppc-cc{
 }
 
 body{
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     overflow: hidden;
     font-family: var(--font-view);
     touch-action: none;
@@ -113,7 +120,7 @@ button{
     top: 12px;
     right: 12px;
     border-radius: 50%;
-    padding: 4px;
+    padding: 8px;
     cursor: pointer;
 }
 
@@ -168,14 +175,14 @@ button{
 }
 
 #shishiji-view{
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     overflow: hidden;
 }
 
 #setagaku-map{
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     position: relative;
     overflow: hidden;
 }
@@ -193,12 +200,21 @@ button{
 
 #noscript_help{
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     font-weight: bold;
     align-items: center;
     justify-content: center;
     font-size: large;
+    position: fixed;
+    z-index: 50001;
+}
+
+#logo_spare_w{
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
 }
 
 .toOverview{
@@ -208,6 +224,18 @@ button{
 
 .ctx-event-detail{
     margin: 20px;
+}
+
+#ovv-ctx-loading{
+    text-align: center;
+}
+
+#ovv-ctx-loading-w{
+    width: 100%;
+    height: var(--window-half-height);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 table{
@@ -225,6 +253,8 @@ table{
 }
 
 #overview-context{
+    width: 100vw;
+    margin-bottom: var(--window-half-height);
     z-index: 999;
 }
 
@@ -274,18 +304,20 @@ table{
 
 #shishiji-overview{
     position: absolute;
-    width: 100vw;
+    width: var(--window-width);
     display: none;
     z-index: 2000;
-    height: 100vh;
+    height: var(--window-height);
     background-color: white;
-    top: 100vh;
+    top: var(--window-height);
     overflow-y: scroll;
     overflow-wrap: break-word;
     overflow-x: hidden;
     overscroll-behavior: none;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    box-shadow: inset 0 15px 10px -10px rgba(0, 0, 0, 0.5);
+    border-top: 20px solid white;
 }
 
 #shishiji-popup-container{
@@ -295,6 +327,8 @@ table{
 }
 
 .share-icon{
+    margin: 5px;
+    margin-bottom: 0;
     border-radius: 50%;
     height: 100%;
     display: flex;
@@ -321,6 +355,8 @@ table{
     width: 60px;
     text-align: center;
     font-size: small;
+    height: 50px;
+    color: white;
 }
 
 #shishiji-popup-container-c{
@@ -329,9 +365,18 @@ table{
     width: 500px;
     height: 450px;
     margin: 24px;
+    overflow: hidden;
+}
+
+#ppc-subtitle{
+    max-width: 100%;
+    text-align: center;
+    margin: 5px 20px 0 20px;
+    font-size: 75%;
 }
 
 .share_ebtn{
+    touch-action: pan-x;
     width: fit-content;
 }
 
@@ -345,7 +390,7 @@ table{
 }
 
 /*#2*/
-#shishiji-overview::-webkit-scrollbar {
+#shishiji-overview::-webkit-scrollbar{
     display: none;
 }
 
@@ -355,7 +400,7 @@ table{
 
 @keyframes raiseup{
     from{
-        top: 100vh;
+        top: var(--window-height);
     }
     to{
         top: 0vh;
@@ -371,7 +416,7 @@ table{
         top: 0vh;
     }
     to{
-        top: 100vh;
+        top: var(--window-height);
         display: none;
     }
 }
@@ -382,7 +427,11 @@ table{
     border: none;
     background-color: white;
     border-radius: 50%;
-    pointer-events: none;
+    touch-action: pan-x pan-y;
+}
+
+.overview-c:active{
+    background-color: var(--shishiji-btn-active-color);
 }
 
 .mapObj_mainctx{
@@ -429,7 +478,7 @@ table{
 }
 
 .article.header{
-    width: 100vw;
+    width: var(--window-width);
 }
 
 #shishiji-canvas{
@@ -438,8 +487,8 @@ table{
 
 #user-stricter{
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     background-color: black;
     display: none;
     z-index: 1999;
@@ -472,13 +521,10 @@ table{
     z-index: 1998;
     width: 45px;
     height: 45px;
-    background-color: rgb(196, 196, 196);
     position: absolute;
     border-radius: 50px;
     margin: 10px;
-    background-image: url("/resources/img/floorOpt.png");
-    background-size: 100%;
-    background-repeat: no-repeat;
+    background-color: rgb(196, 196, 196);
     box-shadow:
     0 1.9px 2.5px rgba(0, 0, 0, 0.057),
     0 5px 6.1px rgba(0, 0, 0, 0.076),
@@ -527,13 +573,32 @@ table{
 }
 
 .share-icon-w{
-    margin-right: 12px;
-    border-radius: 3px;
+    padding-top: 8px;
+    margin-right: 7px;
+    border-radius: 5px;
+    width: var(--shishiji-share-icon-width);
+}
+
+.share-icon-w:first-of-type{
+    margin-left: 14px;
+}
+
+.share-icon-f{
+    min-width: 7px;
+    max-width: 7px;
+    height: 100%;
+}
+
+#ovv-ctx-loading-w{
+    font-family: var(--font-view);
 }
 
 #psdummy{       /*#1*/
-    width: 45px;
-    height: 45px;
+    width: 100%;
+    height: 100%;
+    background-image: url("/resources/img/floorOpt.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
     cursor: pointer;
     position: absolute;
 }
@@ -603,17 +668,40 @@ table{
 
 #ppupir{
     display: flex;
-    height: 150px;
-    margin: 15px;
-    margin-top: 25px;
+    height: 175px;
+    margin-top: 4px;
     overflow-x: scroll;
-    overflow-y: visible;
+    overflow-y: hidden;
+}
+
+#sggty{
+    width: 100%;
+    height: 100px;
+    color: white;
+}
+
+.share-icon-c.-o{
+    width: 45px;
+    height: 45px;
+    background-color: rgba(146, 146, 146, 0.5);
+}
+
+.share_ebtn.-p{
+    display: flex;
+}
+
+.share-title.-l{
+    width: 100%;
+}
+
+#stttgy{
+    height: 100%;
 }
 
 #load_spare{
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: var(--window-width);
+    height: var(--window-height);
     z-index: 1002;
     background-color: white;
     display: none;
@@ -630,6 +718,13 @@ table{
 }
 
 #spare_logo{
-    width: 100px;
-    height: 100px;
+    width: var(--shishiji-load-icon-size);
+    height: var(--shishiji-load-icon-size);
 }
+
+#spare_message{
+    text-align: center;
+    margin-top: 5px;
+}
+
+

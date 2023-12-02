@@ -4,6 +4,10 @@
 
 /**@type {NodeJS.Timeout} FAKE*/
 var lst;
+/**
+ * 
+ * @param {boolean} openned 
+ */
 function toggleFeslOn(openned){
     if (!openned){
         clearTimeout(lst);

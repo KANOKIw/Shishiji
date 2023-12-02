@@ -21,13 +21,14 @@
         <link rel="shortcut icon" href="/resources/img/favicon.ico">
         <link rel="apple-touch-icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-        <link rel="stylesheet" href="/src/main/shishijimap.css">
+        <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
         <!--script src="/test/db-logger.js"></script-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/src/assets/utils.js"></script>
         <script src="/src/assets/mcformat.js"></script>
         <script src="/src/assets/speed.js"></script>
+        <script src="/src/assets/cssroot.js"></script>
         <script src="/src/assets/globals.v.js"></script>
         <script src="/src/assets/canvas/calculate.js"></script>
         <script src="/src/assets/canvas/display.js"></script>
@@ -36,6 +37,7 @@
         <script src="/src/assets/objects/move.js"></script>
         <script src="/src/assets/objects/overview.js"></script>
         <script src="/src/assets/objects/selector.js"></script>
+        <script src="/src/assets/objects/share.js"></script>
     </head>
     <body>
         <noscript aria-hidden="true">
@@ -45,9 +47,9 @@
         </noscript>
         <div id="load_spare" class="protected">
             <div id="load_spare_c" aria-hidden="true">
-                <div style="display: flex; align-items: center; justify-content: center; flex-flow: column;">
-                    <img id="spare_logo" src="/resources/img/logo-loader.png" style="width: 100px; height: 100px;" aria-label="獅子児祭のロゴ">
-                    <h4 style="text-align: center; margin-top: 5px;">please wait...</h4>
+                <div id="logo_spare_w">
+                    <img id="spare_logo" src="/resources/img/logo-loader.png" aria-label="獅子児祭のロゴ">
+                    <h4 id="spare_message">please wait...</h4>
                 </div>
             </div>
         </div>
@@ -64,7 +66,7 @@
                         <!--popup window content-->
                     </div>
                 </div>
-                <shishiji-mx-overlay></shishiji-mx-overlay>
+                <shishiji-mx-overlay class="protected"></shishiji-mx-overlay>
 
                 <div id="place-selector" class="protected fselector-btn">
                     <div id="psdummy"></div>
@@ -110,7 +112,7 @@
                         </div>
                     </div>
 
-                    <div id="overview-context" style="width: 100vw; margin-bottom: 50vh;">
+                    <div id="overview-context">
 
                     </div>
                 </div>
@@ -118,6 +120,7 @@
         </div>
         <script src="/src/assets/objects/listeners.js"></script>
         <script src="/src/assets/objects/popup.js"></script>
+        <script src="/src/assets/objects/setup.js"></script>
         <script src="/src/assets/canvas/setup.js"></script>
         <script src="/src/assets/main.js"></script>
     </body>

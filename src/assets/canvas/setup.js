@@ -39,8 +39,10 @@
         clearTimeout(tout);
 
 
-        toggleFeslOn.apply($(fselector), [!0]);
-        overlay_modes.fselector.opened = !!0;
+        if (overlay_modes.fselector.opened){
+            toggleFeslOn.apply($(fselector), [!0]);
+            overlay_modes.fselector.opened = !!0;
+        }
         
         init_friction();
         initTouch(e);
@@ -58,9 +60,11 @@
 
         clearTimeout(tout);
 
-
-        toggleFeslOn.apply($(fselector), [!0]);
-        overlay_modes.fselector.opened = !!0;
+        
+        if (overlay_modes.fselector.opened){
+            toggleFeslOn.apply($(fselector), [!0]);
+            overlay_modes.fselector.opened = !!0;
+        }
 
         init_friction();
         set_cursorpos(e);

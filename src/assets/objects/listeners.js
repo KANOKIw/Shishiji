@@ -48,7 +48,7 @@
                     endLoad();
                 });
                 CURRENT_FLOOR = name;
-                setParam("fl", CURRENT_FLOOR);
+                setParam(ParamNames.FLOOR, CURRENT_FLOOR);
                 setPlaceSelColor();
             }, { passive: false });
             return 0;
@@ -65,4 +65,3 @@
     });
     return 0;
 }();
-

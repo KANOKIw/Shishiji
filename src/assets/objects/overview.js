@@ -7,71 +7,46 @@ function raiseOverview(){
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
     const $cp = $("#shishiji-popup-container-c");
-    const loadgingsymbol = `<span class="material-symbols-outlined loading-symbol">progress_activity</span>`;
 
     overview.style.top = "0vh";
-    $(overview).removeClass("reducedown").addClass("raiseup").scrollTop(0);
+    $(overview)
+    .removeClass("reducedown")
+    .addClass("raiseup")
+    .scrollTop(0);
     $(overview).show();
+    $("#overview-share").show();
     $("#overview-close").on("click", reduceOverview);
     $("#overview-share").on("click", shareContent);
 
     function shareContent(){
-        Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt">${loadgingsymbol}</div></div>`);
-        function onerr(){
-            Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt"><h4>エラーが発生しました！<br>ページを再読み込みしてみてください！</h4></div></div>`);
+        const discriminator = getParam(ParamNames.ARTICLE_ID);
+        const data = searchObject(discriminator);
+        const _url = new URL(window.location.href);
+        var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+
+        if (data == null || discriminator == null){
+            openSharePopup({ title: "" }, "", {}, "", "", true);
+            return;
         }
-        $.get("/resources/html-ctx/share.html").done(t => {
-            if (Popup.popupping){
-                Popup.popupContent(t, function(){
-                    const shareURL = window.location.href;
-                    $("#share-copy").on("click", function(){
-                        window.navigator.clipboard.writeText(shareURL);
-                    });
 
-                    const discriminator = getParam("art") || "";
-                    const data = searchObject(discriminator);
-
-                    if (data == null){
-                        onerr();
-                        return;
-                    }
-                    
-                    const message = encodeURIComponent(`世田谷学園 獅子児祭のイベント: ${data.article.title}`);
-                
-                    for (const ch of document.getElementsByClassName("share_ebtn")){
-                        const appname = ch.id.replace("share-", "");
-                        const $ch = $(ch);
-                        const here = encodeURIComponent(shareURL);
-                        var href = "";
-                        
-                        switch (appname){
-                            case "line":
-                                href = `http://line.me/R/msg/text/?${message}%0A${here}`;
-                                break;
-                            case "twitter":
-                                href = `https://x.com/intent/tweet?url=${here}&text=${message}&related=shishiji&via=shishijifes&hashtags=${encodeURIComponent("獅子児祭")}`;
-                                break;
-                            case "facebook":
-                                href = `http://www.facebook.com/share.php?u=${here}`;
-                                break;
-                            case "whatsapp":
-                                href = `https://api.whatsapp.com/send/?text=${message}%0A${here}&type=custom_url&app_absent=0`
-                                break;
-                            default:
-                                continue;
-                        }
+        const message = `世田谷学園 獅子児祭のイベント: ${data.article.title}`;
         
-                        !function(_href){
-                            $ch.on("click", function(){
-                                window.open(_href, "_blank");
-                            });
-                            return 0;
-                        }(href);
-                    }
-                });
-            }
-        })
-        .catch(onerr);
+        openSharePopup(
+            {
+                title: "イベントをシェア",
+                subtitle: "共有されたリンクを開くとこの記事を開き、このイベントが地図の中心に配置されます",
+            },
+            shareURL,
+            {
+                title: "獅子児祭",
+                text: `${message}\n{__SHARE_URL__}`,
+            },
+            /**
+             * jump to the object screened on middle of window
+             */
+            ParamValues.FROM_ARTICLE_SHARE,
+            message,
+        );
     }
 }
 
@@ -92,16 +67,21 @@ function reduceOverview(){
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
     overview.style.top = "100vh";
-    $(overview).removeClass("raiseup").addClass("reducedown");
+    $(overview)
+    .removeClass("raiseup")
+    .addClass("reducedown");
     $("#overview-close").off("click", reduceOverview);
     $("#overview-context").removeClass("fadein");
     
     Intervals.reduceOverview = setTimeout(() => {
-        $("#overview-context").html(`<h4 style="text-align: center;">詳細情報を処理中...</h4>`);
-        $(overview).scrollTop(0).hide();
+        writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
+        $(overview)
+        .css("border-top", "20px solid white")
+        .scrollTop(0)
+        .hide();
     }, 190);
 
-    setParam("art", "");
+    delParam(ParamNames.ARTICLE_ID);
 }
 
 
@@ -110,7 +90,7 @@ function reduceOverview(){
  * @param {mapObject} details 
  * @param {boolean} fadein 
  */
-function writeOverview(details, fadein){
+function writeArticleOverview(details, fadein){
     /**@ts-ignore @type {HTMLElement} */
     const ctx = document.getElementById("overview-context");
     /**@ts-ignore @type {HTMLElement} */
@@ -120,6 +100,12 @@ function writeOverview(details, fadein){
     const imgOnError = `onerror="this.src='/resources/img/noimg.png';"`
 
     var article_mainctx = mcFormat(details.article.content);
+
+    if (!window.navigator.onLine){
+        $("#ovv-ctx-loading").html(ERROR_HTML.CONNECTION_ERROR);
+        $("#overview-share").hide();
+        return;
+    }
     
     if (article_mainctx === "<span></span>"){
         article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';
@@ -147,11 +133,10 @@ function writeOverview(details, fadein){
     overview.style.borderTop = "solid 20px "+color;
     $(overview).css("font-family", font);
 
-
-    $(ctx).html(`
-        <img class="article header" src="${details.article.images.header}" aria-label="ヘッダー画像" ${imgOnError}>
+    writeOverviewContent(`
+        <img class="article-image article header" src="${details.article.images.header}" aria-label="ヘッダー画像" ${imgOnError}>
         <div class="article titleC">
-            <img src="${details.object.images.icon}" style="width: 48px" alt="アイコン" ${imgOnError}>
+            <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="アイコン" ${imgOnError}>
             <h1 id="ctx-title" style="margin: 5px">${details.article.title}</h1>
         </div>
         <div id="ctx-article" style="margin: 10px;">
@@ -207,10 +192,24 @@ function writeOverview(details, fadein){
             </div>
             <hr style="margin-bottom: 20px;">
         </div>
-    `);
+    `, );
 }
 
 
+/**
+ * 
+ * @param {string} ctx
+ * @param {() => void} [callback] 
+ */
+function writeOverviewContent(ctx, callback){
+    new Promise((resolve, reject) => {
+        $("#overview-context").html(ctx);
+        resolve("");
+    }).then(() => {
+        if (callback !== void 0)
+            callback();
+    });
+}
 
 function init(){
     /**@ts-ignore @type {HTMLElement} */

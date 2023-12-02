@@ -1,4 +1,4 @@
-!function() {
+!function(){
     //@ts-check
     "use strict";
     
@@ -177,8 +177,52 @@
     };
     
     
+    /**@enum {string} */
+    const Symbol_Span = {
+        loadgingsymbol: `<span class="material-symbols-outlined loading-symbol">progress_activity</span>`,
+        refreshsymbol: `<span class="material-symbols-outlined">refresh</span>`,
+    };
+    /**@enum {string} */
+    const ERROR_HTML = {
+        CONNECTION_ERROR: "通信エラーが発生しました。<br>ネットワーク状況をご確認いただき、再度お試しください。",
+    };
+    
+    /**
+     * :literal:
+     * @enum {number} 
+     */
+    const reloadInitializeLevels = {
+        DO_NOTHING: 0,
+        CLOSE_ARTICLE: 1,
+        INIT_ZOOMRADIO: 2,
+        INIT_COORDS: 3,
+        INIT_FLOOR: 4,
+        DO_EVERYTHING: 5,
+    }
+    
+    /**
+     * @see {@link reloadInitializeLevels}
+     */
+    const reloadInitializeLevel = reloadInitializeLevels.DO_NOTHING;
+    
+    
     // digit
     const paramAbstractDeg = 4;
+    /**@enum {string} */
+    const ParamNames = {
+        ZOOM_RATIO: "zr",
+        COORDS: "at",
+        ARTICLE_ID: "art",
+        FLOOR: "fl",
+        URL_FROM: "storm"
+    };
+    /**@enum {string} */
+    const ParamValues = {
+        FROM_ARTICLE_SHARE: "artshare",
+    }
+    const objectIdFormat = "disc-{0}";
+    
+    const ZOOMRATIO_ON_SHARE = 3;
     
     const _mcColorList = {
         "0": "#000000",  // Black
@@ -529,7 +573,7 @@
     
     /**
      * 
-     * @param {string} discriminator 
+     * @param {string | null} discriminator 
      * @returns {mapObject | null}
      */
     function searchObject(discriminator){
@@ -538,6 +582,35 @@
             if (data.discriminator == discriminator) return data;
         }
         return null;
+    }
+    
+    
+    /**
+     * 
+     * @param {Coords} coords 
+     * @param {number} [abs_zoomRatio] 
+     */
+    function screenCoordsOnMiddle(coords, abs_zoomRatio){
+        if (abs_zoomRatio === void 0){
+            abs_zoomRatio = zoomRatio;
+        }
+        /**@ts-ignore @type {HTMLCanvasElement} */
+        const canvas = document.getElementById("shishiji-canvas");
+        /**@ts-ignore @type {CanvasRenderingContext2D} */
+        const ctx = canvas.getContext("2d");
+        const style = {
+            top: window.innerHeight/2,
+            left: window.innerWidth/2,
+        };
+        /**@type {Coords} */
+        const bcoords = {
+            x: (abs_zoomRatio*coords.x - style.left)/abs_zoomRatio,
+            y: (abs_zoomRatio*coords.y - style.top)/abs_zoomRatio,
+        };
+    
+        zoomRatio = abs_zoomRatio;
+        backcanvas.canvas.coords = bcoords;
+        moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
     }
     
     //@ts-check
@@ -846,6 +919,31 @@
             }, 20);
             return 0;
         }();
+        return 0;
+    }();
+    
+    //@ts-check
+    "use strict";
+    
+    
+    !function(){
+        const root = document.documentElement;
+    
+        window.addEventListener("resize", function(e){
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+    
+            root.style.setProperty("--window-width", width+"px");
+            root.style.setProperty("--window-height", height+"px");
+            root.style.setProperty("--window-half-width", width/2+"px");
+            root.style.setProperty("--window-half-height", height/2+"px");
+        });
+    
+        window.dispatchEvent(new Event("resize"));
+        setInterval(() => {
+            window.dispatchEvent(new Event("resize"));
+        }, 150);
+        
         return 0;
     }();
     
@@ -1177,16 +1275,16 @@
     
     /**
      * 
-     * @param {boolean} [accurated] 
+     * @param {boolean} [accurate] 
      */
-    function setBehavParam(accurated){
+    function setBehavParam(accurate){
         const abstraction = 10**paramAbstractDeg;
         const K = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
-        const zr = accurated ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
-        const at = accurated ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
+        const zr = accurate ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
+        const at = accurate ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
         
-        setParam("zr", zr);
-        setParam("at", at);
+        setParam(ParamNames.ZOOM_RATIO, zr);
+        setParam(ParamNames.COORDS, at);
     }
     
     //@ts-check
@@ -1602,6 +1700,7 @@
         var attrs = "";
         var classes = "";
         var dfcursor = "pointer";
+        const obj_id = formatString(objectIdFormat, objectData.discriminator);
     
         switch (behavior){
             case "dynamic":
@@ -1623,7 +1722,7 @@
     
     
         const element_outerHTML = `
-            <div class="mapObj mapObj_centerAlign" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; z-index: ${zIndex};"
+            <div id="${obj_id}" class="mapObj mapObj_centerAlign" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; z-index: ${zIndex};"
                 coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
                 behavior="${objectData.object.type.behavior}"
                 dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
@@ -1643,9 +1742,9 @@
             listenInterOnEnd(el, function(e){
                 const eventDetails = objectData;
                 raiseOverview();
-                writeOverview(eventDetails, true);
+                writeArticleOverview(eventDetails, true);
     
-                setParam("art", objectData.discriminator);
+                setParam(ParamNames.ARTICLE_ID, objectData.discriminator);
             }, { forceLeft: true });
         }
     }
@@ -1722,6 +1821,7 @@
     //@ts-check
     "use strict";
     
+    
     function updatePositions(){
         for (var _mapObj of document.getElementsByClassName("mapObj")){
             /**@ts-ignore @type {mapObjectElement} */
@@ -1769,71 +1869,46 @@
         /**@ts-ignore @type {HTMLElement} */
         const overview = document.getElementById("shishiji-overview");
         const $cp = $("#shishiji-popup-container-c");
-        const loadgingsymbol = `<span class="material-symbols-outlined loading-symbol">progress_activity</span>`;
     
         overview.style.top = "0vh";
-        $(overview).removeClass("reducedown").addClass("raiseup").scrollTop(0);
+        $(overview)
+        .removeClass("reducedown")
+        .addClass("raiseup")
+        .scrollTop(0);
         $(overview).show();
+        $("#overview-share").show();
         $("#overview-close").on("click", reduceOverview);
         $("#overview-share").on("click", shareContent);
     
         function shareContent(){
-            Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt">${loadgingsymbol}</div></div>`);
-            function onerr(){
-                Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt"><h4>エラーが発生しました！<br>ページを再読み込みしてみてください！</h4></div></div>`);
+            const discriminator = getParam(ParamNames.ARTICLE_ID);
+            const data = searchObject(discriminator);
+            const _url = new URL(window.location.href);
+            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+    
+            if (data == null || discriminator == null){
+                openSharePopup({ title: "" }, "", {}, "", "", true);
+                return;
             }
-            $.get("/resources/html-ctx/share.html").done(t => {
-                if (Popup.popupping){
-                    Popup.popupContent(t, function(){
-                        const shareURL = window.location.href;
-                        $("#share-copy").on("click", function(){
-                            window.navigator.clipboard.writeText(shareURL);
-                        });
     
-                        const discriminator = getParam("art") || "";
-                        const data = searchObject(discriminator);
-    
-                        if (data == null){
-                            onerr();
-                            return;
-                        }
-                        
-                        const message = encodeURIComponent(`世田谷学園 獅子児祭のイベント: ${data.article.title}`);
-                    
-                        for (const ch of document.getElementsByClassName("share_ebtn")){
-                            const appname = ch.id.replace("share-", "");
-                            const $ch = $(ch);
-                            const here = encodeURIComponent(shareURL);
-                            var href = "";
-                            
-                            switch (appname){
-                                case "line":
-                                    href = `http://line.me/R/msg/text/?${message}%0A${here}`;
-                                    break;
-                                case "twitter":
-                                    href = `https://x.com/intent/tweet?url=${here}&text=${message}&related=shishiji&via=shishijifes&hashtags=${encodeURIComponent("獅子児祭")}`;
-                                    break;
-                                case "facebook":
-                                    href = `http://www.facebook.com/share.php?u=${here}`;
-                                    break;
-                                case "whatsapp":
-                                    href = `https://api.whatsapp.com/send/?text=${message}%0A${here}&type=custom_url&app_absent=0`
-                                    break;
-                                default:
-                                    continue;
-                            }
+            const message = `世田谷学園 獅子児祭のイベント: ${data.article.title}`;
             
-                            !function(_href){
-                                $ch.on("click", function(){
-                                    window.open(_href, "_blank");
-                                });
-                                return 0;
-                            }(href);
-                        }
-                    });
-                }
-            })
-            .catch(onerr);
+            openSharePopup(
+                {
+                    title: "イベントをシェア",
+                    subtitle: "共有されたリンクを開くとこの記事を開き、このイベントが地図の中心に配置されます",
+                },
+                shareURL,
+                {
+                    title: "獅子児祭",
+                    text: `${message}\n{__SHARE_URL__}`,
+                },
+                /**
+                 * jump to the object screened on middle of window
+                 */
+                ParamValues.FROM_ARTICLE_SHARE,
+                message,
+            );
         }
     }
     
@@ -1854,16 +1929,21 @@
         /**@ts-ignore @type {HTMLElement} */
         const overview = document.getElementById("shishiji-overview");
         overview.style.top = "100vh";
-        $(overview).removeClass("raiseup").addClass("reducedown");
+        $(overview)
+        .removeClass("raiseup")
+        .addClass("reducedown");
         $("#overview-close").off("click", reduceOverview);
         $("#overview-context").removeClass("fadein");
         
         Intervals.reduceOverview = setTimeout(() => {
-            $("#overview-context").html(`<h4 style="text-align: center;">詳細情報を処理中...</h4>`);
-            $(overview).scrollTop(0).hide();
+            writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
+            $(overview)
+            .css("border-top", "20px solid white")
+            .scrollTop(0)
+            .hide();
         }, 190);
     
-        setParam("art", "");
+        delParam(ParamNames.ARTICLE_ID);
     }
     
     
@@ -1872,7 +1952,7 @@
      * @param {mapObject} details 
      * @param {boolean} fadein 
      */
-    function writeOverview(details, fadein){
+    function writeArticleOverview(details, fadein){
         /**@ts-ignore @type {HTMLElement} */
         const ctx = document.getElementById("overview-context");
         /**@ts-ignore @type {HTMLElement} */
@@ -1882,6 +1962,12 @@
         const imgOnError = `onerror="this.src='/resources/img/noimg.png';"`
     
         var article_mainctx = mcFormat(details.article.content);
+    
+        if (!window.navigator.onLine){
+            $("#ovv-ctx-loading").html(ERROR_HTML.CONNECTION_ERROR);
+            $("#overview-share").hide();
+            return;
+        }
         
         if (article_mainctx === "<span></span>"){
             article_mainctx = '<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">このイベントに関する記載はありません</h4>';
@@ -1909,11 +1995,10 @@
         overview.style.borderTop = "solid 20px "+color;
         $(overview).css("font-family", font);
     
-    
-        $(ctx).html(`
-            <img class="article header" src="${details.article.images.header}" aria-label="ヘッダー画像" ${imgOnError}>
+        writeOverviewContent(`
+            <img class="article-image article header" src="${details.article.images.header}" aria-label="ヘッダー画像" ${imgOnError}>
             <div class="article titleC">
-                <img src="${details.object.images.icon}" style="width: 48px" alt="アイコン" ${imgOnError}>
+                <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="アイコン" ${imgOnError}>
                 <h1 id="ctx-title" style="margin: 5px">${details.article.title}</h1>
             </div>
             <div id="ctx-article" style="margin: 10px;">
@@ -1969,10 +2054,24 @@
                 </div>
                 <hr style="margin-bottom: 20px;">
             </div>
-        `);
+        `, );
     }
     
     
+    /**
+     * 
+     * @param {string} ctx
+     * @param {() => void} [callback] 
+     */
+    function writeOverviewContent(ctx, callback){
+        new Promise((resolve, reject) => {
+            $("#overview-context").html(ctx);
+            resolve("");
+        }).then(() => {
+            if (callback !== void 0)
+                callback();
+        });
+    }
     
     function init(){
         /**@ts-ignore @type {HTMLElement} */
@@ -1986,6 +2085,10 @@
     
     /**@type {NodeJS.Timeout} FAKE*/
     var lst;
+    /**
+     * 
+     * @param {boolean} openned 
+     */
     function toggleFeslOn(openned){
         if (!openned){
             clearTimeout(lst);
@@ -2005,7 +2108,114 @@
         }
     }
     
-    window.addEventListener("load", function(e) {
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * 
+     * @param {{ title: string, subtitle?: string }} ovvOptions 
+     * @param {string} share_url 
+     * @param {ShareData} share_data 
+     *      share_data.text?.replace("{__SHARE_URL__}", finalShareURL<decoded>);
+     * @param {string} from_where 
+     * @param {string} message 
+     * @param {boolean} [ERROR] 
+     */
+    function openSharePopup(ovvOptions, share_url, share_data, from_where, message, ERROR){
+        Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
+        share_url = decodeURIComponent(share_url);
+        /**@param {string} [ctx]  */
+        function onerr(ctx){
+            if (ctx === void 0) ctx = ERROR_HTML.CONNECTION_ERROR;
+            const _html = `<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt"><h4>${ctx}</h4></div></div>`
+            Popup.popupContent(_html);
+        }
+        
+        $.ajax({
+            url: "/resources/html-ctx/share.html",
+            method: "GET",
+            timeout: 30000,
+            dataType: "html",
+        }).done(t => {
+            if (Popup.popupping){
+                Popup.popupContent(t, function(){
+                    const shareURL = share_url.includes("?") ? `${share_url}&${ParamNames.URL_FROM}=${from_where}` : `${share_url}?${ParamNames.URL_FROM}=${from_where}`;
+    
+                    if (ERROR){
+                        onerr();
+                        return;
+                    }
+    
+                    $("#ppc-title").text(ovvOptions.title);
+                    if (ovvOptions.subtitle)
+                        $("#ppc-subtitle").text(ovvOptions.subtitle);
+    
+                    if (window.navigator.share){
+                        share_data.text = share_data.text?.replace("{__SHARE_URL__}", shareURL);
+                        !function(sd){
+                            $("#share-nav").on("click", async function(){
+                                await window.navigator.share(sd);
+                            });
+                            return 0;
+                        }(share_data);
+                    } else {
+                        $("#nav-share").remove();
+                    }
+                    $("#share-copy").on("click", function(){
+                        window.navigator.clipboard.writeText(shareURL);
+                    });
+                    
+                    message = encodeURIComponent(message);
+                    const here = encodeURIComponent(shareURL);
+                    const baseText = `%0A%0A${message}%0A${here}`;
+    
+                
+                    for (const ch of document.getElementsByClassName("share_ebtn")){
+                        const appname = ch.id.replace("share-", "");
+                        const $ch = $(ch);
+                        var href = "";
+                        
+                        switch (appname){
+                            case "line":
+                                href = `http://line.me/R/msg/text/?${baseText}`;
+                                break;
+                            case "twitter":
+                                href = `https://x.com/intent/tweet?url=${here}&text=%0A%0A${message}%0A${encodeURIComponent("#獅子児祭 @shishijifes")}%0A&related=shishiji`;
+                                break;
+                            case "facebook":
+                                href = `http://www.facebook.com/share.php?u=${here}`;
+                                break;
+                            case "gmail":
+                                href = `https://mail.google.com/mail/?view=cm&body=${baseText}`;
+                                break;
+                            case "mail":
+                                href = `mailto:?body=${baseText}`;
+                                break;
+                            case "sms":
+                                href = `sms:?body=${baseText}`;
+                                break;
+                            case "whatsapp":
+                                href = `https://api.whatsapp.com/send?text=${baseText}`;
+                                break;
+                            default:
+                                continue;
+                        }
+        
+                        !function(_href){
+                            $ch.on("click", function(){
+                                window.open(_href, "_blank");
+                            });
+                            return 0;
+                        }(href);
+                    }
+                });
+            }
+        })
+        .catch(() => { onerr(); });
+    }
+    
+    window.addEventListener("load", function(e){
         //@ts-check
         "use strict";
         
@@ -2047,8 +2257,10 @@
                 clearTimeout(tout);
         
         
-                toggleFeslOn.apply($(fselector), [!0]);
-                overlay_modes.fselector.opened = !!0;
+                if (overlay_modes.fselector.opened){
+                    toggleFeslOn.apply($(fselector), [!0]);
+                    overlay_modes.fselector.opened = !!0;
+                }
                 
                 init_friction();
                 initTouch(e);
@@ -2066,9 +2278,11 @@
         
                 clearTimeout(tout);
         
-        
-                toggleFeslOn.apply($(fselector), [!0]);
-                overlay_modes.fselector.opened = !!0;
+                
+                if (overlay_modes.fselector.opened){
+                    toggleFeslOn.apply($(fselector), [!0]);
+                    overlay_modes.fselector.opened = !!0;
+                }
         
                 init_friction();
                 set_cursorpos(e);
@@ -2222,8 +2436,7 @@
             return 0;
         }();
         
-    });
-    window.addEventListener("load", function(e) {
+        
         //@ts-check
         "use strict";
         
@@ -2274,7 +2487,7 @@
                             endLoad();
                         });
                         CURRENT_FLOOR = name;
-                        setParam("fl", CURRENT_FLOOR);
+                        setParam(ParamNames.FLOOR, CURRENT_FLOOR);
                         setPlaceSelColor();
                     }, { passive: false });
                     return 0;
@@ -2293,55 +2506,20 @@
         }();
         
         
-    });
-    window.addEventListener("load", function(e) {
         //@ts-check
         "use strict";
-        
-        
-        !function(){
-            const $cp = $("#shishiji-popup-container-c");
-        
-            /**@param {string} str  */
-            function delpxToNum(str){
-                return Number(str.replace("px", ""));
-            }
-        
-            const base = {
-                width: delpxToNum($cp.css("width")),
-                height: delpxToNum($cp.css("height")),
-                margin: delpxToNum($cp.css("margin"))
-            };
-            
-            $(window).on("resize", function(e){
-                var width = delpxToNum($cp.css("width"));
-                var height = delpxToNum($cp.css("height"));
-                var margin = delpxToNum($cp.css("margin"));
-                
-                
-                if (window.innerWidth < width+margin*2){
-                    $cp.css("width", window.innerWidth-margin*2+"px");
-                    width = window.innerWidth-margin*2;
-                } else {
-                    $cp.css("width", base.width+"px");
-                }
-        
-                $cp
-                .css("top", (window.innerHeight-(margin*2+height))/2+"px")
-                .css("left", (window.innerWidth-(margin*2+width))/2+"px");
-            });
-        
-            window.dispatchEvent(new Event("resize"));
-        
-            return 0;
-        }();
-        
         
         
         class Popup{
             static me = document.getElementById("shishiji-popup-container-c");
             static ppcls = `<div id="ppcls"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;"><path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z" fill="#ffffff"></path></svg></div>`;
         
+            
+            /**
+             * 
+             * @param {string} _innerHTML 
+             * @param {() => void} [callback] 
+             */
             static popupContent(_innerHTML, callback){
                 new Promise((resolve, reject) => {
                     $("shishiji-mx-overlay")
@@ -2380,8 +2558,57 @@
             }
         }
         
-    });
-    window.addEventListener("load", function(e) {
+        
+        //@ts-ignore
+        window.Popup = Popup;
+        
+        
+        //@ts-check
+        "use strict";
+        
+        
+        !function(){
+            // popup
+            const $cp = $("#shishiji-popup-container-c");
+        
+            /**@param {string} str  */
+            function delpxToNum(str){
+                return Number(str.replace("px", ""));
+            }
+        
+            const base = {
+                width: delpxToNum($cp.css("width")),
+                height: delpxToNum($cp.css("height")),
+                margin: delpxToNum($cp.css("margin"))
+            };
+            
+            $(window).on("resize", function(e){
+                var width = delpxToNum($cp.css("width"));
+                var height = delpxToNum($cp.css("height"));
+                var margin = delpxToNum($cp.css("margin"));
+                
+                if (window.innerWidth <= width+margin*2){
+                    $cp.css("width", window.innerWidth-margin*2+"px");
+                    width = window.innerWidth-margin*2;
+                } else {
+                    $cp.css("width", base.width+"px");
+                }
+        
+                $cp
+                .css("top", (window.innerHeight-(margin*2+height))/2+"px")
+                .css("left", (window.innerWidth-(margin*2+width))/2+"px");
+            });
+        
+            window.dispatchEvent(new Event("resize"));
+        
+            
+            // overview
+            writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
+        
+            return 0;
+        }();
+        
+        
         //@ts-check
         "use strict";
         
@@ -2405,19 +2632,36 @@
             /**@ts-ignore @type {string} */
             const loadType = window.performance?.getEntriesByType("navigation")[0].type;
             const PARAMS = {
-                article: getParam("art"),
-                zoomRatio: Number(getParam("zr")) || 1,
-                floor: getParam("fl"),
-                coords: getParam("at")?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+                article: getParam(ParamNames.ARTICLE_ID),
+                zoomRatio: Number(getParam(ParamNames.ZOOM_RATIO)) || 1,
+                floor: getParam(ParamNames.FLOOR),
+                coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+                from: getParam(ParamNames.URL_FROM),
             };
             if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
         
             if (loadType == "reload"){
-                PARAMS.article = null;
-                //PARAMS.zoomRatio = 1;
-                //PARAMS.coords = [0, 0];
-                setParam("art", "");
+                switch (reloadInitializeLevel){
+                    case reloadInitializeLevels.DO_EVERYTHING:
+                    case reloadInitializeLevels.INIT_FLOOR:
+                        PARAMS.floor = null;
+                        delParam(ParamNames.FLOOR);
+                    case reloadInitializeLevels.INIT_COORDS:
+                        PARAMS.coords = [ 0, 0 ];
+                        delParam(ParamNames.COORDS);
+                    case reloadInitializeLevels.INIT_ZOOMRADIO:
+                        PARAMS.zoomRatio = 1;
+                        delParam(ParamNames.ZOOM_RATIO);
+                    case reloadInitializeLevels.CLOSE_ARTICLE:
+                        PARAMS.article = null;
+                        delParam(ParamNames.ARTICLE_ID);
+                    case reloadInitializeLevels.DO_NOTHING:
+                    default:
+        
+                }
             }
+        
+            delParam(ParamNames.URL_FROM);
         
             startLoad();
             setCanvasSizes();
@@ -2479,14 +2723,29 @@
                     $("#app-mount").show();
                     if (PARAMS.article){
                         const data = searchObject(PARAMS.article);
+                        var fromshare = !!0;
                         
+                        if (PARAMS.from == ParamValues.FROM_ARTICLE_SHARE){
+                            fromshare = !0;
+                        }
+        
                         if (data == null){
-                            setParam("art", "");
+                            if (fromshare){
+                                // say error
+                            }
+                            setParam(ParamNames.ARTICLE_ID, "");
                             return;
                         }
+        
+                        if (fromshare){
+                            const coords = data.object.coordinate;
+                            
+                            screenCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
+                        }
+        
                         setTimeout(() => {
                             raiseOverview();
-                            writeOverview(data, true);
+                            writeArticleOverview(data, true);
                         }, 1000);
                     }
                 }
@@ -2527,6 +2786,9 @@
         
         document.oncontextmenu = () => { return false; }
         
+        
+        
     });
     
+    return 0;
 }();

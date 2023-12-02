@@ -21,19 +21,36 @@ function setCanvasSizes(){
     /**@ts-ignore @type {string} */
     const loadType = window.performance?.getEntriesByType("navigation")[0].type;
     const PARAMS = {
-        article: getParam("art"),
-        zoomRatio: Number(getParam("zr")) || 1,
-        floor: getParam("fl"),
-        coords: getParam("at")?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+        article: getParam(ParamNames.ARTICLE_ID),
+        zoomRatio: Number(getParam(ParamNames.ZOOM_RATIO)) || 1,
+        floor: getParam(ParamNames.FLOOR),
+        coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+        from: getParam(ParamNames.URL_FROM),
     };
     if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
 
     if (loadType == "reload"){
-        PARAMS.article = null;
-        //PARAMS.zoomRatio = 1;
-        //PARAMS.coords = [0, 0];
-        setParam("art", "");
+        switch (reloadInitializeLevel){
+            case reloadInitializeLevels.DO_EVERYTHING:
+            case reloadInitializeLevels.INIT_FLOOR:
+                PARAMS.floor = null;
+                delParam(ParamNames.FLOOR);
+            case reloadInitializeLevels.INIT_COORDS:
+                PARAMS.coords = [ 0, 0 ];
+                delParam(ParamNames.COORDS);
+            case reloadInitializeLevels.INIT_ZOOMRADIO:
+                PARAMS.zoomRatio = 1;
+                delParam(ParamNames.ZOOM_RATIO);
+            case reloadInitializeLevels.CLOSE_ARTICLE:
+                PARAMS.article = null;
+                delParam(ParamNames.ARTICLE_ID);
+            case reloadInitializeLevels.DO_NOTHING:
+            default:
+
+        }
     }
+
+    delParam(ParamNames.URL_FROM);
 
     startLoad();
     setCanvasSizes();
@@ -95,14 +112,29 @@ function setCanvasSizes(){
             $("#app-mount").show();
             if (PARAMS.article){
                 const data = searchObject(PARAMS.article);
+                var fromshare = !!0;
                 
+                if (PARAMS.from == ParamValues.FROM_ARTICLE_SHARE){
+                    fromshare = !0;
+                }
+
                 if (data == null){
-                    setParam("art", "");
+                    if (fromshare){
+                        // say error
+                    }
+                    setParam(ParamNames.ARTICLE_ID, "");
                     return;
                 }
+
+                if (fromshare){
+                    const coords = data.object.coordinate;
+                    
+                    screenCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
+                }
+
                 setTimeout(() => {
                     raiseOverview();
-                    writeOverview(data, true);
+                    writeArticleOverview(data, true);
                 }, 1000);
             }
         }

@@ -82,6 +82,8 @@
         "regex": "cpp",
         "codecvt": "cpp",
         "functional": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "complex": "cpp",
+        "numeric": "cpp"
     },
 }
