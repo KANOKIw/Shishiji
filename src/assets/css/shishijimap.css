@@ -453,7 +453,7 @@ table{
 .share_ebtn{
     touch-action: pan-x;
     width: fit-content;
-    height: 200%;
+    height: 125%;
 }
 
 .share-icon-w:active{
@@ -653,6 +653,7 @@ table{
     margin-right: 7px;
     border-radius: 5px;
     width: var(--shishiji-share-icon-width);
+    transition: all 0.1s ease;
 }
 
 .share-icon-w:first-of-type{
