@@ -339,4 +339,5 @@ function setCoordsOnMiddle(coords, abs_zoomRatio){
     zoomRatio = abs_zoomRatio;
     backcanvas.canvas.coords = bcoords;
     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
+    setBehavParam();
 }

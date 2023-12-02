@@ -690,6 +690,7 @@
         zoomRatio = abs_zoomRatio;
         backcanvas.canvas.coords = bcoords;
         moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
+        setBehavParam();
     }
     
     //@ts-check
@@ -1354,13 +1355,13 @@
     
     /**
      * 
-     * @param {boolean} [accurate] 
+     * @param {boolean} [accurated] 
      */
-    function setBehavParam(accurate){
+    function setBehavParam(accurated){
         const abstraction = 10**paramAbstractDeg;
         const K = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
-        const zr = accurate ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
-        const at = accurate ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
+        const zr = accurated ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
+        const at = accurated ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
         
         setParam(ParamNames.ZOOM_RATIO, zr);
         setParam(ParamNames.COORDS, at);
