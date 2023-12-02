@@ -135,7 +135,7 @@ function setCanvasSizes(){
                 const data = searchObject(PARAMS.article);
                 var fromARTshare = !!0;
                 
-                if (PARAMS.from == ParamValues.FROM_ARTICLE_SHARE){
+                if (PARAMS.from){
                     fromARTshare = !0;
                 }
 
@@ -155,7 +155,6 @@ function setCanvasSizes(){
 
                 if (fromARTshare){
                     const coords = data.object.coordinate;
-                    
                     setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                 }
 

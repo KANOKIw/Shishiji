@@ -1839,6 +1839,7 @@
                 writeArticleOverview(eventDetails, true);
     
                 setParam(ParamNames.ARTICLE_ID, objectData.discriminator);
+                setBehavParam();
             }, { forceLeft: true });
         }
     }
@@ -2974,7 +2975,7 @@
                         const data = searchObject(PARAMS.article);
                         var fromARTshare = !!0;
                         
-                        if (PARAMS.from == ParamValues.FROM_ARTICLE_SHARE){
+                        if (PARAMS.from){
                             fromARTshare = !0;
                         }
         
@@ -2994,7 +2995,6 @@
         
                         if (fromARTshare){
                             const coords = data.object.coordinate;
-                            
                             setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                         }
         

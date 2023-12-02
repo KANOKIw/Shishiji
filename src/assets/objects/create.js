@@ -73,6 +73,7 @@ function putObjOnMap(objectData){
             writeArticleOverview(eventDetails, true);
 
             setParam(ParamNames.ARTICLE_ID, objectData.discriminator);
+            setBehavParam();
         }, { forceLeft: true });
     }
 }
