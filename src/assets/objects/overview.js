@@ -97,7 +97,10 @@ function writeArticleOverview(details, fadein){
     const overview  = document.getElementById("shishiji-overview");
     const color = (details.article.theme_color) ? details.article.theme_color : "black";
     const font = (details.article.font_family) ? details.article.font_family : "";
-    const imgOnError = `onerror="this.src='/resources/img/noimg.png';"`
+
+    function onerror(){
+        this.setAttribute("src", "/resources/img/noimg.png");
+    };
 
     var article_mainctx = mcFormat(details.article.content);
 
@@ -134,10 +137,10 @@ function writeArticleOverview(details, fadein){
     $(overview).css("font-family", font);
 
     writeOverviewContent(`
-        <img class="article-image article header" src="${details.article.images.header}" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}" ${imgOnError}>
+        <img id="--art-header" class="article-image article header" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}">
         <div class="article titleC">
-            <img class="article-image" src="${details.object.images.icon}" style="width: 48px" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}" ${imgOnError}>
-            <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${details.article.title}</h1>
+            <img id="--art-icon" class="article-image" style="width: 48px" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}">
+            <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1>
         </div>
         <div id="ctx-article" style="margin: 10px;">
             <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
@@ -193,6 +196,8 @@ function writeArticleOverview(details, fadein){
             <hr style="margin-bottom: 20px;">
         </div>
     `, );
+    $("#--art-header").attr("src", details.article.images.header).on("error", function(){ onerror.apply(this);; });
+    $("#--art-icon").attr("src", details.object.images.icon).on("error", function(){ onerror.apply(this); });
 }
 
 
