@@ -33,7 +33,7 @@ const TEXT = {
         NOTIFICATION_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
         SHARE_EVENT_MESSAGE: "Shishiji festival event, Setagayagakuen; ",
         SHARE_EVENT_POPUP_TITLE: "Share Event",
-        SHARE_EVENT_POPUP_SUBTITLE: "The map moves to middle focusing on this event and opens this article, when openning a shared Link",
+        SHARE_EVENT_POPUP_SUBTITLE: "The map moves to middle focusing on this event and opens this article, when openning a shared link",
         SHARE_EVENT_DATA_TITLE: "Shishiji festival",
         ARTICLE_NO_ARTICLE: "There is no article for this event.",
         ARTICLE_CORE_GRADE: "Core Grade",
