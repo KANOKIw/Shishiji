@@ -265,7 +265,7 @@
     };
     /**@enum {string} */
     const ParamValues = {
-        FROM_ARTICLE_SHARE: "artshare",
+        FROM_ARTICLE_SHARE: "attsrh",
     }
     const objectIdFormat = "disc-{0}";
     
@@ -1979,7 +1979,7 @@
             const discriminator = getParam(ParamNames.ARTICLE_ID);
             const data = searchObject(discriminator);
             const _url = new URL(window.location.href);
-            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.ARTICLE_ID}=${discriminator}`;
+            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
     
             if (data == null || discriminator == null){
                 openSharePopup({ title: "" }, "", {}, "", "", true);

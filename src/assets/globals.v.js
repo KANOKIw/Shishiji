@@ -219,7 +219,7 @@ const ParamNames = {
 };
 /**@enum {string} */
 const ParamValues = {
-    FROM_ARTICLE_SHARE: "artshare",
+    FROM_ARTICLE_SHARE: "attsrh",
 }
 const objectIdFormat = "disc-{0}";
 
