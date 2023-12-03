@@ -143,7 +143,7 @@ function setCanvasSizes(){
                     if (fromARTshare){
                         setTimeout(() => {
                             notifyHTML(
-                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_EVENT_NOT_FOUND}</div>`,
+                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_NOT_FOUND}</div>`,
                                 7500,
                                 "share not found",
                             );
@@ -156,6 +156,13 @@ function setCanvasSizes(){
                 if (fromARTshare){
                     const coords = data.object.coordinate;
                     setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
+                    setTimeout(() => {
+                        notifyHTML(
+                            `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_FOUND}</div>`,
+                            5000,
+                            "share found",
+                        );
+                    }, 1000);
                 }
 
                 setTimeout(() => {

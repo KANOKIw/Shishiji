@@ -12,7 +12,7 @@
     const TEXT = {
         JA: {
             LOADING_MAP: "マップを読み込んでいます...",
-            MAP_LOADED: "読み込み完了！",
+            MAP_LOADED: "ようこそ",
             PROCESSING: "処理中...",
             NOTIFICATION_COPIED_LINK: "リンクをコピーしました！",
             NOTIFICATION_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
@@ -28,7 +28,7 @@
         },
         EN: {
             LOADING_MAP: "Loading map...",
-            MAP_LOADED: "Load Completed!",
+            MAP_LOADED: "Welcome",
             PROCESSING: "Processing...",
             NOTIFICATION_COPIED_LINK: "Link Copied!",
             NOTIFICATION_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",

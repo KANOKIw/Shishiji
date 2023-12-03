@@ -147,6 +147,17 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
     width: calc(var(--shishiji-yd-notifier-height)*0.5);
 }
 
+#shr-f{
+    height: 100%;
+    width: 100%;
+}
+
+#shr-f svg{
+    margin-right: 4px;
+    height: calc(var(--shishiji-yd-notifier-height)*0.5);
+    width: calc(var(--shishiji-yd-notifier-height)*0.5);
+}
+
 @keyframes kkl{
     from { rotate: 0deg; }
     to { rotate: 360deg; }

@@ -11,10 +11,11 @@
 const TEXT = {
     JA: {
         LOADING_MAP: "マップを読み込んでいます...",
-        MAP_LOADED: "読み込み完了！",
+        MAP_LOADED: "ようこそ",
         PROCESSING: "処理中...",
         NOTIFICATION_COPIED_LINK: "リンクをコピーしました！",
-        NOTIFICATION_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
+        NOTIFICATION_SHARED_EVENT_FOUND: "シェアされたイベントを開きました",
+        NOTIFICATION_SHARED_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
         SHARE_EVENT_MESSAGE: "世田谷学園 獅子児祭のイベント:",
         SHARE_EVENT_POPUP_TITLE: "イベントをシェア",
         SHARE_EVENT_POPUP_SUBTITLE: "共有されたリンクを開くと、マップがこのイベントを中心に移動しこの記事が開かれます",
@@ -27,10 +28,11 @@ const TEXT = {
     },
     EN: {
         LOADING_MAP: "Loading map...",
-        MAP_LOADED: "Load Completed!",
+        MAP_LOADED: "Welcome",
         PROCESSING: "Processing...",
         NOTIFICATION_COPIED_LINK: "Link Copied!",
-        NOTIFICATION_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
+        NOTIFICATION_SHARED_EVENT_FOUND: "Opened the shared event.",
+        NOTIFICATION_SHARED_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
         SHARE_EVENT_MESSAGE: "Shishiji festival event, Setagayagakuen; ",
         SHARE_EVENT_POPUP_TITLE: "Share Event",
         SHARE_EVENT_POPUP_SUBTITLE: "The map moves to middle focusing on this event and opens this article, when openning a shared link",
