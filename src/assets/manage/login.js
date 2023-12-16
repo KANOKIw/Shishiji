@@ -12,7 +12,7 @@
 
         if (!username || !password){
             msgfield.style.display = "block";
-            msgfield.textContent = "入力していない箇所があります";
+            msgfield.textContent = "入力されていない箇所があります";
             return;
         }
 
@@ -41,6 +41,7 @@
     });
 
     const _session = getCookie("__ogauthk");
+
     if (_session){
         fetch("/org/manage/auth/_login", {
             method: "POST",
@@ -59,6 +60,19 @@
 
         });
     }
+
+
+    document.getElementById("login_username").addEventListener("keydown", function(e){
+        if (e.key.toUpperCase() == "ENTER"){
+            document.getElementById("login_password").focus();
+        }
+    });
+
+    document.getElementById("login_password").addEventListener("keydown", function(e){
+        if (e.key.toUpperCase() == "ENTER"){
+            document.getElementById("login_enter").dispatchEvent(new Event("click"));
+        }
+    });
 
     return 0;
 }();

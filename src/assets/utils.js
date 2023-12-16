@@ -405,6 +405,16 @@ function toOrgFilepath(orgname, filename){
 
 /**
  * 
+ * @param {string} orgname 
+ * @param {string} filename 
+ */
+function toStaticFilepath(orgname, filename){
+    return "/resources/img/static/"+orgname+"/"+filename;
+}
+
+
+/**
+ * 
  * @param {string | null} lang 
  */
 function isThereLang(lang){

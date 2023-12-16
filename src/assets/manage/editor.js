@@ -340,6 +340,8 @@
                 callback();
         });
     }
+
+
     /**@type {Range | undefined} */
     var last_pos;
     window.addEventListener("load", function(e){
@@ -347,6 +349,7 @@
             range: Range.prototype,
             selection: Selection.prototype,
         };
+
 
         this.setInterval(() => {
             var sel = window.getSelection();
@@ -361,8 +364,26 @@
         $("#app-mount").show();
         $("#username-d").text(username);
 
-        $("#main-editor").html(ARTICLEDATA.article.content);
+        $("#main-editor").html(colorXtext(ARTICLEDATA.article.content));
         $("#ctx-title").text(ARTICLEDATA.article.title || "NAME");
+
+
+        /**
+         * 
+         * @param {string} text 
+         */
+        function colorXtext(text){
+            return text.replace(/\n/g, "<br>");
+        }
+
+
+        /**
+         * 
+         * @param {string} text 
+         */
+        function parseXtext(text){
+            return text.replace(/<br>/g, "\n");
+        }
 
 
         /**
@@ -389,6 +410,11 @@
 
             sel.removeAllRanges();
             sel.addRange(range);
+
+            change_not_saved_remains = true;
+            $("#save_data_norm")
+            .css("background-color", "rgb(247, 255, 142)")
+            .css("cursor", "pointer");
 
             if (notify)
                 Notifier.notifyHTML(text, 1000, text, true);
@@ -433,29 +459,34 @@
         });
 
 
-        this.document.getElementById("main-editor")?.addEventListener("input", function(ev){
-            var scr = $("#shishiji-overview").scrollTop();
-            
-            change_not_saved_remains = true;
-
-            ARTICLEDATA.article.content = this.innerText;
-            writeArticleOverview(ARTICLEDATA, false, scr, void 0, true, true);
-        });
-
-
-        this.document.getElementById("save_data_norm")?.addEventListener("click", function(){
-            /**@ts-ignore @type {{[key: string]: NodeJS.Timeout}} */
-            var _t = { a: 0, };
+        /**
+         * @this {HTMLElement}
+         * @param {boolean} [do_not_showmessage] 
+         * @param {() => void} [donecallback] 
+         */
+        function saveMainEditorctx(do_not_showmessage, donecallback){
+            if ($(this).css("background-color") != "rgb(247, 255, 142)")
+                return;
             $.post("/org/manage/edit/savemain", { session: session, nmap: JSON.stringify(ARTICLEDATA) })
             .done(d => {
                 change_not_saved_remains = false;
                 lastsaved = ARTICLEDATA;
+
                 clearTimeout(_t.a);
-                $("#sv_msg").text("保存しました").css("color", "green");
+
+                if (!do_not_showmessage){
+                    $("#sv_msg").text("保存しました").css("color", "green");
+                    _t.a = setTimeout(() => {
+                        $("#sv_msg").text("");
+                    }, 3000);
+                }
+                $("#save_data_norm")
+                .css("background-color", "rgb(144 149 81)")
+                .css("cursor", "not-allowed");
+
                 rewrite();
-                _t.a = setTimeout(() => {
-                    $("#sv_msg").text("");
-                }, 3000);
+                if (donecallback)
+                    donecallback();
             })  
             .catch(err => {
                 clearTimeout(_t.a);
@@ -464,6 +495,52 @@
                     $("#sv_msg").text("");
                 }, 3000);
             });
+        }
+
+
+        function setLineN(){
+            const brs = $("#main-editor").html().matchAll(/<br>/g);
+            const bns = $("#main-editor").html().matchAll(/\n/g);
+            
+            $("#main-editor-linen").html("");
+            var i = 1;
+            for (const r of brs){
+                $("#main-editor-linen").append(i+"<br>");
+                i++;
+            }
+            for (const n of bns){
+                $("#main-editor-linen").append(i+"<br>");
+                i++;
+            }
+        }
+
+        /**@ts-ignore @type {NodeJS.Timeout} */
+        var kes = 0;
+        this.document.getElementById("main-editor")?.addEventListener("input", function(ev){
+            var scr = $("#shishiji-overview").scrollTop();
+            
+            change_not_saved_remains = true;
+            $("#save_data_norm")
+            .css("background-color", "rgb(247, 255, 142)")
+            .css("cursor", "pointer");
+            $("#sv_msg").text("");
+
+            ARTICLEDATA.article.content = parseXtext(this.innerHTML);
+            writeArticleOverview(ARTICLEDATA, false, scr, void 0, true, true);
+
+            clearTimeout(kes);
+            kes = setTimeout(() => {
+                saveMainEditorctx.apply(document.getElementById("save_data_norm"), [true, () => {
+                    $("#sv_msg").text("自動で保存しました").css("color", "green");
+                }]);
+            }, 2500);
+        });
+
+
+        /**@ts-ignore @type {{[key: string]: NodeJS.Timeout}} */
+        var _t = { a: 0, };
+        this.document.getElementById("save_data_norm")?.addEventListener("click", function(){
+            saveMainEditorctx.apply(this);
         });
 
 
@@ -712,6 +789,8 @@
                         .append(_html)
                         .scrollTop(0);
                     }
+
+                    $(".cloudfileele").on("click", () => {});
                 }
 
                 if (files){
@@ -802,13 +881,15 @@
                                             });
                                         } else{
                                             mbytesoverflow = Math.ceil(mbytesoverflow*10000)/10000;
+
                                             Notifier.notifyHTML(
                                                 `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}クラウドに ${mbytesoverflow}MB 容量が足りません</div>`,
                                                 5000,
                                                 "Cloud is overflowing!",
                                                 true,
                                             );
-                                            $("#uploadfbh").text(`${mbytesoverflow}MB 超過しています`).css("color", "red");
+
+                                            $("#uploadfbh").text(`${mbytesoverflow}MB 容量が足りません`).css("color", "red");
                                             _t.a = setTimeout(() => {
                                                 $("#uploadfbh").text("アップロード").css("color", "black");
                                             }, 5000);
@@ -876,10 +957,11 @@
                                         "file deleted", 
                                         true,
                                     );
-                                    $("#deletefbh").text("削除しました").css("color", "green");
+
+                                    $("#deletefbh").text("削除に成功").css("color", "green");
                                     _t.b = setTimeout(() => {
                                         $("#deletefbh").text("削除").css("color", "black");
-                                    }, 3000);
+                                    }, 5000);
                                     //@ts-ignore
                                     document.getElementById("deletefi").value = "";
                                 })
@@ -910,6 +992,31 @@
         });
 
 
+        window.addEventListener("resize", function(e){
+            //@ts-ignore
+            const xpre_height = document.getElementById("editsplitter").clientHeight;
+            //@ts-ignore
+            const xpre_width = document.getElementById("--ppo").clientWidth;
+    
+            const iphone_12_pro_max = {
+                height: xpre_height*0.8,
+                width: (xpre_height*0.8)*0.46,
+            }
+    
+            if (iphone_12_pro_max.width > xpre_width-20){
+                iphone_12_pro_max.width = xpre_width-20;
+                iphone_12_pro_max.height = iphone_12_pro_max.width*2.16;
+            }
+    
+            $("#article-preview").css("transform", "scale("+iphone_12_pro_max.width/430+")");
+        });
+    
+        window.dispatchEvent(new Event("resize"));
+        setInterval(() => {
+            window.dispatchEvent(new Event("resize"));
+        }, 500);
+
+
         $("#--art-header").on("error", function(){ imageError.apply(this, ["h"]); }).attr("src", "");
         $("#--art-icon").on("error", function(){ imageError.apply(this, ["i"]); }).attr("src", "");
 
@@ -935,6 +1042,11 @@
             }
         }
     });
+
+
+    window.addEventListener("dblclick", function(e){
+        e.preventDefault();
+    }, { passive: false });
 
 
     window.addEventListener("beforeunload", e => {

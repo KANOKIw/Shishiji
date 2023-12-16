@@ -534,6 +534,13 @@ table{
     }
 }
 
+.ev_ppar{
+    color: green;
+    font-weight: bold;
+    margin: 15px;
+    margin-left: 20px;
+}
+
 .overview-c{
     width: 40px;
     height: 40px;
@@ -557,6 +564,10 @@ table{
     background-size: 85%;
     background-repeat: no-repeat;
     background-position: center center; 
+}
+
+.--path-through{
+    pointer-events: none;
 }
 
 .shadowedObj{

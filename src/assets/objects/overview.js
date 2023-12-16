@@ -124,6 +124,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     const color = (details.article.theme_color) ? details.article.theme_color : "black";
     const font = (details.article.font_family) ? details.article.font_family : "";
     const orgname = details.discriminator;
+    const pathConvertfunc = (details.object.type.behavior == "dynamic") ? toOrgFilepath : toStaticFilepath;
 
     /**
      * 
@@ -136,7 +137,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
             this.outerHTML = `<div class="flxxt" style="width:48px;height:48px;">${GPATH.ERROR_ZAHUMARU}</div>`;
     };
 
-    var article_mainctx = mcFormat(details.article.content, fn => { return toOrgFilepath(orgname, fn); });
+    var article_mainctx = mcFormat(details.article.content, fn => { return pathConvertfunc(orgname, fn); });
 
     if (!window.navigator.onLine){
         Notifier.notifyHTML(
@@ -197,7 +198,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         writeOverviewContent(`
             ${EVENT_HEADER}
             <div id="ctx-article" class="article">
-                <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
+                <div class="ev_property ev_ppar">
                     <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
                 </div>
                 ${article_mainctx}
@@ -207,8 +208,8 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
         $(this).addClass("tg-active");
-        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", toOrgFilepath(orgname, details.article.images.header));
-        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", toOrgFilepath(orgname, details.object.images.icon));
+        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
+        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
     }
 
     /**@this {HTMLElement} */
@@ -272,8 +273,8 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
         $(this).addClass("tg-active");
-        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", toOrgFilepath(orgname, details.article.images.header));
-        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", toOrgFilepath(orgname, details.object.images.icon));
+        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
+        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
     }
 
     $("#ovv-t-description-sd").off("click", Ovv_tg_listener.description).on("click", showDescription);

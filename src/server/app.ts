@@ -63,7 +63,6 @@ app.post("/org/manage/file/upload", PostHandler.File.upload);
 app.post("/org/manage/file/delete", PostHandler.File.delete);
 
 
-
 app.get("/data/map-data/objects", (req, res) => {
 	const mapobjects_ = mapObjAPI.getAllObjects(false);
 	res.send(mapobjects_);

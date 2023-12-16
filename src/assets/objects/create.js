@@ -29,18 +29,21 @@ function putMobjonMap(objectData){
     var attrs = "";
     var classes = "";
     var dfcursor = "pointer";
+    var iconsrc = objectData.object.images.icon;
     const obj_id = formatString(objectIdFormat, orgname);
     
     switch (behavior){
         case "dynamic":
-            classes += "popups realshadow "
+            classes += "popups realshadow ";
+            iconsrc = toOrgFilepath(orgname, iconsrc);
             break;
         default:
         case "static":
             zIndex = 999;
-            classes += "mapObj_static"
+            classes += "mapObj_static";
+            iconsrc = toStaticFilepath(orgname, iconsrc);
             if (!objectData.object.type.border)
-                styles += "border: none; border-radius: 0; background-color: transparent;"
+                styles += "border: none; border-radius: 0; background-color: transparent;";
             if (!objectData.article){
                 styles += "cursor: default; pointer-events: none;";
                 dfcursor = "default";
@@ -55,7 +58,7 @@ function putMobjonMap(objectData){
             coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
             behavior="${objectData.object.type.behavior}"
             dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
-            <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${toOrgFilepath(orgname, objectData.object.images.icon)}');
+            <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${iconsrc}');
 min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.height}px;max-width:${objectData.object.size.width}px;max-height:${objectData.object.size.height}px;${styles}" dfcs="${dfcursor}">
             </div>
         </div>
@@ -66,6 +69,7 @@ min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.
     if (objectData.article){
         listenInterOnEnd(el, function(e){
             const eventDetails = objectData;
+            
             raiseOverview();
             writeArticleOverview(eventDetails, true);
 

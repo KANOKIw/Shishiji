@@ -72,6 +72,8 @@ class OrgAuth{
             return;
         }
 
+        console.log(new Date() + ": Editor: "+orgname);
+
         const mapdata = AppAPI.getOrgMdata(orgname) || DEFAULTOBJECT;
 
         res.status(200).json({ artdata: mapdata, usn: orgname, mxcs: File.getOrgMaCloudSize(orgname) });

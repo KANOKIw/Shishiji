@@ -10,12 +10,15 @@
 class Notifier{
     /**@type {NoticeComponent[]} */
     static pending_notices = [];
+
+
     /**
      * 
      * @param {string} html 
      * @param {number} term 
      *      millisecond
      * @param {string} discriminator
+     *      some unique id
      * @param {boolean} [do_not_keep] 
      *      default: false
      * @param {boolean} [user_uncloseable]
@@ -24,12 +27,12 @@ class Notifier{
      */
     static notifyHTML(html, term, discriminator, do_not_keep, user_uncloseable, _ispendingf){
         const $notifier = $("#--yd-notifier");
-        
+        const te = document.createTextNode(html).textContent;        
         
         if (Notifier_prop.notifying && Notifier_prop.current == discriminator && !do_not_keep)
             return;
 
-        if (html.endsWith(".</div>") || html.endsWith("!</div>"))
+        if (te?.endsWith(".") || te?.endsWith("!") || te?.endsWith("?"))
             html += "&nbsp;";
 
             
@@ -65,6 +68,8 @@ class Notifier{
 
             if (!cant_close){
                 this._add_closeOnInter();
+            } else {
+                $notifier.addClass("--path-through");
             }
         
             Notifier_prop.notifying = !0;
@@ -85,6 +90,7 @@ class Notifier{
     static closeNotifier(keep_discriminator){
         clearTimeout(Notifier_prop.__Timeout);
         $("#--yd-notifier")
+        .removeClass("--path-through")
         .removeClass("vpopen")
         .addClass("hpipe");
         
@@ -122,7 +128,9 @@ class Notifier{
     static _add_closeOnInter(){
         const $notifier = $("#--yd-notifier");
         
-        $notifier.on("touchstart mousedown", this._interClose);
+        $notifier
+        .removeClass("--path-through")
+        .on("touchstart mousedown", this._interClose);
     }
 
 

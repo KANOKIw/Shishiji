@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
         <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
         <link rel="stylesheet" href="/src/assets/css/edit.css">
+        <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/src/assets/lang.js"></script>
         <script src="/src/assets/utils.js"></script>
@@ -111,8 +112,8 @@
                             <p>白色</p>
                         </div>
                     </div>
-                    <div style="display: flex; height: 100%;">
-                        <div id="-motd-dec-wp">
+                    <div style="display: flex; height: 50%;">
+                        <div id="-motd-dec-wp" style="height: 100%;">
                             <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
                                 <p style="font-size:16px;">大 lvl.1</p>
                             </div>
@@ -148,7 +149,7 @@
                             </div>
                         </div>
 
-                        <div id="-motd-dec-wp-r">
+                        <div id="-motd-dec-wp-r" style="height: 100%;">
                             <div id="manageFileb" class="motd-dec-e protected" style="background-color: #b86200; color: white;">
                                 <p style="font-size:16px;">クラウド</p>
                             </div>
@@ -166,12 +167,13 @@
                 </div>
 
                 <div id="editsplitter">
-                    <div class="editorE" style="display: flex;">
-                        <div id="main-editor-linen"></div>
+                    <div class="editorE" id="aoidjoi" style="display: flex;">
+                        <blockquote id="main-editor-linen"></blockquote>
                         <blockquote id="main-editor" contenteditable="plaintext-only"></blockquote>
                     </div>
 
                     <div class="editorE" id="--ppo">
+                        <p id="preview-device-name">Dimentions: iPhone 14 Pro Max</p>
                         <div id="article-preview" class="previewer iphone-12-pro-max protected">
                             <div id="overview-options" style="width: var(--previewer-width); pointer-events: none; position: absolute; top: 20px; z-index: 2999;">
                                 <div class="overview-option" id="overview-share">
@@ -219,7 +221,7 @@
                                         <img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}">
                                         <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">TITLE</h1>
                                     </div>
-                                    <div id="oop" class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
+                                    <div id="oop" class="ev_property ev_ppar">
                                         <p style="font-family: var(--font-view);">▷中心学年: ${(new kidaComponent(d.a.c)).text}</p>
                                     </div>
                                     <div id="ctx-article" class="article">
@@ -233,5 +235,11 @@
             </div>
         </div>
         <script src="/src/assets/supports/setup.js"></script>
+        <script>
+            Notifier.notifyHTML(`<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.CAUTION}開発中のページです。不具合を見つけ次第お知らせください</div>`,
+                100000,
+                "THIS IS AN DEVELOPING PAGE",
+            );
+        </script>
     </body>
 </html>
