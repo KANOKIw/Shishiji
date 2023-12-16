@@ -9,7 +9,9 @@
     /**@ts-ignore @type {import("../shishiji-dts/objects").mapObject} */
     var ARTICLEDATA = {};
     var change_not_saved_remains = false;
-    var orgmxfsize = 100;
+    const orgCloudfi = {
+        maxsize: 0,
+    };
 
     $.ajaxSetup({async: false});
     $.post("/org/manage/auth/editor", { session: session })
@@ -22,7 +24,7 @@
             leaveherep();
 
         ARTICLEDATA = data.artdata;
-        orgmxfsize = data.mxcs;
+        orgCloudfi.maxsize = data.mxcs;
     })
     .catch(leaveherep);
     $.ajaxSetup({async: true});
@@ -68,8 +70,8 @@
                     icon: "",
                 },
                 size: {
-                    width: 0,
-                    height: 0
+                    width: 50,
+                    height: 50
                 },
                 floor: "",
             },
@@ -669,15 +671,15 @@
                     
                     var color = "lightgreen";
 
-                    if (totalsize >= orgmxfsize){
+                    if (totalsize >= orgCloudfi.maxsize){
                         color = "red";
-                    } else if (totalsize >= orgmxfsize*3/4){
+                    } else if (totalsize >= orgCloudfi.maxsize*3/4){
                         color = "orange";
-                    } else if (totalsize >= orgmxfsize/2){
+                    } else if (totalsize >= orgCloudfi.maxsize/2){
                         color = "yellow";
                     }
 
-                    $("#--cloud-desc").html(`<span style="color: lightgreen;">${orgmxfsize}MB</span> まで使用できます&nbsp;(<span style="color: ${color};">${displaysize}</span>/${orgmxfsize})`);
+                    $("#--cloud-desc").html(`<span style="color: lightgreen;">${orgCloudfi.maxsize}MB</span> まで使用できます&nbsp;(<span style="color: ${color};">${displaysize}</span>/${orgCloudfi.maxsize})`);
 
                     for (const file of files){
                         const mediatype = getMediaType(file);
@@ -717,7 +719,8 @@
                     <div class="protected --posa" id="ppupds">
                         <h4 style="padding-top: 20px;">あなたの団体(${username})のクラウド</h4>
                         <p id="--cloud-desc"></p>
-                        <hr class="dhr-ppo" style="margin-bottom: 10px;">
+                        <p style="font-size: 50%;">お金をくれたら増やしてあげる！</p>
+                        <hr class="dhr-ppo" style="margin: 5px 0 10px 0;">
                         <p style="margin-bottom: 5px; color: #b7b7b7;">クリックしてファイル名をコピー</p>
                         <div id="orgcloud-filelist">
 
@@ -936,10 +939,11 @@
 
     window.addEventListener("beforeunload", e => {
         if (change_not_saved_remains || (Popup.popupping && !document.getElementById("--yesilogout"))){
+            e.preventDefault();
             var message = "このページを離れてもよろしいですか？\n編集データは自動では保存されません。";
         
             e.returnValue = message;
             return message;
         }
-    });
+    }, { passive: false });
 }());

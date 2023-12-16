@@ -4,8 +4,8 @@
 
 :root{
     --motd-cl-height: 80px;
-    --previewer-width: 250px;
-    --previewer-height: 544px;
+    --previewer-width: 230px;
+    --previewer-height: 534px;
     --previewer-font-size: 64%;
 }
 
@@ -30,6 +30,18 @@ body{
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+
+.oiad{
+    position: relative;
+}
+
+.eafa{
+    top: -20px;
+    display: block;
+    width: 100%;
+    height: calc(100% - 20px);
+    position: relative;
 }
 
 #orgcloud-filelist{
@@ -157,7 +169,7 @@ body{
 }
 
 #editsplitter{
-    height: calc(100% - var(--motd-cl-height));
+    height: calc(100% - var(--motd-cl-height) - 35px);
     display: flex;
 }
 
@@ -238,7 +250,8 @@ body::-webkit-scrollbar-thumb{
 }
 
 .iphone-12-pro-max{
-    top: -30px;
+    position: relative;
+    top: -35px;
     background-color: rgb(255, 255, 255);
     width: var(--previewer-width);
     height: var(--previewer-height);

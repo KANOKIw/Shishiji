@@ -6,10 +6,10 @@ import { readJSONSync } from "./utils";
 
 /**@global */
 var ALLOBJECTS: mapObjComponent;
-const DEFAULTOBJECT = {
+const DEFAULTOBJECT: mapObject = {
     article: {
-        title: "",
-        core_grade: "",
+        title: "orgname",
+        core_grade: "0",
         theme_color: "#000000",
         content: "",
         crowd_status: {
@@ -37,8 +37,8 @@ const DEFAULTOBJECT = {
             icon: "",
         },
         size: {
-            width: 0,
-            height: 0
+            width: 50,
+            height: 50
         },
         floor: "",
     },

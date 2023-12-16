@@ -123,6 +123,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     const overview  = document.getElementById("shishiji-overview");
     const color = (details.article.theme_color) ? details.article.theme_color : "black";
     const font = (details.article.font_family) ? details.article.font_family : "";
+    const orgname = details.discriminator;
 
     /**
      * 
@@ -176,7 +177,6 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     $(overview).css("font-family", font);
 
     const EVENT_HEADER = `<img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}"><div class="article titleC"><img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}"><h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1></div>`;
-    const orgname = details.discriminator;
 
     function __onload(){
         setTimeout(() => {
@@ -272,8 +272,8 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
         $(this).addClass("tg-active");
-        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", details.article.images.header);
-        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", details.object.images.icon);
+        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", toOrgFilepath(orgname, details.article.images.header));
+        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", toOrgFilepath(orgname, details.object.images.icon));
     }
 
     $("#ovv-t-description-sd").off("click", Ovv_tg_listener.description).on("click", showDescription);

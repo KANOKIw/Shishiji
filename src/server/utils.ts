@@ -63,9 +63,13 @@ function dumpJSONSync(path: string, data: {} | any[], indent?: number, options?:
 }
 
 
-function getOrgMdata(orgname: string): mapObject{
+function getOrgMdata(orgname: string): mapObject | null{
     const path = toMdatapath(orgname);
-    return readJSONSync(path);
+    try {
+        return readJSONSync(path);
+    } catch(e){
+        return null;
+    }
 }
 
 

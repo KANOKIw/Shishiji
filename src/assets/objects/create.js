@@ -12,14 +12,15 @@
  * use /scripts/coords.py to find coordinate
  * @param {mapObject} objectData 
  */
-function putObjOnMap(objectData){
+function putMobjonMap(objectData){
     /**@ts-ignore @type {HTMLElement} */
     const viewer = document.getElementById("shishiji-view");
     /**@ts-ignore @type {HTMLElement} */
     const overview = document.getElementById("shishiji-overview");
     const behavior = objectData.object.type.behavior;
+    const orgname = objectData.discriminator;
     var zIndex = 1001;
-
+    
     const objectCoords_fromCanvas = {
         x: (objectData.object.coordinate.x - backcanvas.canvas.coords.x) * zoomRatio,
         y: (objectData.object.coordinate.y - backcanvas.canvas.coords.y) * zoomRatio,
@@ -28,8 +29,8 @@ function putObjOnMap(objectData){
     var attrs = "";
     var classes = "";
     var dfcursor = "pointer";
-    const obj_id = formatString(objectIdFormat, objectData.discriminator);
-
+    const obj_id = formatString(objectIdFormat, orgname);
+    
     switch (behavior){
         case "dynamic":
             classes += "popups realshadow "
@@ -54,7 +55,7 @@ function putObjOnMap(objectData){
             coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
             behavior="${objectData.object.type.behavior}"
             dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
-            <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${objectData.object.images.icon}');
+            <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${toOrgFilepath(orgname, objectData.object.images.icon)}');
 min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.height}px;max-width:${objectData.object.size.width}px;max-height:${objectData.object.size.height}px;${styles}" dfcs="${dfcursor}">
             </div>
         </div>
@@ -138,7 +139,7 @@ function normalCanvas(canvas){
 function showDigitsOnFloor(currentfloor, objects){
     for (const y in objects){
         if (objects[y].object.floor == currentfloor){
-            putObjOnMap(objects[y]);
+            putMobjonMap(objects[y]);
         }
     }
 }
