@@ -3,9 +3,11 @@ import http from "http";
 import { Server as SocketIO } from "socket.io";
 import fs from "fs";
 import https from "https";
-import { Random } from "./random";
 import * as mapObjAPI from "./mapObjs";
-import sharp from "sharp";
+import { readJSONSync, Random } from "./utils";
+import * as PostHandler from "./handler/post";
+import fileUpload from "express-fileupload";
+
 
 
 const PORT = 443;
@@ -18,38 +20,13 @@ const mapConfData = readJSONSync("./src/server/data/map.json");
 const server = https.createServer(httpsOptions, app);
 const ws = new SocketIO(server);
 
+__dirname = __dirname.replace(/[/, \\]src[/, \\]server/, "");
 
-//#region 
-const mainCandidates = [
-	"C:/server1/Shishiji/src/main/index.html",
-	"/root/Shishiji/src/main/index.html"
-];
-var mainFilePath = "";
-!function(){
-	for (const n of mainCandidates){
-		if (fs.existsSync(n)){
-			mainFilePath = n;
-			break;
-		}
-	}
-	if (mainFilePath.length < 1){
-		throw new Error("No file found from: " + mainCandidates);
-	}
-	return 0;
-}();
-//#endregion
-
-function readJSONSync(path: string, options?: {
-    encoding?: null | undefined;
-    flag?: string | undefined;
-}){
-	return JSON.parse(String(fs.readFileSync(path, options)));
-}
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(fileUpload());
 app.use(express.static("./"));
-
 
 
 ws.on("connection", (socket) => {
@@ -58,23 +35,32 @@ ws.on("connection", (socket) => {
 		const mapobjects_ = mapObjAPI.getAllObjects(true);
 		socket.emit("/client/update/map-objects", mapobjects_);
 	});
+
+
+	socket.on("disconnect", (reason) => {
+		
+	});
 });
 
 
 
-app.post("/api/addobject/", (req, res) => {
-	var alr = 0;
-	try{
-		var e = JSON.parse(req.body.c);
-		var y = "./resources/map-objects/third-party/"+ req.body.n + ".json";
-		if (fs.existsSync(y)) alr = 1;
-		fs.writeFileSync(y, JSON.stringify(e, null, 4));
-		mapObjAPI.updateObject();
-		res.status(200).send("ok");
-	} catch (E){
-		res.status(500).send({a: alr});
-	}
-});
+app.post("/org/manage/auth/login", PostHandler.OrgAuth.login);
+
+app.post("/org/manage/auth/_login", PostHandler.OrgAuth._login)
+
+app.post("/org/manage/auth/editor", PostHandler.OrgAuth.editor);
+
+app.post("/org/manage/edit/saveothers", PostHandler.Edit.saveothers);
+
+app.post("/org/manage/edit/savemain", PostHandler.Edit.savemain);
+
+app.post("/org/manage/file/list", PostHandler.File.list);
+
+app.post("/org/manage/file/overflow", PostHandler.File.overflow);
+
+app.post("/org/manage/file/upload", PostHandler.File.upload);
+
+app.post("/org/manage/file/delete", PostHandler.File.delete);
 
 
 
@@ -87,9 +73,23 @@ app.get("/data/map-data/conf", (req, res) => {
 	res.send(mapConfData);
 });
 
+app.get(["/test/", "/test/@:PARAMS"], function(req, res){
+	res.sendFile(__dirname + "/test/index.html");
+});
 
-app.get("/", function(req, res){
-	res.sendFile(mainFilePath);
+
+
+app.get("/org/manage/edit", function(req, res){
+	res.sendFile(__dirname + "/src/manage/org/edit.html");
+});
+
+app.get("/org/manage/login", function(req, res){
+	res.sendFile(__dirname + "/src/manage/org/login.html");
+});
+
+
+app.get(["/", "/@:PARAMS"], function(req, res){
+	res.sendFile(__dirname + "/test/index.html");
 });
 
 

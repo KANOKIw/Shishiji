@@ -15,10 +15,10 @@
  * @param {TouchList | MouseEvent} y 
  */
 function set_cursorpos(y){
-    if (y instanceof TouchList)
-        pointerPosition = get_middlePos(y);
-    else
+    if (y instanceof MouseEvent)
         pointerPosition = [ y.clientX, y.clientY ];
+    else
+        pointerPosition = getMiddlePos(y);
 }
 
 
@@ -53,7 +53,7 @@ function moveMapAssistingNegative(canvas, ctx, moved){
 
 
 /**
- * @deprecated use moveMapAssistingNegative instead for safari support
+ * @deprecated use {@linkcode moveMapAssistingNegative} instead for safari support
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
  * @param {{top: number, left: number}} moved
@@ -120,7 +120,7 @@ function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
 
 
 /**
- * @deprecated use zoomMapAssistingNegative instead for safari support
+ * @deprecated use {@linkcode zoomMapAssistingNegative} instead for safari support
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
  * @param {number} ratio 
@@ -128,7 +128,7 @@ function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
  *   (cursorPosition)
  * @param {[number, number] | undefined} pos
  */
-function moveMap(canvas, ctx, ratio, origin, pos){
+function zoomMap(canvas, ctx, ratio, origin, pos){
     if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
         || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
         ) return;
@@ -257,7 +257,7 @@ function rotateCanvas(canvas, ctx, origin, rotation){
  */
 function onTouchMove(event, canvas, ctx){
     const touches = event.touches;
-    const pos = get_middlePos(touches);
+    const pos = getMiddlePos(touches);
     const prevp = pointerPosition;
 
     /**@type {{diffRatio: number, crossPos: NonnullPosition, rotation: Radian}} */
@@ -336,7 +336,7 @@ function onTouchMove(event, canvas, ctx){
         if (false)
             frict();
 
-        prevTouchINFO.zoom = !!0;
+        prevTouchINFO.zoom = false;
     }
 
 

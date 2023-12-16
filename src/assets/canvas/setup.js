@@ -2,8 +2,6 @@
 "use strict";
 
 
-
-
 !function(){
     /** @ts-ignore @type {HTMLCanvasElement}*/
     const map_wrapper = document.getElementById("shishiji-view");
@@ -107,13 +105,6 @@
         tout = setTimeout(() => {
             setBehavParam();
         }, 500);
-        map_wrapper.style.cursor = "move";
-        Array.from(document.getElementsByClassName("canvas_interactive")).forEach(
-            p => {
-                //@ts-ignore
-                p.style.cursor = "move";
-            }
-        );
         canvasonScroll(e, canvas);
     }
 

@@ -115,12 +115,13 @@ function startLoad(message){
 
 /**
  * 
- * @param {string} message 
+ * @param {string} [message] 
  */
 function endLoad(message){
-    setTimeout(() => {
-        $("#spare_message").text(message);
-    }, 200);
+    if (message)
+        setTimeout(() => {
+            $("#spare_message").text(message);
+        }, 200);
     setTimeout(() => {
         $("#load_spare").addClass("loaddoneman");
         setTimeout(() => {
@@ -201,28 +202,31 @@ function parseMCFormat(str){
 /**
  * 
  * @param {JQuery.PlainObject<any>} element 
- * @param {(event: Event) => void} callback 
+ * @param {(event: JQuery.TriggeredEvent<any, undefined, any, any>) => void} callback 
  * @param {{forceLeft?: boolean}} [options] 
  */
 function listenInterOnEnd(element, callback, options){
     if (typeof options === "undefined")
         options = {};
     $(element).on("touchstart mousedown", function(e){
+        e.preventDefault();
         if (options){
             if (options.forceLeft && e.button && e.button != 0)
                 return;
         }
         
-        var moved = !!0;
+        var moved = false;
         $(this)
         .on("touchmove mousemove wheel mousewheel", onmove)
         .on("touchend mouseup mouseleave touchleave", onleave);
 
         function onmove(){
+            e.preventDefault();
             moved = !0;
         }
         /**@this {HTMLElement}*/
         function onleave(e){
+            e.preventDefault();
             if (!moved)
                 callback(e);
             $(this)
@@ -258,10 +262,20 @@ function escapeHTML(str){
 function setParam(key, value){
     const here = window.location.href;
     const urlParams = new URLSearchParams(window.location.search);
+    var yhere = "";
 
-    urlParams.set(key, encodeURIComponent(String(value)));
+    if (key == ParamNames.COORDS){
+        if (urlParams.toString() != ""){
+            yhere = here.includes("@") ? here.replace(/@.*/, "")+"@"+value+"?"+urlParams.toString() : here.replace(/\?.*/, "")+"@"+value+"?"+urlParams.toString();
+        } else {
+            yhere = here+"@"+value;
+        }
+    } else {
+        urlParams.set(key, encodeURIComponent(String(value)));
+    
+        yhere = here.split("?")[0] + "?" + urlParams.toString();
+    }
 
-    const yhere = here.split("?")[0] + "?" + urlParams.toString();
     window.history.replaceState("", "", yhere);
 }
 
@@ -293,6 +307,13 @@ function delParam(key, value){
 function getParam(key, url){
     if (url === void 0)
         url = window.location.href;
+
+    if (key == ParamNames.COORDS){
+        var reg = /@([^?&]+)/;
+        var res = url.match(reg);
+
+        return res ? res[1] : null;
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const val = urlParams.get(key);
@@ -347,6 +368,43 @@ function setCoordsOnMiddle(coords, abs_zoomRatio){
 
 /**
  * 
+ * @param {string} key 
+ */
+function getCookie(key){
+    const cookies = document.cookie.split("; ");
+  
+    for (const cookie of cookies) {
+        const [ckey, cval] = cookie.split("=");
+        if (ckey === key){
+            return decodeURIComponent(cval);
+        } 
+    }
+  
+    return null;
+}
+
+
+/**
+ * 
+ * @param {string} key 
+ */
+function delCookie(key){
+    document.cookie = `${key}=; max-age=0;`;
+}
+
+
+/**
+ * 
+ * @param {string} orgname 
+ * @param {string} filename 
+ */
+function toOrgFilepath(orgname, filename){
+    return "/resources/cloud/org/"+orgname+"/"+filename;
+}
+
+
+/**
+ * 
  * @param {string | null} lang 
  */
 function isThereLang(lang){
@@ -354,4 +412,24 @@ function isThereLang(lang){
         return null;
     const langs = [ "JA", "EN" ];
     return langs.includes(lang) ? lang : null;
+}
+
+
+/**
+ * 
+ * @param {string} link 
+ * @returns {"image" | "video" | "unknown"}
+ */
+function getMediaType(link){
+    var extension = link.split(".").slice(-1)[0].toLowerCase();
+
+    if (["jpg", "jpeg", "png", "gif", "webp"].indexOf(extension) !== -1) {
+        return "image";
+    }
+
+    if (["mp4", "webm", "avi", "mov", "flv"].indexOf(extension) !== -1) {
+        return "video";
+    }
+
+    return "unknown";
 }

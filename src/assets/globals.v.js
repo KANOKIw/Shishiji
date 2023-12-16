@@ -15,7 +15,7 @@
  */
 
 
-var LANGUAGE = "EN";
+var LANGUAGE = "JA";
 
 /**
  * assign on interaction
@@ -26,9 +26,6 @@ var pointerPosition = [ null, null ];
 /**@type {Position} */
 var cursorPosition = [ null, null ];
 
-
-/**@ts-ignore @type {Socket} */
-const ws = io();
 
 var DRAGGING = false;
 var zoomRatio = 1;
@@ -59,6 +56,13 @@ backcanvas.canvas = {
  */
 const MOVEPROPERTY = {
     scroll: 1.05,
+    object: {
+        /**{@link MOVEPROPERTY.caps.ratio.max} < over & {@link MOVEPROPERTY.caps.ratio.min} > under & over > under*/
+        dynamic_to_static: {
+            over: 3,
+            under: 0.3,
+        },
+    },
     caps: {
         ratio: {
             max: Infinity, // dev
@@ -182,10 +186,6 @@ const Symbol_Span = {
     loadgingsymbol: `<span class="material-symbols-outlined loading-symbol">progress_activity</span>`,
     refreshsymbol: `<span class="material-symbols-outlined">refresh</span>`,
 };
-/**@enum {string} */
-const ERROR_HTML = {
-    CONNECTION_ERROR: TEXT[LANGUAGE].ERROR_CONNECTION,
-};
 
 /**
  * :literal:
@@ -215,7 +215,9 @@ const ParamNames = {
     ARTICLE_ID: "art",
     FLOOR: "fl",
     URL_FROM: "storm",
-    LANGUAGE: "lang"
+    LANGUAGE: "lang",
+    SCROLL_POS: "scrp",
+    ART_TARGET: "atg",
 };
 /**@enum {string} */
 const ParamValues = {
@@ -226,7 +228,7 @@ const objectIdFormat = "disc-{0}";
 const ZOOMRATIO_ON_SHARE = 2;
 
 
-var Notifier = {
+const Notifier_prop = {
     /**@ts-ignore @type {NodeJS.Timeout} FAKE */
     Timeout: 0,
     /**@ts-ignore @type {NodeJS.Timeout} FAKE */
@@ -235,6 +237,15 @@ var Notifier = {
     __Timeout: 0,
     current: "",
     notifying: !!0,
+};
+
+/**milisecond */
+const WAIT_BETWEEN_EACH_MAP_IMAGE = 100;
+
+const Ovv_tg_listener = {
+    description: () => {},
+    details: () => {},
+    else: () => {},
 };
 
 const _mcColorList = {
@@ -287,3 +298,7 @@ const _mcColor = {
     ITALIC: "§o",
     RESET: "§r",
 };
+
+
+/**@ts-ignore @type {Socket} */
+const ws = io();

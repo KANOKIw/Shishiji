@@ -15,17 +15,24 @@ function raiseOverview(){
     .scrollTop(0);
     $(overview).show();
     $("#overview-share").show();
-    $("#overview-close").on("click", reduceOverview);
-    $("#overview-share").on("click", shareContent);
+    $("#overview-close").on("click", (e) => {
+        e.preventDefault();
+        reduceOverview();
+    });
+    $("#overview-share").on("click", (e) => {
+        e.preventDefault();
+        shareContent();
+    });
 
     function shareContent(){
         const discriminator = getParam(ParamNames.ARTICLE_ID);
         const data = searchObject(discriminator);
         const _url = new URL(window.location.href);
-        var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+        var shareURL = `${_url.origin}${_url.pathname.replace(/@.*/, "")}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
 
         if (data == null || discriminator == null){
-            openSharePopup({ title: "" }, "", {}, "", "", true);
+            console.log(data, discriminator)
+            openSharePopup({ title: "" }, "", {}, "", "", {labelkey: "", url: ""}, true);
             return;
         }
 
@@ -46,6 +53,11 @@ function raiseOverview(){
              */
             ParamValues.FROM_ARTICLE_SHARE,
             message,
+            {
+                labelkey: "SHARE_EVENT_INCLUDE_EVTH",
+                // activve element id match
+                url: `${shareURL}&${ParamNames.SCROLL_POS}=${$("#shishiji-overview").scrollTop()}&${ParamNames.ART_TARGET}=${$(".tg-active")[0].id.match(/ovv-t-(.*?)-sd/)?.[1]}`,
+            }
         );
     }
 }
@@ -53,12 +65,21 @@ function raiseOverview(){
 
 function strictMap(){
     clearInterval(Intervals.reduceOverview);
-    $("#user-stricter").addClass("active").show();
+    $("#user-stricter")
+    .removeClass("deactive")
+    .addClass("active")
+    .show();
 }
 
 
 function restrictMap(){
-    $("#user-stricter").removeClass("active").hide();
+    clearTimeout(Intervals.restrict);
+    $("#user-stricter")
+    .removeClass("active");
+    Intervals.restrict = setTimeout(() => {
+        $("#user-stricter")
+        .hide();
+    }, 195);
 }
 
 
@@ -72,6 +93,8 @@ function reduceOverview(){
     .addClass("reducedown");
     $("#overview-close").off("click", reduceOverview);
     $("#overview-context").removeClass("fadein");
+
+    $(".tg-active").removeClass("tg-active");
     
     Intervals.reduceOverview = setTimeout(() => {
         writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
@@ -89,8 +112,11 @@ function reduceOverview(){
  * 
  * @param {mapObject} details 
  * @param {boolean} fadein 
+ * @param {number} [scroll_top]
+ * @param {string} [target] 
+ * @param {boolean} [FORCE] 
  */
-function writeArticleOverview(details, fadein){
+function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     /**@ts-ignore @type {HTMLElement} */
     const ctx = document.getElementById("overview-context");
     /**@ts-ignore @type {HTMLElement} */
@@ -98,14 +124,27 @@ function writeArticleOverview(details, fadein){
     const color = (details.article.theme_color) ? details.article.theme_color : "black";
     const font = (details.article.font_family) ? details.article.font_family : "";
 
-    function onerror(){
-        this.setAttribute("src", "/resources/img/noimg.png");
+    /**
+     * 
+     * @param {"h" | "i"} a 
+     */
+    function onerror(a){
+        if (a == "h")
+            this.outerHTML = `<div class="flxxt nImg-a">${GPATH.ERROR_ZAHUMARU}<h4>No Image</h4></div>`;
+        else if (a == "i")
+            this.outerHTML = `<div class="flxxt" style="width:48px;height:48px;">${GPATH.ERROR_ZAHUMARU}</div>`;
     };
 
-    var article_mainctx = mcFormat(details.article.content);
+    var article_mainctx = mcFormat(details.article.content, fn => { return toOrgFilepath(orgname, fn); });
 
     if (!window.navigator.onLine){
-        $("#ovv-ctx-loading").html(ERROR_HTML.CONNECTION_ERROR);
+        Notifier.notifyHTML(
+            `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR}</div>`,
+            2500,
+            "article connection error",
+            !0,
+        );
+        $("#ovv-ctx-loading").html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
         $("#overview-share").hide();
         return;
     }
@@ -133,21 +172,55 @@ function writeArticleOverview(details, fadein){
     if (fadein)
         $(ctx).addClass("fadein");
     
-    overview.style.borderTop = "solid 20px "+color;
+    overview.style.borderTop = "solid var(--shishiji-ovv-theme-height) "+color;
     $(overview).css("font-family", font);
 
-    writeOverviewContent(`
-        <img id="--art-header" class="article-image article header" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}">
-        <div class="article titleC">
-            <img id="--art-icon" class="article-image" style="width: 48px" alt="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}">
-            <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1>
-        </div>
-        <div id="ctx-article" style="margin: 10px;">
-            <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
-                <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
+    const EVENT_HEADER = `<img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}"><div class="article titleC"><img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}"><h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1></div>`;
+    const orgname = details.discriminator;
+
+    function __onload(){
+        setTimeout(() => {
+            $("#overview-context").addClass("_fadein");
+            if (scroll_top !== void 0)
+                $("#shishiji-overview").scrollTop(scroll_top);
+            scroll_top = 0;
+        }, 25);
+    }
+
+    /**@this {HTMLElement} */
+    function showDescription(){
+        if ($(this).hasClass("tg-active") && !FORCE)
+            return;
+
+        $("#overview-context").addClass("_wait_f");
+
+        writeOverviewContent(`
+            ${EVENT_HEADER}
+            <div id="ctx-article" class="article">
+                <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
+                    <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
+                </div>
+                ${article_mainctx}
             </div>
-            ${article_mainctx}
-            <hr style="margin-top: 20px;">
+        `, __onload);
+        if (fadein)
+        $("#overview-context").removeClass("fadein").removeClass("_fadein");
+        $(".tg-active").removeClass("tg-active");
+        $(this).addClass("tg-active");
+        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", toOrgFilepath(orgname, details.article.images.header));
+        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", toOrgFilepath(orgname, details.object.images.icon));
+    }
+
+    /**@this {HTMLElement} */
+    function showDetails(){
+        if ($(this).hasClass("tg-active") && !FORCE)
+            return;
+
+        $("#overview-context").addClass("_wait_f");
+
+        writeOverviewContent(`
+            ${EVENT_HEADER}
+            <hr style="margin: 40px 20px 20px 20px;">
             <div class="ev_property">
                 <table style="width: 100%;">
                     <tbody>
@@ -193,11 +266,25 @@ function writeArticleOverview(details, fadein){
                     </div>
                 </div>
             </div>
-            <hr style="margin-bottom: 20px;">
-        </div>
-    `, );
-    $("#--art-header").attr("src", details.article.images.header).on("error", function(){ onerror.apply(this);; });
-    $("#--art-icon").attr("src", details.object.images.icon).on("error", function(){ onerror.apply(this); });
+            <hr style="margin: 20px;">
+        `, __onload);
+
+        $("#overview-context").removeClass("fadein").removeClass("_fadein");
+        $(".tg-active").removeClass("tg-active");
+        $(this).addClass("tg-active");
+        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", details.article.images.header);
+        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", details.object.images.icon);
+    }
+
+    $("#ovv-t-description-sd").off("click", Ovv_tg_listener.description).on("click", showDescription);
+    $("#ovv-t-details-sd").off("click", Ovv_tg_listener.details).on("click", showDetails);
+    Ovv_tg_listener.description = showDescription;
+    Ovv_tg_listener.details = showDetails;
+
+    if (!target || !["description", "details", "else"].includes(target))
+        target = "description";
+    
+    document.getElementById(`ovv-t-${target}-sd`)?.dispatchEvent(new Event("click"));
 }
 
 
@@ -206,7 +293,7 @@ function writeArticleOverview(details, fadein){
  * @param {string} ctx
  * @param {() => void} [callback] 
  */
-function writeOverviewContent(ctx, callback){
+async function writeOverviewContent(ctx, callback){
     new Promise((resolve, reject) => {
         $("#overview-context").html(ctx);
         resolve("");

@@ -3,7 +3,7 @@
 
 
 function updatePositions(){
-    for (var _mapObj of document.getElementsByClassName("mapObj")){
+    for (var _mapObj of document.getElementsByClassName("mpob")){
         /**@ts-ignore @type {mapObjectElement} */
         const mapObj = _mapObj;
         const coords = getCoords(mapObj);
@@ -13,15 +13,28 @@ function updatePositions(){
             y: (coords.y - backcanvas.canvas.coords.y) * zoomRatio,
         };
 
-        const behavior = getBehavior(mapObj);
+        var behavior = getBehavior(mapObj);
         const dfsize = getDefaultSize(mapObj);
 
         var size = dfsize;
+
+        if (behavior == "dynamic"){
+            if (zoomRatio > MOVEPROPERTY.object.dynamic_to_static.over) behavior = "dynatic";
+            if (zoomRatio < MOVEPROPERTY.object.dynamic_to_static.under) behavior = "_dynatic";
+        }
 
         switch (behavior){
             case "static":
                 size.width = dfsize.width*zoomRatio;
                 size.height = dfsize.height*zoomRatio;
+                break;
+            case "dynatic":
+                size.width = dfsize.width*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.over);
+                size.height = dfsize.height*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.over);
+                break;
+            case "_dynatic":
+                size.width = dfsize.width*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.under);
+                size.height = dfsize.height*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.under);
                 break;
             case "dynamic":
             default:

@@ -16,10 +16,11 @@
         <meta name="twitter:description" content="...2024年度も開催します的なこと">
         <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
         <meta name="theme-color" content="#ffffff">
-        <title>【世田谷学園】2024年度 | 獅子児祭</title>
+        <title>世田谷学園 | 2024年度 獅子児祭</title>
         <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
         <link rel="stylesheet" href="/src/assets/builds/shishijimap.min.css">
+        <link rel="preload" href="/resources/img/floorOpt.png" as="image">
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/src/assets/builds/main.min.js"></script>
@@ -42,9 +43,11 @@
         <div id="app-mount" aria-hidden="true">
             <main aria-label="獅子児祭マップ">
                 <shishiji-yd-notify>
-                    <shishiji-yd-notifier id="--yd-notifier" class="hpipe protected">
-                        <div id="--ott-us" class="flxxt"></div>
-                    </shishiji-yd-notifier>
+                    <shishiji-yd-notify-w>
+                        <shishiji-yd-notifier id="--yd-notifier" class="hpipe protected">
+                            <div id="--ott-us" class="flxxt"></div>
+                        </shishiji-yd-notifier>
+                    </shishiji-yd-notify-w>
                 </shishiji-yd-notify>
                 <div id="shishiji-popup-container">
                     <div id="shishiji-popup-container-c">

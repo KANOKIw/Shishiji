@@ -10,6 +10,7 @@
     /**@ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
 
+    
     $("#place-options").children().each(function(index, elm){
         if (!this.textContent)
             return;
@@ -27,18 +28,21 @@
                 }
 
                 changeFloor(name, data);
-            }, { passive: false });
+            });
             return 0;
         };
 
         addListener.apply(this, [text])
     });
+
     $(fselector)
     .on("click", function(e){
-        if (e.target.classList.contains("fselector-btn") || e.target.id == "psdummy"){
+        e.preventDefault();
+        if (e.target?.classList.contains("fselector-btn") || e.target?.id == "psdummy"){
             toggleFeslOn.apply($(fselector), [overlay_modes.fselector.opened]);
             overlay_modes.fselector.opened = !overlay_modes.fselector.opened;
         }
     });
+    
     return 0;
 }();

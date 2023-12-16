@@ -5,8 +5,10 @@ npm-debug.log
 resources/img/**
 resources/map_divided/**/*
 resources/map-objects/**
+resources/cloud
 !resources/map-objects/.sample.json
 
+.data/
 .cert/
 
 scripts/*.exe

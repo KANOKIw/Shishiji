@@ -10,16 +10,33 @@
  *      share_data.text?.replace("{__SHARE_URL__}", finalShareURL<decoded>);
  * @param {string} from_where 
  * @param {string} message 
+ * @param {{labelkey: string, url: string}} [change_option] 
  * @param {boolean} [ERROR] 
  */
-function openSharePopup(ovvOptions, share_url, share_data, from_where, message, ERROR){
-    Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
+function openSharePopup(ovvOptions, share_url, share_data, from_where, message, change_option, ERROR){
+    Popup.popupContent(`<div class="protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
     share_url = decodeURIComponent(share_url);
     /**@param {string} [ctx]  */
     function onerr(ctx){
-        if (ctx === void 0) ctx = ERROR_HTML.CONNECTION_ERROR;
-        const _html = `<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt"><h4>${ctx}</h4></div></div>`
+        if (ctx === void 0) ctx = TEXT[LANGUAGE].ERROR_ANY;
+        const _html = `<div class="protected" id="ppupds"><div class="mx-text-center flxxt" style="flex-direction:column;"><div style="width:125px;margin-bottom:4px;">${GPATH.ERROR_ZAHUMARU}</div><h4>${ctx}</h4></div></div>`;
+        Notifier.notifyHTML(
+            `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY}</div>`,
+            2500,
+            "sharePopup connection error",
+            !0,
+        );
         Popup.popupContent(_html);
+    }
+
+    /**
+     * 
+     * @param {string} url 
+     * @param {string} pn 
+     * @param {string} pv 
+     */
+    function adp(url, pn, pv){
+        return url.includes("?") ? `${url}&${pn}=${pv}` : `${url}?${pn}=${pv}`;
     }
     
     $.ajax({
@@ -30,7 +47,9 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
     }).done(t => {
         if (Popup.popupping){
             Popup.popupContent(t, function(){
-                const shareURL = share_url.includes("?") ? `${share_url}&${ParamNames.URL_FROM}=${from_where}` : `${share_url}?${ParamNames.URL_FROM}=${from_where}`;
+                const shareURL = adp(share_url, ParamNames.URL_FROM, from_where);
+                var fch = [];
+                var _fchp = {share: () => {}, copy: () => {}};
 
                 if (ERROR){
                     onerr();
@@ -41,80 +60,138 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                 if (ovvOptions.subtitle)
                     $("#ppc-subtitle").text(ovvOptions.subtitle);
 
-                if (window.navigator.share){
-                    share_data.text = share_data.text?.replace("{__SHARE_URL__}", shareURL);
-                    !function(sd){
-                        $("#share-nav").on("click", async function(){
-                            await window.navigator.share(sd);
-                        });
-                        return 0;
-                    }(share_data);
-                } else {
-                    $("#nav-share").remove();
+                /**
+                 * 
+                 * @param {string} [url] 
+                 */
+                function shareShare(url){
+                    if (window.navigator.share){
+                        share_data.text = share_data.text?.replace("{__SHARE_URL__}", url || shareURL);
+                        !function(sd){
+                            async function T(){
+                                await window.navigator.share(sd);
+                            }
+                            $("#share-nav").off("click", _fchp.share).on("click", T);
+                            _fchp.share = T;
+                            return 0;
+                        }(share_data);
+                    } else {
+                        $("#nav-share").remove();
+                    }
                 }
-                $("#share-copy").on("click", function(){
-                    window.navigator.clipboard.writeText(shareURL);
-                    notifyHTML(
-                        `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
-                        2500,
-                        "copy artshare",
-                    );
-                });
+
+                shareShare();
+
+
+                /**
+                 * 
+                 * @param {string} [url] 
+                 */
+                function copyShare(url){
+
+                    function T(){
+                        window.navigator.clipboard.writeText(url || shareURL);
+                        Notifier.notifyHTML(
+                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
+                            2500,
+                            "copy artshare",
+                        );
+                    }
+                    $("#share-copy").off("click", _fchp.copy).on("click", T);
+
+                    _fchp.copy = T;
+                }
+
+                copyShare();
+
+
+                if (change_option){
+                    $("#includeScr").text(TEXT[LANGUAGE][change_option.labelkey]);
+                    $("#includeScrCh").on("change", function(e){
+                        //@ts-ignore
+                        if (this.checked){
+                            for (var i = 0; i < document.getElementsByClassName("share_ebtn").length; i++){
+                                $(document.getElementsByClassName("share_ebtn")[i]).off("click", fch[i]);
+                            }
+                            const upp = adp(change_option.url, ParamNames.URL_FROM, from_where);
+                            setShareLink(upp);
+                            shareShare(upp);
+                            copyShare(upp);
+                        } else {
+                            setShareLink();
+                            shareShare();
+                            copyShare();
+                        }
+                    });
+                } else {
+                    $("#includeScrCh").remove();
+                }
                 
                 message = encodeURIComponent(message);
-                const here = encodeURIComponent(shareURL);
-                const baseText = `%0A%0A${message}%0A${here}`;
 
-            
-                for (const ch of document.getElementsByClassName("share_ebtn")){
-                    const appname = ch.id.replace("share-", "");
-                    const $ch = $(ch);
-                    var href = "";
-                    
-                    switch (appname){
-                        case "line":
-                            href = `http://line.me/R/msg/text/?${baseText}`;
-                            break;
-                        case "twitter":
-                            href = `https://x.com/intent/tweet?url=${here}&text=%0A%0A${message}%0A${encodeURIComponent("#獅子児祭 @shishijifes")}%0A&related=shishiji`;
-                            break;
-                        case "facebook":
-                            href = `http://www.facebook.com/share.php?u=${here}`;
-                            break;
-                        case "gmail":
-                            href = `https://mail.google.com/mail/?view=cm&body=${baseText}`;
-                            break;
-                        case "mail":
-                            href = `mailto:?body=${baseText}`;
-                            break;
-                        case "sms":
-                            href = `sms:?body=${baseText}`;
-                            break;
-                        case "whatsapp":
-                            href = `https://api.whatsapp.com/send?text=${baseText}`;
-                            break;
-                        default:
-                            continue;
+
+                /**
+                 * @param {string} [share_url] 
+                 */
+                function setShareLink(share_url){
+                    const here = encodeURIComponent(share_url || shareURL);
+                    const baseText = `${message}%0A${here}`;
+                    fch = [];
+                    for (const ch of document.getElementsByClassName("share_ebtn")){
+                        const appname = ch.id.replace("share-", "");
+                        const $ch = $(ch);
+                        var href = "";
+                        
+                        switch (appname){
+                            case "line":
+                                href = `http://line.me/R/msg/text/?${baseText}`;
+                                break;
+                            case "twitter":
+                                href = `https://x.com/intent/tweet?url=${here}&text=%0A%0A${message}%0A${encodeURIComponent("#獅子児祭 @shishijifes")}%0A&related=shishiji`;
+                                break;
+                            case "facebook":
+                                href = `http://www.facebook.com/share.php?u=${here}`;
+                                break;
+                            case "gmail":
+                                $("#share-gmail").parent().parent().remove();
+                                href = `https://mail.google.com/mail/?view=cm&body=%0A%0A${baseText}`;
+                                break;
+                            case "mail":
+                                href = `mailto:?body=%0A%0A${baseText}`;
+                                break;
+                            case "sms":
+                                href = `sms:?body=%0A%0A${baseText}`;
+                                break;
+                            case "whatsapp":
+                                href = `https://api.whatsapp.com/send?text=${baseText}`;
+                                break;
+                            default:
+                                continue;
+                        }
+        
+                        !function(_href){
+                            function lopp(){
+                                window.open(_href, "_blank");
+                            }
+                            $ch.on("click", lopp);
+                            fch.push(lopp);
+                            return 0;
+                        }(href);
                     }
     
-                    !function(_href){
-                        $ch.on("click", function(){
-                            window.open(_href, "_blank");
-                        });
-                        return 0;
-                    }(href);
+                    /**except japanese */
+                    function translate(){
+                        $("#--share-bru").text("Share");
+                        $("#--trans-MAIL").text("Email");
+                        $("#--trans-MESSAGE").text("Messages");
+                        $("#--trans-COPYLINK").text("Copy Link");
+                        $("#--trans-OTHERS").text("Others");
+                    }
+                    if (LANGUAGE != "JA")
+                        translate();
                 }
 
-                /**except japanese */
-                function translate(){
-                    $("#--share-bru").text("Share");
-                    $("#--trans-MAIL").text("Email");
-                    $("#--trans-MESSAGE").text("Messages");
-                    $("#--trans-COPYLINK").text("Copy Link");
-                    $("#--trans-OTHERS").text("Others");
-                }
-                if (LANGUAGE != "JA")
-                    translate();
+                setShareLink();
             });
         }
     })

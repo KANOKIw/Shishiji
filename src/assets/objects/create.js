@@ -41,7 +41,7 @@ function putObjOnMap(objectData){
             if (!objectData.object.type.border)
                 styles += "border: none; border-radius: 0; background-color: transparent;"
             if (!objectData.article){
-                styles += "cursor: default;";
+                styles += "cursor: default; pointer-events: none;";
                 dfcursor = "default";
             }
             break;
@@ -50,16 +50,12 @@ function putObjOnMap(objectData){
 
 
     const element_outerHTML = `
-        <div id="${obj_id}" class="mapObj mapObj_centerAlign" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; z-index: ${zIndex};"
+        <div id="${obj_id}" class="mpob centeral" style="top: ${objectCoords_fromCanvas.y}px; left: ${objectCoords_fromCanvas.x}px; z-index: ${zIndex};"
             coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
             behavior="${objectData.object.type.behavior}"
             dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
-            <div class="canvas_interactive mapObj_mainctx ${classes}" style="background-image: url('${objectData.object.images.icon}');
-                min-width: ${objectData.object.size.width}px;
-                min-height: ${objectData.object.size.height}px;
-                max-width: ${objectData.object.size.width}px;
-                max-height: ${objectData.object.size.height}px; ${styles}" dfcs="${dfcursor}">
-
+            <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${objectData.object.images.icon}');
+min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.height}px;max-width:${objectData.object.size.width}px;max-height:${objectData.object.size.height}px;${styles}" dfcs="${dfcursor}">
             </div>
         </div>
     `;
@@ -80,7 +76,7 @@ function putObjOnMap(objectData){
 
 
 function clearObj(){
-    $(".mapObj").remove();
+    $(".mpob").remove();
 }
 
 

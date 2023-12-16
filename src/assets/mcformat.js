@@ -20,6 +20,7 @@ var STYLES = {
     "§d": "color:#FF55FF",
     "§e": "color:#FFFF55",
     "§f": "color:#FFFFFF",
+    
     "§l": "font-weight:bold",
     "§n": "text-decoration:underline", 
     "§o": "font-style:italic",
@@ -111,15 +112,34 @@ function _parseMCFormat(string){
 
 /**
  * @param {string} str 
+ * @param {(S: string) => string} srcConverter 
  * @returns {string}
  */
-function mcFormat(str){
-    //str = escapeHTML(str);
+function mcFormat(str, srcConverter){
+    str = escapeHTML(str);
+
+    str = str.replace(/\n/g, "").replace(/§v/g, "\n");
+
     var r = "";
     const el = _parseMCFormat(str);
+
     for (var e of Array.from(el.children)){
         r += e.outerHTML;
     }
+
+    const imgreg = /\$\$IMG-S=([^\-]+)-W=(\d+)\$\$/g;
+    const vidreg = /\$\$VIDEO-S=([^\-]+)-W=(\d+)\$\$/g;
+    const imgmatches = r.matchAll(imgreg) || [];
+    const vidmacthes = r.matchAll(vidreg) || [];
+
+    for (const imgmacth of imgmatches){
+        r = r.replace(imgmacth[0], `<img class="article-image" src="${srcConverter(imgmacth[1])}" style="width: ${imgmacth[2]}%;">`);
+    }
+
+    for (const vidmacth of vidmacthes){
+        r = r.replace(vidmacth[0], `<video class="article-video" src="${srcConverter(vidmacth[1])}#t=0.001" controls preload="metadata" playsinline style="width: ${vidmacth[2]}%;"></video>`);
+    }
+
     return r;
 }
 

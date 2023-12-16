@@ -59,6 +59,14 @@ interface LANGUAGE_TEXT{
     }
 }
 
+interface NoticeComponent{
+    html: string,
+    term: number,
+    discriminator: string,
+    do_not_keep?: boolean,
+    user_uncloseable?: boolean
+}
+
 
 export {
     LANGUAGE_TEXT as LanguageComponent,
@@ -66,4 +74,5 @@ export {
     mapObjComponent,
     mapObjElement,
     intervals,
+    NoticeComponent,
 }

@@ -15,6 +15,10 @@
     --shishiji-yd-notifier-width: 250px;
     --shishiji-yd-notifier-height: 45px;
     --shishiji-yd-notifier-top: 30px;
+    --shishiji-ovv-theme-height: 20px;
+    --shishiji-ovv-tg-height: 50px;
+    --shishiji-ovv-tg-color: rgb(235, 235, 235);
+    --shishiji-ovv-tg-color-active: rgb(0, 0, 0);
 }
 
 .protected{
@@ -45,6 +49,7 @@ shishiji-mx-overlay.popen{
     display: block;
     z-index: 3001;
     animation: alternative 0.2s linear;
+    height: calc(var(--window-height)*2);
 }
 
 shishiji-mx-overlay.pipe{
@@ -61,10 +66,17 @@ shishiji-yd-notify{
     width: var(--window-width);
 }
 
-shishiji-yd-notify shishiji-yd-notifier{
-    left: calc(50% - var(--shishiji-yd-notifier-width)/2);
+shishiji-yd-notify-w{
     position: absolute;
-    width: var(--shishiji-yd-notifier-width);
+    width: var(--window-width);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+shishiji-yd-notify shishiji-yd-notifier{
+    position: absolute;
+    width: fit-content;
     height: var(--shishiji-yd-notifier-height);
     background-color: #202020;
     border-radius: calc(var(--shishiji-yd-notifier-height)/2);
@@ -85,7 +97,9 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
 }
 
 #--ott-us{
-    width: 100%;
+    text-overflow: clip;
+    padding: 0 10px 0 10px;
+    width: fit-content;
     height: 100%;
     color: white;
 }
@@ -142,7 +156,7 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
 }
 
 #shr-notf svg{
-    margin: 0 4px 0 8px;
+    margin: 0 4px 0 4px;
     height: calc(var(--shishiji-yd-notifier-height)*0.5);
     width: calc(var(--shishiji-yd-notifier-height)*0.5);
 }
@@ -355,6 +369,14 @@ table{
     animation: 1s fadein forwards;
 }
 
+#overview-context._fadein{
+    animation: 2s fadein forwards;
+}
+
+#overview-context._wait_f{
+    opacity: 0;
+}
+
 @keyframes fadein{
     from {
         opacity: 0;
@@ -384,8 +406,12 @@ table{
     border-radius: 10px;
 }
 
-.mapObj{
+.mpob{
     cursor: pointer;
+}
+
+#ctx-article{
+    margin: 10px;
 }
 
 #shishiji-overview{
@@ -403,7 +429,7 @@ table{
     -ms-overflow-style: none;
     scrollbar-width: none;
     box-shadow: inset 0 15px 10px -10px rgba(0, 0, 0, 0.5);
-    border-top: 20px solid white;
+    border-top: 20px solid #000000;
 }
 
 #shishiji-popup-container{
@@ -521,16 +547,16 @@ table{
     background-color: var(--shishiji-btn-active-color);
 }
 
-.mapObj_mainctx{
-    border: solid 4px white;
+.mpobmctx{
     background-color: white;
     border-radius: 5px;
     min-width: 60px;
     min-height: 60px;
     max-width: 60px;
     max-height: 60px;
-    background-size: 100%;
+    background-size: 85%;
     background-repeat: no-repeat;
+    background-position: center center; 
 }
 
 .shadowedObj{
@@ -539,7 +565,7 @@ table{
     10px -10px 25px rgba(0, 0, 0, 0.9);
 }
 
-.mapObj_centerAlign{
+.centeral{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -576,13 +602,18 @@ table{
     position: absolute;
     width: var(--window-width);
     height: var(--window-height);
-    background-color: black;
-    display: none;
     z-index: 1999;
+    display: none;
 }
 
 #user-stricter.active{
+    opacity: 0.5;
+    background-color: black;
     animation: appear .5s ease;
+}
+
+#user-stricter.deactive{
+    animation: disappear .3s ease;
 }
 
 @keyframes appear {
@@ -591,6 +622,15 @@ table{
     }
     100%{
         opacity: 0.5;
+    }
+}
+
+@keyframes disappear {
+    0%{
+        opacity: 0.2;
+    }
+    100%{
+        opacity: 0;
     }
 }
 
@@ -649,6 +689,18 @@ table{
 
 #place-options-w{
     display: none;
+}
+
+.nImg-a{
+    width: 100%;
+    height: 150px;
+    border-bottom: 1px solid rgb(61, 61, 61);
+    padding: 4px 0 4px 0;
+}
+
+.nImg-a h4{
+    font-family: var(--font-view);
+    margin-left: 4px;
 }
 
 #place-selector.toSel{
@@ -762,6 +814,16 @@ table{
     overflow-y: hidden;
 }
 
+#ppupir::-webkit-scrollbar{
+    width: 10px;
+    height: 12px;
+}
+#ppupir::-webkit-scrollbar-thumb{
+    border-radius: 0.25rem;
+    --bg-opacity: 1;
+    background-color: #4e4e4e;
+}
+
 #sggty{
     width: 100%;
     height: 100px;
@@ -776,6 +838,10 @@ table{
 
 .share_ebtn.-p{
     display: flex;
+}
+
+.cloudfileel{
+    cursor: pointer;
 }
 
 .share-title.-l{
@@ -813,4 +879,89 @@ table{
 #spare_message{
     text-align: center;
     margin-top: 5px;
+}
+
+#includeScrCh{
+    display: none;
+}
+
+#includeScrCh[type=checkbox] + label{
+    cursor: pointer;
+    padding-left: 30px; 
+}
+
+#includeScrCh[type=checkbox] + label:active{
+    padding-right: 5px;
+    background-color: var(--shishiji-btn-active-color);
+}
+          
+#includeScrCh[type=checkbox] + label:before{
+    display: block;
+    top: 0px;
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00171d;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+#includeScrCh[type=checkbox]:checked + label:after{
+    display: block;
+    position: absolute;
+    content: "";
+    width: 14px;
+    height: 5px;
+    border-bottom: 4px solid;
+    border-left: 4px solid;
+    border-color: #ff0080;
+    transform: rotate(-45deg);
+    top: 50%;
+    left: 4px;
+    margin-top: -5px;
+} 
+
+#ovv-tg-a{
+    position: fixed;
+    height: 100%;
+    z-index: 8001;
+}
+
+#ovv-tg-b{
+    width: var(--window-width);
+    position: absolute;
+    bottom: var(--shishiji-ovv-theme-height);
+    height: var(--shishiji-ovv-tg-height);
+    background-color: var(--shishiji-ovv-tg-color);
+    display: flex;
+    box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.5);
+}
+
+.ovv-tg-bwr{
+    width: 100%;
+    height: 100%;
+    border-right: solid 2px rgb(136, 136, 136);
+    display: flex;
+    text-align: center;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-view);
+}
+
+.ovv-tg-bwr button{
+    width: 100%;
+    height: 100%;
+    color: black;
+    font-size: medium;
+}
+
+.ovv-tg-bwr:last-of-type{
+    border-right: none;
+}
+
+.ovv-tg-bwr .tg-active{
+    color: white;
+    background-color: var(--shishiji-ovv-tg-color-active);
 }

@@ -83,5 +83,5 @@ export {
     NonnullPosition,
     Distance,
     Coords,
-    touchINFO
+    touchINFO,
 }

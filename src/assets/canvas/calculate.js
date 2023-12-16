@@ -12,7 +12,7 @@
  * @param {TouchList} touches 
  * @returns {number}
  */
-function get_midestOfTouches(touches){
+function getMidestOfTouches(touches){
     if (touches.length == 1)
         return 0;
 
@@ -41,7 +41,7 @@ function get_midestOfTouches(touches){
  * @param {TouchList} touches 
  * @returns {NonnullPosition}
  */
-function get_middlePos(touches){
+function getMiddlePos(touches){
     var av_x = 0;
     var av_y = 0;
     for (var t  of touches){

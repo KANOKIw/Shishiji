@@ -24,7 +24,7 @@ function setCanvasSizes(){
         article: getParam(ParamNames.ARTICLE_ID),
         zoomRatio: Number(getParam(ParamNames.ZOOM_RATIO)) || 1,
         floor: getParam(ParamNames.FLOOR),
-        coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
+        coords: getParam(ParamNames.COORDS)?.split(",").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
         from: getParam(ParamNames.URL_FROM),
         lang: isThereLang(getParam(ParamNames.LANGUAGE)) || "JA",
     };
@@ -133,7 +133,9 @@ function setCanvasSizes(){
             $("#app-mount").show();
             if (PARAMS.article){
                 const data = searchObject(PARAMS.article);
-                var fromARTshare = !!0;
+                var fromARTshare = false;
+                var scr_position = 0;
+                var article_tg = "description";
                 
                 if (PARAMS.from){
                     fromARTshare = !0;
@@ -142,7 +144,7 @@ function setCanvasSizes(){
                 if (data == null || CURRENT_FLOOR != data.object.floor){
                     if (fromARTshare){
                         setTimeout(() => {
-                            notifyHTML(
+                            Notifier.notifyHTML(
                                 `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_NOT_FOUND}</div>`,
                                 7500,
                                 "share not found",
@@ -157,17 +159,34 @@ function setCanvasSizes(){
                     const coords = data.object.coordinate;
                     setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                     setTimeout(() => {
-                        notifyHTML(
+                        Notifier.notifyHTML(
                             `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_FOUND}</div>`,
                             5000,
                             "share found",
                         );
                     }, 1000);
+
+                    var g = getParam(ParamNames.SCROLL_POS);
+                    var y = getParam(ParamNames.ART_TARGET);
+                    delParam(ParamNames.SCROLL_POS);
+                    delParam(ParamNames.ART_TARGET);
+                    if (g != null || y){
+                        setTimeout(() => {
+                            Notifier.appendPending({
+                                html: `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_TRANSITIONED}</div>`,
+                                term: 5000,
+                                discriminator: "transitioned to shared position",
+                            });
+                        }, 1050);
+                        scr_position = Number(g);
+                        if (y)
+                            article_tg = y;
+                    }
                 }
 
                 setTimeout(() => {
                     raiseOverview();
-                    writeArticleOverview(data, true);
+                    writeArticleOverview(data, true, scr_position, article_tg);
                 }, 1000);
             }
         }
@@ -176,9 +195,9 @@ function setCanvasSizes(){
     .fail(function(e){
 
     });
+    
     return 0;
 }();
-
 
 
 window.addEventListener("resize", function(e){

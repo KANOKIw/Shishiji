@@ -3,23 +3,21 @@
 
 
 class Popup{
-    static me = document.getElementById("shishiji-popup-container-c");
-    static ppcls = GPATH.X;
-
-    
     /**
      * 
      * @param {string} _innerHTML 
      * @param {() => void} [callback] 
      */
     static popupContent(_innerHTML, callback){
+        const ppcls = GPATH.X;
+        
         new Promise((resolve, reject) => {
             $("shishiji-mx-overlay")
             .removeClass("pipe")
             .addClass("popen")
             .on("click", this._dispose);
             $("#shishiji-popup-container-c")
-            .html(this.ppcls+_innerHTML)
+            .html(ppcls+_innerHTML)
             .show();
             resolve("");
         }).then(() => {
@@ -41,7 +39,8 @@ class Popup{
     }
 
     static get popupping(){
-        return (this.me?.style.display != "none") ? true : false;
+        const me = document.getElementById("shishiji-popup-container-c");
+        return ( me?.clientHeight != 0 ) ? true : false;
     }
 
     static _dispose(){

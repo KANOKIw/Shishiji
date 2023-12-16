@@ -1,3 +1,7 @@
+//@ts-check
+"use strict";
+
+
 /**
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
@@ -22,7 +26,7 @@ function touchZoom(canvas, ctx, event){
         }
     };
 
-    const distance = get_midestOfTouches(touches);
+    const distance = getMidestOfTouches(touches);
     var diffRatio = distance / previousTouchDistance.distance;
 
     if (previousTouchDistance.x == -1 && previousTouchDistance.y == -1 && previousTouchDistance.distance == -1){
@@ -86,48 +90,49 @@ function touchZoom(canvas, ctx, event){
     //#endregion
 
 
-    //#region 
-    const PI = Math.PI;
-    const theta = getThouchesTheta(touches);
-    
     /**@type {Radian} */
-    var rotation;
+    var rotation = 0;
+    //#region 
+    function _rotateHandler(){
+        const PI = Math.PI;
+        const theta = getThouchesTheta(touches);
 
-    if (prevTheta === -1)
-        rotation = 0;
-    else if (
-        0 <= prevTheta && prevTheta <= PI
-            &&
-        PI*(3/2) <= theta && theta <= 2*PI
-        )
-        rotation = -(2*PI - theta + prevTheta);
-    else if (
-        0 <= theta && theta <= PI
-            &&
-        PI*(3/2) <= prevTheta && prevTheta <= 2*PI
-        )
-        rotation = 2*PI - prevTheta + theta;
-    else 
-        rotation = theta - prevTheta;
+        if (prevTheta === -1)
+            rotation = 0;
+        else if (
+            0 <= prevTheta && prevTheta <= PI
+                &&
+            PI*(3/2) <= theta && theta <= 2*PI
+            )
+            rotation = -(2*PI - theta + prevTheta);
+        else if (
+            0 <= theta && theta <= PI
+                &&
+            PI*(3/2) <= prevTheta && prevTheta <= 2*PI
+            )
+            rotation = 2*PI - prevTheta + theta;
+        else 
+            rotation = theta - prevTheta;
 
-    prevTheta = theta;
-
-
-    totalRotateThisTime += Math.abs(rotation);
-    rotatedThisTime += rotation;
+        prevTheta = theta;
 
 
-    if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPERTY.touch.rotate.min) || pastRotateMin){
-        if (!pastRotateMin){
-            rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
+        totalRotateThisTime += Math.abs(rotation);
+        rotatedThisTime += rotation;
+
+
+        if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPERTY.touch.rotate.min) || pastRotateMin){
+            if (!pastRotateMin){
+                rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
+            }
+            pastRotateMin = !0;
+            if (zoomCD > MOVEPROPERTY.touch.zoomCD)
+                rotateCanvas(canvas, ctx, crossPos, rotation);
         }
-        pastRotateMin = !0;
-        if (zoomCD > MOVEPROPERTY.touch.zoomCD)
-            rotateCanvas(canvas, ctx, crossPos, rotation);
-    }
-    
+        
 
-    rotatedThisTime += rotation;
+        rotatedThisTime += rotation;
+    }
     //#endregion
 
     return { diffRatio: diffRatio, crossPos: crossPos, rotation: rotation };
@@ -149,6 +154,7 @@ async function drawMap(canvas, ctx, data, callback){
     const src_formatter = data.format;
     /**@type {HTMLImageElement[]} */
     var al = [];
+    var wait = 0;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -177,8 +183,12 @@ async function drawMap(canvas, ctx, data, callback){
                         if (al.length >= (xrange+1)*(yrange+1))
                             resolve("map loaded");
                     }
+                    
+                    setTimeout(() => {
+                        img.src = formatString(src_formatter, y, x);
+                    }, wait);
 
-                    img.src = formatString(src_formatter, y, x);
+                    wait += WAIT_BETWEEN_EACH_MAP_IMAGE;
 
                     return 0;
                 }(x, y, dx, dy, dw, dh);
@@ -201,7 +211,7 @@ function setBehavParam(accurated){
     const abstraction = 10**paramAbstractDeg;
     const K = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
     const zr = accurated ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
-    const at = accurated ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
+    const at = accurated ? K[0]+","+K[1] : Math.round(K[0]*abstraction)/abstraction+","+Math.round(K[1]*abstraction)/abstraction;
     
     setParam(ParamNames.ZOOM_RATIO, zr);
     setParam(ParamNames.COORDS, at);

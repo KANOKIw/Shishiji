@@ -200,7 +200,6 @@ int main()
         folder + "canvas/setup.js",
         folder + "objects/listeners.js",
         folder + "objects/setup.js",
-        folder + "supports/popup.js",
         folder + "supports/setup.js",
         folder + "main.js",
     };
@@ -221,10 +220,11 @@ int main()
         folder + "objects/create.js",
         folder + "objects/move.js",
         folder + "objects/overview.js",
-        folder + "objects/selector.js",
+        folder + "objects/fselector.js",
 
         folder + "supports/share.js",
         folder + "supports/notify.js",
+        folder + "supports/popup.js",
     };
 
     Builder jsbuilder(onLoads, scriptFiles, outFolder+"main.js", false);

@@ -39,17 +39,5 @@
         return 0;
     }();
 
-
-    // notify
-    !function(){
-        const $notifier = $("#--yd-notifier");
-        
-        $notifier.on("touchstart mousedown", function(e){
-            e.preventDefault();
-            closeNotifier(!0);
-        });
-        return 0;
-    }();
-
     return 0;
 }();

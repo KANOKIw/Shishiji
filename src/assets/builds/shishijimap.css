@@ -61,10 +61,17 @@ shishiji-yd-notify{
     width: var(--window-width);
 }
 
-shishiji-yd-notify shishiji-yd-notifier{
-    left: calc(50% - var(--shishiji-yd-notifier-width)/2);
+shishiji-yd-notify-w{
     position: absolute;
-    width: var(--shishiji-yd-notifier-width);
+    width: var(--window-width);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+shishiji-yd-notify shishiji-yd-notifier{
+    position: absolute;
+    width: fit-content;
     height: var(--shishiji-yd-notifier-height);
     background-color: #202020;
     border-radius: calc(var(--shishiji-yd-notifier-height)/2);
@@ -85,7 +92,9 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
 }
 
 #--ott-us{
-    width: 100%;
+    text-overflow: clip;
+    padding: 0 10px 0 10px;
+    width: fit-content;
     height: 100%;
     color: white;
 }
@@ -142,7 +151,7 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
 }
 
 #shr-notf svg{
-    margin: 0 4px 0 8px;
+    margin: 0 4px 0 4px;
     height: calc(var(--shishiji-yd-notifier-height)*0.5);
     width: calc(var(--shishiji-yd-notifier-height)*0.5);
 }
@@ -384,8 +393,12 @@ table{
     border-radius: 10px;
 }
 
-.mapObj{
+.mpob{
     cursor: pointer;
+}
+
+#ctx-article{
+    margin: 10px;
 }
 
 #shishiji-overview{
@@ -521,7 +534,7 @@ table{
     background-color: var(--shishiji-btn-active-color);
 }
 
-.mapObj_mainctx{
+.mpobmctx{
     border: solid 4px white;
     background-color: white;
     border-radius: 5px;
@@ -539,7 +552,7 @@ table{
     10px -10px 25px rgba(0, 0, 0, 0.9);
 }
 
-.mapObj_centerAlign{
+.centeral{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -576,13 +589,18 @@ table{
     position: absolute;
     width: var(--window-width);
     height: var(--window-height);
-    background-color: black;
-    display: none;
     z-index: 1999;
+    display: none;
 }
 
 #user-stricter.active{
+    opacity: 0.5;
+    background-color: black;
     animation: appear .5s ease;
+}
+
+#user-stricter.deactive{
+    animation: disappear .3s ease;
 }
 
 @keyframes appear {
@@ -591,6 +609,15 @@ table{
     }
     100%{
         opacity: 0.5;
+    }
+}
+
+@keyframes disappear {
+    0%{
+        opacity: 0.2;
+    }
+    100%{
+        opacity: 0;
     }
 }
 
@@ -649,6 +676,18 @@ table{
 
 #place-options-w{
     display: none;
+}
+
+.nImg-a{
+    width: 100%;
+    height: 150px;
+    border-bottom: 1px solid rgb(61, 61, 61);
+    padding: 4px 0 4px 0;
+}
+
+.nImg-a h4{
+    font-family: var(--font-view);
+    margin-left: 4px;
 }
 
 #place-selector.toSel{
@@ -760,6 +799,16 @@ table{
     margin-top: 4px;
     overflow-x: scroll;
     overflow-y: hidden;
+}
+
+#ppupir::-webkit-scrollbar{
+    width: 10px;
+    height: 12px;
+}
+#ppupir::-webkit-scrollbar-thumb{
+    border-radius: 0.25rem;
+    --bg-opacity: 1;
+    background-color: #4e4e4e;
 }
 
 #sggty{
