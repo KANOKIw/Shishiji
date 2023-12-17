@@ -6,6 +6,7 @@
 /**
  * @typedef {import("../shishiji-dts/motion").Position} _Position
  * @typedef {import("../shishiji-dts/motion").Radian} Radian
+ * @typedef {import("../shishiji-dts/motion").MoveData} MoveData
  */
 
 
@@ -35,7 +36,7 @@ function setTheta(touches){
  * 
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {{top: number, left: number}} moved
+ * @param {MoveData} moved
  */
 function moveMapAssistingNegative(canvas, ctx, moved){
     const x = backcanvas.canvas.coords.x - moved.left/zoomRatio;
@@ -56,7 +57,7 @@ function moveMapAssistingNegative(canvas, ctx, moved){
  * @deprecated use {@linkcode moveMapAssistingNegative} instead for safari support
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
- * @param {{top: number, left: number}} moved
+ * @param {MoveData} moved
  */
 function moveMap(canvas, ctx, moved){
     const x = backcanvas.canvas.coords.y-moved.left/zoomRatio;

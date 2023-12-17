@@ -27,6 +27,7 @@ class Popup{
         });
     }
     
+
     static disPop(){
         $("#ppcls").off("click", this.disPop);
         $("shishiji-mx-overlay")
@@ -38,11 +39,44 @@ class Popup{
         .empty();
     }
 
+
     static get popupping(){
         const me = document.getElementById("shishiji-popup-container-c");
         return ( me?.clientHeight != 0 ) ? true : false;
     }
 
+
+    static setsize(){
+        const $cp = $("#shishiji-popup-container-c");
+
+        /**@param {string} str  */
+        function delpxToNum(str){
+            return Number(str.replace("px", ""));
+        }
+
+        const base = {
+            width: delpxToNum($cp.css("width")),
+            height: delpxToNum($cp.css("height")),
+            margin: delpxToNum($cp.css("margin"))
+        };
+        
+        var width = delpxToNum($cp.css("width"));
+        var height = delpxToNum($cp.css("height"));
+        var margin = delpxToNum($cp.css("margin"));
+        
+        if (window.innerWidth <= width+margin*2){
+            $cp.css("width", window.innerWidth-margin*2+"px");
+            width = window.innerWidth-margin*2;
+        } else {
+            $cp.css("width", base.width+"px");
+        }
+
+        $cp
+        .css("top", (window.innerHeight-(margin*2+height))/2+"px")
+        .css("left", (window.innerWidth-(margin*2+width))/2+"px");
+    }
+
+    
     static _dispose(){
         if (Popup.popupping)
             Popup.disPop();

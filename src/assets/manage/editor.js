@@ -12,6 +12,9 @@
     const orgCloudfi = {
         maxsize: 0,
     };
+    const SETTINGS = {
+        autosave: false,
+    };
 
     $.ajaxSetup({async: false});
     $.post("/org/manage/auth/editor", { session: session })
@@ -111,7 +114,42 @@
         "改行": "§v",
 
         "リセット": "§r",
-    }
+    };
+
+
+    const DOCOLS = {
+        "§0": "sheart1",
+        "§1": "sheart2",
+        "§2": "sheart3",
+        "§3": "sheart4",
+        "§4": "sheart5",
+        "§5": "sheart6",
+        "§6": "sheart7",
+        "§7": "sheart8",
+        "§8": "sheart9",
+        "§9": "sheart10",
+        "§a": "sheart11",
+        "§b": "sheart12",
+        "§c": "sheart13",
+        "§d": "sheart14",
+        "§e": "sheart15",
+        "§f": "sheart16",
+    };
+    const DOSTS = {
+        "§l": "sheart17",
+        "§n": "sheart18", 
+        "§o": "sheart19",
+        "§m": "sheart26",
+        "§L": "sheart27",
+    };
+    const DODEFS = {
+        "§x": "sheart28",
+        "§y": "sheart29",
+        "§z": "sheart30",
+
+        defaultcls: "sheart31",
+    };
+    
     
 
     /**
@@ -300,6 +338,7 @@
         var scr = $("#shishiji-overview").scrollTop();
             
 
+        setEditorcdColor();
         ARTICLEDATA.article.content = editor.innerText;
         writeArticleOverview(ARTICLEDATA, false, scr, void 0, true, true);
 
@@ -342,6 +381,77 @@
     }
 
 
+    function setEditorcdColor(){
+        $("#main-editor-cd").html(colorXtext(document.getElementById("main-editor")?.innerText));
+    }
+
+
+    /**
+     * 
+     * @param {string | null | undefined} text 
+     */
+    function colorXtext(text){
+        if (text === null || text === undefined)
+            return "";
+
+        text = escapeHTML(text);
+        text = text.replace(/\n/g, "<br>");
+
+        for (const sectionkey in DOCOLS){
+            text = text.replace(new RegExp(sectionkey, "g"), `<span class="${DOCOLS[sectionkey]}">${sectionkey}</span>`);
+        }
+
+        for (const sectionkey in DOSTS){
+            text = text.replace(new RegExp(sectionkey, "g"), `<span class="${DOSTS[sectionkey]}">${sectionkey}</span>`);
+        }
+        
+        for (const sectionkey in DODEFS){
+            text = text.replace(new RegExp(sectionkey, "g"), `<span class="${DODEFS.defaultcls}">${sectionkey}</span>`);
+        }
+
+        text = text.replace(/§v/g, `<span class="sheart32">§v</span>`);
+        text = text.replace(/§r/g, `<span class="sheart33">§r</span>`);
+        text = text.replace(/§k/g, `<span class="sheart34">§<span class="MCOBF">r</span></span>`);
+
+        // TODO: allow <br> any where & deny :#-H= on url
+        text = text.replace(/(%:IMG)-S=([^\-]+)-W=(\d+)(;%)|(%:VIDEO)-S=([^\-]+)-W=(\d+)(;%)/g, `<span class="sheart22">$1-S=<span class="sheart23">$2</span>-W=<span class="sheart23">$3</span>$4</span>`);
+        text = text.replace(/(#:LINK)-H=(https?:\/\/[^#:]+\.\w+\/?\S*)-T=(.*?)(;#)/g, `<span class="sheart24">$1-H=<span class="sheart25">$2</span>-T=<span class="sheart25">$3</span>$4</span>`);
+
+        return text;
+    }
+
+
+    /**
+     * 
+     * @param {string} text 
+     */
+    function tranparentedXtext(text){
+        return text.replace(/\n/g, "<br>");
+    }
+
+
+    /**
+     * 
+     * @param {string} text 
+     */
+    function parseXtext(text){
+        return text.replace(/&amp;/g, "&")
+                   .replace(/&lt;/g, "<")
+                   .replace(/&gt;/g, ">")
+                   .replace(/&quot;/g, '"')
+                   .replace(/&#39;/g, "'")
+                   .replace(/&nbsp;/g, " ")
+                   .replace(/<br>/g, "\n");
+    }
+
+
+    function allowNsave(){
+        $("#save_data_norm")
+        .css("background-color", "rgb(247, 255, 142)")
+        .css("cursor", "pointer");
+    }
+
+
     /**@type {Range | undefined} */
     var last_pos;
     window.addEventListener("load", function(e){
@@ -353,7 +463,9 @@
 
         this.setInterval(() => {
             var sel = window.getSelection();
-            if (!sel) return;
+            //@ts-ignore
+            if (!sel || (sel.anchorNode?.parentElement?.id != "main-editor" && sel.anchorNode?.id != "main-editor"))
+                return;
             try {
                 var rag = sel.getRangeAt(0);
                 EDITORSR.selection = sel;
@@ -361,37 +473,32 @@
             } catch(e){}
         }, 1);
 
+
+        /**
+         * mischief
+         */
+        startLoad("読み込み中");
+
+        this.setTimeout(() => {
+            endLoad("ようこそ");
+        }, 500);
+
+
         $("#app-mount").show();
         $("#username-d").text(username);
 
-        $("#main-editor").html(colorXtext(ARTICLEDATA.article.content));
+        $("#main-editor").html(tranparentedXtext(escapeHTML(ARTICLEDATA.article.content)));
+        $("#main-editor-cd").html(colorXtext(ARTICLEDATA.article.content));
         $("#ctx-title").text(ARTICLEDATA.article.title || "NAME");
 
 
         /**
          * 
          * @param {string} text 
-         */
-        function colorXtext(text){
-            return text.replace(/\n/g, "<br>");
-        }
-
-
-        /**
-         * 
-         * @param {string} text 
-         */
-        function parseXtext(text){
-            return text.replace(/<br>/g, "\n");
-        }
-
-
-        /**
-         * 
-         * @param {string} text 
          * @param {boolean} [notify] 
+         * @param {() => void} [errcb] 
          */
-        function insertText(text, notify){
+        function insertText(text, notify, errcb){
             /**@ts-ignore @type {HTMLElement} */
             var editor = document.getElementById("main-editor");
 
@@ -402,8 +509,14 @@
             
             var textNode = document.createTextNode(text);
 
-            range.deleteContents();
-            range.insertNode(textNode);
+            try{
+                range.deleteContents();
+                range.insertNode(textNode);
+            } catch (e){
+                if (errcb)
+                    errcb();
+                return;
+            }
 
             range.setStartAfter(textNode);
             range.collapse(true);
@@ -412,6 +525,7 @@
             sel.addRange(range);
 
             change_not_saved_remains = true;
+            $("#sv_msg").text("");
             $("#save_data_norm")
             .css("background-color", "rgb(247, 255, 142)")
             .css("cursor", "pointer");
@@ -467,34 +581,42 @@
         function saveMainEditorctx(do_not_showmessage, donecallback){
             if ($(this).css("background-color") != "rgb(247, 255, 142)")
                 return;
-            $.post("/org/manage/edit/savemain", { session: session, nmap: JSON.stringify(ARTICLEDATA) })
-            .done(d => {
-                change_not_saved_remains = false;
-                lastsaved = ARTICLEDATA;
 
-                clearTimeout(_t.a);
+            $("#sv_msg").text("保存しています...").css("color", "orange");
+            $("#save_data_norm")
+            .css("background-color", "rgb(144 149 81)")
+            .css("background-color", "rgb(144 149 81)");
 
-                if (!do_not_showmessage){
-                    $("#sv_msg").text("保存しました").css("color", "green");
+            setTimeout(() => {
+                $.post("/org/manage/edit/savemain", { session: session, nmap: JSON.stringify(ARTICLEDATA) })
+                .done(d => {
+                    change_not_saved_remains = false;
+                    lastsaved = ARTICLEDATA;
+
+                    clearTimeout(_t.a);
+
+                    if (!do_not_showmessage){
+                        $("#sv_msg").text("保存しました").css("color", "green");
+                        _t.a = setTimeout(() => {
+                            $("#sv_msg").text("");
+                        }, 3000);
+                    }
+                    $("#save_data_norm")
+                    .css("background-color", "rgb(144 149 81)")
+                    .css("cursor", "not-allowed");
+
+                    rewrite();
+                    if (donecallback)
+                        donecallback();
+                })  
+                .catch(err => {
+                    clearTimeout(_t.a);
+                    $("#sv_msg").text("失敗しました").css("color", "red");
                     _t.a = setTimeout(() => {
                         $("#sv_msg").text("");
                     }, 3000);
-                }
-                $("#save_data_norm")
-                .css("background-color", "rgb(144 149 81)")
-                .css("cursor", "not-allowed");
-
-                rewrite();
-                if (donecallback)
-                    donecallback();
-            })  
-            .catch(err => {
-                clearTimeout(_t.a);
-                $("#sv_msg").text("失敗しました").css("color", "red");
-                _t.a = setTimeout(() => {
-                    $("#sv_msg").text("");
-                }, 3000);
-            });
+                });
+            }, 250);
         }
 
 
@@ -514,26 +636,30 @@
             }
         }
 
+
         /**@ts-ignore @type {NodeJS.Timeout} */
         var kes = 0;
         this.document.getElementById("main-editor")?.addEventListener("input", function(ev){
             var scr = $("#shishiji-overview").scrollTop();
             
             change_not_saved_remains = true;
-            $("#save_data_norm")
-            .css("background-color", "rgb(247, 255, 142)")
-            .css("cursor", "pointer");
             $("#sv_msg").text("");
-
+            
+            allowNsave();
+            
+            setEditorcdColor();
+            
             ARTICLEDATA.article.content = parseXtext(this.innerHTML);
             writeArticleOverview(ARTICLEDATA, false, scr, void 0, true, true);
 
             clearTimeout(kes);
-            kes = setTimeout(() => {
-                saveMainEditorctx.apply(document.getElementById("save_data_norm"), [true, () => {
-                    $("#sv_msg").text("自動で保存しました").css("color", "green");
-                }]);
-            }, 2500);
+            if (SETTINGS.autosave){
+                kes = setTimeout(() => {
+                    saveMainEditorctx.apply(document.getElementById("save_data_norm"), [true, () => {
+                        $("#sv_msg").text("自動で保存しました").css("color", "green");
+                    }]);
+                }, 2500);
+            }
         });
 
 
@@ -544,9 +670,23 @@
         });
 
 
+        this.document.getElementById("autosaveswitcheri")?.addEventListener("input", function(e){
+            //@ts-ignore
+            SETTINGS.autosave = (this.checked) ? true : false;
+            clearTimeout(kes);
+            if (SETTINGS.autosave){
+                kes = setTimeout(() => {
+                    saveMainEditorctx.apply(document.getElementById("save_data_norm"), [true, () => {
+                        $("#sv_msg").text("自動で保存しました").css("color", "green");
+                    }]);
+                }, 2500);
+            }
+        });
+
+
         this.document.getElementById("smthElse")?.addEventListener("click", function(e){
             Popup.popupContent(`
-            <div class="protected" id="ppupds" style="display: flex; align-items: center; flex-flow: column;">
+            <div class="protected aioshud" id="ppupds" style="display: flex; align-items: center; flex-flow: column;">
                 <h4 style="padding-top: 30px;">テーマカラー</h4>
                 <input type="color" id="theme_color_picker" value="${ARTICLEDATA.article.theme_color}">
                 <hr class="dhr-ppo">
@@ -569,36 +709,44 @@
                     var header_path = document.getElementById("header_path_input")?.value.replace(" ", "") || "";
                     //@ts-ignore
                     var icon_path = document.getElementById("icon_path_input")?.value.replace(" ", "") || "";
+
+                    if ($("#others---meg").text() == "保存しています")
+                        return;
                     
-                    if (header_path.includes("/") || icon_path.includes("/")){
+                    if (header_path.includes("/") || icon_path.includes("/") || !icon_path.includes(".")){
                         clearTimeout(_t.a);
                         $("#others---meg").text("画像に誤りがあります").css("color", "red");
                         _t.a = setTimeout(() => {
                             $("#others---meg").text("");
                         }, 3000);
+                        return;
                     }
 
                     ARTICLEDATA.article.theme_color = color;
                     ARTICLEDATA.article.images.header = header_path;
                     ARTICLEDATA.object.images.icon = icon_path;
                     
-                    $.post("/org/manage/edit/saveothers", { session: session, nmap: JSON.stringify(ARTICLEDATA) })
-                    .done(d => {
-                        lastsaved = ARTICLEDATA;
-                        clearTimeout(_t.a);
-                        $("#others---meg").text("保存しました").css("color", "lightgreen");
-                        rewrite(true);
-                        _t.a = setTimeout(() => {
-                            $("#others---meg").text("");
-                        }, 3000);
-                    })  
-                    .catch(err => {
-                        clearTimeout(_t.a);
-                        $("#others---meg").text("失敗しました").css("color", "red");
-                        _t.a = setTimeout(() => {
-                            $("#others---meg").text("");
-                        }, 3000);
-                    });
+                    $("#others---meg").text("保存しています").css("color", "orange");
+
+                    setTimeout(() => {
+                        $.post("/org/manage/edit/saveothers", { session: session, nmap: JSON.stringify(ARTICLEDATA) })
+                        .done(d => {
+                            lastsaved = ARTICLEDATA;
+                            clearTimeout(_t.a);
+                            $("#others---meg").text("保存しました").css("color", "lightgreen");
+                            rewrite(true);
+                            _t.a = setTimeout(() => {
+                                $("#others---meg").text("");
+                            }, 3000);
+                        })  
+                        .catch(err => {
+                            clearTimeout(_t.a);
+                            $("#others---meg").text("失敗しました").css("color", "red");
+                            _t.a = setTimeout(() => {
+                                $("#others---meg").text("");
+                            }, 3000);
+                        });
+                    }, 250);
                 });
             });
         });
@@ -650,15 +798,11 @@
                     }
 
                     $("#__caut_imad").text("");
-                    const imgFormat = `$$IMG-S=${path}-W=${width}$$`;
+                    const imgFormat = `%:IMG-S=${path}-W=${width};%`;
                     
                     Popup.disPop();
 
-                    //@ts-ignore
-                    document.getElementById("main-editor").innerHTML += imgFormat;
-                    rewrite();
-                    change_not_saved_remains = true;
-                    Notifier.notifyHTML(imgFormat, 3000, imgFormat, true);
+                    insertText(imgFormat, true);
                 });
             });
         });
@@ -671,9 +815,9 @@
                 <h4 id="__caut_imad"></h4>
                 <hr class="dhr-ppo">
                 <h4>動画の名前</h4>
-                <input id="addImg_path_" type="text" style="margin-bottom: 20px;"  placeholder="ファイル名"></input>
+                <input id="addImg_path_" type="text" style="margin-bottom: 20px;" placeholder="ファイル名"></input>
                 <h4>動画の幅(画面の横幅に対する %)</h4>
-                <input id="addImg_width_" type="text"  placeholder="0 ~ 100"></input>
+                <input id="addImg_width_" type="text" placeholder="0 ~ 100"></input>
                 <hr class="dhr-ppo">
                 <button id="insertImgb" class="ppu-decb"><h4>追加</h4></button>
                 <h4 id="others---meg"></h4>
@@ -709,15 +853,66 @@
                     }
 
                     $("#__caut_imad").text("");
-                    const imgFormat = `$$VIDEO-S=${path}-W=${width}$$`;
+                    const videoFormat = `%:VIDEO-S=${path}-W=${width};%`;
                     
                     Popup.disPop();
 
+                    insertText(videoFormat, true);
+                });
+            });
+        });
+
+
+        this.document.getElementById("addLinkb")?.addEventListener("click", e => {
+            Popup.popupContent(`
+            <div class="protected" id="ppupds" style="display: flex; align-items: center; flex-flow: column;">
+                <h2 style="padding-top: 30px;">リンクを挿入</h2>
+                <h4 id="__caut_imad"></h4>
+                <hr class="dhr-ppo">
+                <h4>URL</h4>
+                <input id="addLink_url_" type="text" style="margin-bottom: 20px;" placeholder="https?://"></input>
+                <h4>テキスト</h4>
+                <input id="addLink_text_" type="text" style="margin-bottom: 20px;" placeholder="任意"></input>
+                <hr class="dhr-ppo">
+                <button id="insertLinkb" class="ppu-decb"><h4>追加</h4></button>
+                <h4 id="others---meg"></h4>
+            </div>
+            `, function(){
+                /**@ts-ignore @type {{[key: string]: NodeJS.Timeout}} */
+                var _t = { a: 0, };
+                var tm = 0;
+                const up = /^https?:\/\/?[\w.]+\.\w+\/?\S*$/;
+                document.getElementById("insertLinkb")?.addEventListener("click", function(){
                     //@ts-ignore
-                    document.getElementById("main-editor").innerHTML += imgFormat;
-                    rewrite();
-                    change_not_saved_remains = true;
-                    Notifier.notifyHTML(imgFormat, 3000, imgFormat, true);
+                    var url = document.getElementById("addLink_url_")?.value.replace(" ", "") || "";
+                    //@ts-ignore
+                    var text = document.getElementById("addLink_text_")?.value.replace(" ", "") || "";
+
+                    /**@param {string} msg  */
+                    function notifyMSG(msg){
+                        clearTimeout(_t.a);
+                        $("#others---meg").text(msg).css("color", "red");
+                        _t.a = setTimeout(() => {
+                            $("#others---meg").text("");
+                        }, 3000);
+                    }
+
+                    if (url.length < 1){
+                        $("#__caut_imad").text("URLが埋まっていません").css("color", "red");
+                        return;
+                    }
+
+                    if (!up.test(url)){
+                        $("#__caut_imad").text("無効なURLです").css("color", "red");
+                        return;
+                    }
+
+                    $("#__caut_imad").text("");
+                    const linkFormat = `#:LINK-H=${url}-T=${text};#`;
+                    
+                    Popup.disPop();
+
+                    insertText(linkFormat);
                 });
             });
         });
@@ -756,7 +951,7 @@
                         color = "yellow";
                     }
 
-                    $("#--cloud-desc").html(`<span style="color: lightgreen;">${orgCloudfi.maxsize}MB</span> まで使用できます&nbsp;(<span style="color: ${color};">${displaysize}</span>/${orgCloudfi.maxsize})`);
+                    $("#--cloud-desc").html(`<span style="color: lightgreen;">${orgCloudfi.maxsize.toLocaleString()}MB</span> まで使用できます&nbsp;(<span style="color: ${color};">${displaysize.toLocaleString()}</span>/${orgCloudfi.maxsize.toLocaleString()})`);
 
                     for (const file of files){
                         const mediatype = getMediaType(file);
@@ -837,7 +1032,7 @@
                                     $("#uploadfbh").text("ファイル形式が無効です").css("color", "red");
                                     _t.a = setTimeout(() => {
                                         $("#uploadfbh").text("アップロード").css("color", "black");
-                                    }, 2500);
+                                    }, 3000);
                                     return;
                                 }
 
@@ -907,7 +1102,7 @@
                                 $("#uploadfbh").text("ファイルが選択されていません").css("color", "red");
                                 _t.a = setTimeout(() => {
                                     $("#uploadfbh").text("アップロード").css("color", "black");
-                                }, 2500);
+                                }, 3000);
                             }
                         });
 
@@ -1017,6 +1212,14 @@
         }, 500);
 
 
+        window.addEventListener("keydown", function(e){
+            if ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === "S") {
+                e.preventDefault();
+                saveMainEditorctx.apply(document.getElementById("save_data_norm"));
+            }
+        }, { passive: false });
+
+
         $("#--art-header").on("error", function(){ imageError.apply(this, ["h"]); }).attr("src", "");
         $("#--art-icon").on("error", function(){ imageError.apply(this, ["i"]); }).attr("src", "");
 
@@ -1050,7 +1253,7 @@
 
 
     window.addEventListener("beforeunload", e => {
-        if (change_not_saved_remains || (Popup.popupping && !document.getElementById("--yesilogout"))){
+        if (change_not_saved_remains || (Popup.popupping && $("#ppupds").hasClass("aioshud"))){
             e.preventDefault();
             var message = "このページを離れてもよろしいですか？\n編集データは自動では保存されません。";
         

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"></meta>
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
         <meta property="og:type" content="website">
         <meta property="og:title" content="Setagayagakuen Shishiji festival">
         <meta property="og:description" content="Manage your organization's article.">
@@ -36,6 +36,15 @@
     </head>
     <body>
         <div id="app-mount">
+            <div id="load_spare" class="protected">
+                <div id="load_spare_c" aria-hidden="true">
+                    <div id="logo_spare_w">
+                        <img id="spare_logo" src="/resources/img/logo-loader.png" aria-label="獅子児祭のロゴ">
+                        <h4 id="spare_message">please wait...</h4>
+                    </div>
+                </div>
+            </div>
+
             <shishiji-yd-notify>
                 <shishiji-yd-notify-w>
                     <shishiji-yd-notifier id="--yd-notifier" class="hpipe protected">
@@ -54,6 +63,10 @@
                 <h4>username:&nbsp;<span id="username-d"></span></h4>
                 <button id="logout__">ログアウト</button>
                 <div id="save_wrap">
+                    <div id="autosaveswitcher">
+                        <input type="checkbox" id="autosaveswitcheri">
+                        <label for="switcheri"><span>autosave</span></label>
+                    </div>
                     <h4 id="sv_msg"></h4>
                     <button id="save_data_norm">保存</button>
                 </div>
@@ -114,31 +127,31 @@
                     </div>
                     <div style="display: flex; height: 50%;">
                         <div id="-motd-dec-wp" style="height: 100%;">
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #00ca8d; color: white;">
                                 <p style="font-size:16px;">大 lvl.1</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #00ca8d; color: white;">
                                 <p style="font-size:18px;">大 lvl.2</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #00ca8d; color: white;">
                                 <p style="font-size:20px;">大 lvl.3</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p style="font-weight:bold">太字</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p style="font-weight:bolder">更に太字</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p style="text-decoration:underline">下線</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p style="font-style:italic">italic</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p style="text-decoration:line-through">中線</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #0068ca; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p class="MCOBF" style="font-family: monospace; font-size:18px;">obf</p>
                             </div>
                             <div class="motd-dec-b protected" style="background-color: #b1ae00; color: white;">
@@ -153,11 +166,14 @@
                             <div id="manageFileb" class="motd-dec-e protected" style="background-color: #b86200; color: white;">
                                 <p style="font-size:16px;">クラウド</p>
                             </div>
-                            <div id="addImageb" class="motd-dec-e protected" style="background-color: #7cb100; color: white;">
+                            <div id="addImageb" class="motd-dec-e protected" style="background-color: #c3916a; color: white;">
                                 <p style="font-size:16px;">写真</p>
                             </div>
-                            <div id="addVideob" class="motd-dec-e protected" style="background-color: #7cb100; color: white;">
+                            <div id="addVideob" class="motd-dec-e protected" style="background-color: #c3916a; color: white;">
                                 <p style="font-size:18px;">動画</p>
+                            </div>
+                            <div id="addLinkb" class="motd-dec-e protected" style="background-color: #5555ee; color: white;">
+                                <p style="font-size:18px;">リンク</p>
                             </div>
                             <div id="smthElse" class="motd-dec-e protected" style="background-color: #810077; color: white;">
                                 <p style="font-size:18px;">その他</p>
@@ -168,8 +184,9 @@
 
                 <div id="editsplitter">
                     <div class="editorE" id="aoidjoi" style="display: flex;">
+                        <blockquote id="main-editor-cd"></blockquote>
                         <blockquote id="main-editor-linen"></blockquote>
-                        <blockquote id="main-editor" contenteditable="plaintext-only"></blockquote>
+                        <blockquote id="main-editor" contenteditable="plaintext-only" class="ohwdahuoi"></blockquote>
                     </div>
 
                     <div class="editorE" id="--ppo">
@@ -237,7 +254,7 @@
         <script src="/src/assets/supports/setup.js"></script>
         <script>
             Notifier.notifyHTML(`<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.CAUTION}開発中のページです。不具合を見つけ次第お知らせください</div>`,
-                100000,
+                5000,
                 "THIS IS AN DEVELOPING PAGE",
             );
         </script>

@@ -30,6 +30,8 @@ var cursorPosition = [ null, null ];
 var DRAGGING = false;
 var zoomRatio = 1;
 
+const href_replaceDuration = 350;
+
 
 /**
  * @type {BackCanvas} 
@@ -82,7 +84,11 @@ const MOVEPROPERTY = {
             // degree
             min: 15,
         }
-    }
+    },
+    arrowkeys: {
+        interval: 5,
+        move: 4,
+    },
 };
 
 
@@ -90,8 +96,8 @@ const MOVEPROPERTY = {
  * velocities are assigned with (px/sec)
  * @type {{ x: number, y: number, v: number, a: number, method: "MOUSE" | "TOUCH" | null }}
  */
-var pointerVelocity = { 
-    x: 0, y: 0, v: 0, a: -100,
+var pointerVelocity = {
+    x: 0, y: 0, v: 0, a: -75,
     method: null 
 };
 

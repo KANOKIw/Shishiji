@@ -34,6 +34,11 @@ interface touchINFO {
     match?: TouchType[],
 }
 
+interface MoveData {
+    top: number,
+    left: number
+}
+
 
 type Radian = number;
 type Degree = number;
@@ -84,4 +89,5 @@ export {
     Distance,
     Coords,
     touchINFO,
+    MoveData,
 }

@@ -1,5 +1,6 @@
 *{
     margin: 0;
+    touch-action: pan-x pan-y;
 }
 
 :root{
@@ -8,10 +9,15 @@
     --previewer-height: 932px;
     --previewer-font-size: 100%;
     --bottom-bar-height: 35px;
+    --sheart-forenormal: #cccccc;
+    --sheart-foremediatag: #c3916a;
+    --sheart-foremediaarg: #b86200;
+    --sheart-forelinktag: #7c7cbe;
+    --sheart-forelinkarg: #5555ee;
 }
 
 body{
-    overflow-y: scroll;
+    overflow: hidden;
 }
 
 body::-webkit-scrollbar{
@@ -144,8 +150,12 @@ body::-webkit-scrollbar-thumb{
 }
 
 #aoidjoi{
-    overflow-x: scroll;
+    position: relative;
+    overflow: scroll;
     overscroll-behavior: none;
+    background-color: rgb(31, 31, 31);
+    border-left: 2px solid rgb(131, 131, 131);
+    border-right: 2px solid rgb(131, 131, 131);
 }
 
 .ppu-decb{
@@ -153,6 +163,19 @@ body::-webkit-scrollbar-thumb{
     border: 2px solid green;
     border-radius: 4px;
     background-color: white;
+}
+
+#load_spare{
+    position: absolute;
+    width: var(--window-width);
+    height: var(--window-height);
+    z-index: 9002;
+    background-color: white;
+    display: none;
+}
+
+#autosaveswitcher{
+    margin-right: 10px;
 }
 
 .dhr-ppo{
@@ -182,8 +205,6 @@ body::-webkit-scrollbar-thumb{
 
 [contenteditable]{
     outline: 0px solid transparent;
-    border-left: 2px solid rgb(131, 131, 131);
-    border-right: 2px solid rgb(131, 131, 131);
 }
 
 #editsplitter{
@@ -198,20 +219,43 @@ body::-webkit-scrollbar-thumb{
 }
 
 .editorE::-webkit-scrollbar{
-    width: 10px;
-    height: 12px;
+    width: 15px;
+    height: 20px;
 }
 
 .editorE::-webkit-scrollbar-thumb{
     border-radius: 0.25rem;
     --bg-opacity: 1;
-    background-color: #4e4e4e;
+    background-color: rgba(172, 172, 172, 0.5);
 }
 
 #main-editor-linen{
+    padding-top: 5px;
+    font-size: 16px;
+    font-family: Consolas, "Courier New", monospace;
+}
+
+#main-editor-cd{
+    pointer-events: none;
+    position: absolute;
+    white-space: nowrap;
+    caret-color: white;
+    font-size: 16px;
+    font-family: Consolas, "Courier New", monospace;
+    color: var(--sheart-forenormal);
     width: fit-content;
-    font-family: monospace;
-    font-size: larger;
+    min-height: 100%;
+    padding: 5px 5px 15vh 5px;
+    height: fit-content;
+    z-index: 2999;
+    background-color: transparent;
+}
+
+#main-editor-cd span{
+    white-space: nowrap;
+    caret-color: white;
+    font-size: 16px;
+    font-family: Consolas, "Courier New", monospace;
 }
 
 #preview-device-name{
@@ -224,15 +268,46 @@ body::-webkit-scrollbar-thumb{
 #main-editor{
     white-space: nowrap;
     caret-color: white;
-    font-size: larger;
-    font-family: monospace;
-    color: rgb(206, 248, 255);
+    font-size: 16px;
+    font-family: Consolas, "Courier New", monospace;
+    color: transparent;
+    min-width: 100%;
     width: fit-content;
     min-height: 100%;
     padding: 5px 5px 15vh 5px;
     height: fit-content;
-    z-index: 2999;
-    background-color: rgba(17, 17, 17, 0.822);
+    z-index: 2998;
+    background-color: transparent;
+}
+
+::selection{
+    color: rgb(239, 252, 255);
+    background-color: rgba(28, 170, 0, 0.75);
+}
+
+::-moz-selection{
+    color: rgb(239, 252, 255);
+    background-color: rgba(28, 170, 0, 0.75);
+}
+
+::-webkit-selection{
+    color: rgb(239, 252, 255);
+    background-color: rgba(28, 170, 0, 0.75);
+}
+
+#main-editor::selection, #main-editor-cd::selection{
+    color: transparent;
+    background-color: rgba(255, 205, 131, 0.5);
+}
+
+#main-editor::-moz-selection, #main-editor-cd::-moz-selection{
+    color: transparent;
+    background-color: rgba(255, 205, 131, 0.5);
+}
+
+#main-editor::-webkit-selection, #main-editor-cd::-webkit-selection{
+    color: transparent;
+    background-color: rgba(255, 205, 131, 0.5);
 }
 
 #overview-context{
@@ -337,4 +412,143 @@ body::-webkit-scrollbar-thumb{
 #ctx-article{
     margin: 10px;
     font-size: var(--previewer-font-size);
+}
+
+.sheart1{
+    color: #000000;
+}
+
+.sheart2{
+    color: #0000AA;
+}
+
+.sheart3{
+    color: #00AA00;
+}
+
+.sheart4{
+    color: #00AAAA;
+}
+
+.sheart5{
+    color: #AA0000;
+}
+
+.sheart6{
+    color: #AA00AA;
+}
+
+.sheart7{
+    color: #FFAA00;
+}
+
+.sheart8{
+    color: #AAAAAA;
+}
+
+.sheart9{
+    color: #555555;
+}
+
+.sheart10{
+    color: #5555FF;
+}
+
+.sheart11{
+    color: #55FF55;
+}
+
+.sheart12{
+    color: #55FFFF;
+}
+
+.sheart13{
+    color: #FF5555;
+}
+
+.sheart14{
+    color: #FF55FF;
+}
+
+.sheart15{
+    color: #FFFF55;
+}
+
+.sheart16{
+    color: #FFFFFF;
+}
+
+.sheart17{
+    font-weight: bold;
+    color: #94ca00;
+}
+
+.sheart18{
+    text-decoration: underline;
+    color: #94ca00;
+}
+
+.sheart19{
+    font-style: italic;
+    color: #94ca00;
+}
+
+.sheart26{
+    text-decoration: line-through;
+    color: #94ca00;
+}
+
+.sheart27{
+    font-weight: bolder;
+    color: #94ca00;
+}
+
+.sheart28{
+    font-size: 48px;
+    line-height: 1.5;
+    color: #00ca8d;
+}
+
+.sheart29{
+    font-size: 36px;
+    line-height: 1.333;
+    color: #00ca8d;
+}
+
+.sheart30{
+    font-size: 24px;
+    line-height: 1;
+    color: #00ca8d;
+}
+
+.sheart31{
+    color: #00ca8d;
+}
+
+.sheart32{
+    color: #41b3ff;
+}
+
+.sheart33{
+    color: #ff008c;
+}
+
+.sheart34{
+    color: #94ca00;
+}
+
+.sheart22{
+    color: var(--sheart-foremediatag);
+}
+
+.sheart23{
+    color: var(--sheart-foremediaarg);
+}
+
+.sheart24{
+    color: var(--sheart-forelinktag);
+}
+
+.sheart25{
+    color: var(--sheart-forelinkarg);
 }

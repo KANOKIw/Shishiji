@@ -127,17 +127,25 @@ function mcFormat(str, srcConverter){
         r += e.outerHTML;
     }
 
-    const imgreg = /\$\$IMG-S=([^\-]+)-W=(\d+)\$\$/g;
-    const vidreg = /\$\$VIDEO-S=([^\-]+)-W=(\d+)\$\$/g;
+    const imgreg = /%:IMG-S=([^\-]+)-W=(\d+);%/g;
+    const vidreg = /%:VIDEO-S=([^\-]+)-W=(\d+);%/g;
+    const linkreg = /#:LINK-H=(https?:\/\/?[\w.]+\.\w+\/?\S*)-T=(.*?);#/g;
     const imgmatches = r.matchAll(imgreg) || [];
     const vidmacthes = r.matchAll(vidreg) || [];
+    const linkmacthes = r.matchAll(linkreg) || [];
 
     for (const imgmacth of imgmatches){
-        r = r.replace(imgmacth[0], `<img class="article-image" src="${srcConverter(imgmacth[1])}" style="width: ${imgmacth[2]}%;">`);
+        const width = Number(imgmacth[2]);
+        r = r.replace(imgmacth[0], `<img class="article-image" src="${srcConverter(imgmacth[1])}" style="width: ${(width > 100 || width < 0) ? 100 : width}%;">`);
     }
 
     for (const vidmacth of vidmacthes){
-        r = r.replace(vidmacth[0], `<video class="article-video" src="${srcConverter(vidmacth[1])}#t=0.001" controls preload="metadata" playsinline style="width: ${vidmacth[2]}%;"></video>`);
+        const width = Number(vidmacth[2]);
+        r = r.replace(vidmacth[0], `<video class="article-video" src="${srcConverter(vidmacth[1])}#t=0.001" controls preload="metadata" playsinline style="width: ${(width > 100 || width < 0) ? 100 : width}%;"></video>`);
+    }
+
+    for (const linkmacth of linkmacthes){
+        r = r.replace(linkmacth[0], `<a class="article-outsidelink" href="${new URL(linkmacth[1])}" style="color: #5555ee;" target="_blank">${(linkmacth[2].length > 0) ? linkmacth[2] : linkmacth[1]}</a>`);
     }
 
     return r;

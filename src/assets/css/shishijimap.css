@@ -34,6 +34,12 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+a{
+    word-break: break-all;
+    color: #5555ee;
+    text-decoration: underline;
+}
+
 shishiji-mx-overlay{
     position: fixed;
     width: var(--window-width);
@@ -474,7 +480,10 @@ table{
 #shishiji-popup-container-c{
     display: none;
     position: absolute;
-    width: 500px;
+    max-width: 500px;
+    width: calc(var(--window-width) - 48px);
+    top: calc((var(--window-height) - 48px - 450px)/2);
+    left: calc((var(--window-width) - 48px - min(500px, var(--window-width) - 48px))/2);
     height: 450px;
     margin: 24px;
     overflow: hidden;
@@ -854,6 +863,7 @@ table{
 
 .cloudfileel{
     cursor: pointer;
+    touch-action: pan-y;
 }
 
 .share-title.-l{

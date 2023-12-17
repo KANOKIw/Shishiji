@@ -3,8 +3,12 @@
 
 
 !function(){
-    // popup
+    /**
+     * popup
+     * using css {@link ../css/shishijimap.css:474}
+     */
     !function(){
+        return;
         const $cp = $("#shishiji-popup-container-c");
 
         /**@param {string} str  */
@@ -35,7 +39,6 @@
             .css("left", (window.innerWidth-(margin*2+width))/2+"px");
         });
 
-        window.dispatchEvent(new Event("resize"));
         return 0;
     }();
 
