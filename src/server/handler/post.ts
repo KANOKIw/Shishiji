@@ -23,8 +23,8 @@ class OrgAuth{
             return;
         }
     
-        const datapath = "./.data/organization/authkey.json";
-        const sessionpath = "./.data/organization/authsession.json";
+        const datapath = "./.data/org/authkey.json";
+        const sessionpath = "./.data/org/authsession.json";
         const org_authkeymap: {[key: string]: {password: string, maxcloudsize: number}} = AppAPI.readJSONSync(datapath);
         const correct_data = org_authkeymap[username];
         
@@ -87,7 +87,7 @@ class OrgAuth{
      */
     static _auth(session: string): string | null{
         if (!session) return null;
-        const sessionpath = "./.data/organization/authsession.json";
+        const sessionpath = "./.data/org/authsession.json";
         const sessions = AppAPI.readJSONSync(sessionpath);
         const orgname = sessions[session];
 
@@ -96,7 +96,7 @@ class OrgAuth{
 
 
     static _endSession(session: string): void{
-        const sessionpath = "./.data/organization/authsession.json";
+        const sessionpath = "./.data/org/authsession.json";
         const sessions = AppAPI.readJSONSync(sessionpath);
 
         delete sessions[session];
@@ -143,6 +143,8 @@ class Edit{
         const prevObjdata = AppAPI.getOrgMdata(username) || DEFAULTOBJECT;
 
         prevObjdata.discriminator = username;
+        prevObjdata.article.font_family = newMapdata.article.font_family;
+        prevObjdata.article.core_grade = newMapdata.article.core_grade;
         prevObjdata.article.images = newMapdata.article.images;
         prevObjdata.object.images = newMapdata.object.images;
         prevObjdata.article.theme_color = newMapdata.article.theme_color;
@@ -348,7 +350,7 @@ class File{
      * @param orgname 
      */
     static getOrgMaCloudSize(orgname: string): number{
-        const datapath = "./.data/organization/authkey.json";
+        const datapath = "./.data/org/authkey.json";
         const org_authkeymap: {[key: string]: {password: string, maxcloudsize: number}} = AppAPI.readJSONSync(datapath);
 
         return org_authkeymap[orgname].maxcloudsize;

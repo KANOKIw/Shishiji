@@ -15,7 +15,7 @@
  * 
  * @param {TouchList | MouseEvent} y 
  */
-function set_cursorpos(y){
+function setCursorpos(y){
     if (y instanceof MouseEvent)
         pointerPosition = [ y.clientX, y.clientY ];
     else
@@ -79,15 +79,13 @@ function moveMap(canvas, ctx, moved){
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
  * @param {number} ratio 
- * @param {[number, number]} origin
+ * @param {NonnullPosition | [number, number]} origin
  *   (cursorPosition)
- * @param {[number, number]} [pos]
+ * @param {NonnullPosition | [number, number]} [pos]
  * @param {boolean} [forceRatio] 
  */
 function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
-    if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
-        || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
-        ) return;
+    if (willOverflow(ratio)) return;
 
     if (pos === void 0)
         pos = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
@@ -246,138 +244,4 @@ function rotateCanvas(canvas, ctx, origin, rotation){
     );
 
     backcanvas.canvas.rotation += rotation;
-}
-
-
-
-/**
- * 
- * @param {TouchEvent} event 
- * @param {HTMLCanvasElement} canvas 
- * @param {CanvasRenderingContext2D} ctx 
- */
-function onTouchMove(event, canvas, ctx){
-    const touches = event.touches;
-    const pos = getMiddlePos(touches);
-    const prevp = pointerPosition;
-
-    /**@type {{diffRatio: number, crossPos: NonnullPosition, rotation: Radian}} */
-    var adjust = { diffRatio: 1, crossPos: [-1, -1], rotation: 0 };
-
-
-    pointerPosition = pos;
-
-
-    if (touchCD < MOVEPROPERTY.touch.downCD){
-        touchCD++;
-        return;
-    }
-    
-
-    if (touches.length >= 2 && prevTouchINFO.real !== void 0 && prevTouchINFO.real.length >= 2){
-        /**@see {@link (./eventCalcu.js).touchZoom} */
-        adjust = touchZoom(canvas, ctx, event);
-        prevTouchINFO.zoom = !0;
-    } else {
-        pastRotateMin = false;
-        rotatedThisTime = 0;
-        totalRotateThisTime = 0;
-        prevTheta = -1;
-        zoomCD = 0;
-        prevTouchINFO.cross = [ -1, -1 ];
-
-        function frict(){
-            var touch_0 = { clientX: prevTouchINFO.real[0].clientX, clientY: prevTouchINFO.real[0].clientY, velocity: touchZoomVelocity[0] };
-            var touch_1 = { clientX: prevTouchINFO.real[1].clientX, clientY: prevTouchINFO.real[1].clientY, velocity: touchZoomVelocity[1] };
-
-            !function(touch_0, touch_1){
-                const orig = [ touch_0, touch_1 ];
-                const a = touchZoomVelocity.a;
-
-                function i(n){
-                    return n < 0 ? -1 : 1;
-                }
-                if (zoomFrictInterval !== null)
-                    clearInterval(zoomFrictInterval);
-        
-                if (isNaN(touch_0.velocity.x) || isNaN(touch_0.velocity.y)
-                    || isNaN(touch_1.velocity.x) || isNaN(touch_1.velocity.y)
-                    )
-                    return 0;
-        
-                //@ts-ignore
-                zoomFrictInterval = setInterval(() => {
-                    touch_0.velocity.x += i(touch_0.velocity.x)*a;
-                    touch_0.velocity.y += i(touch_0.velocity.y)*a;
-                    touch_1.velocity.x += i(touch_1.velocity.x)*a;
-                    touch_1.velocity.y += i(touch_1.velocity.y)*a;
-
-                    touch_0.clientX += touch_0.velocity.x;
-                    touch_0.clientY += touch_0.velocity.y;
-                    touch_1.clientX += touch_1.velocity.x;
-                    touch_1.clientY += touch_1.velocity.y;
-
-                    touchZoom(canvas, ctx, {
-                        touches: [
-                            //@ts-ignore
-                            touch_0, touch_1,
-                        ],
-                    });
-                    if (touch_0.velocity.x*orig[0].velocity.x <= 0 &&
-                        touch_0.velocity.y*orig[0].velocity.y <= 0 &&
-                        touch_1.velocity.x*orig[1].velocity.x <= 0 &&
-                        touch_1.velocity.y*orig[1].velocity.y <= 0
-                        )
-                        //@ts-ignore
-                        clearInterval(zoomFrictInterval);
-                }, 1);
-                return 0;
-            }(touch_0, touch_1);
-        }
-        if (false)
-            frict();
-
-        prevTouchINFO.zoom = false;
-    }
-
-
-    if (!prevp.some(t => t === null) && touches.length == 1){
-        //@ts-ignore
-        const map_move = { left: pos[0] - prevp[0], top: pos[1] - prevp[1] };
-        moveMapAssistingNegative(canvas, ctx, map_move);
-    }
-
-    prevTouchINFO.cross = adjust.crossPos;
-    savePrevTouches(touches);
-}
-
-
-/**
- * zoom canvas by scrolling mouse wheel
- * @param {WheelEvent} e 
- * @param {HTMLCanvasElement} canvas 
- */
-function canvasonScroll(e, canvas){
-    var delta = MOVEPROPERTY.scroll * 1;
-    if (e.deltaY > 0)
-        delta = 1/delta;
-    //@ts-ignore
-    zoomMapAssistingNegative(canvas, canvas.getContext("2d"), delta, cursorPosition);
-}
-
-
-/**
- * 
- * @param {MouseEvent} e 
- * @param {HTMLCanvasElement} canvas 
- * @param {CanvasRenderingContext2D} ctx 
- */
-function onMouseMove(e, canvas, ctx){
-    /**@type {NonnullPosition} */
-    const pos = [ e.clientX, e.clientY ];
-    //@ts-ignore
-    const moved = { left: pos[0] - pointerPosition[0], top: pos[1] - pointerPosition[1] };
-
-    moveMapAssistingNegative(canvas, ctx, moved);
-    pointerPosition = pos;
 }

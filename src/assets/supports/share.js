@@ -14,19 +14,19 @@
  * @param {boolean} [ERROR] 
  */
 function openSharePopup(ovvOptions, share_url, share_data, from_where, message, change_option, ERROR){
-    Popup.popupContent(`<div class="protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
+    Popup.startLoad();
     share_url = decodeURIComponent(share_url);
     /**@param {string} [ctx]  */
     function onerr(ctx){
         if (ctx === void 0) ctx = TEXT[LANGUAGE].ERROR_ANY;
-        const _html = `<div class="protected" id="ppupds"><div class="mx-text-center flxxt" style="flex-direction:column;"><div style="width:125px;margin-bottom:4px;">${GPATH.ERROR_ZAHUMARU}</div><h4>${ctx}</h4></div></div>`;
         Notifier.notifyHTML(
             `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY}</div>`,
             2500,
             "sharePopup connection error",
             !0,
         );
-        Popup.popupContent(_html);
+        if (Popup.popupping)
+            Popup.showasError(ctx);
     }
 
     /**

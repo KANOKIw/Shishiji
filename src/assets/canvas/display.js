@@ -14,9 +14,8 @@ function touchZoom(canvas, ctx, event){
     const abs = Math.abs;
     const touches = event.touches;
 
-    zoomCD++;
 
-    /**@graph */
+    zoomCD++;
     const Fx = {
         previous: {
             slope: (prevTouchINFO.real[0].clientY - prevTouchINFO.real[1].clientY) / (prevTouchINFO.real[0].clientX - prevTouchINFO.real[1].clientX),
@@ -40,7 +39,7 @@ function touchZoom(canvas, ctx, event){
         var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
         var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
 
-        (D1 === 0 && D2 === 0 || D1 + D2 == 0) ? D1 = D2 = 1 : 0;
+        (D1 === 0 && D2 === 0 || D1 + D2 == 0) ? D1 = D2 = 1 : void 0;
 
         const R = D1 / (abs(D1) + abs(D2));
 
@@ -71,6 +70,7 @@ function touchZoom(canvas, ctx, event){
     }
     //#endregion
 
+    if (willOverflow(diffRatio)) diffRatio = 1;
 
     //#region 
     const x1d = prevTouchINFO.real[0].clientX * diffRatio;
@@ -81,7 +81,7 @@ function touchZoom(canvas, ctx, event){
 
 
     if (zoomCD > MOVEPROPERTY.touch.zoomCD){
-        zoomMapAssistingNegative(canvas, ctx, diffRatio, [0, 0]);
+        zoomMapAssistingNegative(canvas, ctx, diffRatio, [ 0, 0 ]);
         moveMapAssistingNegative(canvas, ctx, {
             top: diffy,
             left: diffx

@@ -26,7 +26,7 @@ const DEFAULTOBJECT: mapObject = {
     },
     object: {
         type: {
-            event: "",
+            event: "org",
             behavior: "dynamic"
         },
         coordinate: {
@@ -40,7 +40,7 @@ const DEFAULTOBJECT: mapObject = {
             width: 50,
             height: 50
         },
-        floor: "",
+        floor: "F2",
     },
     discriminator: ""
 };

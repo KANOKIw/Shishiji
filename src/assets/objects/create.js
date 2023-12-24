@@ -29,19 +29,19 @@ function putMobjonMap(objectData){
     var attrs = "";
     var classes = "";
     var dfcursor = "pointer";
-    var iconsrc = objectData.object.images.icon;
     const obj_id = formatString(objectIdFormat, orgname);
-    
+    const pathConverter = getPathConverter(objectData);
+    const iconsrc = pathConverter(orgname, objectData.object.images.icon);
+
+
     switch (behavior){
         case "dynamic":
             classes += "popups realshadow ";
-            iconsrc = toOrgFilepath(orgname, iconsrc);
             break;
         default:
         case "static":
             zIndex = 999;
             classes += "mapObj_static";
-            iconsrc = toStaticFilepath(orgname, iconsrc);
             if (!objectData.object.type.border)
                 styles += "border: none; border-radius: 0; background-color: transparent;";
             if (!objectData.article){

@@ -1,6 +1,6 @@
 """
-set full map image path on main
-creates a window to get obj coordinate by clicking on it
+set base map image path on main
+creates a window to get obj coordinate by clicking
 """
 import tkinter as tk
 

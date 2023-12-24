@@ -2,7 +2,7 @@
     "git.ignoreLimitWarning": true,
     "files.insertFinalNewline": true,
     "editor.tabSize": 4,
-    "editor.lightbulb.enabled": false,
+    "editor.lightbulb.enabled": "off",
     "files.associations": {
         "filesystem": "cpp",
         "fstream": "cpp",
@@ -85,5 +85,5 @@
         "unordered_map": "cpp",
         "complex": "cpp",
         "numeric": "cpp"
-    },
+    }
 }

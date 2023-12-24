@@ -28,6 +28,7 @@ function setCanvasSizes(){
         from: getParam(ParamNames.URL_FROM),
         lang: isThereLang(getParam(ParamNames.LANGUAGE)) || "JA",
     };
+
     LANGUAGE = PARAMS.lang;
     if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
 
@@ -57,7 +58,7 @@ function setCanvasSizes(){
     startLoad(TEXT[LANGUAGE].LOADING_MAP);
     setCanvasSizes();
 
-    $.get("/data/map-data/conf")
+    $.post("/data/map-data/conf")
     .done(function(data){
         MAPDATA = data;
         var initial_floor = data.initial_floor;
@@ -80,7 +81,11 @@ function setCanvasSizes(){
                 //@ts-ignore
                 x: PARAMS.coords[0], y: PARAMS.coords[1]
             };
+            if (PARAMS.zoomRatio > MOVEPROPERTY.caps.ratio.max) PARAMS.zoomRatio = MOVEPROPERTY.caps.ratio.max;
+            if (PARAMS.zoomRatio < MOVEPROPERTY.caps.ratio.min) PARAMS.zoomRatio = MOVEPROPERTY.caps.ratio.min;
+
             zoomRatio = PARAMS.zoomRatio;
+            
             moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
             setBehavParam();
 
@@ -90,7 +95,7 @@ function setCanvasSizes(){
         }
     
         !function(){
-            $.get("/data/map-data/objects")
+            $.post("/data/map-data/objects")
             .done((objdata) => {
                 mapObjectComponent = objdata;
     
@@ -100,7 +105,7 @@ function setCanvasSizes(){
 
                 /**
                  * handles if wrong floor with shared article
-                 * for shorter share link
+                 * in order to make share link shorter
                  */
                 if (PARAMS.article){
                     const data = searchObject(PARAMS.article);

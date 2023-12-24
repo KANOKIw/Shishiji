@@ -45,7 +45,7 @@
         
         init_friction();
         initTouch(e);
-        set_cursorpos(e.touches);
+        setCursorpos(e.touches);
 
         if (e.touches.length >= 2)
             setTheta(e.touches);
@@ -66,7 +66,7 @@
         }
 
         init_friction();
-        set_cursorpos(e);
+        setCursorpos(e);
 
         window.addEventListener("mousemove", mm, { passive: false });
     }, { passive: false });

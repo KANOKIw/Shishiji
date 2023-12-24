@@ -368,6 +368,20 @@ function setCoordsOnMiddle(coords, abs_zoomRatio){
 
 /**
  * 
+ * @param {number} diffratio 
+ */
+function willOverflow(diffratio){
+    const _r = zoomRatio*diffratio
+    
+    if (MOVEPROPERTY.caps.ratio.max < _r && diffratio > 1
+        || MOVEPROPERTY.caps.ratio.min > _r && diffratio < 1
+        ) return true;
+    return false;
+}
+
+
+/**
+ * 
  * @param {string} key 
  */
 function getCookie(key){
@@ -408,8 +422,17 @@ function toOrgFilepath(orgname, filename){
  * @param {string} orgname 
  * @param {string} filename 
  */
-function toStaticFilepath(orgname, filename){
+function toAdminFilepath(orgname, filename){
     return "/resources/img/static/"+orgname+"/"+filename;
+}
+
+
+/**
+ * 
+ * @param {mapObject} mapobject 
+ */
+function getPathConverter(mapobject){
+    return (mapobject.object.type.event === "org") ? toOrgFilepath : toAdminFilepath;
 }
 
 

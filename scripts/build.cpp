@@ -94,7 +94,7 @@ private:
         std::ifstream file(filename);
 
         if (!file.is_open()){
-            std::cerr << "Couldn't open file: " << filename << std::endl;
+            std::cerr << "couldn't open file: " << filename << std::endl;
             exit(EXIT_FAILURE);
         }
 

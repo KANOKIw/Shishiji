@@ -44,12 +44,15 @@ function getMidestOfTouches(touches){
 function getMiddlePos(touches){
     var av_x = 0;
     var av_y = 0;
-    for (var t  of touches){
+    const _a = touches.length;
+
+    for (const t  of touches){
         av_x += t.clientX;
         av_y += t.clientY;
     }
-    av_x /= touches.length;
-    av_y /= touches.length;
+
+    av_x /= _a;
+    av_y /= _a;
     return [av_x, av_y];
 }
 

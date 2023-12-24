@@ -3,7 +3,7 @@ npm-debug.log
 .db/
 
 resources/img/**
-resources/map_divided/**/*
+resources/map-tiles/**/*
 resources/map-objects/**
 resources/cloud
 !resources/map-objects/.sample.json

@@ -5,7 +5,7 @@ interface Position extends Array {
     some: Function,
 }
 
-interface NonnullPosition extends Array {
+interface NonnullPosition extends Array<number> {
     0: number,
     1: number,
     map: Function,

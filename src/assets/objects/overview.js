@@ -15,11 +15,11 @@ function raiseOverview(){
     .scrollTop(0);
     $(overview).show();
     $("#overview-share").show();
-    $("#overview-close").on("click", (e) => {
+    $("#overview-close-c").on("click", (e) => {
         e.preventDefault();
         reduceOverview();
     });
-    $("#overview-share").on("click", (e) => {
+    $("#overview-share-c").on("click", (e) => {
         e.preventDefault();
         shareContent();
     });
@@ -124,7 +124,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     const color = (details.article.theme_color) ? details.article.theme_color : "black";
     const font = (details.article.font_family) ? details.article.font_family : "";
     const orgname = details.discriminator;
-    const pathConvertfunc = (details.object.type.behavior == "dynamic") ? toOrgFilepath : toStaticFilepath;
+    const pathConvertfunc = getPathConverter(details);
 
     /**
      * 
@@ -144,7 +144,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
             `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR}</div>`,
             2500,
             "article connection error",
-            !0,
+            true,
         );
         $("#ovv-ctx-loading").html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
         $("#overview-share").hide();
@@ -180,13 +180,31 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     const EVENT_HEADER = `<img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}"><div class="article titleC"><img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}"><h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1></div>`;
 
     function __onload(){
-        setTimeout(() => {
+        setTimeout(
+            (
+
+        ) => {
             $("#overview-context").addClass("_fadein");
             if (scroll_top !== void 0)
                 $("#shishiji-overview").scrollTop(scroll_top);
             scroll_top = 0;
         }, 25);
     }
+
+    class ctx_article_C{
+        static get exists(){
+            return document.getElementById("ctx-article") ? true : false;
+        }
+
+        /**@param {string} _html @param {() => void} [cb] */
+        static async write(_html, cb){
+            const r = document.getElementById("ctx-article");
+            if (r)
+                r.innerHTML = _html;
+            if (cb)
+                cb();
+        }
+    };
 
     /**@this {HTMLElement} */
     function showDescription(){
@@ -195,15 +213,17 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
 
         $("#overview-context").addClass("_wait_f");
 
-        writeOverviewContent(`
-            ${EVENT_HEADER}
-            <div id="ctx-article" class="article">
-                <div class="ev_property ev_ppar">
-                    <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
-                </div>
-                ${article_mainctx}
-            </div>
-        `, __onload);
+        const _html__w = `
+        <div class="ev_property ev_ppar">
+            <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
+        </div>
+        ${article_mainctx}
+        `;
+        if (ctx_article_C.exists)
+            ctx_article_C.write(_html__w, __onload);
+        else
+            writeOverviewContent(
+                `${EVENT_HEADER}<div id="ctx-article" class="article">${_html__w}</div>`, __onload);
         if (fadein)
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
@@ -219,56 +239,59 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
 
         $("#overview-context").addClass("_wait_f");
 
-        writeOverviewContent(`
-            ${EVENT_HEADER}
-            <hr style="margin: 40px 20px 20px 20px;">
-            <div class="ev_property">
-                <table style="width: 100%;">
-                    <tbody>
-                        <tr class="ev_property">
-                            <th class="ev_property_cell" aria-label="開催場所">
-                                開催場所
-                            </th>
-                            <th class="ev_property_cell" aria-label="${details.article.venue}">
-                                ${details.article.venue}
-                            </th>
-                        </tr>
-                        <tr class="ev_property">
-                            <th class="ev_property_cell">
-                                開催時間
-                            </th>
-                            <th class="ev_property_cell">
-                                ${details.article.schedule}
-                            </th>
-                        </tr>
-                        ${custom_tr}
-                        <tr class="ev_property">
-                            <th class="ev_property_cell">
-                                予想待ち時間
-                            </th>
-                            <th class="ev_property_cell" aria-label="${details.article.crowd_status.estimated}分">
-                                ${details.article.crowd_status.estimated}分
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="crowded_lim">
-                    <p style="font-weight: bold; margin: 10px; margin-top: 0; margin-bottom: 5px;" aria-label="混み具合">
-                        混み具合
-                    </p>
-                    <div class="crowded_deg_bar"></div>
-                    <div id="crowed_pointer" style="position: relative;">
-                        <div class="ccENTER_B" style="position: absolute; left: ${details.article.crowd_status.level}%;">
-                            <span class="material-symbols-outlined"
-                                style="position: absolute; margin-top: 5px;">
-                                north
-                            </span>
-                        </div>
+        const __htmlw = `
+        <hr style="margin: 40px 20px 20px 20px;">
+        <div class="ev_property">
+            <table style="width: 100%;">
+                <tbody>
+                    <tr class="ev_property">
+                        <th class="ev_property_cell" aria-label="開催場所">
+                            開催場所
+                        </th>
+                        <th class="ev_property_cell" aria-label="${details.article.venue}">
+                            ${details.article.venue}
+                        </th>
+                    </tr>
+                    <tr class="ev_property">
+                        <th class="ev_property_cell">
+                            開催時間
+                        </th>
+                        <th class="ev_property_cell">
+                            ${details.article.schedule}
+                        </th>
+                    </tr>
+                    ${custom_tr}
+                    <tr class="ev_property">
+                        <th class="ev_property_cell">
+                            予想待ち時間
+                        </th>
+                        <th class="ev_property_cell" aria-label="${details.article.crowd_status.estimated}分">
+                            ${details.article.crowd_status.estimated}分
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="crowded_lim">
+                <p style="font-weight: bold; margin: 10px; margin-top: 0; margin-bottom: 5px;" aria-label="混み具合">
+                    混み具合
+                </p>
+                <div class="crowded_deg_bar"></div>
+                <div id="crowed_pointer" style="position: relative;">
+                    <div class="ccENTER_B" style="position: absolute; left: ${details.article.crowd_status.level}%;">
+                        <span class="material-symbols-outlined"
+                            style="position: absolute; margin-top: 5px;">
+                            north
+                        </span>
                     </div>
                 </div>
             </div>
-            <hr style="margin: 20px;">
-        `, __onload);
+        </div>
+        <hr style="margin: 20px;">
+        `;
+        if (ctx_article_C.exists)
+            ctx_article_C.write(__htmlw, __onload);
+        else
+            writeOverviewContent(`${EVENT_HEADER}<div id="ctx-article" class="article">${__htmlw}</div>`, __onload);
 
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");

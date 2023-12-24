@@ -96,7 +96,7 @@ class Notifier{
         
         this._remove_closeOnInter();
 
-        Notifier_prop.notifying = !!0;
+        Notifier_prop.notifying = false;
         Notifier_prop.__Timeout = setTimeout(() => {
             $("#--ott-us").empty();
             $("#--yd-notifier").hide();

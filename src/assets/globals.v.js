@@ -67,8 +67,8 @@ const MOVEPROPERTY = {
     },
     caps: {
         ratio: {
-            max: Infinity, // dev
-            min: NaN, // dev
+            max: 10,
+            min: 0.1,
         },
     },
     touch: {
@@ -87,7 +87,7 @@ const MOVEPROPERTY = {
     },
     arrowkeys: {
         interval: 5,
-        move: 4,
+        move: 3,
     },
 };
 
@@ -180,8 +180,8 @@ const overlay_modes = {
     fselector: {
         opened: !!0,
         colors: {
-            current: "rgba(0, 100, 0, 0.699)",
-            else: "rgba(188, 255, 255, 0.699)",
+            current: "rgba(90, 434, 37, 0.8)",
+            else: "rgba(188, 34, 124, 0.75)",
         }
     },
 };

@@ -18,7 +18,7 @@
         <meta name="theme-color" content="#ffffff">
         <title>世田谷学園 | 2024年度 獅子児祭</title>
         <link rel="icon" href="/resources/img/favicon.ico">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+        <link rel="stylesheet" href="/src/assets/builds/gglMS.css">
         <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
         <link rel="stylesheet" href="/src/assets/css/edit.css">
         <script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
@@ -52,16 +52,32 @@
                     </shishiji-yd-notifier>
                 </shishiji-yd-notify-w>
             </shishiji-yd-notify>
-            <div id="shishiji-popup-container">
+            <shishiji-yd-popup id="shishiji-popup-container" class="flxxt">
                 <div id="shishiji-popup-container-c">
                     <!--popup window content-->
                 </div>
-            </div>
+            </shishiji-yd-popup>
             <shishiji-mx-overlay class="protected"></shishiji-mx-overlay>
 
             <div id="user-infomation">
                 <h4>username:&nbsp;<span id="username-d"></span></h4>
                 <button id="logout__">ログアウト</button>
+                <button id="__undo_-" class="doaihd">
+                    <h4>
+                        <span class="material-symbols-outlined">
+                            undo
+                        </span>
+                        <span>UNDO</span>
+                    </h4>
+                </button>
+                <button id="__redo_-" class="doaihd">
+                    <h4>
+                        <span class="material-symbols-outlined">
+                            redo
+                        </span>
+                        <span>REDO</span>
+                    </h4>
+                </button>
                 <div id="save_wrap">
                     <div id="autosaveswitcher">
                         <input type="checkbox" id="autosaveswitcheri">
@@ -121,9 +137,6 @@
                         <div class="motd-dec-b protected" style="background-color: #FFFF55;">
                             <p>黄色</p>
                         </div>
-                        <div class="motd-dec-b protected" style="background-color: #FFFFFF;">
-                            <p>白色</p>
-                        </div>
                     </div>
                     <div style="display: flex; height: 50%;">
                         <div id="-motd-dec-wp" style="height: 100%;">
@@ -154,7 +167,7 @@
                             <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
                                 <p class="MCOBF" style="font-family: monospace; font-size:18px;">obf</p>
                             </div>
-                            <div class="motd-dec-b protected" style="background-color: #b1ae00; color: white;">
+                            <div class="motd-dec-b protected" style="background-color: #41b3ff; color: white;">
                                 <p style="font-family: monospace; font-size:18px;">改行</p>
                             </div>
                             <div class="motd-dec-b protected" style="background-color: #ff008c; color: white;">
@@ -184,6 +197,7 @@
 
                 <div id="editsplitter">
                     <div class="editorE" id="aoidjoi" style="display: flex;">
+                        <span class="s9uiahd"></span>
                         <blockquote id="main-editor-cd"></blockquote>
                         <blockquote id="main-editor-linen"></blockquote>
                         <blockquote id="main-editor" contenteditable="plaintext-only" class="ohwdahuoi"></blockquote>
@@ -192,6 +206,12 @@
                     <div class="editorE" id="--ppo">
                         <p id="preview-device-name">Dimentions: iPhone 14 Pro Max</p>
                         <div id="article-preview" class="previewer iphone-12-pro-max protected">
+                            <shishiji-mx-overlay-n class="protected"></shishiji-mx-overlay-n>
+                            <shishiji-yd-popup-n id="shishiji-popup-container-n" class="flxxt">
+                                <div id="shishiji-popup-container-cn">
+                                    <!--popup window content-->
+                                </div>
+                            </shishiji-yd-popup-n>
                             <div id="overview-options" style="width: var(--previewer-width); pointer-events: none; position: absolute; top: 20px; z-index: 2999;">
                                 <div class="overview-option" id="overview-share">
                                     <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-share-c" aria-label="閉じる">
@@ -239,7 +259,7 @@
                                         <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">TITLE</h1>
                                     </div>
                                     <div id="oop" class="ev_property ev_ppar">
-                                        <p style="font-family: var(--font-view);">▷中心学年: ${(new kidaComponent(d.a.c)).text}</p>
+                                        <p style="font-family: var(--font-view);">▷中心学年: <span id="core_grade_vh"></span></p>
                                     </div>
                                     <div id="ctx-article" class="article">
 

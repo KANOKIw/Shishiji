@@ -16,7 +16,7 @@ const httpsOptions = {
     cert: fs.readFileSync("./.cert/dev/fullchain.pem").toString("utf-8"),
     key: fs.readFileSync("./.cert/dev/privkey.pem").toString("utf-8")
 };
-const mapConfData = readJSONSync("./src/server/data/map.json");
+const mapConfData = readJSONSync("./.data/app/map.json");
 const server = https.createServer(httpsOptions, app);
 const ws = new SocketIO(server);
 
@@ -63,16 +63,18 @@ app.post("/org/manage/file/upload", PostHandler.File.upload);
 app.post("/org/manage/file/delete", PostHandler.File.delete);
 
 
-app.get("/data/map-data/objects", (req, res) => {
+app.post("/data/map-data/objects", (req, res) => {
 	const mapobjects_ = mapObjAPI.getAllObjects(false);
 	res.send(mapobjects_);
 });
 
-app.get("/data/map-data/conf", (req, res) => {
+app.post("/data/map-data/conf", (req, res) => {
 	res.send(mapConfData);
 });
 
-app.get(["/test/", "/test/@:PARAMS"], function(req, res){
+
+
+app.get(["/test/", "/test/@", "/test/@:PARAMS"], function(req, res){
 	res.sendFile(__dirname + "/test/index.html");
 });
 
@@ -87,7 +89,7 @@ app.get("/org/manage/login", function(req, res){
 });
 
 
-app.get(["/", "/@:PARAMS"], function(req, res){
+app.get(["/", "/@", "/@:PARAMS"], function(req, res){
 	res.sendFile(__dirname + "/test/index.html");
 });
 
