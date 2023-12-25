@@ -1,0 +1,9 @@
+{
+    "startupfiles": [
+        "src/assets/*^childdir",
+        "src/assets/canvas/*",
+        "src/assets/objects/*",
+        "src/assets/shishiji-dts/*",
+        "src/assets/supports/*"
+    ]
+}
