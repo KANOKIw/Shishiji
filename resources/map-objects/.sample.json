@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "",
+        "core_grade": "",
+        "theme_color": "#000000",
+        "content": "",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": ""
+        },
+        "venue": "",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "volunteer",
+            "behavior": "static | dynamic",
+            "border": null
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": ""
+        },
+        "size": {
+            "width": 0,
+            "height": 0
+        },
+        "floor": ""
+    },
+    "discriminator": 0
+}

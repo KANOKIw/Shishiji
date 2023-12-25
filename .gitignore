@@ -1,0 +1,16 @@
+node_modules/
+npm-debug.log
+.db/
+
+extensions/**/node_modules/
+
+resources/img/**
+resources/map-tiles/**/*
+resources/map-objects/**
+resources/cloud
+!resources/map-objects/.sample.json
+
+.data/
+.cert/
+
+scripts/*.exe
