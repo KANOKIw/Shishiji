@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "Horror";
+    src: url(/resources/font/fontou.otf);
+}
+
+@font-face {
+    font-family: "Handwritten";
+    src: url(/resources/font/handwritten.ttf);
+}
+
+@font-face {
+    font-family: "Calligraphed";
+    src: url(/resources/font/calligraphed.otf);
+}

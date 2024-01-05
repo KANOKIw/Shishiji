@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" style="font-family: var(--font-view);">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
@@ -26,39 +26,39 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/src/assets/builds/jquery.3.4.3.min.js"></script>
         <script src="/src/assets/lang.js"></script>
-        <script src="/src/assets/globals.v.js"></script>
-        <script src="/src/assets/utils.js"></script>
+        <script src="/src/assets/cssroot.js"></script>
+        <script src="/src/assets/global.v.js"></script>
+        <script src="/src/assets/util.js"></script>
         <script src="/src/assets/mcformat.js"></script>
         <script src="/src/assets/speed.js"></script>
-        <script src="/src/assets/cssroot.js"></script>
         <script src="/src/assets/gpath.js"></script>
         <script src="/src/assets/canvas/calculate.js"></script>
         <script src="/src/assets/canvas/display.js"></script>
         <script src="/src/assets/canvas/react.js"></script>
         <script src="/src/assets/canvas/touch.js"></script>
         <script src="/src/assets/canvas/mouse.js"></script>
+        <script src="/src/assets/canvas/keyboard.js"></script>
         <script src="/src/assets/objects/create.js"></script>
         <script src="/src/assets/objects/move.js"></script>
         <script src="/src/assets/objects/overview.js"></script>
         <script src="/src/assets/objects/fselector.js"></script>
         <script src="/src/assets/supports/share.js"></script>
         <script src="/src/assets/supports/notify.js"></script>
+        <script src="/src/assets/supports/pictonotifier.js"></script>
         <script src="/src/assets/supports/popup.js"></script>
     </head>
     <body>
         <noscript aria-hidden="true">
             <div id="noscript_help" aria-label="Javascriptを有効にして獅子児祭マップを表示します。">
-                <a href="https://support.google.com/admanager/answer/12654?hl=ja" target="_blank">Javascriptを有効にして獅子児祭マップを表示します。</a>
-            </div>
-        </noscript>
-        <div id="load_spare" class="protected">
-            <div id="load_spare_c" aria-hidden="true">
-                <div id="logo_spare_w">
-                    <img id="spare_logo" src="/resources/img/logo-loader.png" aria-label="獅子児祭のロゴ">
-                    <h4 id="spare_message">please wait...</h4>
+                <div class="kjduiha">
+                    <div class="aDHUDS">
+                        No <strong>JavaScript,</strong><br>
+                        No Map.
+                    </div>
+                    <a class="saoidSA" href="https://support.google.com/admanager/answer/12654?hl=ja" target="_blank">Javascriptを有効にして獅子児祭マップを表示します。</a>
                 </div>
             </div>
-        </div>
+        </noscript>
 
         <h1 id="e" style="position: absolute; z-index: 9999; pointer-events: none;"></h1>
         <script nonce>window.addEventListener("error", function(e){
@@ -66,6 +66,15 @@
         });</script>
 
         <div id="app-mount" aria-hidden="true">
+            <shishiji-yd-loadv id="load_spare" class="protected">
+                <div id="load_spare_c" aria-hidden="true">
+                    <div id="logo_spare_w">
+                        <img id="spare_logo" src="/resources/img/logo-loader.png" aria-label="獅子児祭のロゴ">
+                        <h4 id="spare_message">please wait...</h4>
+                    </div>
+                </div>
+            </shishiji-yd-loadv>
+
             <main aria-label="獅子児祭マップ">
                 <shishiji-yd-notify>
                     <shishiji-yd-notify-w>
@@ -88,20 +97,23 @@
                             <div class="placeOpt fselector-btn" style="width: 67px; height: 67px;">
 
                             </div>
-                            <div class="placeOpt realshadow" aria-label="">
+                            <div class="placeOpt realshadow" aria-label="1階">
                                 <h3>F1</h3>
                             </div>
-                            <div class="placeOpt realshadow" aria-label="">
+                            <div class="placeOpt realshadow" aria-label="2階">
                                 <h3>F2</h3>
                             </div>
-                            <div class="placeOpt realshadow" aria-label="">
+                            <div class="placeOpt realshadow" aria-label="3階">
                                 <h3>F3</h3>
+                            </div>
+                            <div class="placeOpt realshadow" aria-label="4階">
+                                <h3>F4</h3>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="user-stricter"></div>
-                <div id="shishiji-view" aria-label="地図をドラッグして操作します。写真などをタップ·クリックして詳細を表示します。">
+                <div id="shishiji-view" aria-label="地図をドラッグして操作します。写真などをタップ·クリックして詳細を表示します。矢印キーでも操作できます。">
                     <canvas id="shishiji-canvas" style="width: 100vw; height: 100vh;"></canvas>
                 </div>
 
@@ -109,7 +121,7 @@
                     <div id="overview-options">
                         <div class="overview-option" id="overview-share">
                             <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-share-c" aria-label="閉じる">
-                                <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="共有">
+                                <span class="gglmats" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="共有">
                                     ios_share
                                 </span>
                             </div>
@@ -117,7 +129,7 @@
                         <div id="overview-close-w">
                             <div class="overview-option" id="overview-close">
                                 <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-close-c" aria-label="閉じる">
-                                    <span class="material-symbols-outlined" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="閉じる">
+                                    <span class="gglmats" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="閉じる">
                                         close
                                     </span>
                                 </div>
@@ -152,12 +164,13 @@
             </main>
         </div>
         <script src="/src/assets/supports/setup.js"></script>
-        <script src="/src/assets/objects/listeners.js"></script>
+        <script src="/src/assets/objects/listener.js"></script>
         <script src="/src/assets/objects/setup.js"></script>
         <script src="/src/assets/canvas/setup.js"></script>
         <script src="/src/assets/main.js"></script>
         <script>
-            Notifier.notifyHTML(`<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.CAUTION}特に面白くありません</div>`,
+            PictoNotifier.notifyWarn(
+                "特に面白くありません",
                 100000,
                 "SOME OBJECTS ARE BUGGING",
                 true,

@@ -3,39 +3,57 @@
 
 
 /**
+ * @typedef {import("../shishiji-dts/objects").NotifierOptions} NotifierOptions
  * @typedef {import("../shishiji-dts/objects").NoticeComponent} NoticeComponent
  */
 
 
 class Notifier{
-    /**@type {NoticeComponent[]} */
+    /**
+     * @type {NoticeComponent[]} 
+     */
     static pending_notices = [];
 
 
     /**
      * 
      * @param {string} html 
-     * @param {number} term 
+     * @param {number} [term] 
      *      millisecond
-     * @param {string} discriminator
+     *      default: 3000 
+     * @param {string} [discriminator]
      *      some unique id
-     * @param {boolean} [do_not_keep] 
-     *      default: false
-     * @param {boolean} [user_uncloseable]
+     *      default: {html}
+     * @param {NotifierOptions} [options]
      *      default: false 
-     * @param {boolean} [_ispendingf] 
      */
-    static notifyHTML(html, term, discriminator, do_not_keep, user_uncloseable, _ispendingf){
-        const $notifier = $("#--yd-notifier");
-        const te = document.createTextNode(html).textContent;        
+    static notifyHTML(html, term, discriminator, options){
+        this._invoke([ html, term, discriminator, options ], false);
+    }
+
+
+    /**
+     * 
+     * @param  {[NotifierArgs, boolean?]} args 
+     */
+    static _invoke(...args){
+        const nargs = args[0];
+        var html = nargs[0], term = nargs[1], discriminator = nargs[2], options = nargs[3], _ispendingf = args[1];
         
-        if (Notifier_prop.notifying && Notifier_prop.current == discriminator && !do_not_keep)
+        const $notifier = $("#--yd-notifier");
+        const te = document.createTextNode(html).textContent;
+
+        if (typeof term === "undefined")
+            term = 3000;
+        if (typeof discriminator === "undefined")
+            discriminator = html;
+        
+        if (Notifier_prop.notifying && Notifier_prop.current == discriminator && !options?.do_not_keep)
             return;
 
         if (te?.endsWith(".") || te?.endsWith("!") || te?.endsWith("?"))
             html += "&nbsp;";
-
-            
+       
         if (!_ispendingf)
             this.clearPengings();
     
@@ -48,7 +66,7 @@ class Notifier{
         if (Notifier_prop.notifying){
             this.closeNotifier(true);
             Notifier_prop._Timeout = setTimeout(() => {
-                doOpen.apply(this, [user_uncloseable]);
+                doOpen.apply(this, [options?.deny_userclose]);
             }, 75);
             return;
         }
@@ -79,7 +97,7 @@ class Notifier{
             }, term);
         }
 
-        doOpen.apply(this, [user_uncloseable]);
+        doOpen.apply(this, [options?.deny_userclose]);
     }
 
 
@@ -104,7 +122,7 @@ class Notifier{
                 Notifier_prop.current = "";
             if (this.pending_notices.length > 0){
                 const arg = this.pending_notices[0];
-                this.notifyHTML(arg.html, arg.term, arg.discriminator, arg.do_not_keep, arg.user_uncloseable, true);
+                this._invoke([ arg.html, arg.term, arg.discriminator, arg.options ], true);
                 this.pending_notices.shift();
             }
         }, 70);

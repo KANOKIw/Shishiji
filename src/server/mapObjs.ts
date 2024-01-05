@@ -4,12 +4,11 @@ import { mapObject, mapObjComponent } from "./server-dts/server";
 import { readJSONSync } from "./utils";
 
 
-/**@global */
-var ALLOBJECTS: mapObjComponent;
-const DEFAULTOBJECT: mapObject = {
+var ALL_MAP_OBJECTS: mapObjComponent;
+export const DEFAULT_MAP_OBJECT: mapObject = {
     article: {
         title: "orgname",
-        core_grade: "0",
+        core_grade: "...",
         theme_color: "#000000",
         content: "",
         crowd_status: {
@@ -45,16 +44,16 @@ const DEFAULTOBJECT: mapObject = {
     discriminator: ""
 };
 
-function getAllObjects(cache: boolean=true){
-    ALLOBJECTS ??= readAllObjectFiles();
+export function getAllObjects(cache: boolean=true){
+    ALL_MAP_OBJECTS ??= readAllObjectFiles();
     if (cache)
-        return ALLOBJECTS;
+        return ALL_MAP_OBJECTS;
     else
         return readAllObjectFiles();
 }
 
-function updateObject(){
-    ALLOBJECTS = readAllObjectFiles();
+export function updateObject(){
+    ALL_MAP_OBJECTS = readAllObjectFiles();
 }
 
 function readAllObjectFiles(): mapObjComponent{
@@ -78,8 +77,4 @@ function readAllObjectFiles(): mapObjComponent{
 }
 
 
-export {
-    getAllObjects,
-    updateObject,
-    DEFAULTOBJECT,
-}
+export { }

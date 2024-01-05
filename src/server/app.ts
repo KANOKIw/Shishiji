@@ -46,7 +46,9 @@ ws.on("connection", (socket) => {
 
 app.post("/org/manage/auth/login", PostHandler.OrgAuth.login);
 
-app.post("/org/manage/auth/_login", PostHandler.OrgAuth._login)
+app.post("/org/manage/auth/_login", PostHandler.OrgAuth._login);
+
+app.post("/org/manage/auth/logout", PostHandler.OrgAuth.logout);
 
 app.post("/org/manage/auth/editor", PostHandler.OrgAuth.editor);
 
@@ -81,7 +83,7 @@ app.get(["/test/", "/test/@", "/test/@:PARAMS"], function(req, res){
 
 
 app.get("/org/manage/edit", function(req, res){
-	res.sendFile(__dirname + "/src/manage/org/edit.html");
+	res.sendFile(__dirname + "/src/manage/org/editor.html");
 });
 
 app.get("/org/manage/login", function(req, res){
@@ -90,7 +92,7 @@ app.get("/org/manage/login", function(req, res){
 
 
 app.get(["/", "/@", "/@:PARAMS"], function(req, res){
-	res.sendFile(__dirname + "/test/index.html");
+	res.sendFile(__dirname + "/src/main/index.html");
 });
 
 

@@ -13,16 +13,20 @@
         JA: {
             LOADING_MAP: "マップを読み込んでいます...",
             MAP_LOADED: "ようこそ",
+            MAP_LOAD_RETRYING: "エラーが発生ました<br>{0}秒後に再挑戦します...",
             PROCESSING: "処理中...",
             NOTIFICATION_COPIED_LINK: "リンクをコピーしました！",
             NOTIFICATION_SHARED_EVENT_FOUND: "シェアされたイベントを表示しています",
             NOTIFICATION_SHARED_EVENT_NOT_FOUND: "シェアされたイベントが見つかりませんでした",
+            NOTIFICATION_SHARED_EVENT_TRANSITIONED: "指定された位置を表示しています",
             NOTIFICATION_CONNECTION_ERROR: "通信エラーが発生しました",
             NOTIFICATION_ERROR_ANY: "エラーが発生しました。",
+            NOTIFICATION_CHECK_YOUR_CONNECTION: "通信状況をご確認ください",
             SHARE_EVENT_MESSAGE: "世田谷学園 獅子児祭のイベント:",
             SHARE_EVENT_POPUP_TITLE: "イベント記事をシェア",
-            SHARE_EVENT_POPUP_SUBTITLE: "共有されたリンクを開くと、マップがこのイベントを中心に移動しこの記事が開かれます",
+            SHARE_EVENT_POPUP_SUBTITLE: "共有されたリンクを開くと、マップがこのイベントをフォーカスしこの記事が開かれます",
             SHARE_EVENT_DATA_TITLE: "獅子児祭",
+            SHARE_EVENT_INCLUDE_EVTH: "現在と同じ位置を指定",
             ARTICLE_NO_ARTICLE: "このイベントに関する記載はありません",
             ARTICLE_CORE_GRADE: "中心学年",
             ARTICLE_CONNECTION_ERROR: "通信エラーが発生しました。<br>ネットワーク状況をご確認の上、再度お試しください。",
@@ -33,22 +37,26 @@
         EN: {
             LOADING_MAP: "Loading map...",
             MAP_LOADED: "Welcome",
+            MAP_LOAD_RETRYING: "Error occured.<br>Retrying in {0} seconds...",
             PROCESSING: "Processing...",
             NOTIFICATION_COPIED_LINK: "Link Copied!",
             NOTIFICATION_SHARED_EVENT_FOUND: "Displaying the shared event article.",
             NOTIFICATION_SHARED_EVENT_NOT_FOUND: "Sorry, we couldn't find the shared event.",
+            NOTIFICATION_SHARED_EVENT_TRANSITIONED: "Showing designated location.",
             NOTIFICATION_CONNECTION_ERROR: "Connection Error",
             NOTIFICATION_ERROR_ANY: "An Error occured.",
-            SHARE_EVENT_MESSAGE: "Shishiji festival event, Setagayagakuen; ",
+            NOTIFICATION_CHECK_YOUR_CONNECTION: "Please check your network connection.",
+            SHARE_EVENT_MESSAGE: "Shishiji Festival, Setagayagakuen; ",
             SHARE_EVENT_POPUP_TITLE: "Share Event Article",
-            SHARE_EVENT_POPUP_SUBTITLE: "The map moves to middle focusing on this event and opens this article, when openning a shared link",
+            SHARE_EVENT_POPUP_SUBTITLE: "The map focuses on this event and opens this article, when openning a shared link",
             SHARE_EVENT_DATA_TITLE: "Shishiji festival",
-            ARTICLE_NO_ARTICLE: "There is no article for this event.",
+            SHARE_EVENT_INCLUDE_EVTH: "let the link display current article location",
+            ARTICLE_NO_ARTICLE: "No information available for this event.",
             ARTICLE_CORE_GRADE: "Core Grade",
             ARTICLE_CONNECTION_ERROR: "Connection Error occured.<br>Please check your network status and try again.",
             ARIA_ARTICLE_HEADER: "header image",
             ARIA_ARTICLE_ICON: "icon image",
-            ERROR_ANY: "An Error occured.<br>Please try again.",
+            ERROR_ANY: "An error occured.<br>Please try again.",
         },
     };
     
@@ -63,13 +71,14 @@
      * @typedef {import("./shishiji-dts/motion").Coords} Coords
      * @typedef {import("./shishiji-dts/motion").touchINFO} touchINFO
      * @typedef {import("./shishiji-dts/objects").mapObjComponent} mapObjComponent
-     * @typedef {import("./shishiji-dts/objects").intervals} intervals
+     * @typedef {import("./shishiji-dts/objects").Intervals} Intervals
      * 
      * @typedef {import("socket.io").Socket} Socket
      */
     
     
-    var LANGUAGE = "EN";
+    /**@type {"JA" | "EN"} */
+    var LANGUAGE = "JA";
     
     /**
      * assign on interaction
@@ -81,11 +90,10 @@
     var cursorPosition = [ null, null ];
     
     
-    /**@ts-ignore @type {Socket} */
-    const ws = io();
-    
     var DRAGGING = false;
     var zoomRatio = 1;
+    
+    const href_replaceCD = 400;
     
     
     /**
@@ -108,15 +116,22 @@
     
     
     /**
-     * limit map motion and set magnification of any
+     * Restrict user map interaction and set magnification of any
      * @readonly
      */
     const MOVEPROPERTY = {
         scroll: 1.05,
+        object: {
+            /**{@link MOVEPROPERTY.caps.ratio.max} < over & {@link MOVEPROPERTY.caps.ratio.min} > under & over > under*/
+            dynamic_to_static: {
+                over: 3,
+                under: 0.3,
+            },
+        },
         caps: {
             ratio: {
-                max: Infinity, // dev
-                min: NaN, // dev
+                max: 10,
+                min: 0.1,
             },
         },
         touch: {
@@ -130,18 +145,25 @@
             zoomCD: -1,
             rotate: {
                 // degree
-                min: 15,
+                min: 5,
             }
-        }
+        },
+        arrowkeys: {
+            interval: 5,
+            move: 3,
+        },
     };
+    
+    /**Second */
+    const Map_retry_cooldown = 5;
     
     
     /**
      * velocities are assigned with (px/sec)
      * @type {{ x: number, y: number, v: number, a: number, method: "MOUSE" | "TOUCH" | null }}
      */
-    var pointerVelocity = { 
-        x: 0, y: 0, v: 0, a: -100,
+    var pointerVelocity = {
+        x: 0, y: 0, v: 0, a: -75,
         method: null 
     };
     
@@ -196,7 +218,7 @@
     var prevTheta = 0;
     
     /**
-     * use to make smooth map interaction.
+     * useful for making smooth map interaction!
      * not map moved, swiping instantly cause proble.
      * init on touch down
      */
@@ -204,19 +226,15 @@
     var zoomCD = 0;
     
     
-    /**@type {intervals} */
-    var Intervals = {
-        
-    };
+    /**@type {Intervals} */
+    var Intervals = { };
     
     
     /**@type {mapObjComponent} */
-    var mapObjectComponent = {};
+    var mapObjectComponent = { };
     
     
-    var MAPDATA = {
-    
-    };
+    var MAPDATA = { };
     
     var CURRENT_FLOOR = "";
     
@@ -224,8 +242,8 @@
         fselector: {
             opened: !!0,
             colors: {
-                current: "rgba(0, 100, 0, 0.699)",
-                else: "rgba(188, 255, 255, 0.699)",
+                current: "rgba(90, 434, 37, 0.8)",
+                else: "rgba(188, 34, 124, 0.75)",
             }
         },
     };
@@ -259,13 +277,15 @@
     // digit
     const paramAbstractDeg = 4;
     /**@enum {string} */
-    const ParamNames = {
+    const ParamName = {
         ZOOM_RATIO: "zr",
         COORDS: "at",
         ARTICLE_ID: "art",
         FLOOR: "fl",
         URL_FROM: "storm",
-        LANGUAGE: "lang"
+        LANGUAGE: "lang",
+        SCROLL_POS: "scrp",
+        ART_TARGET: "atg",
     };
     /**@enum {string} */
     const ParamValues = {
@@ -276,7 +296,7 @@
     const ZOOMRATIO_ON_SHARE = 2;
     
     
-    var Notifier_prop = {
+    const Notifier_prop = {
         /**@ts-ignore @type {NodeJS.Timeout} FAKE */
         Timeout: 0,
         /**@ts-ignore @type {NodeJS.Timeout} FAKE */
@@ -289,6 +309,12 @@
     
     /**milisecond */
     const WAIT_BETWEEN_EACH_MAP_IMAGE = 100;
+    
+    const Ovv_tg_listener = {
+        description: () => {},
+        details: () => {},
+        else: () => {},
+    };
     
     const _mcColorList = {
         "0": "#000000",  // Black
@@ -341,14 +367,18 @@
         RESET: "§r",
     };
     
+    
+    /**@ts-ignore @type {Socket} */
+    const ws = io();
+    
     const GPATH = {
         LINK: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 311 311" enable-background="new 0 0 311 311" xml:space="preserve">
         <path fill="rgba(0, 0, 0, 0)" opacity="1.000000" stroke="none" d=" M171.000000,312.000000   C115.333359,312.000000 60.166618,311.959625 5.000321,312.097198   C1.575440,312.105743 0.900468,311.424225 0.904463,307.999969   C1.022283,207.000168 1.022267,106.000160 0.904507,5.000339   C0.900515,1.576757 1.575329,0.900450 4.999880,0.904445   C105.999702,1.022284 206.999710,1.022256 307.999512,0.904528   C311.422791,0.900538 312.099579,1.574891 312.095581,4.999732   C311.977722,105.999550 311.977722,206.999557 312.095428,307.999359   C312.099426,311.422302 311.426880,312.109009 308.000214,312.097961   C262.500488,311.951172 217.000168,312.000000 171.000000,312.000000  z"/>
         <path fill="#4169e1" opacity="1.000000" stroke="none" d=" M212.588440,62.751225   C203.905151,61.807106 197.318359,64.825386 191.542114,70.667397   C173.146027,89.272934 154.611465,107.742149 136.053268,126.186432   C130.662643,131.543976 127.557449,137.786102 128.348419,145.417740   C128.770218,149.487381 125.725365,150.953064 123.608177,153.027985   C121.330856,155.259842 119.174591,159.867798 116.427277,158.862595   C113.518204,157.798218 113.486778,152.886185 112.890381,149.474075   C110.634079,136.565109 114.234146,125.198303 123.279854,115.974342   C142.766052,96.104149 162.411880,76.382927 182.324997,56.941437   C197.565002,42.062393 221.385269,42.463470 236.456772,57.271034   C251.419540,71.971771 252.308945,96.159264 237.592758,111.384216   C217.905685,131.751923 197.864868,151.796082 177.468582,171.452698   C166.175644,182.336105 152.354523,184.355377 137.501022,179.340317   C134.675583,178.386368 133.868240,177.296005 136.440430,175.062469   C138.072174,173.645538 139.615051,172.101028 141.037430,170.473572   C143.872650,167.229599 146.826492,165.301910 151.682220,165.693344   C157.522110,166.164124 162.672089,163.329041 166.853622,159.153671   C186.194168,139.841492 205.643143,120.635231 224.787735,101.130394   C237.990891,87.678795 231.749924,67.824394 212.588440,62.751225  z"/>
         <path fill="#4169e1" opacity="1.000000" stroke="none" d=" M125.359390,180.359985   C113.330795,192.396744 101.505661,204.137421 89.785324,215.981796   C79.940681,225.930618 79.530716,239.891037 88.669243,248.997726   C97.777161,258.073914 111.812653,257.593933 121.709610,247.737167   C140.482590,229.040421 159.169144,210.256866 177.947128,191.565155   C182.793091,186.741470 185.845337,181.129318 185.354355,174.229935   C185.114212,170.855316 186.130493,168.631439 188.465485,166.387619   C191.451920,163.517807 194.064056,160.258469 197.369263,156.574265   C202.845032,167.292648 203.189789,177.088394 199.851089,187.131454   C197.871994,193.084702 194.467590,198.173920 190.034927,202.601547   C170.818253,221.796356 151.686020,241.076416 132.376938,260.177734   C120.836800,271.593658 103.995110,274.511047 89.358406,268.032440   C74.855324,261.612915 65.525002,246.854904 66.195305,230.890778   C66.609032,221.037491 70.263245,212.376877 77.253769,205.349472   C96.761551,185.738739 116.196274,166.050919 135.974030,146.714890   C147.204605,135.735138 160.803604,133.218796 175.776215,137.693924   C179.222443,138.723923 181.039978,140.034164 177.200104,143.019241   C176.025284,143.932526 174.995834,145.060364 174.013992,146.189240   C170.686951,150.014450 167.343384,152.809952 161.436050,152.308777   C155.639404,151.817017 150.620224,155.047577 146.461792,159.252014   C139.548523,166.241776 132.563232,173.160309 125.359390,180.359985  z"/>
         </svg>`,
-        X: `<div id="ppcls" class="protected"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;">
-        <path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z" fill="#ffffff"></path>
+        X: `<div id="ppcls" class="protected flxxt"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 74 74" enable-background="new 0 0 74 74" xml:space="preserve">
+        <path fill="#cccccc" opacity="1.000000" stroke="none" d=" M4.946470,65.071991   C12.848474,57.152008 20.429871,49.417210 28.203484,41.880672   C30.541042,39.614403 30.634775,38.143127 28.243010,35.834614   C20.812458,28.662685 13.681864,21.179546 6.235195,14.025002   C3.681348,11.571340 3.710598,9.955759 6.273559,7.609175   C8.564236,5.511888 10.127145,3.772244 13.123124,6.931504   C20.113310,14.302654 27.533670,21.264761 34.567284,28.596416   C37.092484,31.228617 38.747044,31.484579 41.397747,28.706858   C48.411495,21.357029 55.843914,14.406034 62.836536,7.037086   C65.708282,4.010791 67.337952,5.180474 69.693764,7.500336   C72.020638,9.791706 72.643303,11.345357 69.934212,13.926871   C62.820606,20.705463 56.174713,27.982174 48.948227,34.631981   C45.246632,38.038181 45.724766,40.042202 49.144836,43.224613   C56.335815,49.915897 62.991341,57.180325 70.126801,63.934673   C73.113831,66.762169 71.537231,68.239540 69.494774,70.337128   C67.347832,72.542007 65.760773,73.683098 63.035637,70.827843   C56.021290,63.478584 48.589294,56.527260 41.595966,49.158981   C38.800320,46.213444 37.053719,46.458233 34.382820,49.256115   C27.482727,56.484253 20.323196,63.465958 13.212370,70.490501   C12.018736,71.669647 10.629393,74.121605 8.803199,72.163376   C7.045736,70.278847 2.900609,69.447426 4.946470,65.071991  z"/>
         </svg></div>`,
         ERROR: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 150 150" enable-background="new 0 0 150 150" xml:space="preserve">
         <path fill="rgba(0, 0, 0, 0)" opacity="1.000000" stroke="none" d=" M91.000000,151.000000   C61.857235,151.000000 33.214314,150.958221 4.571959,151.066559   C1.799039,151.077042 0.890779,150.769745 0.900395,147.577240   C1.044349,99.784233 1.034018,51.990562 0.915765,4.197404   C0.908644,1.319584 1.631624,0.924331 4.297526,0.929724   C52.090782,1.026403 99.884331,1.024516 147.677612,0.933526   C150.291916,0.928548 151.094894,1.241225 151.087357,4.172537   C150.964233,52.132198 150.973221,100.092323 151.072662,148.052094   C151.078110,150.673111 150.330460,151.068909 147.952454,151.056152   C129.135422,150.955200 110.317589,151.000000 91.000000,151.000000  z"/>
@@ -376,6 +406,22 @@
         <path fill="#F0F0F0" opacity="1.000000" stroke="none" d=" M212.953949,295.569916   C213.717484,295.218994 214.416016,295.187805 215.465057,295.161438   C216.871994,308.366486 227.435013,312.558685 237.229446,316.824890   C245.622406,320.480621 254.664963,322.201935 263.981537,320.111542   C264.821991,319.922943 265.891052,319.507416 266.982819,320.930481   C260.093781,325.059662 252.991486,325.173645 245.604706,323.279297   C238.316727,321.410309 231.654816,318.185150 225.028427,314.652344   C218.213531,311.018982 217.228333,302.422211 211.075989,297.939362   C211.235931,297.758545 212.062439,296.824097 212.953949,295.569916  z"/>
         <path fill="#EAEAEA" opacity="1.000000" stroke="none" d=" M177.840469,307.624756   C188.742111,308.970947 199.152237,309.061859 208.534637,300.683289   C204.583420,310.160736 191.304398,313.580109 178.380981,309.013794   C177.905502,308.582062 177.782562,308.308990 177.840469,307.624756  z"/>
         </svg>`,
+        CAUTION: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 513 465" enable-background="new 0 0 513 465" xml:space="preserve">
+        <path fill="#1A1A1A" opacity="1.000000" stroke="none" d=" M1.241642,406.291565   C1.000000,397.979095 1.000000,389.958191 1.000000,381.468628   C2.626651,379.337738 1.912117,377.197418 2.076329,375.277710   C2.914839,365.475098 6.296447,356.660797 11.252174,348.168213   C34.800465,307.813751 58.069195,267.296387 81.503136,226.875076   C109.275192,178.970917 136.848953,130.952103 164.763901,83.130356   C172.809677,69.346962 180.437805,55.309315 188.724182,41.674023   C198.891800,24.943106 212.635666,11.963506 230.823471,4.042763   C234.567596,2.412208 238.659729,2.736317 242.719604,1.239572   C253.020889,1.000000 263.041779,1.000000 273.531342,1.000000   C278.017975,3.156844 282.707458,2.430180 286.901733,4.297610   C305.751221,12.690011 319.418091,26.544600 329.576782,44.133774   C346.881622,74.096001 364.132477,104.089661 381.385284,134.081680   C397.395935,161.914307 413.407318,189.747406 429.417786,217.580139   C445.011414,244.688248 460.591858,271.804871 476.263397,298.868744   C485.683655,315.137054 495.062225,331.431091 504.414917,347.739288   C509.361725,356.365021 512.577759,365.518890 513.760559,375.720215   C514.000000,387.354218 514.000000,398.708466 514.000000,410.531342   C513.404785,411.626373 513.065125,412.360260 513.029785,413.233398   C512.079041,436.694061 482.807068,463.873047 459.975769,464.862488   C458.845581,464.911438 457.622314,464.844727 456.290283,465.758484   C323.312439,466.000000 190.624878,466.000000 57.468658,466.000000   C56.488663,465.566986 55.957302,465.198334 55.261578,465.090363   C28.685551,460.965332 13.349062,443.850342 3.712149,420.282043   C1.943465,415.956512 2.713393,411.075836 1.241642,406.291565  z"/>
+        <path fill="#FEEE11" opacity="1.000000" stroke="none" d=" M303.656067,70.365646   C330.374512,116.783737 356.898132,162.889709 383.436737,208.987091   C413.619659,261.414612 444.028931,313.713684 473.867493,366.336426   C482.060669,380.785858 484.399078,396.641937 476.859924,412.323120   C469.861542,426.879578 456.549988,431.539825 441.556854,432.785400   C439.237732,432.978119 436.895538,432.931213 434.564026,432.931335   C316.092834,432.937531 197.618622,432.467316 79.152313,433.228210   C44.447426,433.451080 27.864651,407.550079 37.606255,375.986908   C39.657917,369.339447 43.535931,363.744202 46.922001,357.876099   C79.987740,300.572845 113.171227,243.337555 146.296280,186.068512   C170.265106,144.629410 194.090668,103.106926 218.207977,61.754524   C225.510376,49.233570 235.219589,38.865047 249.896881,35.210342   C266.735779,31.017393 279.633789,38.445839 290.569153,50.521240   C295.865906,56.370163 299.531860,63.300018 303.656067,70.365646  z"/>
+        <path fill="#1B1B1A" opacity="1.000000" stroke="none" d=" M237.961578,279.007935   C234.194275,240.800507 230.057770,203.081604 228.722260,165.135254   C228.675461,163.805618 228.696930,162.469925 228.576248,161.147125   C227.114120,145.121521 236.249771,140.009003 246.888672,137.687683   C258.045624,135.253342 269.090393,135.751068 279.222229,141.820908   C285.513489,145.589905 288.125854,151.226715 287.510864,158.648773   C284.584351,193.969177 281.804596,229.301758 278.969513,264.629730   C277.931244,277.567535 276.998840,290.515259 275.801147,303.438354   C275.005646,312.022095 268.225250,317.718506 259.006592,317.994934   C249.118195,318.291412 242.002274,313.406128 240.719818,304.762329   C239.476028,296.379150 238.874359,287.900726 237.961578,279.007935  z"/>
+        <path fill="#1C1C1A" opacity="1.000000" stroke="none" d=" M245.764053,342.591187   C256.913269,336.996185 267.661682,338.554352 275.204102,346.603333   C282.246124,354.118317 283.484985,365.276398 278.203979,374.235443   C273.363861,382.446655 265.970581,386.453003 256.623535,385.744720   C246.493347,384.977112 239.059158,379.654083 235.937897,369.771423   C233.073013,360.700500 234.957565,352.392181 241.984756,345.603699   C243.050217,344.574432 244.295731,343.731567 245.764053,342.591187  z"/>
+        </svg>`,
+        NO_WiFi: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="100%" viewBox="0 0 566 566" enable-background="new 0 0 566 566" xml:space="preserve">
+        <path fill="#ffffff" opacity="1.000000" stroke="none" d=" M198.287079,151.049698   C228.478516,142.793930 259.173096,138.262146 290.520721,139.173904   C365.215118,141.346436 430.794006,166.985260 487.146484,216.082016   C499.049011,226.452057 500.365234,243.423141 490.396881,254.924133   C480.232697,266.651062 463.062439,267.763916 451.113251,257.288879   C413.054016,223.924927 369.019836,203.376007 318.927765,196.316345   C278.004028,190.548798 237.934387,194.679321 198.600250,208.285278   C198.261002,188.979767 198.274033,170.014725 198.287079,151.049698  z"/>
+        <path fill="#ffffff" opacity="1.000000" stroke="none" d=" M198.512405,223.744019   C258.654114,201.640976 318.394592,202.495102 377.588440,227.205948   C399.845245,236.497192 420.071442,249.234818 438.386688,264.954651   C446.558929,271.968872 449.706940,281.004852 447.572540,291.384430   C445.348328,302.200653 438.540405,309.434357 427.765015,312.313171   C418.028778,314.914337 409.477295,312.260162 401.820526,305.786560   C382.117462,289.128082 359.863617,277.035828 335.027161,270.070831   C289.414917,257.279541 245.171722,261.149414 202.490402,281.886444   C201.295807,282.466858 200.101196,283.047241 198.567215,283.315308   C198.194855,276.524414 198.100327,270.045502 198.141754,263.567444   C198.226685,250.292709 198.384567,237.018463 198.512405,223.744019  z"/>
+        <path fill="#ffffff" opacity="1.000000" stroke="none" d=" M198.267944,301.030304   C212.528717,295.193054 226.348724,287.655334 241.129456,283.824066   C294.380188,270.021118 343.341278,280.347382 387.230743,313.518127   C402.191986,324.825500 402.323273,345.601013 388.160034,357.052094   C378.222931,365.086273 364.625824,365.007324 353.570007,356.592896   C339.161560,345.626862 323.221893,338.107086 305.381348,334.861725   C272.145386,328.815796 242.067795,336.188354 214.791107,356.027893   C210.752808,358.965149 205.654221,360.444672 200.539474,362.287964   C195.138626,347.151062 185.006042,339.009888 169.341782,337.928131   C169.588730,334.915466 169.835663,331.902802 170.497314,328.447998   C187.289688,325.471008 196.325378,316.560944 198.267944,301.030304  z"/>
+        <path fill="#EC1B25" opacity="1.000000" stroke="none" d=" M198.242203,300.560791   C196.325378,316.560944 187.289688,325.471008 170.514374,328.038849   C158.967316,327.735596 150.260559,323.053436 144.005310,312.892151   C139.865799,305.357941 140.722031,297.807159 140.627670,290.380188   C140.484909,279.141754 140.281479,267.904114 140.103851,256.666138   C140.214188,251.168945 140.324539,245.671768 140.306976,239.396255   C140.322372,226.526413 140.567184,214.434952 140.575684,202.343323   C140.582077,193.244690 140.285339,184.145844 140.123535,175.047089   C140.278976,166.893036 140.455597,158.739304 140.585495,150.584839   C140.864075,133.098129 152.763107,120.781281 169.426819,120.760483   C185.728882,120.740128 197.696487,132.970596 198.239853,150.603912   C198.274033,170.014725 198.261002,188.979767 198.274734,208.401550   C198.295837,213.529022 198.290176,218.199722 198.398468,223.307220   C198.384567,237.018463 198.226685,250.292709 198.141754,263.567444   C198.100327,270.045502 198.194855,276.524414 198.267578,283.462402   C198.277039,289.311646 198.246750,294.701447 198.242203,300.560791  z"/>
+        <path fill="#ffffff" opacity="1.000000" stroke="none" d=" M281.185852,447.090454   C257.072662,445.244171 239.236145,425.308167 240.117279,401.689178   C240.995193,378.156738 260.494904,359.583038 284.192749,359.706848   C307.875671,359.830536 327.216095,378.517883 327.753052,402.209686   C328.362518,429.099091 305.966248,448.697845 281.185852,447.090454  z"/>
+        <path fill="#ffffff" opacity="1.000000" stroke="none" d=" M139.776810,175.138367   C140.285339,184.145844 140.582077,193.244690 140.575684,202.343323   C140.567184,214.434952 140.322372,226.526413 140.141418,238.899597   C132.116287,245.403610 123.908783,251.366364 116.191803,257.907837   C103.954247,268.281189 89.170647,267.746368 78.518173,256.087158   C67.953018,244.523514 68.212563,227.553040 79.562706,217.181320   C97.684792,200.621429 117.819550,186.852539 139.776810,175.138367  z"/>
+        <path fill="#EC1D26" opacity="1.000000" stroke="none" d=" M168.907990,337.992126   C185.006042,339.009888 195.138626,347.151062 200.188461,362.292419   C201.740906,374.709961 199.048279,385.382935 189.303772,393.463867   C179.239944,401.809631 164.863739,403.033264 153.854797,396.610138   C142.747162,390.129395 136.384018,377.122925 138.387222,364.993896   C140.641754,351.343170 150.209137,341.356750 163.554398,338.765594   C165.179016,338.450165 166.833542,338.288879 168.907990,337.992126  z"/>
+        <path fill="#ffffff" opacity="1.000000" stroke="none" d=" M139.759262,256.786621   C140.281479,267.904114 140.484909,279.141754 140.627670,290.380188   C140.722031,297.807159 139.865799,305.357941 143.835846,312.597351   C132.765335,311.704559 125.158752,305.540375 121.429420,295.244385   C117.622803,284.735016 119.657722,274.874847 127.602119,266.792084   C131.184128,263.147675 135.455887,260.181183 139.759262,256.786621  z"/>
+        </svg>`,
     };
     
     //@ts-check
@@ -385,6 +431,7 @@
     /**
      * @typedef {import("./shishiji-dts/motion").Degree} Degree
      */
+    
     
     /**
      * 
@@ -402,7 +449,7 @@
     
     
     /**
-     * deg -> rad
+     * 
      * @param {Degree} deg 
      * @returns {Radian}
      */
@@ -412,7 +459,7 @@
     
     
     /**
-     * rad -> deg
+     * 
      * @param {Degree} rad 
      * @returns {Radian}
      */
@@ -485,11 +532,21 @@
      * @param {string} message 
      */
     function startLoad(message){
+        $("#app-mount").show();
         $("#place-selector").hide();
         $("#load_spare")
         .removeClass("loaddoneman")
         .show();
         $("#spare_message").text(message);
+    }
+    
+    
+    /**
+     * 
+     * @param {string} html 
+     */
+    function setLoadMessage(html){
+        $("#spare_message").html(html);
     }
     
     
@@ -506,23 +563,10 @@
             $("#load_spare").addClass("loaddoneman");
             setTimeout(() => {
                 clearInterval(Intervals.load);
-                $("#load_spare").hide();
                 $("#place-selector").addClass("hello").show();
+                $("#spare_message").text("");
             }, 950);
         }, 1000);
-    }
-    
-    
-    function setPlaceSelColor(p){
-        if (p === void 0) p = CURRENT_FLOOR;
-        $(".placeOpt").each(function(index, elm){
-            if (!this.textContent) return;
-            const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
-            if (text === p)
-                $(this).css("background-color", overlay_modes.fselector.colors.current);
-            else if (text.length > 1)
-                $(this).css("background-color", overlay_modes.fselector.colors.else);
-        });
     }
     
     
@@ -602,7 +646,7 @@
     
             function onmove(){
                 e.preventDefault();
-                moved = !0;
+                moved = true;
             }
             /**@this {HTMLElement}*/
             function onleave(e){
@@ -623,12 +667,12 @@
      * @returns 
      */
     function escapeHTML(str){
-        str = str.replace(/&/g, "&amp;");
-        str = str.replace(/</g, "&lt;");
-        str = str.replace(/>/g, "&gt;");
-        str = str.replace(/"/g, "&quot;");
-        str = str.replace(/'/g, "&#39;");
-        str = str.replace(/ /g, "&nbsp;");
+        str = str.replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#39;")
+                 .replace(/ /g, "&nbsp;");
     
         return str;
     }
@@ -642,10 +686,28 @@
     function setParam(key, value){
         const here = window.location.href;
         const urlParams = new URLSearchParams(window.location.search);
+        var yhere = "";
     
-        urlParams.set(key, encodeURIComponent(String(value)));
+        if (key == ParamName.COORDS){
+            if (urlParams.toString() != ""){
+                const _h = getParam(ParamName.ZOOM_RATIO);
+                yhere = here.includes("@") ? here.replace(/@.*/, "")+"@"+value+"x"+(_h === null ? 1 : _h)+"?"+urlParams.toString() : here.replace(/\?.*/, "")+"@"+value+"?"+urlParams.toString();
+            } else {
+                yhere = here+"@"+value;
+            }
+        } else if (key == ParamName.ZOOM_RATIO){
+            if (urlParams.toString() != ""){
+                const _c = getParam(ParamName.COORDS);
+                yhere = here.includes("@") ? here.replace(/@.*/, "")+"@"+(_c === null ? "0,0" : _c)+"x"+value+"?"+urlParams.toString() : here.replace(/\?.*/, "")+"@"+value+"?"+urlParams.toString();
+            } else {
+                yhere = here+"@"+getParam(ParamName.COORDS)+value;
+            }
+        } else {
+            urlParams.set(key, encodeURIComponent(String(value)));
+        
+            yhere = here.split("?")[0] + "?" + urlParams.toString();
+        }
     
-        const yhere = here.split("?")[0] + "?" + urlParams.toString();
         window.history.replaceState("", "", yhere);
     }
     
@@ -678,6 +740,22 @@
         if (url === void 0)
             url = window.location.href;
     
+        if (key == ParamName.COORDS){
+            const reg = /@([^?&]+)x([^?&]+)/;
+            const _reg = /@([^?&]+)/;
+            var res = url.match(reg);
+    
+            if (!res)
+                res = url.match(_reg);
+            
+            return res ? res[1].replace(/x/g, "") : null;
+        } else if (key == ParamName.ZOOM_RATIO){
+            const reg = /@([^?&]+)x([^?&]+)/;
+            const res = url.match(reg);
+    
+            return res ? res[2] : null;
+        }
+    
         const urlParams = new URLSearchParams(window.location.search);
         const val = urlParams.get(key);
     
@@ -701,43 +779,130 @@
     
     /**
      * 
-     * @param {Coords} coords 
-     * @param {number} [abs_zoomRatio] 
+     * @param {number} diffratio 
+     * @param {boolean} setzr
+     *      set to the limit when this gets invoked
      */
-    function setCoordsOnMiddle(coords, abs_zoomRatio){
-        if (abs_zoomRatio === void 0){
-            abs_zoomRatio = zoomRatio;
+    function willOverflow(diffratio, setzr){
+        const _r = zoomRatio*diffratio;
+        
+        if (MOVEPROPERTY.caps.ratio.max < _r && diffratio > 1){
+            if (setzr)
+                zoomRatio = MOVEPROPERTY.caps.ratio.max;
+            return true;
         }
-        /**@ts-ignore @type {HTMLCanvasElement} */
-        const canvas = document.getElementById("shishiji-canvas");
-        /**@ts-ignore @type {CanvasRenderingContext2D} */
-        const ctx = canvas.getContext("2d");
-        const style = {
-            top: window.innerHeight/2,
-            left: window.innerWidth/2,
-        };
-        /**@type {Coords} */
-        const bcoords = {
-            x: (abs_zoomRatio*coords.x - style.left)/abs_zoomRatio,
-            y: (abs_zoomRatio*coords.y - style.top)/abs_zoomRatio,
-        };
+        if (MOVEPROPERTY.caps.ratio.min > _r && diffratio < 1){
+            if (setzr)
+                zoomRatio = MOVEPROPERTY.caps.ratio.min;
+            return true;
+        }
     
-        zoomRatio = abs_zoomRatio;
-        backcanvas.canvas.coords = bcoords;
-        moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
-        setBehavParam();
+        return false;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} key 
+     */
+    function getCookie(key){
+        const cookies = document.cookie.split("; ");
+      
+        for (const cookie of cookies) {
+            const [ckey, cval] = cookie.split("=");
+            if (ckey === key){
+                return decodeURIComponent(cval);
+            } 
+        }
+      
+        return null;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} key 
+     */
+    function delCookie(key){
+        document.cookie = `${key}=; max-age=0;`;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} orgname 
+     * @param {string} filename 
+     */
+    function toOrgFilepath(orgname, filename){
+        return "/resources/cloud/org/"+orgname+"/"+filename;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} orgname 
+     * @param {string} filename 
+     */
+    function toAdminFilepath(orgname, filename){
+        return "/resources/img/static/"+orgname+"/"+filename;
+    }
+    
+    
+    /**
+     * 
+     * @param {mapObject} mapobject 
+     */
+    function getPathConverter(mapobject){
+        return mapobject.object.type.event === "org" ? toOrgFilepath : toAdminFilepath;
+    }
+    
+    
+    /**
+     * 
+     * @returns {"JA" | "EN" | null}
+     */
+    function getUserLang(){
+        const lang = navigator.language;
+    
+        return digitLang(lang);
     }
     
     
     /**
      * 
      * @param {string | null} lang 
+     * @returns {"JA" | "EN" | null}
      */
-    function isThereLang(lang){
-        if (lang == null)
+    function digitLang(lang){
+        if (lang)
+            switch (lang.toUpperCase()){
+                case "JA":
+                    return "JA";
+                default:
+                    return "EN";
+            }
+        else 
             return null;
-        const langs = [ "JA", "EN" ];
-        return langs.includes(lang) ? lang : null;
+    }
+    
+    
+    /**
+     * 
+     * @param {string} link 
+     * @returns {"image" | "video" | "unknown"}
+     */
+    function getMediaType(link){
+        var extension = link.split(".").slice(-1)[0].toLowerCase();
+    
+        if (["jpg", "jpeg", "png", "gif", "webp"].indexOf(extension) !== -1) {
+            return "image";
+        }
+    
+        if (["mp4", "webm", "avi", "mov", "flv"].indexOf(extension) !== -1) {
+            return "video";
+        }
+    
+        return "unknown";
     }
     
     //@ts-check
@@ -745,7 +910,7 @@
     
     
     
-    var STYLES = {
+    const STYLES = {
         "§0": "color:#000000",
         "§1": "color:#0000AA",
         "§2": "color:#00AA00",
@@ -762,6 +927,7 @@
         "§d": "color:#FF55FF",
         "§e": "color:#FFFF55",
         "§f": "color:#FFFFFF",
+        
         "§l": "font-weight:bold",
         "§n": "text-decoration:underline", 
         "§o": "font-style:italic",
@@ -774,9 +940,12 @@
     };
     
     
-    function MCobfuscate(elem){
-        elem.classList.add("MCOBF");
-        elem.style.fontFamily = "monospace";
+    /**
+     * 
+     * @param {HTMLElement} elem 
+     */
+    function _MCobfuscate(elem){
+        elem.classList.add("MCOBF", "crucial");
     }
     
     
@@ -786,14 +955,14 @@
      * @param {Array} codes 
      * @returns {HTMLSpanElement}
      */
-    function applyMCCode(string, codes){
+    function _applyMCCode(string, codes){
         var len = codes.length;
         var elem = document.createElement("span"),
             obfuscated = false;
         for (var i = 0; i < len; i++){
             elem.style.cssText += STYLES[codes[i]] + ";";
             if(codes[i] === "§k") {
-                MCobfuscate(elem);
+                _MCobfuscate(elem);
                 obfuscated = true;
             }
         }
@@ -815,7 +984,6 @@
             apply = [],
             tmpStr,
             indexDelta,
-            noCode,
             final = document.createDocumentFragment(),
             len = codes.length,
             string = string.replace(/\n|\\n/g, "<br>");
@@ -826,13 +994,13 @@
         }
     
         if(indexes[0] !== 0){
-            final.appendChild(applyMCCode(string.substring(0, indexes[0]), []));
+            final.appendChild(_applyMCCode(string.substring(0, indexes[0]), []));
         }
     
         for(var i = 0; i < len; i++){
         	indexDelta = indexes[i + 1] - indexes[i];
             if(indexDelta === 2){
-                while(indexDelta === 2){
+                while (indexDelta === 2){
                     apply.push(codes[i]);
                     i++;
                     indexDelta = indexes[i + 1] - indexes[i];
@@ -845,7 +1013,7 @@
                 apply = apply.slice(apply.lastIndexOf("§r") + 1);
             }
             tmpStr = string.substring(indexes[i], indexes[i + 1]);
-            final.appendChild(applyMCCode(tmpStr, apply));
+            final.appendChild(_applyMCCode(tmpStr, apply));
         }
         return final;
     }
@@ -853,15 +1021,42 @@
     
     /**
      * @param {string} str 
+     * @param {(S: string) => string} srcConverter 
      * @returns {string}
      */
-    function mcFormat(str){
-        //str = escapeHTML(str);
+    function mcFormat(str, srcConverter){
+        str = escapeHTML(str);
+    
+        str = str.replace(/\n/g, "").replace(/§v/g, "\n");
+    
         var r = "";
         const el = _parseMCFormat(str);
+    
         for (var e of Array.from(el.children)){
             r += e.outerHTML;
         }
+    
+        const imgreg = /%\:IMG-S=([^\-]+)-W=(\d+);%/g;
+        const vidreg = /%\:VIDEO-S=([^\-]+)-W=(\d+);%/g;
+        const linkreg = /#\:LINK-H=(https?:\/\/(?!.*#:).*)-T=(.*);#/g;
+        const imgmatches = r.matchAll(imgreg) || [];
+        const vidmacthes = r.matchAll(vidreg) || [];
+        const linkmacthes = r.matchAll(linkreg) || [];
+    
+        for (const imgmacth of imgmatches){
+            const width = Number(imgmacth[2]);
+            r = r.replace(imgmacth[0], `<img class="article-image doaJSD protected" src="${srcConverter(imgmacth[1])}" style="width: ${(width > 100 || width < 0) ? 100 : width}%;">`);
+        }
+    
+        for (const vidmacth of vidmacthes){
+            const width = Number(vidmacth[2]);
+            r = r.replace(vidmacth[0], `<video class="article-video protected" src="${srcConverter(vidmacth[1])}#t=0.001" controls preload="metadata" playsinline style="width: ${(width > 100 || width < 0) ? 100 : width}%;"></video>`);
+        }
+    
+        for (const linkmacth of linkmacthes){
+            r = r.replace(linkmacth[0], `<a class="article-outsidelink protected" href="${new URL(linkmacth[1])}" target="_blank">${(linkmacth[2].length > 0) ? linkmacth[2] : linkmacth[1]}</a>`);
+        }
+    
         return r;
     }
     
@@ -874,14 +1069,14 @@
         const obfuscaters = abc.split("").concat(abc.slice(9).toUpperCase().split(""));
     
         setInterval(function(){
-            var obfs = document.getElementsByClassName("MCOBF");
-            for (var obf of obfs){
-                for (var ch of obf.childNodes){
+            const obfs = document.getElementsByClassName("MCOBF");
+            for (const obf of obfs){
+                for (const ch of obf.childNodes){
                     var content = "";
                     if (ch.textContent == null)
                         continue;
-                    for (var char of ch.textContent.split("")){
-                        var c = Math.round(Math.random() * (obfuscaters.length -1));
+                    for (const char of ch.textContent.split("")){
+                        const c = Math.round(Math.random() * (obfuscaters.length -1));
                         content += obfuscaters[c];
                     }
                     ch.textContent = content;
@@ -893,7 +1088,6 @@
     
     //@ts-check
     "use strict";
-    
     
     
     !function(){
@@ -1088,7 +1282,7 @@
      * @param {TouchList} touches 
      * @returns {number}
      */
-    function get_midestOfTouches(touches){
+    function getMidestOfTouches(touches){
         if (touches.length == 1)
             return 0;
     
@@ -1114,19 +1308,22 @@
     
     /**
      * 
-     * @param {TouchList} touches 
+     * @param {TouchList | Touch[]} touches 
      * @returns {NonnullPosition}
      */
-    function get_middlePos(touches){
+    function getMiddlePos(touches){
         var av_x = 0;
         var av_y = 0;
-        for (var t  of touches){
+        const _a = touches.length;
+    
+        for (const t  of touches){
             av_x += t.clientX;
             av_y += t.clientY;
         }
-        av_x /= touches.length;
-        av_y /= touches.length;
-        return [av_x, av_y];
+    
+        av_x /= _a;
+        av_y /= _a;
+        return [ av_x, av_y ];
     }
     
     
@@ -1210,148 +1407,17 @@
     
     
     /**
-     * @param {HTMLCanvasElement} canvas 
-     * @param {CanvasRenderingContext2D} ctx 
-     * @param {TouchEvent} event 
-     * @returns {{diffRatio: number, crossPos: NonnullPosition, rotation: Radian}}
+     * @typedef {import("../shishiji-dts/objects").DrawMapData} DrawMapData
      */
-    function touchZoom(canvas, ctx, event){
-        /**@type {NonnullPosition} */
-        var crossPos = [ -1, -1 ];
-        const abs = Math.abs;
-        const touches = event.touches;
-    
-        zoomCD++;
-    
-        /**@graph */
-        const Fx = {
-            previous: {
-                slope: (prevTouchINFO.real[0].clientY - prevTouchINFO.real[1].clientY) / (prevTouchINFO.real[0].clientX - prevTouchINFO.real[1].clientX),
-            },
-            this: {
-                slope: (touches[0].clientY - touches[1].clientY) / (touches[0].clientX - touches[1].clientX),
-            }
-        };
-    
-        const distance = get_midestOfTouches(touches);
-        var diffRatio = distance / previousTouchDistance.distance;
-    
-        if (previousTouchDistance.x == -1 && previousTouchDistance.y == -1 && previousTouchDistance.distance == -1){
-            diffRatio = 1;
-        }
-    
-        previousTouchDistance.distance = distance;
-    
-        //#region 
-        if (Fx.previous.slope == Fx.this.slope){
-            var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
-            var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
-    
-            (D1 === 0 && D2 === 0 || D1 + D2 == 0) ? D1 = D2 = 1 : 0;
-    
-            const R = D1 / (abs(D1) + abs(D2));
-    
-            const addD1x = abs(touches[0].clientX - touches[1].clientX) * R;
-            const addD1y = abs(touches[0].clientY - touches[1].clientY) * R;
-    
-            /**@type {NonnullPosition} */
-            const middle = [
-                touches[0].clientX + addD1x,
-                touches[0].clientY + addD1y,
-            ];
-            
-            prevTouchINFO.middle = middle;
-        } else {
-            const crossX = (
-                    prevTouchINFO.real[0].clientX * Fx.previous.slope - touches[0].clientX * Fx.this.slope
-                    - prevTouchINFO.real[0].clientY + touches[0].clientY
-                )
-                    /
-                (Fx.previous.slope - Fx.this.slope);
-            const crossY = (
-                Fx.this.slope * (crossX - touches[0].clientX) + touches[0].clientY
-            );
-            
-            crossPos = [ Math.ceil(crossX), Math.ceil(crossY) ];
-    
-            if (!crossPos.some(t => { return isNaN(t) })) 0;
-        }
-        //#endregion
-    
-    
-        //#region 
-        const x1d = prevTouchINFO.real[0].clientX * diffRatio;
-        const y1d = prevTouchINFO.real[0].clientY * diffRatio;
-    
-        const diffx = touches[0].clientX - x1d;
-        const diffy = touches[0].clientY - y1d;
-    
-    
-        if (zoomCD > MOVEPROPERTY.touch.zoomCD){
-            zoomMapAssistingNegative(canvas, ctx, diffRatio, [0, 0]);
-            moveMapAssistingNegative(canvas, ctx, {
-                top: diffy,
-                left: diffx
-            });
-        }
-        //#endregion
-    
-    
-        /**@type {Radian} */
-        var rotation = 0;
-        //#region 
-        function _rotateHandler(){
-            const PI = Math.PI;
-            const theta = getThouchesTheta(touches);
-    
-            if (prevTheta === -1)
-                rotation = 0;
-            else if (
-                0 <= prevTheta && prevTheta <= PI
-                    &&
-                PI*(3/2) <= theta && theta <= 2*PI
-                )
-                rotation = -(2*PI - theta + prevTheta);
-            else if (
-                0 <= theta && theta <= PI
-                    &&
-                PI*(3/2) <= prevTheta && prevTheta <= 2*PI
-                )
-                rotation = 2*PI - prevTheta + theta;
-            else 
-                rotation = theta - prevTheta;
-    
-            prevTheta = theta;
-    
-    
-            totalRotateThisTime += Math.abs(rotation);
-            rotatedThisTime += rotation;
-    
-    
-            if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPERTY.touch.rotate.min) || pastRotateMin){
-                if (!pastRotateMin){
-                    rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
-                }
-                pastRotateMin = !0;
-                if (zoomCD > MOVEPROPERTY.touch.zoomCD)
-                    rotateCanvas(canvas, ctx, crossPos, rotation);
-            }
-            
-    
-            rotatedThisTime += rotation;
-        }
-        //#endregion
-    
-        return { diffRatio: diffRatio, crossPos: crossPos, rotation: rotation };
-    }
     
     
     /**
      * Draw tiles
      * @param {HTMLCanvasElement} canvas 
      * @param {CanvasRenderingContext2D} ctx
+     * @param {DrawMapData} data 
      * @param {Function} [callback]
-     * @returns {Promise<any>} 
+     * @returns {Promise<void>} 
      */
     async function drawMap(canvas, ctx, data, callback){
         const xrange = data.xrange;
@@ -1362,11 +1428,17 @@
         /**@type {HTMLImageElement[]} */
         var al = [];
         var wait = 0;
+        var processed = 0;
+        /**@type {{ x: number, y: number, dx: number, dy: number, dw: number, dh: number, src: string }[]} */
+        var erroredArray = [];
+        const tileAmount = (xrange+1)*(yrange+1);
     
+        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     
         backcanvas.width = tile_width*(xrange+1);
         backcanvas.height = tile_height*(yrange+1);
+        
     
         return new Promise((resolve) => {
             for (var y = 0; y <= yrange; y++){
@@ -1377,22 +1449,90 @@
                         dy = dh*y;
     
                     !function(x, y, dx, dy, dw, dh){
-                        var img = new Image();
+                        const img = new Image();
+                        const src = formatString(src_formatter, y, x);
     
                         img.onload = function(){
-                            //@ts-ignore
-                            this.loaded = true;
-    
                             bctx.drawImage(img, 0, 0, tile_width, tile_height, dx, dy, dw, dh);
                             ctx.drawImage(backcanvas, ...[ backcanvas.canvas.coords.x ,backcanvas.canvas.coords.y ]);
                             
+                            processed++;
                             al.push(img);
-                            if (al.length >= (xrange+1)*(yrange+1))
+    
+                            if (al.length >= tileAmount)
                                 resolve("map loaded");
                         }
+    
+                        function reloaderrimg(){
+                            var t = Map_retry_cooldown;
+    
+                            const g = setInterval(() => {
+                                setLoadMessage(formatString(TEXT[LANGUAGE].MAP_LOAD_RETRYING, t));
+                                $(`#load_spare:not([style*="display: none"]) #spare_logo`).css("animation", "load_rotator .75s infinite linear");
+    
+                                Notifier.notifyHTML(
+                                    `<div id="cpy-lin-not" class="flxxt">${GPATH.NO_WiFi}${TEXT[LANGUAGE].NOTIFICATION_CHECK_YOUR_CONNECTION}</div>`,
+                                    5000,
+                                    "check ur WiFi",
+                                    false,
+                                    true,
+                                );
+    
+                                t--;
+    
+                                if (t <= -1){
+                                    $(`#load_spare:not([style*="display: none"]) #spare_logo`).css("animation", "load_rotator 0.25s infinite linear");
+                                    retry();
+                                    clearInterval(g);
+                                }
+                            }, 1000);
+                        }
+    
+                        function handleError(){
+                            var t = Map_retry_cooldown;
+    
+                            processed++;
+    
+                            if (processed >= tileAmount)
+                                reloaderrimg();
+                        }
+    
+                        function retry(){
+                            for (const cvsidata of erroredArray){
+                                const img = new Image();
+                                const src = cvsidata.src;
+    
+                                setLoadMessage(TEXT[LANGUAGE].LOADING_MAP);
+                                processed--;
+    
+                                img.onload = function(){
+                                    bctx.drawImage(img, 0, 0, tile_width, tile_height, cvsidata.dx, cvsidata.dy, cvsidata.dw, cvsidata.dh);
+                                    ctx.drawImage(backcanvas, ...[ backcanvas.canvas.coords.x ,backcanvas.canvas.coords.y ]);
+    
+                                    erroredArray = erroredArray.filter(p => { if (p.src != src) return true; });
+                                    processed++;
+    
+                                    al.push(img);
+    
+                                    if (al.length >= tileAmount)
+                                        resolve("map loaded");
+                                    else if (processed >= tileAmount)
+                                        reloaderrimg();
+                                }
+    
+                                img.onerror = handleError;
+    
+                                img.src = src;
+                            }
+                        }
+    
+                        img.onerror = () => {
+                            erroredArray.push({ x: x, y: y, dx: dx, dy: dy, dw: dw, dh: dh, src: src });
+                            handleError();
+                        };
                         
                         setTimeout(() => {
-                            img.src = formatString(src_formatter, y, x);
+                            img.src = src;
                         }, wait);
     
                         wait += WAIT_BETWEEN_EACH_MAP_IMAGE;
@@ -1418,33 +1558,62 @@
         const abstraction = 10**paramAbstractDeg;
         const K = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
         const zr = accurated ? zoomRatio : Math.round(zoomRatio*abstraction)/abstraction;
-        const at = accurated ? K[0]+"*"+K[1] : Math.round(K[0]*abstraction)/abstraction+"*"+Math.round(K[1]*abstraction)/abstraction;
+        const at = accurated ? K[0]+","+K[1] : Math.round(K[0]*abstraction)/abstraction+","+Math.round(K[1]*abstraction)/abstraction;
         
-        setParam(ParamNames.ZOOM_RATIO, zr);
-        setParam(ParamNames.COORDS, at);
+        setParam(ParamName.ZOOM_RATIO, zr);
+        setParam(ParamName.COORDS, at);
+    }
+    
+    
+    /**
+     * 
+     * @param {Coords} coords 
+     * @param {number} [abs_zoomRatio] 
+     */
+    function setCoordsOnMiddle(coords, abs_zoomRatio){
+        if (abs_zoomRatio === void 0){
+            abs_zoomRatio = zoomRatio;
+        }
+        /**@ts-ignore @type {HTMLCanvasElement} */
+        const canvas = document.getElementById("shishiji-canvas");
+        /**@ts-ignore @type {CanvasRenderingContext2D} */
+        const ctx = canvas.getContext("2d");
+        const style = {
+            top: window.innerHeight/2,
+            left: window.innerWidth/2,
+        };
+        /**@type {Coords} */
+        const bcoords = {
+            x: (abs_zoomRatio*coords.x - style.left)/abs_zoomRatio,
+            y: (abs_zoomRatio*coords.y - style.top)/abs_zoomRatio,
+        };
+    
+        zoomRatio = abs_zoomRatio;
+        backcanvas.canvas.coords = bcoords;
+        moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
+        setBehavParam();
     }
     
     //@ts-check
     "use strict";
     
     
-    
     /**
      * @typedef {import("../shishiji-dts/motion").Position} _Position
      * @typedef {import("../shishiji-dts/motion").Radian} Radian
+     * @typedef {import("../shishiji-dts/motion").MoveData} MoveData
      */
-    
     
     
     /**
      * 
      * @param {TouchList | MouseEvent} y 
      */
-    function set_cursorpos(y){
-        if (y instanceof TouchList)
-            pointerPosition = get_middlePos(y);
-        else
+    function setCursorpos(y){
+        if (y instanceof MouseEvent)
             pointerPosition = [ y.clientX, y.clientY ];
+        else
+            pointerPosition = getMiddlePos(y);
     }
     
     
@@ -1461,7 +1630,7 @@
      * 
      * @param {HTMLCanvasElement} canvas 
      * @param {CanvasRenderingContext2D} ctx 
-     * @param {{top: number, left: number}} moved
+     * @param {MoveData} moved
      */
     function moveMapAssistingNegative(canvas, ctx, moved){
         const x = backcanvas.canvas.coords.x - moved.left/zoomRatio;
@@ -1482,7 +1651,7 @@
      * @deprecated use {@linkcode moveMapAssistingNegative} instead for safari support
      * @param {HTMLCanvasElement} canvas 
      * @param {CanvasRenderingContext2D} ctx 
-     * @param {{top: number, left: number}} moved
+     * @param {MoveData} moved
      */
     function moveMap(canvas, ctx, moved){
         const x = backcanvas.canvas.coords.y-moved.left/zoomRatio;
@@ -1504,15 +1673,13 @@
      * @param {HTMLCanvasElement} canvas 
      * @param {CanvasRenderingContext2D} ctx 
      * @param {number} ratio 
-     * @param {[number, number]} origin
+     * @param {NonnullPosition} origin
      *   (cursorPosition)
-     * @param {[number, number]} [pos]
+     * @param {NonnullPosition} [pos]
      * @param {boolean} [forceRatio] 
      */
     function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
-        if (MOVEPROPERTY.caps.ratio.max < zoomRatio && ratio > 1
-            || MOVEPROPERTY.caps.ratio.min > zoomRatio && ratio < 1
-            ) return;
+        if (willOverflow(ratio, false)) return;
     
         if (pos === void 0)
             pos = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
@@ -1608,7 +1775,7 @@
      *   canvas height
      */
     function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
-        /**@type {_Position} */
+        /**@type {NonnullPosition} */
         const canvasCoords = [sx, sy];
         /**@type {NonnullPosition} */
         var transCoords;
@@ -1653,9 +1820,11 @@
             rotation = backcanvas.canvas.rotation;
         }
         
-        /*var d = backcanvas.toDataURL();
+        var d = backcanvas.toDataURL();
         var _img = new Image();
+    
         _img.src = d;
+    
         bctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
         bctx.translate(origin[0] * zoomRatio, origin[1] * zoomRatio);
         bctx.rotate(rotation);
@@ -1663,7 +1832,7 @@
         
         _img.onload = function(e){
             bctx.drawImage(_img, 0, 0);
-        }*/
+        }
     
         _redraw(canvas, ctx, backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
             backcanvas.canvas.width, backcanvas.canvas.height,
@@ -1673,6 +1842,147 @@
         backcanvas.canvas.rotation += rotation;
     }
     
+    //@ts-check
+    "use strict";
+    
+    
+    /**
+     * @param {HTMLCanvasElement} canvas 
+     * @param {CanvasRenderingContext2D} ctx 
+     * @param {TouchEvent} event 
+     * @returns {{diffRatio: number, crossPos: NonnullPosition, rotation: Radian}}
+     */
+    function touchZoom(canvas, ctx, event){
+        /**@type {NonnullPosition} */
+        var crossPos = [ -1, -1 ];
+        const abs = Math.abs;
+        const touches = event.touches;
+    
+    
+        zoomCD++;
+        const Fx = {
+            previous: {
+                slope: (prevTouchINFO.real[0].clientY - prevTouchINFO.real[1].clientY) / (prevTouchINFO.real[0].clientX - prevTouchINFO.real[1].clientX),
+            },
+            this: {
+                slope: (touches[0].clientY - touches[1].clientY) / (touches[0].clientX - touches[1].clientX),
+            }
+        };
+    
+        const distance = getMidestOfTouches(touches);
+        var diffRatio = distance / previousTouchDistance.distance;
+    
+        if (previousTouchDistance.x == -1 && previousTouchDistance.y == -1 && previousTouchDistance.distance == -1){
+            diffRatio = 1;
+        }
+    
+        previousTouchDistance.distance = distance;
+    
+        //#region 
+        if (Fx.previous.slope == Fx.this.slope){
+            var D1 = touches[0].clientX - prevTouchINFO.touches[0].x;
+            var D2 = touches[1].clientX - prevTouchINFO.touches[1].x;
+    
+            (D1 === 0 && D2 === 0 || D1 + D2 == 0) ? D1 = D2 = 1 : void 0;
+    
+            const R = D1 / (abs(D1) + abs(D2));
+    
+            const addD1x = abs(touches[0].clientX - touches[1].clientX) * R;
+            const addD1y = abs(touches[0].clientY - touches[1].clientY) * R;
+    
+            /**@type {NonnullPosition} */
+            const middle = [
+                touches[0].clientX + addD1x,
+                touches[0].clientY + addD1y,
+            ];
+            
+            prevTouchINFO.middle = middle;
+        } else {
+            const crossX = (
+                    prevTouchINFO.real[0].clientX * Fx.previous.slope - touches[0].clientX * Fx.this.slope
+                    - prevTouchINFO.real[0].clientY + touches[0].clientY
+                )
+                    /
+                (Fx.previous.slope - Fx.this.slope);
+            const crossY = (
+                Fx.this.slope * (crossX - touches[0].clientX) + touches[0].clientY
+            );
+            
+            crossPos = [ Math.ceil(crossX), Math.ceil(crossY) ];
+    
+            if (!crossPos.some(t => { return isNaN(t) })) 0;
+        }
+        //#endregion
+    
+        if (willOverflow(diffRatio, false)) diffRatio = 1;
+    
+        const prevOrigin = getMiddlePos(prevTouchINFO.real);
+        const currentOrigin = getMiddlePos(touches);
+        const x1d = prevOrigin[0] * diffRatio;
+        const y1d = prevOrigin[1] * diffRatio;
+        const diffx = currentOrigin[0] - x1d;
+        const diffy = currentOrigin[1] - y1d;
+    
+    
+        if (zoomCD > MOVEPROPERTY.touch.zoomCD){
+            zoomMapAssistingNegative(canvas, ctx, diffRatio, [ 0, 0 ]);
+            moveMapAssistingNegative(canvas, ctx, {
+                top: diffy,
+                left: diffx
+            });
+        }
+    
+    
+        /**@type {Radian} */
+        var rotation = 0;
+        //#region 
+        /**
+         * can't use this
+         */
+        function _rotateHandler(){
+            const PI = Math.PI;
+            const theta = getThouchesTheta(touches);
+    
+            if (prevTheta === -1)
+                rotation = 0;
+            else if (
+                0 <= prevTheta && prevTheta <= PI
+                    &&
+                PI*(3/2) <= theta && theta <= 2*PI
+                )
+                rotation = -(2*PI - theta + prevTheta);
+            else if (
+                0 <= theta && theta <= PI
+                    &&
+                PI*(3/2) <= prevTheta && prevTheta <= 2*PI
+                )
+                rotation = 2*PI - prevTheta + theta;
+            else 
+                rotation = theta - prevTheta;
+    
+            prevTheta = theta;
+    
+    
+            totalRotateThisTime += Math.abs(rotation);
+            rotatedThisTime += rotation;
+    
+    
+            if (Math.abs(rotatedThisTime) > toRadians(MOVEPROPERTY.touch.rotate.min) || pastRotateMin){
+                if (!pastRotateMin){
+                    rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
+                }
+                pastRotateMin = !0;
+                if (zoomCD > MOVEPROPERTY.touch.zoomCD)
+                    rotateCanvas(canvas, ctx, crossPos, rotation);
+            }
+            
+    
+            rotatedThisTime += rotation;
+        }
+        //#endregion
+    
+        return { diffRatio: diffRatio, crossPos: crossPos, rotation: rotation };
+    }
     
     
     /**
@@ -1683,11 +1993,11 @@
      */
     function onTouchMove(event, canvas, ctx){
         const touches = event.touches;
-        const pos = get_middlePos(touches);
+        const pos = getMiddlePos(touches);
         const prevp = pointerPosition;
     
         /**@type {{diffRatio: number, crossPos: NonnullPosition, rotation: Radian}} */
-        var adjust = { diffRatio: 1, crossPos: [-1, -1], rotation: 0 };
+        var adjust = { diffRatio: 1, crossPos: [ -1, -1 ], rotation: 0 };
     
     
         pointerPosition = pos;
@@ -1702,7 +2012,7 @@
         if (touches.length >= 2 && prevTouchINFO.real !== void 0 && prevTouchINFO.real.length >= 2){
             /**@see {@link (./eventCalcu.js).touchZoom} */
             adjust = touchZoom(canvas, ctx, event);
-            prevTouchINFO.zoom = !0;
+            prevTouchINFO.zoom = true;
         } else {
             pastRotateMin = false;
             rotatedThisTime = 0;
@@ -1776,9 +2086,12 @@
         savePrevTouches(touches);
     }
     
+    //@ts-check
+    "use strict";
+    
     
     /**
-     * zoom canvas by scrolling mouse wheel
+     * Zoom canvas by scrolling mouse wheel
      * @param {WheelEvent} e 
      * @param {HTMLCanvasElement} canvas 
      */
@@ -1821,14 +2134,15 @@
      * use /scripts/coords.py to find coordinate
      * @param {mapObject} objectData 
      */
-    function putObjOnMap(objectData){
+    function putMobjonMap(objectData){
         /**@ts-ignore @type {HTMLElement} */
         const viewer = document.getElementById("shishiji-view");
         /**@ts-ignore @type {HTMLElement} */
         const overview = document.getElementById("shishiji-overview");
         const behavior = objectData.object.type.behavior;
+        const orgname = objectData.discriminator;
         var zIndex = 1001;
-    
+        
         const objectCoords_fromCanvas = {
             x: (objectData.object.coordinate.x - backcanvas.canvas.coords.x) * zoomRatio,
             y: (objectData.object.coordinate.y - backcanvas.canvas.coords.y) * zoomRatio,
@@ -1837,18 +2151,21 @@
         var attrs = "";
         var classes = "";
         var dfcursor = "pointer";
-        const obj_id = formatString(objectIdFormat, objectData.discriminator);
+        const obj_id = formatString(objectIdFormat, orgname);
+        const pathConverter = getPathConverter(objectData);
+        const iconsrc = pathConverter(orgname, objectData.object.images.icon);
+    
     
         switch (behavior){
             case "dynamic":
-                classes += "popups realshadow "
+                classes += "popups realshadow ";
                 break;
             default:
             case "static":
                 zIndex = 999;
-                classes += "mapObj_static"
+                classes += "mapObj_static";
                 if (!objectData.object.type.border)
-                    styles += "border: none; border-radius: 0; background-color: transparent;"
+                    styles += "border: none; border-radius: 0; background-color: transparent;";
                 if (!objectData.article){
                     styles += "cursor: default; pointer-events: none;";
                     dfcursor = "default";
@@ -1863,7 +2180,7 @@
                 coords="${objectData.object.coordinate.x} ${objectData.object.coordinate.y}"
                 behavior="${objectData.object.type.behavior}"
                 dfsize="${objectData.object.size.width} ${objectData.object.size.height}">
-                <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${objectData.object.images.icon}');
+                <div class="canvas_interactive mpobmctx ${classes}" style="background-image:url('${iconsrc}');
     min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.height}px;max-width:${objectData.object.size.width}px;max-height:${objectData.object.size.height}px;${styles}" dfcs="${dfcursor}">
                 </div>
             </div>
@@ -1874,10 +2191,11 @@
         if (objectData.article){
             listenInterOnEnd(el, function(e){
                 const eventDetails = objectData;
+                
                 raiseOverview();
                 writeArticleOverview(eventDetails, true);
     
-                setParam(ParamNames.ARTICLE_ID, objectData.discriminator);
+                setParam(ParamName.ARTICLE_ID, objectData.discriminator);
                 setBehavParam();
             }, { forceLeft: true });
         }
@@ -1947,7 +2265,7 @@
     function showDigitsOnFloor(currentfloor, objects){
         for (const y in objects){
             if (objects[y].object.floor == currentfloor){
-                putObjOnMap(objects[y]);
+                putMobjonMap(objects[y]);
             }
         }
     }
@@ -1967,15 +2285,28 @@
                 y: (coords.y - backcanvas.canvas.coords.y) * zoomRatio,
             };
     
-            const behavior = getBehavior(mapObj);
+            var behavior = getBehavior(mapObj);
             const dfsize = getDefaultSize(mapObj);
     
             var size = dfsize;
+    
+            if (behavior == "dynamic"){
+                if (zoomRatio > MOVEPROPERTY.object.dynamic_to_static.over) behavior = "dynatic";
+                if (zoomRatio < MOVEPROPERTY.object.dynamic_to_static.under) behavior = "_dynatic";
+            }
     
             switch (behavior){
                 case "static":
                     size.width = dfsize.width*zoomRatio;
                     size.height = dfsize.height*zoomRatio;
+                    break;
+                case "dynatic":
+                    size.width = dfsize.width*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.over);
+                    size.height = dfsize.height*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.over);
+                    break;
+                case "_dynatic":
+                    size.width = dfsize.width*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.under);
+                    size.height = dfsize.height*(zoomRatio / MOVEPROPERTY.object.dynamic_to_static.under);
                     break;
                 case "dynamic":
                 default:
@@ -2011,23 +2342,24 @@
         .scrollTop(0);
         $(overview).show();
         $("#overview-share").show();
-        $("#overview-close").on("click", (e) => {
+        $("#overview-close-c").on("click", (e) => {
             e.preventDefault();
             reduceOverview();
         });
-        $("#overview-share").on("click", (e) => {
+        $("#overview-share-c").on("click", (e) => {
             e.preventDefault();
             shareContent();
         });
     
         function shareContent(){
-            const discriminator = getParam(ParamNames.ARTICLE_ID);
+            const discriminator = getParam(ParamName.ARTICLE_ID);
             const data = searchObject(discriminator);
             const _url = new URL(window.location.href);
-            var shareURL = `${_url.origin}${_url.pathname}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+            var shareURL = `${_url.origin}${_url.pathname.replace(/@.*/, "")}?${ParamName.FLOOR}=${CURRENT_FLOOR}&${ParamName.ARTICLE_ID}=${discriminator}`;
     
             if (data == null || discriminator == null){
-                openSharePopup({ title: "" }, "", {}, "", "", true);
+                console.log(data, discriminator)
+                openSharePopup({ title: "" }, "", {}, "", "", {labelkey: "", url: ""}, true);
                 return;
             }
     
@@ -2048,6 +2380,11 @@
                  */
                 ParamValues.FROM_ARTICLE_SHARE,
                 message,
+                {
+                    labelkey: "SHARE_EVENT_INCLUDE_EVTH",
+                    // activve element id match
+                    url: `${shareURL}&${ParamName.SCROLL_POS}=${$("#shishiji-overview").scrollTop()}&${ParamName.ART_TARGET}=${$(".tg-active")[0].id.match(/ovv-t-(.*?)-sd/)?.[1]}`,
+                }
             );
         }
     }
@@ -2083,6 +2420,8 @@
         .addClass("reducedown");
         $("#overview-close").off("click", reduceOverview);
         $("#overview-context").removeClass("fadein");
+    
+        $(".tg-active").removeClass("tg-active");
         
         Intervals.reduceOverview = setTimeout(() => {
             writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
@@ -2092,7 +2431,7 @@
             .hide();
         }, 190);
     
-        delParam(ParamNames.ARTICLE_ID);
+        delParam(ParamName.ARTICLE_ID);
     }
     
     
@@ -2100,14 +2439,19 @@
      * 
      * @param {mapObject} details 
      * @param {boolean} fadein 
+     * @param {number} [scroll_top]
+     * @param {string} [target] 
+     * @param {boolean} [FORCE] 
      */
-    function writeArticleOverview(details, fadein){
+    function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         /**@ts-ignore @type {HTMLElement} */
         const ctx = document.getElementById("overview-context");
         /**@ts-ignore @type {HTMLElement} */
         const overview  = document.getElementById("shishiji-overview");
         const color = (details.article.theme_color) ? details.article.theme_color : "black";
         const font = (details.article.font_family) ? details.article.font_family : "";
+        const orgname = details.discriminator;
+        const pathConvertfunc = getPathConverter(details);
     
         /**
          * 
@@ -2120,14 +2464,14 @@
                 this.outerHTML = `<div class="flxxt" style="width:48px;height:48px;">${GPATH.ERROR_ZAHUMARU}</div>`;
         };
     
-        var article_mainctx = mcFormat(details.article.content);
+        var article_mainctx = mcFormat(details.article.content, fn => { return pathConvertfunc(orgname, fn); });
     
         if (!window.navigator.onLine){
             Notifier.notifyHTML(
                 `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR}</div>`,
                 2500,
                 "article connection error",
-                !0,
+                true,
             );
             $("#ovv-ctx-loading").html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
             $("#overview-share").hide();
@@ -2157,71 +2501,143 @@
         if (fadein)
             $(ctx).addClass("fadein");
         
-        overview.style.borderTop = "solid 20px "+color;
+        overview.style.borderTop = "solid var(--shishiji-ovv-theme-height) "+color;
         $(overview).css("font-family", font);
     
-        writeOverviewContent(`
-            <img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}">
-            <div class="article titleC">
-                <img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}">
-                <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1>
+        const EVENT_HEADER = `<img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}"><div class="article titleC"><img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}"><h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1></div>`;
+    
+        function __onload(){
+            setTimeout(
+                (
+    
+            ) => {
+                $("#overview-context").addClass("_fadein");
+                if (scroll_top !== void 0)
+                    $("#shishiji-overview").scrollTop(scroll_top);
+                scroll_top = 0;
+            }, 25);
+        }
+    
+        class ctx_article_C{
+            static get exists(){
+                return document.getElementById("ctx-article") ? true : false;
+            }
+    
+            /**@param {string} _html @param {() => void} [cb] */
+            static async write(_html, cb){
+                const r = document.getElementById("ctx-article");
+                if (r)
+                    r.innerHTML = _html;
+                if (cb)
+                    cb();
+            }
+        };
+    
+        /**@this {HTMLElement} */
+        function showDescription(){
+            if ($(this).hasClass("tg-active") && !FORCE)
+                return;
+    
+            $("#overview-context").addClass("_wait_f");
+    
+            const _html__w = `
+            <div class="ev_property ev_ppar">
+                <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
             </div>
-            <div id="ctx-article" class="article">
-                <div class="ev_property" style="color: green; font-weight: bold; margin: 20px;">
-                    <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
-                </div>
-                ${article_mainctx}
-                <hr style="margin-top: 20px;">
-                <div class="ev_property">
-                    <table style="width: 100%;">
-                        <tbody>
-                            <tr class="ev_property">
-                                <th class="ev_property_cell" aria-label="開催場所">
-                                    開催場所
-                                </th>
-                                <th class="ev_property_cell" aria-label="${details.article.venue}">
-                                    ${details.article.venue}
-                                </th>
-                            </tr>
-                            <tr class="ev_property">
-                                <th class="ev_property_cell">
-                                    開催時間
-                                </th>
-                                <th class="ev_property_cell">
-                                    ${details.article.schedule}
-                                </th>
-                            </tr>
-                            ${custom_tr}
-                            <tr class="ev_property">
-                                <th class="ev_property_cell">
-                                    予想待ち時間
-                                </th>
-                                <th class="ev_property_cell" aria-label="${details.article.crowd_status.estimated}分">
-                                    ${details.article.crowd_status.estimated}分
-                                </th>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="crowded_lim">
-                        <p style="font-weight: bold; margin: 10px; margin-top: 0; margin-bottom: 5px;" aria-label="混み具合">
-                            混み具合
-                        </p>
-                        <div class="crowded_deg_bar"></div>
-                        <div id="crowed_pointer" style="position: relative;">
-                            <div class="ccENTER_B" style="position: absolute; left: ${details.article.crowd_status.level}%;">
-                                <span class="material-symbols-outlined"
-                                    style="position: absolute; margin-top: 5px;">
-                                    north
-                                </span>
-                            </div>
+            ${article_mainctx}
+            `;
+            if (ctx_article_C.exists)
+                ctx_article_C.write(_html__w, __onload);
+            else
+                writeOverviewContent(
+                    `${EVENT_HEADER}<div id="ctx-article" class="article">${_html__w}</div>`, __onload);
+            if (fadein)
+            $("#overview-context").removeClass("fadein").removeClass("_fadein");
+            $(".tg-active").removeClass("tg-active");
+            $(this).addClass("tg-active");
+            $(".article-image").addClass("doaJSD");
+            $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
+            $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
+        }
+    
+        /**@this {HTMLElement} */
+        function showDetails(){
+            if ($(this).hasClass("tg-active") && !FORCE)
+                return;
+    
+            $("#overview-context").addClass("_wait_f");
+    
+            const __htmlw = `
+            <hr style="margin: 40px 20px 20px 20px;">
+            <div class="ev_property">
+                <table style="width: 100%;">
+                    <tbody>
+                        <tr class="ev_property">
+                            <th class="ev_property_cell" aria-label="開催場所">
+                                開催場所
+                            </th>
+                            <th class="ev_property_cell" aria-label="${details.article.venue}">
+                                ${details.article.venue}
+                            </th>
+                        </tr>
+                        <tr class="ev_property">
+                            <th class="ev_property_cell">
+                                開催時間
+                            </th>
+                            <th class="ev_property_cell">
+                                ${details.article.schedule}
+                            </th>
+                        </tr>
+                        ${custom_tr}
+                        <tr class="ev_property">
+                            <th class="ev_property_cell">
+                                予想待ち時間
+                            </th>
+                            <th class="ev_property_cell" aria-label="${details.article.crowd_status.estimated}分">
+                                ${details.article.crowd_status.estimated}分
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="crowded_lim">
+                    <p style="font-weight: bold; margin: 10px; margin-top: 0; margin-bottom: 5px;" aria-label="混み具合">
+                        混み具合
+                    </p>
+                    <div class="crowded_deg_bar"></div>
+                    <div id="crowed_pointer" style="position: relative;">
+                        <div class="ccENTER_B" style="position: absolute; left: ${details.article.crowd_status.level}%;">
+                            <span class="material-symbols-outlined"
+                                style="position: absolute; margin-top: 5px;">
+                                north
+                            </span>
                         </div>
                     </div>
                 </div>
-                <hr style="margin-bottom: 20px;">
             </div>
-        `, );
-        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", details.article.images.header);
-        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", details.object.images.icon);
+            <hr style="margin: 20px;">
+            `;
+            if (ctx_article_C.exists)
+                ctx_article_C.write(__htmlw, __onload);
+            else
+                writeOverviewContent(`${EVENT_HEADER}<div id="ctx-article" class="article">${__htmlw}</div>`, __onload);
+    
+            $("#overview-context").removeClass("fadein").removeClass("_fadein");
+            $(".tg-active").removeClass("tg-active");
+            $(this).addClass("tg-active");
+            $(".article-image").addClass("doaJSD");
+            $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
+            $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
+        }
+    
+        $("#ovv-t-description-sd").off("click", Ovv_tg_listener.description).on("click", showDescription);
+        $("#ovv-t-details-sd").off("click", Ovv_tg_listener.details).on("click", showDetails);
+        Ovv_tg_listener.description = showDescription;
+        Ovv_tg_listener.details = showDetails;
+    
+        if (!target || !["description", "details", "else"].includes(target))
+            target = "description";
+        
+        document.getElementById(`ovv-t-${target}-sd`)?.dispatchEvent(new Event("click"));
     }
     
     
@@ -2230,7 +2646,7 @@
      * @param {string} ctx
      * @param {() => void} [callback] 
      */
-    function writeOverviewContent(ctx, callback){
+    async function writeOverviewContent(ctx, callback){
         new Promise((resolve, reject) => {
             $("#overview-context").html(ctx);
             resolve("");
@@ -2250,36 +2666,46 @@
     "use strict";
     
     
-    /**@type {NodeJS.Timeout} FAKE*/
-    var lst;
     /**
      * 
+     * @this {JQuery<HTMLElement>}
      * @param {boolean} openned 
      */
     function toggleFeslOn(openned){
         if (!openned){
-            clearTimeout(lst);
-            this.addClass("toSel popped");
+            this
+            .removeClass("toSel undoSel")
+            .addClass("toSel popped");
             $("#place-options-w")
             .show()
+            .removeClass("toSel undoSel")
             .addClass("toSel");
         } else {
-            this.addClass("undoSel").removeClass("popped");
+            this
+            .addClass("undoSel")
+            .removeClass("popped");
             $("#place-options-w").addClass("undoSel");
-            lst = setTimeout(() => {
-                this.removeClass("toSel undoSel")
-                $("#place-options-w")
-                .hide()
-                .removeClass("toSel undoSel");
-            }, 190);
         }
+    }
+    
+    
+    function setPlaceSelColor(p){
+        if (p === void 0) p = CURRENT_FLOOR;
+        $(".placeOpt").each(function(index, elm){
+            if (!this.textContent) return;
+            const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
+            if (text === p)
+                $(this).css("background-color", overlay_modes.fselector.colors.current);
+            else if (text.length > 1)
+                $(this).css("background-color", overlay_modes.fselector.colors.else);
+        });
     }
     
     
     /**
      * 
      * @param {string} floor 
-     * @param {{[key: string]: number}} data 
+     * @param {DrawMapData} data 
      * @param {() => void} [callback] 
      */
     function changeFloor(floor, data, callback){
@@ -2315,7 +2741,7 @@
                 callback();
         });
         CURRENT_FLOOR = floor;
-        setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+        setParam(ParamName.FLOOR, CURRENT_FLOOR);
         setPlaceSelColor();
     }
     
@@ -2325,28 +2751,39 @@
     
     /**
      * 
-     * @param {{ title: string, subtitle?: string }} ovvOptions 
+     * @param {{title: string, subtitle?: string}} ovvOptions 
      * @param {string} share_url 
      * @param {ShareData} share_data 
      *      share_data.text?.replace("{__SHARE_URL__}", finalShareURL<decoded>);
      * @param {string} from_where 
      * @param {string} message 
+     * @param {{labelkey: string, url: string}} [change_option] 
      * @param {boolean} [ERROR] 
      */
-    function openSharePopup(ovvOptions, share_url, share_data, from_where, message, ERROR){
-        Popup.popupContent(`<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
+    function openSharePopup(ovvOptions, share_url, share_data, from_where, message, change_option, ERROR){
+        Popup.startLoad();
         share_url = decodeURIComponent(share_url);
         /**@param {string} [ctx]  */
         function onerr(ctx){
             if (ctx === void 0) ctx = TEXT[LANGUAGE].ERROR_ANY;
-            const _html = `<div class="realshadow protected" id="ppupds"><div class="mx-text-center flxxt" style="flex-direction:column;"><div style="width:125px;margin-bottom:4px;">${GPATH.ERROR_ZAHUMARU}</div><h4>${ctx}</h4></div></div>`;
             Notifier.notifyHTML(
                 `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY}</div>`,
                 2500,
                 "sharePopup connection error",
                 !0,
             );
-            Popup.popupContent(_html);
+            if (Popup.popupping)
+                Popup.showasError(ctx);
+        }
+    
+        /**
+         * 
+         * @param {string} url 
+         * @param {string} pn 
+         * @param {string} pv 
+         */
+        function adp(url, pn, pv){
+            return url.includes("?") ? `${url}&${pn}=${pv}` : `${url}?${pn}=${pv}`;
         }
         
         $.ajax({
@@ -2357,7 +2794,9 @@
         }).done(t => {
             if (Popup.popupping){
                 Popup.popupContent(t, function(){
-                    const shareURL = share_url.includes("?") ? `${share_url}&${ParamNames.URL_FROM}=${from_where}` : `${share_url}?${ParamNames.URL_FROM}=${from_where}`;
+                    const shareURL = adp(share_url, ParamName.URL_FROM, from_where);
+                    var fch = [];
+                    var _fchp = {share: () => {}, copy: () => {}};
     
                     if (ERROR){
                         onerr();
@@ -2368,80 +2807,138 @@
                     if (ovvOptions.subtitle)
                         $("#ppc-subtitle").text(ovvOptions.subtitle);
     
-                    if (window.navigator.share){
-                        share_data.text = share_data.text?.replace("{__SHARE_URL__}", shareURL);
-                        !function(sd){
-                            $("#share-nav").on("click", async function(){
-                                await window.navigator.share(sd);
-                            });
-                            return 0;
-                        }(share_data);
-                    } else {
-                        $("#nav-share").remove();
+                    /**
+                     * 
+                     * @param {string} [url] 
+                     */
+                    function shareShare(url){
+                        if (window.navigator.share){
+                            share_data.text = share_data.text?.replace("{__SHARE_URL__}", url || shareURL);
+                            !function(sd){
+                                async function T(){
+                                    await window.navigator.share(sd);
+                                }
+                                $("#share-nav").off("click", _fchp.share).on("click", T);
+                                _fchp.share = T;
+                                return 0;
+                            }(share_data);
+                        } else {
+                            $("#nav-share").remove();
+                        }
                     }
-                    $("#share-copy").on("click", function(){
-                        window.navigator.clipboard.writeText(shareURL);
-                        Notifier.notifyHTML(
-                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
-                            2500,
-                            "copy artshare",
-                        );
-                    });
+    
+                    shareShare();
+    
+    
+                    /**
+                     * 
+                     * @param {string} [url] 
+                     */
+                    function copyShare(url){
+    
+                        function T(){
+                            window.navigator.clipboard.writeText(url || shareURL);
+                            Notifier.notifyHTML(
+                                `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
+                                2500,
+                                "copy artshare",
+                            );
+                        }
+                        $("#share-copy").off("click", _fchp.copy).on("click", T);
+    
+                        _fchp.copy = T;
+                    }
+    
+                    copyShare();
+    
+    
+                    if (change_option){
+                        $("#includeScr").text(TEXT[LANGUAGE][change_option.labelkey]);
+                        $("#includeScrCh").on("change", function(e){
+                            //@ts-ignore
+                            if (this.checked){
+                                for (var i = 0; i < document.getElementsByClassName("share_ebtn").length; i++){
+                                    $(document.getElementsByClassName("share_ebtn")[i]).off("click", fch[i]);
+                                }
+                                const upp = adp(change_option.url, ParamName.URL_FROM, from_where);
+                                setShareLink(upp);
+                                shareShare(upp);
+                                copyShare(upp);
+                            } else {
+                                setShareLink();
+                                shareShare();
+                                copyShare();
+                            }
+                        });
+                    } else {
+                        $("#includeScrCh").remove();
+                    }
                     
                     message = encodeURIComponent(message);
-                    const here = encodeURIComponent(shareURL);
-                    const baseText = `${message}%0A${here}`;
     
-                
-                    for (const ch of document.getElementsByClassName("share_ebtn")){
-                        const appname = ch.id.replace("share-", "");
-                        const $ch = $(ch);
-                        var href = "";
-                        
-                        switch (appname){
-                            case "line":
-                                href = `http://line.me/R/msg/text/?${baseText}`;
-                                break;
-                            case "twitter":
-                                href = `https://x.com/intent/tweet?url=${here}&text=%0A%0A${message}%0A${encodeURIComponent("#獅子児祭 @shishijifes")}%0A&related=shishiji`;
-                                break;
-                            case "facebook":
-                                href = `http://www.facebook.com/share.php?u=${here}`;
-                                break;
-                            case "gmail":
-                                href = `https://mail.google.com/mail/?view=cm&body=%0A%0A${baseText}`;
-                                break;
-                            case "mail":
-                                href = `mailto:?body=%0A%0A${baseText}`;
-                                break;
-                            case "sms":
-                                href = `sms:?body=%0A%0A${baseText}`;
-                                break;
-                            case "whatsapp":
-                                href = `https://api.whatsapp.com/send?text=${baseText}`;
-                                break;
-                            default:
-                                continue;
+    
+                    /**
+                     * @param {string} [share_url] 
+                     */
+                    function setShareLink(share_url){
+                        const here = encodeURIComponent(share_url || shareURL);
+                        const baseText = `${message}%0A${here}`;
+                        fch = [];
+                        for (const ch of document.getElementsByClassName("share_ebtn")){
+                            const appname = ch.id.replace("share-", "");
+                            const $ch = $(ch);
+                            var href = "";
+                            
+                            switch (appname){
+                                case "line":
+                                    href = `http://line.me/R/msg/text/?${baseText}`;
+                                    break;
+                                case "twitter":
+                                    href = `https://x.com/intent/tweet?url=${here}&text=%0A%0A${message}%0A${encodeURIComponent("#獅子児祭 @shishijifes")}%0A&related=shishiji`;
+                                    break;
+                                case "facebook":
+                                    href = `http://www.facebook.com/share.php?u=${here}`;
+                                    break;
+                                case "gmail":
+                                    $("#share-gmail").parent().parent().remove();
+                                    href = `https://mail.google.com/mail/?view=cm&body=%0A%0A${baseText}`;
+                                    break;
+                                case "mail":
+                                    href = `mailto:?body=%0A%0A${baseText}`;
+                                    break;
+                                case "sms":
+                                    href = `sms:?body=%0A%0A${baseText}`;
+                                    break;
+                                case "whatsapp":
+                                    href = `https://api.whatsapp.com/send?text=${baseText}`;
+                                    break;
+                                default:
+                                    continue;
+                            }
+            
+                            !function(_href){
+                                function lopp(){
+                                    window.open(_href, "_blank");
+                                }
+                                $ch.on("click", lopp);
+                                fch.push(lopp);
+                                return 0;
+                            }(href);
                         }
         
-                        !function(_href){
-                            $ch.on("click", function(){
-                                window.open(_href, "_blank");
-                            });
-                            return 0;
-                        }(href);
+                        /**except japanese */
+                        function translate(){
+                            $("#--share-bru").text("Share");
+                            $("#--trans-MAIL").text("Email");
+                            $("#--trans-MESSAGE").text("Messages");
+                            $("#--trans-COPYLINK").text("Copy Link");
+                            $("#--trans-OTHERS").text("Others");
+                        }
+                        if (LANGUAGE != "JA")
+                            translate();
                     }
     
-                    /**except japanese */
-                    function translate(){
-                        $("#--share-bru").text("Share");
-                        $("#--trans-MAIL").text("Email");
-                        $("#--trans-MESSAGE").text("Messages");
-                        $("#--trans-COPYLINK").text("Copy Link");
-                        $("#--trans-OTHERS").text("Others");
-                    }
-                    if (LANGUAGE != "JA")
-                        translate();
+                    setShareLink();
                 });
             }
         })
@@ -2452,27 +2949,42 @@
     "use strict";
     
     
+    /**
+     * @typedef {import("../shishiji-dts/objects").NoticeComponent} NoticeComponent
+     */
+    
+    
     class Notifier{
+        /**@type {NoticeComponent[]} */
+        static pending_notices = [];
+    
+    
         /**
          * 
          * @param {string} html 
          * @param {number} term 
          *      millisecond
          * @param {string} discriminator
+         *      some unique id
          * @param {boolean} [do_not_keep] 
          *      default: false
          * @param {boolean} [user_uncloseable]
          *      default: false 
+         * @param {boolean} [_ispendingf] 
          */
-        static notifyHTML(html, term, discriminator, do_not_keep, user_uncloseable){
+        static notifyHTML(html, term, discriminator, do_not_keep, user_uncloseable, _ispendingf){
             const $notifier = $("#--yd-notifier");
-            
+            const te = document.createTextNode(html).textContent;        
             
             if (Notifier_prop.notifying && Notifier_prop.current == discriminator && !do_not_keep)
                 return;
     
-            if (html.endsWith(".</div>") || html.endsWith("!</div>"))
+            if (te?.endsWith(".") || te?.endsWith("!") || te?.endsWith("?"))
                 html += "&nbsp;";
+    
+                
+            if (!_ispendingf)
+                this.clearPengings();
         
             Notifier_prop.current = discriminator;
         
@@ -2481,7 +2993,7 @@
             clearTimeout(Notifier_prop.__Timeout);
             
             if (Notifier_prop.notifying){
-                this.closeNotifier();
+                this.closeNotifier(true);
                 Notifier_prop._Timeout = setTimeout(() => {
                     doOpen.apply(this, [user_uncloseable]);
                 }, 75);
@@ -2503,39 +3015,69 @@
     
                 if (!cant_close){
                     this._add_closeOnInter();
+                } else {
+                    $notifier.addClass("--path-through");
                 }
             
                 Notifier_prop.notifying = !0;
             
                 Notifier_prop.Timeout = setTimeout(() => {
-                    this.closeNotifier();
+                    this.closeNotifier(true);
                 }, term);
             }
+    
             doOpen.apply(this, [user_uncloseable]);
         }
     
     
-        static closeNotifier(){
+        /**
+         * 
+         * @param {boolean} [keep_discriminator] 
+         */
+        static closeNotifier(keep_discriminator){
             clearTimeout(Notifier_prop.__Timeout);
             $("#--yd-notifier")
+            .removeClass("--path-through")
             .removeClass("vpopen")
             .addClass("hpipe");
             
             this._remove_closeOnInter();
     
-            Notifier_prop.notifying = !!0;
+            Notifier_prop.notifying = false;
             Notifier_prop.__Timeout = setTimeout(() => {
                 $("#--ott-us").empty();
                 $("#--yd-notifier").hide();
-                Notifier_prop.current = "";
+                if (!keep_discriminator)
+                    Notifier_prop.current = "";
+                if (this.pending_notices.length > 0){
+                    const arg = this.pending_notices[0];
+                    this.notifyHTML(arg.html, arg.term, arg.discriminator, arg.do_not_keep, arg.user_uncloseable, true);
+                    this.pending_notices.shift();
+                }
             }, 70);
+        }
+    
+    
+        /**
+         * 
+         * @param {NoticeComponent} arg 
+         */
+        static appendPending(arg){
+            this.pending_notices.push(arg);
+        }
+    
+    
+        static clearPengings(){
+            this.pending_notices = [];
         }
     
     
         static _add_closeOnInter(){
             const $notifier = $("#--yd-notifier");
             
-            $notifier.on("touchstart mousedown", this._interClose);
+            $notifier
+            .removeClass("--path-through")
+            .on("touchstart mousedown", this._interClose);
         }
     
     
@@ -2564,22 +3106,59 @@
     "use strict";
     
     
+    /**
+     * @typedef {import("../shishiji-dts/objects").PopupOptions} PopupOptions
+     */
+    
+    
     class Popup{
+        /**@see {@link _keydisposal} */
+        static closeKeys = [ "ESCAPE", ];
         /**
          * 
          * @param {string} _innerHTML 
          * @param {() => void} [callback] 
+         * @param {PopupOptions} [options]
          */
-        static popupContent(_innerHTML, callback){
+        static async popupContent(_innerHTML, callback, options){
             const ppcls = GPATH.X;
-            
-            new Promise((resolve, reject) => {
+    
+            if (options === void 0){
+                options = {
+                    width: 500,
+                    height: 450,
+                };
+            } else {
+                if (!options.width)
+                    options.width = 500;
+                if (!options.height)
+                    options.height = 450;
+            }
+    
+            if (options.hideclosebutton && options.forceclosebutton)
+                console.warn("hideclosebutton and forceclosebutton shouldn't be true at same time!!");
+    
+            if (!options.hideclosebutton)
+                _innerHTML = ppcls + _innerHTML;
+    
+            window.removeEventListener("keydown", this._keydisposal);
+            $("shishiji-mx-overlay").off("click", this._dispose);
+            return new Promise((resolve, reject) => {
+                if (!options?.forceclosebutton){
+                    window.addEventListener("keydown", this._keydisposal);
+                    $("shishiji-mx-overlay").on("click", this._dispose);
+                }
                 $("shishiji-mx-overlay")
                 .removeClass("pipe")
-                .addClass("popen")
-                .on("click", this._dispose);
+                .addClass("popen");
                 $("#shishiji-popup-container-c")
-                .html(ppcls+_innerHTML)
+                .removeClass("flxxt")
+                .css("overflow", "")
+                .css("height", "")
+                .css("width", "")
+                //@ts-ignore
+                .css("max-width", options.width).css("max-height", options.height).css("left", `calc((var(--window-width) - 48px - min(${options.width}px, var(--window-width) - 48px))/2)`)
+                .html(_innerHTML)
                 .show();
                 resolve("");
             }).then(() => {
@@ -2588,8 +3167,72 @@
                     callback();
             });
         }
+    
+    
+        /**
+         * 
+         * @param {string} src 
+         * @param {"img" | "video"} mediatype 
+         * @param {() => void} [callback] 
+         */
+        static async popupMedia(src, mediatype, callback){
+            const ppcls = GPATH.X;
+            var _html = ppcls;
+            
+            switch (mediatype){
+                case "img":
+                    _html += `<img class="suhDWAgd" src="${src}">`;
+                    break;
+                case "video":
+                    _html += `<video class="suhDWAgd" src="${src}" controls preload="metadata" playsinline=""></video>`;
+                    break;
+            }
+    
+            return new Promise((resolve, reject) => {
+                window.addEventListener("keydown", this._keydisposal);
+                $("shishiji-mx-overlay")
+                .removeClass("pipe")
+                .addClass("popen")
+                .on("click", this._dispose);
+                $("#shishiji-popup-container-c")
+                .addClass("flxxt")
+                .css("max-height", "fit-content")
+                .css("height", "fit-content")
+                .css("overflow", "visible")
+                .html(_html)
+                .show();
+                resolve("");
+            }).then(() => {
+                $("#ppcls")
+                .css("top", "-40px")
+                .css("right", "0")
+                .on("click", this.disPop);
+                /**<path fill="#ffffff"></path> */
+                $($($("#ppcls").children()[0]).children()[0])
+                .attr("fill", "blue");
+    
+                if (callback !== void 0)
+                    callback();
+            });
+        }
+    
+    
+        static startLoad(){
+            this.popupContent(`<div class="protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
+        }
+    
+    
+        /**
+         * 
+         * @param {string} message 
+         */
+        static showasError(message){
+            this.popupContent(`<div class="protected" id="ppupds"><div class="mx-text-center flxxt" style="flex-direction:column;"><div style="width:125px;margin-bottom:4px;">${GPATH.ERROR_ZAHUMARU}</div><h4>${message}</h4></div></div>`);
+        }
         
+    
         static disPop(){
+            window.removeEventListener("keydown", this._keydisposal);
             $("#ppcls").off("click", this.disPop);
             $("shishiji-mx-overlay")
             .removeClass("popen")
@@ -2600,14 +3243,59 @@
             .empty();
         }
     
+    
         static get popupping(){
             const me = document.getElementById("shishiji-popup-container-c");
-            return (me?.style.display != "none") ? true : false;
+            return ( me?.clientHeight != 0 ) ? true : false;
         }
     
+    
+        static setsize(){
+            const $cp = $("#shishiji-popup-container-c");
+    
+            /**@param {string} str  */
+            function delpxToNum(str){
+                return Number(str.replace("px", ""));
+            }
+    
+            const base = {
+                width: delpxToNum($cp.css("width")),
+                height: delpxToNum($cp.css("height")),
+                margin: delpxToNum($cp.css("margin"))
+            };
+            
+            var width = delpxToNum($cp.css("width"));
+            var height = delpxToNum($cp.css("height"));
+            var margin = delpxToNum($cp.css("margin"));
+            
+            if (window.innerWidth <= width+margin*2){
+                $cp.css("width", window.innerWidth-margin*2+"px");
+                width = window.innerWidth-margin*2;
+            } else {
+                $cp.css("width", base.width+"px");
+            }
+    
+            $cp
+            .css("top", (window.innerHeight-(margin*2+height))/2+"px")
+            .css("left", (window.innerWidth-(margin*2+width))/2+"px");
+        }
+    
+        
         static _dispose(){
             if (Popup.popupping)
                 Popup.disPop();
+        }
+    
+    
+        /**
+         * 
+         * @param {KeyboardEvent} e 
+         */
+        static _keydisposal(e){
+            const key = e.key.toUpperCase();
+            if (Popup.closeKeys.includes(key)){
+                Popup._dispose();
+            }
         }
     }
     
@@ -2631,6 +3319,7 @@
             const fselector = document.getElementById("place-selector");
             /**window.location.href replace timeout */
             var tout = 0;
+        
         
             /**
              * @param {Event} e  
@@ -2662,7 +3351,7 @@
                 
                 init_friction();
                 initTouch(e);
-                set_cursorpos(e.touches);
+                setCursorpos(e.touches);
         
                 if (e.touches.length >= 2)
                     setTheta(e.touches);
@@ -2683,7 +3372,7 @@
                 }
         
                 init_friction();
-                set_cursorpos(e);
+                setCursorpos(e);
         
                 window.addEventListener("mousemove", mm, { passive: false });
             }, { passive: false });
@@ -2715,6 +3404,103 @@
             window.addEventListener("mousewheel", wheel_move, { passive: true });
         
         
+            /**@type {{[key: string]: {pressing: boolean, _do: (arg0: MoveData) => MoveData, _leave: () => void}}} */
+            var arrowkeyBehavs = {
+                arrowup: {
+                    pressing: false,
+                    /**@param {MoveData} moves*/
+                    _do: function(moves){
+                        moves.top += MOVEPROPERTY.arrowkeys.move;
+                        return moves;
+                    },
+                    _leave: function(){
+                        frict(0, MOVEPROPERTY.arrowkeys.move*1000/MOVEPROPERTY.arrowkeys.interval);
+                    },
+                },
+                arrowdown: {
+                    pressing: false,
+                    /**@param {MoveData} moves*/
+                    _do: function(moves){
+                        moves.top += -MOVEPROPERTY.arrowkeys.move;
+                        return moves;
+                    },
+                    _leave: function(){
+                        frict(0, -MOVEPROPERTY.arrowkeys.move*1000/MOVEPROPERTY.arrowkeys.interval);
+                    },
+                },
+                arrowleft: {
+                    pressing: false,
+                    /**@param {MoveData} moves*/
+                    _do: function(moves){
+                        moves.left += MOVEPROPERTY.arrowkeys.move;
+                        return moves;
+                    },
+                    _leave: function(){
+                        frict(MOVEPROPERTY.arrowkeys.move*1000/MOVEPROPERTY.arrowkeys.interval, 0);
+                    },
+                },
+                arrowright: {
+                    pressing: false,
+                    /**@param {MoveData} moves*/
+                    _do: function(moves){
+                        moves.left += -MOVEPROPERTY.arrowkeys.move;
+                        return moves;
+                    },
+                    _leave: function(){
+                        frict(-MOVEPROPERTY.arrowkeys.move*1000/MOVEPROPERTY.arrowkeys.interval, 0);
+                    },
+                },
+            };
+        
+            
+            /**@ts-ignore @type {NodeJS.Timeout} */
+            var _ami = 0;
+            function _arrowmoves(){
+                clearInterval(_ami);
+                _ami = setInterval(() => {
+                    /**@type {MoveData} */
+                    var _moves = { top: 0, left: 0 };
+                    for (const _key in arrowkeyBehavs){
+                        if (arrowkeyBehavs[_key].pressing)
+                            _moves = arrowkeyBehavs[_key]._do(_moves);
+                    }
+                    moveMapAssistingNegative(canvas, ctx, _moves);
+                }, MOVEPROPERTY.arrowkeys.interval);
+            }
+            function _stopArrowmoves(){
+                clearInterval(_ami);
+            }
+        
+            window.addEventListener("keydown", function(e){
+                const key = e.key.toLowerCase();
+                
+                if (key in arrowkeyBehavs){
+                    var actives = 0;
+                    Object.keys(arrowkeyBehavs).forEach(o => { if (arrowkeyBehavs[o].pressing) actives++; })
+                    if (actives == 0){
+                        _arrowmoves();
+                    }
+        
+                    arrowkeyBehavs[key].pressing = true;
+                }
+            });
+        
+            
+            window.addEventListener("keyup", function(e){
+                const key = e.key.toLowerCase();
+        
+                if (key in arrowkeyBehavs){
+                    arrowkeyBehavs[key].pressing = false;
+        
+                    var actives = 0;
+                    Object.keys(arrowkeyBehavs).forEach(o => { if (arrowkeyBehavs[o].pressing) actives++; })
+                    if (actives == 0){
+                        _stopArrowmoves();
+                    }
+                }
+            });
+        
+        
             function wheel_move(e){
                 if (illegal(e))
                     return;
@@ -2722,14 +3508,7 @@
                 //@ts-ignore
                 tout = setTimeout(() => {
                     setBehavParam();
-                }, 500);
-                map_wrapper.style.cursor = "move";
-                Array.from(document.getElementsByClassName("canvas_interactive")).forEach(
-                    p => {
-                        //@ts-ignore
-                        p.style.cursor = "move";
-                    }
-                );
+                }, href_replaceCD);
                 canvasonScroll(e, canvas);
             }
         
@@ -2772,6 +3551,7 @@
                 function i(n){
                     return n < 0 ? -1 : 1;
                 }
+        
                 if (frictInterval !== null)
                     clearInterval(frictInterval);
         
@@ -2788,14 +3568,16 @@
                     var ag = { top: vy/1000, left: vx/1000 };
                     if (ag.top*vy0 <= 0) ag.top = 0;
                     if (ag.left*vx0 <= 0) ag.left = 0;
+        
                     moveMapAssistingNegative(canvas, ctx, ag);
+        
                     vx += dxa;
                     vy += dya;
                     if (vx*vx0 <= 0 && vy*vy0 <= 0 && frictInterval !== null){
                         //@ts-ignore
                         tout = setTimeout(function(){
                             setBehavParam();
-                        }, 500)
+                        }, href_replaceCD)
                         clearInterval(frictInterval);
                     }
                 }, 1);
@@ -2854,6 +3636,7 @@
                 const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
                 if (text.length < 1)
                     return;
+                
         
                 /**@this {HTMLElement} @param {string} name */
                 function addListener(name){
@@ -2893,6 +3676,36 @@
             // overview
             writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">${TEXT[LANGUAGE].PROCESSING}</h4></div>`, );
         
+        
+            window.addEventListener("click", function(e){
+                /**@ts-ignore @type {HTMLElement} */
+                const target = e.target;
+                
+                if ($(target).hasClass("article-image")){
+                    const src = target.getAttribute("src");
+        
+                    if (src)
+                        Popup.popupMedia(src, "img");
+                } else if ($(target).hasClass("article-video")){
+                    const src = target.getAttribute("src");
+        
+                    /*if (src)
+                        Popup.popupMedia(src, "video");*/
+                }
+            });
+        
+            window.addEventListener("dblclick", function(e){
+                /**@ts-ignore @type {HTMLElement} */
+                const target = e.target;
+        
+                if ($(target).hasClass("article-video")){
+                    const src = target.getAttribute("src");
+        
+                    /*if (src)
+                        Popup.popupMedia(src, "video");*/
+                }
+            });
+        
             return 0;
         }();
         
@@ -2902,8 +3715,12 @@
         
         
         !function(){
-            // popup
+            /**
+             * popup
+             * using css {@link ../css/shishijimap.css:474}
+             */
             !function(){
+                return;
                 const $cp = $("#shishiji-popup-container-c");
         
                 /**@param {string} str  */
@@ -2934,7 +3751,6 @@
                     .css("left", (window.innerWidth-(margin*2+width))/2+"px");
                 });
         
-                window.dispatchEvent(new Event("resize"));
                 return 0;
             }();
         
@@ -2965,43 +3781,51 @@
             /**@ts-ignore @type {string} */
             const loadType = window.performance?.getEntriesByType("navigation")[0].type;
             const PARAMS = {
-                article: getParam(ParamNames.ARTICLE_ID),
-                zoomRatio: Number(getParam(ParamNames.ZOOM_RATIO)) || 1,
-                floor: getParam(ParamNames.FLOOR),
-                coords: getParam(ParamNames.COORDS)?.split("*").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
-                from: getParam(ParamNames.URL_FROM),
-                lang: isThereLang(getParam(ParamNames.LANGUAGE)) || "JA",
+                article: getParam(ParamName.ARTICLE_ID),
+                zoomRatio: Number(getParam(ParamName.ZOOM_RATIO)) || 1,
+                floor: getParam(ParamName.FLOOR),
+                coords: getParam(ParamName.COORDS)?.split(",").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? 0 : Number(a); }) || [ 0, 0 ],
+                from: getParam(ParamName.URL_FROM),
+                lang: digitLang(getParam(ParamName.LANGUAGE)),
             };
-            LANGUAGE = PARAMS.lang;
-            if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
+        
+        
+            LANGUAGE = PARAMS.lang || getUserLang() || "JA";
+            
+            if (PARAMS.coords.length != 2 
+                || PARAMS.coords.some(u => {
+                if (!u || isNaN(u))
+                    return true;
+                }
+            )) PARAMS.coords = [ 0, 0 ];
         
             if (loadType == "reload"){
                 switch (reloadInitializeLevel){
                     case reloadInitializeLevels.DO_EVERYTHING:
                     case reloadInitializeLevels.INIT_FLOOR:
                         PARAMS.floor = null;
-                        delParam(ParamNames.FLOOR);
+                        delParam(ParamName.FLOOR);
                     case reloadInitializeLevels.INIT_COORDS:
                         PARAMS.coords = [ 0, 0 ];
-                        delParam(ParamNames.COORDS);
+                        delParam(ParamName.COORDS);
                     case reloadInitializeLevels.INIT_ZOOMRADIO:
                         PARAMS.zoomRatio = 1;
-                        delParam(ParamNames.ZOOM_RATIO);
+                        delParam(ParamName.ZOOM_RATIO);
                     case reloadInitializeLevels.CLOSE_ARTICLE:
                         PARAMS.article = null;
-                        delParam(ParamNames.ARTICLE_ID);
+                        delParam(ParamName.ARTICLE_ID);
                     case reloadInitializeLevels.DO_NOTHING:
                     default:
         
                 }
             }
         
-            delParam(ParamNames.URL_FROM);
+            delParam(ParamName.URL_FROM);
         
             startLoad(TEXT[LANGUAGE].LOADING_MAP);
             setCanvasSizes();
         
-            $.get("/data/map-data/conf")
+            $.post("/data/map-data/conf")
             .done(function(data){
                 MAPDATA = data;
                 var initial_floor = data.initial_floor;
@@ -3024,7 +3848,11 @@
                         //@ts-ignore
                         x: PARAMS.coords[0], y: PARAMS.coords[1]
                     };
+                    if (PARAMS.zoomRatio > MOVEPROPERTY.caps.ratio.max) PARAMS.zoomRatio = MOVEPROPERTY.caps.ratio.max;
+                    if (PARAMS.zoomRatio < MOVEPROPERTY.caps.ratio.min) PARAMS.zoomRatio = MOVEPROPERTY.caps.ratio.min;
+        
                     zoomRatio = PARAMS.zoomRatio;
+                    
                     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
                     setBehavParam();
         
@@ -3034,7 +3862,7 @@
                 }
             
                 !function(){
-                    $.get("/data/map-data/objects")
+                    $.post("/data/map-data/objects")
                     .done((objdata) => {
                         mapObjectComponent = objdata;
             
@@ -3044,7 +3872,7 @@
         
                         /**
                          * handles if wrong floor with shared article
-                         * for shorter share link
+                         * in order to make share link shorter
                          */
                         if (PARAMS.article){
                             const data = searchObject(PARAMS.article);
@@ -3058,7 +3886,7 @@
                             }
                         }
         
-                        setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+                        setParam(ParamName.FLOOR, CURRENT_FLOOR);
         
                         setPlaceSelColor();
                         
@@ -3077,7 +3905,9 @@
                     $("#app-mount").show();
                     if (PARAMS.article){
                         const data = searchObject(PARAMS.article);
-                        var fromARTshare = !!0;
+                        var fromARTshare = false;
+                        var scr_position = 0;
+                        var article_tg = "description";
                         
                         if (PARAMS.from){
                             fromARTshare = !0;
@@ -3093,7 +3923,7 @@
                                     );
                                 }, 500);
                             }
-                            delParam(ParamNames.ARTICLE_ID);
+                            delParam(ParamName.ARTICLE_ID);
                             return;
                         }
         
@@ -3107,11 +3937,28 @@
                                     "share found",
                                 );
                             }, 1000);
+        
+                            var g = getParam(ParamName.SCROLL_POS);
+                            var y = getParam(ParamName.ART_TARGET);
+                            delParam(ParamName.SCROLL_POS);
+                            delParam(ParamName.ART_TARGET);
+                            if (g != null || y){
+                                setTimeout(() => {
+                                    Notifier.appendPending({
+                                        html: `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_TRANSITIONED}</div>`,
+                                        term: 5000,
+                                        discriminator: "transitioned to shared position",
+                                    });
+                                }, 1050);
+                                scr_position = Number(g);
+                                if (y)
+                                    article_tg = y;
+                            }
                         }
         
                         setTimeout(() => {
                             raiseOverview();
-                            writeArticleOverview(data, true);
+                            writeArticleOverview(data, true, scr_position, article_tg);
                         }, 1000);
                     }
                 }
@@ -3123,7 +3970,6 @@
             
             return 0;
         }();
-        
         
         
         window.addEventListener("resize", function(e){

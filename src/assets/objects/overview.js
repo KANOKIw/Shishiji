@@ -1,34 +1,57 @@
 //@ts-check
 "use strict";
 
+class OverView {
+    static fullyopened = false;
+    /**
+     * @type {"closed" | "opening" | "opened" | "closing"}
+     */
+    static status = "closed";
+    
+    static get isfullyopened(){
+        return this.fullyopened;
+    }
+
+    static get currentstatus(){
+        return this.status;
+    }
+}
+
 
 function raiseOverview(){
-    strictMap();
     /**@ts-ignore @type {HTMLElement} */
-    const overview = document.getElementById("shishiji-overview");
-    const $cp = $("#shishiji-popup-container-c");
+    const overview = document.getElementById(cssName.ovv);
+    const kk = $(overview);
 
+    strictMap();
+    OverView.status = "opening";
     overview.style.top = "0vh";
-    $(overview)
+    kk
+    .show()
     .removeClass("reducedown")
     .addClass("raiseup")
     .scrollTop(0);
-    $(overview).show();
-    $("#overview-share").show();
-    $("#overview-close-c").on("click", (e) => {
+    setTimeout(() => {
+        OverView.fullyopened = true;
+        OverView.status = "opened";
+        kk.removeClass("raiseup");
+    }, 500);
+
+    $(cssName.ovvshare).show();
+    $(cssName.ovvclosec).on("click", (e) => {
         e.preventDefault();
         reduceOverview();
     });
-    $("#overview-share-c").on("click", (e) => {
+    $(cssName.ovvsharec).on("click", (e) => {
         e.preventDefault();
         shareContent();
     });
 
     function shareContent(){
-        const discriminator = getParam(ParamNames.ARTICLE_ID);
+        const discriminator = getParam(ParamName.ARTICLE_ID);
         const data = searchObject(discriminator);
         const _url = new URL(window.location.href);
-        var shareURL = `${_url.origin}${_url.pathname.replace(/@.*/, "")}?${ParamNames.FLOOR}=${CURRENT_FLOOR}&${ParamNames.ARTICLE_ID}=${discriminator}`;
+        var shareURL = `${_url.origin}${_url.pathname.replace(/@.*/, "")}?${ParamName.FLOOR}=${CURRENT_FLOOR}&${ParamName.ARTICLE_ID}=${discriminator}`;
 
         if (data == null || discriminator == null){
             console.log(data, discriminator)
@@ -56,7 +79,7 @@ function raiseOverview(){
             {
                 labelkey: "SHARE_EVENT_INCLUDE_EVTH",
                 // activve element id match
-                url: `${shareURL}&${ParamNames.SCROLL_POS}=${$("#shishiji-overview").scrollTop()}&${ParamNames.ART_TARGET}=${$(".tg-active")[0].id.match(/ovv-t-(.*?)-sd/)?.[1]}`,
+                url: `${shareURL}&${ParamName.SCROLL_POS}=${$("#shishiji-overview").scrollTop()}&${ParamName.ART_TARGET}=${$(".tg-active")[0].id.match(/ovv-t-(.*?)-sd/)?.[1]}`,
             }
         );
     }
@@ -65,46 +88,47 @@ function raiseOverview(){
 
 function strictMap(){
     clearInterval(Intervals.reduceOverview);
-    $("#user-stricter")
+    $(cssName.usrstricter)
     .removeClass("deactive")
-    .addClass("active")
-    .show();
+    .addClass("active");
 }
 
 
 function restrictMap(){
     clearTimeout(Intervals.restrict);
-    $("#user-stricter")
-    .removeClass("active");
-    Intervals.restrict = setTimeout(() => {
-        $("#user-stricter")
-        .hide();
-    }, 195);
+    $(cssName.usrstricter)
+    .removeClass("active")
+    .addClass("deactive");
 }
 
 
 function reduceOverview(){
     restrictMap();
     /**@ts-ignore @type {HTMLElement} */
-    const overview = document.getElementById("shishiji-overview");
+    const overview = document.getElementById(cssName.ovv);
+    const kk = $(overview);
+
+    OverView.fullyopened = false;
+    OverView.status = "closing";
     overview.style.top = "100vh";
-    $(overview)
+    kk
     .removeClass("raiseup")
     .addClass("reducedown");
-    $("#overview-close").off("click", reduceOverview);
-    $("#overview-context").removeClass("fadein");
+    $(cssName.ovvclose).off("click", reduceOverview);
+    $(cssName.ovvctx).removeClass("fadein");
 
     $(".tg-active").removeClass("tg-active");
     
     Intervals.reduceOverview = setTimeout(() => {
-        writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">処理中...</h4></div>`, );
-        $(overview)
+        OverView.status = "closed";
+        writeOverviewContent(`<div id="ovv-ctx-loading-w" class="protected"><h4 id="ovv-ctx-loading">${TEXT[LANGUAGE].LOADING}</h4></div>`, );
+        kk
         .css("border-top", "20px solid white")
-        .scrollTop(0)
-        .hide();
-    }, 190);
+        .removeClass("reducedown")
+        .scrollTop(0);
+    }, 195);
 
-    delParam(ParamNames.ARTICLE_ID);
+    delParam(ParamName.ARTICLE_ID);
 }
 
 
@@ -126,6 +150,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     const orgname = details.discriminator;
     const pathConvertfunc = getPathConverter(details);
 
+
     /**
      * 
      * @param {"h" | "i"} a 
@@ -140,19 +165,19 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     var article_mainctx = mcFormat(details.article.content, fn => { return pathConvertfunc(orgname, fn); });
 
     if (!window.navigator.onLine){
-        Notifier.notifyHTML(
-            `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR}</div>`,
+        PictoNotifier.notifyError(
+            TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR,
             2500,
             "article connection error",
-            true,
+            { do_not_keep: true },
         );
-        $("#ovv-ctx-loading").html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
-        $("#overview-share").hide();
+        $(cssName.ovvctxload).html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
+        $(cssName.ovvshare).hide();
         return;
     }
     
     if (article_mainctx === "<span></span>"){
-        article_mainctx = `<h4 style="width: 100%; margin-top: 50px; margin-bottom: 50px; text-align: center;">${TEXT[LANGUAGE].ARTICLE_NO_ARTICLE}</h4>`;
+        article_mainctx = `<h4 style="width:100%;margin-top:50px;margin-bottom:50px;text-align:center;">${TEXT[LANGUAGE].ARTICLE_NO_ARTICLE}</h4>`;
     }
 
     var custom_tr = "";
@@ -160,14 +185,14 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     for (var tr of details.article.custom_tr){
         if (tr.title && tr.content)
             custom_tr += `
-                <tr class="ev_property">
-                    <th class="ev_property_cell" aria-label="${tr.title}">
-                        ${tr.title}
-                    </th>
-                    <th class="ev_property_cell" aria-label="${tr.content}">
-                        ${tr.content}
-                    </th>
-                </tr>
+            <tr class="ev_property">
+                <th class="ev_property_cell" aria-label="${tr.title}">
+                    ${tr.title}
+                </th>
+                <th class="ev_property_cell" aria-label="${tr.content}">
+                    ${tr.content}
+                </th>
+            </tr>
             `;
     }
 
@@ -177,28 +202,38 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     overview.style.borderTop = "solid var(--shishiji-ovv-theme-height) "+color;
     $(overview).css("font-family", font);
 
-    const EVENT_HEADER = `<img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}"><div class="article titleC"><img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}"><h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1></div>`;
+    const EVENT_HEADER = `<img id="--art-header" class="article-image article header" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_HEADER}">
+    <div class="article titleC">
+        <div class="titleW">
+            <img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="${TEXT[LANGUAGE].ARIA_ARTICLE_ICON}">
+            <h1 id="ctx-title" style="margin: 5px; font-family: var(--font-view);">${escapeHTML(details.article.title)}</h1>
+        </div>
+        <div class="gradef evvnon">
+            <p id="cg_visible">${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
+        </div>
+    </div>`;
 
     function __onload(){
         setTimeout(
             (
 
         ) => {
-            $("#overview-context").addClass("_fadein");
+            $(cssName.ovvctx).addClass("_fadein");
             if (scroll_top !== void 0)
-                $("#shishiji-overview").scrollTop(scroll_top);
+                $("#"+cssName.ovv).scrollTop(scroll_top);
             scroll_top = 0;
         }, 25);
     }
 
     class ctx_article_C{
         static get exists(){
-            return document.getElementById("ctx-article") ? true : false;
+            return document.getElementById(cssName.ovvctxart) ? true : false;
         }
 
         /**@param {string} _html @param {() => void} [cb] */
         static async write(_html, cb){
-            const r = document.getElementById("ctx-article");
+            const r = document.getElementById(cssName.ovvctxart);
+     
             if (r)
                 r.innerHTML = _html;
             if (cb)
@@ -211,23 +246,18 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         if ($(this).hasClass("tg-active") && !FORCE)
             return;
 
-        $("#overview-context").addClass("_wait_f");
+        $(cssName.ovvctx).addClass("_wait_f");
 
-        const _html__w = `
-        <div class="ev_property ev_ppar">
-            <p style="font-family: var(--font-view);">▷${TEXT[LANGUAGE].ARTICLE_CORE_GRADE}: ${details.article.core_grade}</p>
-        </div>
-        ${article_mainctx}
-        `;
         if (ctx_article_C.exists)
-            ctx_article_C.write(_html__w, __onload);
+            ctx_article_C.write(article_mainctx, __onload);
         else
             writeOverviewContent(
-                `${EVENT_HEADER}<div id="ctx-article" class="article">${_html__w}</div>`, __onload);
+                `${EVENT_HEADER}<div id="ctx-article" class="article">${article_mainctx}</div>`, __onload);
         if (fadein)
-        $("#overview-context").removeClass("fadein").removeClass("_fadein");
+        $(cssName.ovvctx).removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
         $(this).addClass("tg-active");
+        $(".article-image").addClass("doaJSD");
         $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
         $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
     }
@@ -237,7 +267,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         if ($(this).hasClass("tg-active") && !FORCE)
             return;
 
-        $("#overview-context").addClass("_wait_f");
+        $(cssName.ovvctx).addClass("_wait_f");
 
         const __htmlw = `
         <hr style="margin: 40px 20px 20px 20px;">
@@ -293,9 +323,10 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         else
             writeOverviewContent(`${EVENT_HEADER}<div id="ctx-article" class="article">${__htmlw}</div>`, __onload);
 
-        $("#overview-context").removeClass("fadein").removeClass("_fadein");
+        $(cssName.ovvctx).removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
         $(this).addClass("tg-active");
+        $(".article-image").addClass("doaJSD");
         $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
         $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
     }
@@ -319,7 +350,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
  */
 async function writeOverviewContent(ctx, callback){
     new Promise((resolve, reject) => {
-        $("#overview-context").html(ctx);
+        $(cssName.ovvctx).html(ctx);
         resolve("");
     }).then(() => {
         if (callback !== void 0)
@@ -327,8 +358,9 @@ async function writeOverviewContent(ctx, callback){
     });
 }
 
+
 function init(){
     /**@ts-ignore @type {HTMLElement} */
-    const overview  = document.getElementById("shishiji-overview");
-    const closebtn = document.getElementById("overview-close");
+    const overview  = document.getElementById(cssName.ovv);
+    const closebtn = document.getElementById(cssName.ovvclose.slice(1));
 }

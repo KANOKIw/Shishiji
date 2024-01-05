@@ -3,7 +3,7 @@
 
 
 /**
- * zoom canvas by scrolling mouse wheel
+ * Zoom canvas by scrolling mouse wheel
  * @param {WheelEvent} e 
  * @param {HTMLCanvasElement} canvas 
  */

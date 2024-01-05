@@ -19,8 +19,10 @@
         <title>Login - Shishiji fes</title>
         <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="/src/assets/builds/gglMS.css">
-        <script src="/src/assets/utils.js"></script>
+        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <script src="/src/assets/util.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/src/assets/manage/coop.js"></script>
         <style>
             *{
                 margin: 0;
@@ -41,6 +43,17 @@
                 color: black;
                 border: 1px solid black;
             }
+
+            input{
+                outline: none;
+                border: none;
+            }
+
+            .wdADW{
+                border-width: thin;
+                border-style: solid;
+                padding-right: 5px;
+            }
         </style>
     </head>
     <body>
@@ -52,15 +65,21 @@
                     <p style="color: red; display: none;" id="required-not-filled"></p>
                     <div class="form-login">
                         <label for="name">username:&nbsp;</label>
-                        <input type="text" name="name" id="login_username">
+                        <span class="wdADW">
+                            <input type="text" name="username" id="login_username">
+                        </span>
                     </div>
+                    <div style="height: 5px;"></div>
                     <div class="form-login">
                         <label for="email">password:&nbsp;</label>
-                        <input type="text" name="email" id="login_password">
+                        <span class="wdADW">
+                            <input type="password" name="password" id="login_password">
+                            <span id="buttonEye" class="fa fa-eye"></span>
+                        </span>
                     </div>
                     <hr style="margin: 5px;">
                     <div class="form-login">
-                        <input id="login_enter" type="button" value="Enter">
+                        <input id="login_enter" type="button" name="submit" value="Enter">
                     </div>
                 </form>
             </div>

@@ -36,5 +36,13 @@
         }
     });
 
+    "touchstart mousedown".split(" ").forEach(m => {
+        document.getElementById("user-stricter")?.addEventListener(m, function(){
+            if (OverView.isfullyopened){
+                reduceOverview();
+            }
+        });
+    })
+
     return 0;
 }();

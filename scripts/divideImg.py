@@ -6,6 +6,7 @@ import math
 import os
 import shutil
 
+from colorama import Fore
 from typing import *
 from PIL import Image
 
@@ -44,6 +45,15 @@ def divide(
                 indent=4
         )
     image.close()
+
+    canvaswidth = wi*(j+1)
+    canvasheight = he*(i+1)
+    canvasarea = canvaswidth * canvasheight
+
+    if canvasarea > 16777216:
+        print(f"\033[1m{Fore.YELLOW}WARN{Fore.RESET} Canvas area exceeds the maximum limit (width * height = {canvasarea} > 16777216)\n\
+    This means safari will no longer support this map.")
+
     return det
 
 
@@ -63,5 +73,5 @@ def transparent(image: Image.Image) -> Image.Image:
 
 
 if __name__ == "__main__":
-    d = divide("./resources/img/skyblock.png", "./resources/map_divided/skyblock", 500, 500, cleardir=True)
+    d = divide("./resources/img/mc8k.png", "./resources/map-tiles/Minecraft8K", 500, 500, cleardir=True)
     print(d)

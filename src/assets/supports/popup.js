@@ -2,52 +2,73 @@
 "use strict";
 
 
+/**
+ * @typedef {import("../shishiji-dts/objects").PopupOptions} PopupOptions
+ * @typedef {import("../shishiji-dts/objects").PopupCloseMethod} PopupCloseMethod
+ * @typedef {import("../shishiji-dts/objects").PopupCloseListener} PopupCloseListener
+ */
+
+
 class Popup{
-    /**@see {@link _keydisposal} */
-    static closeKeys = [ "ESCAPE", ];
+    /**
+     * @see {@link _keydisposal}
+     */
+    static closeKeys = [ "ESCAPE" ];
+    /**
+     * @type {PopupCloseListener[]} 
+     */
+    static closeListeners = [];
+
+
     /**
      * 
      * @param {string} _innerHTML 
      * @param {() => void} [callback] 
-     * @param {boolean} [hideclosebutton] 
-     * @param {{width: number, height: number}} [sizes]
+     * @param {PopupOptions} [options]
      */
-    static async popupContent(_innerHTML, callback, hideclosebutton, sizes){
+    static async popupContent(_innerHTML, callback, options){
         const ppcls = GPATH.X;
 
-        if (sizes === void 0){
-            sizes = {
+        if (options === void 0){
+            options = {
                 width: 500,
                 height: 450,
             };
         } else {
-            if (sizes.width === -1)
-                sizes.width = 500;
-            if (sizes.height === -1)
-                sizes.height = 450;
+            if (!options.width)
+                options.width = 500;
+            if (!options.height)
+                options.height = 450;
         }
 
-        if (!hideclosebutton)
+        if (options.hideclosebutton && options.forceclosebutton)
+            console.warn("hideclosebutton and forceclosebutton shouldn't be true at same time!!");
+
+        if (!options.hideclosebutton)
             _innerHTML = ppcls + _innerHTML;
-        
+
+        window.removeEventListener("keydown", this._keydisposal);
+        $("shishiji-mx-overlay").off("click", this._dispose);
         return new Promise((resolve, reject) => {
-            window.addEventListener("keydown", this._keydisposal);
+            if (!options?.forceclosebutton){
+                window.addEventListener("keydown", this._keydisposal);
+                $("shishiji-mx-overlay").on("click", this._dispose);
+            }
             $("shishiji-mx-overlay")
             .removeClass("pipe")
-            .addClass("popen")
-            .on("click", this._dispose);
+            .addClass("popen");
             $("#shishiji-popup-container-c")
             .removeClass("flxxt")
             .css("overflow", "")
             .css("height", "")
             .css("width", "")
             //@ts-ignore
-            .css("max-width", sizes.width).css("max-height", sizes.height).css("left", `calc((var(--window-width) - 48px - min(${sizes.width}px, var(--window-width) - 48px))/2)`)
+            .css("max-width", options.width).css("max-height", options.height).css("left", `calc((var(--window-width) - 48px - min(${options.width}px, var(--window-width) - 48px))/2)`)
             .html(_innerHTML)
             .show();
             resolve("");
         }).then(() => {
-            $("#ppcls").on("click", this.disPop);
+            $("#ppcls").on("click", this._disposition);
             if (callback !== void 0)
                 callback();
         });
@@ -91,7 +112,7 @@ class Popup{
             $("#ppcls")
             .css("top", "-40px")
             .css("right", "0")
-            .on("click", this.disPop);
+            .on("click", this._disposition);
             /**<path fill="#ffffff"></path> */
             $($($("#ppcls").children()[0]).children()[0])
             .attr("fill", "blue");
@@ -116,20 +137,27 @@ class Popup{
     }
     
 
-    static disPop(){
-        window.removeEventListener("keydown", this._keydisposal);
-        $("#ppcls").off("click", this.disPop);
+    /**
+     * 
+     * @param {PopupCloseMethod | Event | JQuery.Event} [closeMethod] 
+     */
+    static disPop(closeMethod){
+        if (typeof closeMethod !== "string")
+            closeMethod = "JAVASCRIPT";
+        window.removeEventListener("keydown", Popup._keydisposal);
+        $("#ppcls").off("click", Popup._disposition);
         $("shishiji-mx-overlay")
         .removeClass("popen")
         .addClass("pipe")
-        .off("click", this._dispose);
+        .off("click", Popup._dispose);
         $("#shishiji-popup-container-c")
         .hide()
         .empty();
+        Popup._callCloseListeners(closeMethod);
     }
 
 
-    static get popupping(){
+    static get isPoppingup(){
         const me = document.getElementById("shishiji-popup-container-c");
         return ( me?.clientHeight != 0 ) ? true : false;
     }
@@ -165,10 +193,49 @@ class Popup{
         .css("left", (window.innerWidth-(margin*2+width))/2+"px");
     }
 
+
+    /**
+     * 
+     * @param {PopupCloseListener} callback 
+     */
+    static addCloseListener(callback){
+        this.closeListeners.push(callback);
+    }
+
+
+    /**
+     * 
+     * @param {PopupCloseListener} callback 
+     */
+    static removeCloseListener(callback){
+        const l = this.closeListeners.length;
+
+        this.closeListeners = this.closeListeners.filter(func => func !== callback);
+
+        if (this.closeListeners.length < l)
+            return true;
+        else
+            return false;
+    }
+
+
+    /**
+     * 
+     * @param {PopupCloseMethod} method 
+     */
+    static _difficult(method){
+        if (Popup.isPoppingup)
+            Popup.disPop(method);
+    }
+
     
     static _dispose(){
-        if (Popup.popupping)
-            Popup.disPop();
+        Popup._difficult("OVERLAY");
+    }
+
+
+    static _disposition(){
+        Popup.disPop("X BUTTON");
     }
 
 
@@ -179,8 +246,19 @@ class Popup{
     static _keydisposal(e){
         const key = e.key.toUpperCase();
         if (Popup.closeKeys.includes(key)){
-            Popup._dispose();
+            Popup._difficult("KEYBOARD");
         }
+    }
+
+
+    /**
+     * 
+     * @param {PopupCloseMethod} method 
+     */
+    static _callCloseListeners(method){
+        this.closeListeners.forEach(func => {
+            func(method);
+        });
     }
 }
 

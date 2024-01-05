@@ -2,43 +2,53 @@
 "use strict";
 
 
-/**@type {NodeJS.Timeout} FAKE*/
-var lst;
 /**
  * 
+ * @this {JQuery<HTMLElement>}
  * @param {boolean} openned 
  */
 function toggleFeslOn(openned){
     if (!openned){
-        clearTimeout(lst);
-        this.addClass("toSel popped");
-        $("#place-options-w")
+        this
+        .removeClass("toSel undoSel")
+        .addClass("toSel popped");
+        $(cssName.foptw)
         .show()
+        .removeClass("toSel undoSel")
         .addClass("toSel");
     } else {
-        this.addClass("undoSel").removeClass("popped");
-        $("#place-options-w").addClass("undoSel");
-        lst = setTimeout(() => {
-            this.removeClass("toSel undoSel")
-            $("#place-options-w")
-            .hide()
-            .removeClass("toSel undoSel");
-        }, 190);
+        this
+        .addClass("undoSel")
+        .removeClass("popped");
+        $(cssName.foptw).addClass("undoSel");
     }
+}
+
+
+function setPlaceSelColor(p){
+    if (p === void 0) p = CURRENT_FLOOR;
+    $(".placeOpt").each(function(index, elm){
+        if (!this.textContent) return;
+        const text = this.textContent?.replace(/ /g, "").replace(/\n/g, "");
+        if (text === p)
+            $(this).css("background-color", overlay_modes.fselector.colors.current);
+        else if (text.length > 1)
+            $(this).css("background-color", overlay_modes.fselector.colors.else);
+    });
 }
 
 
 /**
  * 
  * @param {string} floor 
- * @param {{[key: string]: number}} data 
+ * @param {DrawMapData} data 
  * @param {() => void} [callback] 
  */
 function changeFloor(floor, data, callback){
     /**@ts-ignore @type {HTMLElement} */
-    const fselector = document.getElementById("place-selector");
+    const fselector = document.getElementById(cssName.fselector.slice(1));
     /**@ts-ignore @type {HTMLCanvasElement} */
-    const canvas = document.getElementById("shishiji-canvas");
+    const canvas = document.getElementById(cssName.mcvs);
     /**@ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
 
@@ -67,6 +77,6 @@ function changeFloor(floor, data, callback){
             callback();
     });
     CURRENT_FLOOR = floor;
-    setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+    setParam(ParamName.FLOOR, CURRENT_FLOOR);
     setPlaceSelColor();
 }

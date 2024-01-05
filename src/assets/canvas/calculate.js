@@ -38,7 +38,7 @@ function getMidestOfTouches(touches){
 
 /**
  * 
- * @param {TouchList} touches 
+ * @param {TouchList | Touch[]} touches 
  * @returns {NonnullPosition}
  */
 function getMiddlePos(touches){
@@ -53,7 +53,7 @@ function getMiddlePos(touches){
 
     av_x /= _a;
     av_y /= _a;
-    return [av_x, av_y];
+    return [ av_x, av_y ];
 }
 
 

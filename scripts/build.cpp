@@ -198,7 +198,7 @@ int main()
 
     std::vector<std::string> onLoads = {
         folder + "canvas/setup.js",
-        folder + "objects/listeners.js",
+        folder + "objects/listener.js",
         folder + "objects/setup.js",
         folder + "supports/setup.js",
         folder + "main.js",
@@ -206,9 +206,9 @@ int main()
 
     std::vector<std::string> scriptFiles = {
         folder + "lang.js",
-        folder + "globals.v.js",
+        folder + "global.v.js",
         folder + "gpath.js",
-        folder + "utils.js",
+        folder + "util.js",
         folder + "mcformat.js",
         folder + "speed.js",
         folder + "cssroot.js",
@@ -216,6 +216,8 @@ int main()
         folder + "canvas/calculate.js",
         folder + "canvas/display.js",
         folder + "canvas/react.js",
+        folder + "canvas/touch.js",
+        folder + "canvas/mouse.js",
 
         folder + "objects/create.js",
         folder + "objects/move.js",

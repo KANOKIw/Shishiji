@@ -1,5 +1,5 @@
 import fs from "fs";
-import { DEFAULTOBJECT } from "../mapObjs";
+import { DEFAULT_MAP_OBJECT } from "../mapObjs";
 import { Request, Response } from "express";
 import * as AppAPI from "../utils";
 import * as path from "path";
@@ -36,7 +36,7 @@ class OrgAuth{
             return;
         }
     
-        const newkey = random.string(24);
+        const newkey = random.string(48);
         const sessions = AppAPI.readJSONSync(sessionpath);
 
         sessions[newkey] = username;
@@ -63,6 +63,15 @@ class OrgAuth{
     }
 
 
+    static logout(req: Request, res: Response){
+        const data = req.body;
+        const session = data.session;
+
+        OrgAuth._endSession(session);
+        res.status(202).end();
+    }
+
+
     static editor(req: Request, res: Response): void{
         const sessionkey = req.body.session;
         const orgname = OrgAuth._auth(sessionkey);
@@ -74,7 +83,7 @@ class OrgAuth{
 
         console.log(new Date() + ": Editor: "+orgname);
 
-        const mapdata = AppAPI.getOrgMdata(orgname) || DEFAULTOBJECT;
+        const mapdata = AppAPI.getOrgMdata(orgname) || DEFAULT_MAP_OBJECT;
 
         res.status(200).json({ artdata: mapdata, usn: orgname, mxcs: File.getOrgMaCloudSize(orgname) });
     }
@@ -118,7 +127,7 @@ class Edit{
             return;
         }
 
-        const prevObjdata = AppAPI.getOrgMdata(username) || DEFAULTOBJECT;
+        const prevObjdata = AppAPI.getOrgMdata(username) || DEFAULT_MAP_OBJECT;
 
         prevObjdata.discriminator = username;
         prevObjdata.article.content = newMapdata.article.content;
@@ -140,7 +149,7 @@ class Edit{
             return;
         }
 
-        const prevObjdata = AppAPI.getOrgMdata(username) || DEFAULTOBJECT;
+        const prevObjdata = AppAPI.getOrgMdata(username) || DEFAULT_MAP_OBJECT;
 
         prevObjdata.discriminator = username;
         prevObjdata.article.font_family = newMapdata.article.font_family;
@@ -190,10 +199,10 @@ class File{
 
         const dirpath = File._toOrgDirname(orgname);
         const incd = AppAPI.convertUnit((File._getDirsize(dirpath, false) + incsize), "MB");
-        const responsedata = { overflow: false, bytesoverflow: incd - File.getOrgMaCloudSize(orgname) };
+        const responsedata = { acceptable: true, overflow: incd - File.getOrgMaCloudSize(orgname) };
 
-        if (responsedata.bytesoverflow > 0){
-            responsedata.overflow = true;
+        if (responsedata.overflow > 0){
+            responsedata.acceptable = false;
         }
 
         res.status(200).json(responsedata);
@@ -214,7 +223,9 @@ class File{
         const dirpath = File._toOrgDirname(orgname);
 
         if (AppAPI.getMediaType(file.name) == "unknown"){
-            res.status(forbiddenJSON.status).json(forbiddenJSON);
+            const eres = forbiddenJSON;
+            eres.error = "Denied file type";
+            res.status(forbiddenJSON.status).json(eres);
             return;
         }
 
@@ -231,12 +242,11 @@ class File{
         }
 
         const filename = mediatype + "_" + _findex + path.extname(file.name);
-
         const currentdirsize = File._getDirsize(dirpath, false);
-        const aftersize = currentdirsize + file.size;
+        const aftersize = AppAPI.convertUnit(currentdirsize + file.size, "MB");
         const maxsize = File.getOrgMaCloudSize(orgname);
 
-        if (AppAPI.convertUnit(aftersize, "MB") > maxsize){
+        if (aftersize > maxsize){
             res.status(413).json({ status: 413, error: "Your cloud is overflowing!", overflow: (aftersize - maxsize) });
             return;
         }
@@ -263,6 +273,7 @@ class File{
         }
 
         const dirpath = File._toOrgDirname(orgname);
+
         fs.unlink(dirpath + "/" + filename, err => {
             if (err){
                 res.status(500).send({ error: err });
@@ -280,9 +291,17 @@ class File{
      */
     static _sendOrgdirInfo(orgname: string, res: Response, adjust?: {[key: string]: any}): void{
         const dirname = File._toOrgDirname(orgname);
-        const filelist = File._filelist(orgname);
         const sizemap = File._getDirsize(dirname, true);
+        var filelist = File._filelist(orgname);
         var totalsize = 0;
+
+        if (adjust?.deleted){
+            filelist = filelist.filter(o=> { 
+                if (path.basename(o) !== adjust.deleted)
+                    return true;
+            });
+        }
+        
         
         Object.keys(sizemap).forEach(f => {
             const converted = AppAPI.convertUnit(sizemap[f], "MB");
@@ -293,7 +312,12 @@ class File{
             delete sizemap[f];
         });
         
-        const defaultres: {[key: string]: any} = { files: filelist, totalsize: totalsize, sizemap: sizemap };
+        const defaultres: {[key: string]: any} = {
+            files: filelist,
+            totalsize: totalsize,
+            sizemap: sizemap,
+            mxcs: File.getOrgMaCloudSize(orgname),
+        };
 
         if (adjust){
             for (const key of Object.keys(adjust)){
@@ -330,13 +354,15 @@ class File{
     
         files.forEach(file => {
             const filePath = path.join(dirpath, file);
-            const stats = fs.statSync(filePath);
+            try{
+                const stats = fs.statSync(filePath);
             
-            if (each){
-                eachtotal[filePath] = stats.size;
-            } else{
-                total += stats.size;
-            }
+                if (each){
+                    eachtotal[filePath] = stats.size;
+                } else{
+                    total += stats.size;
+                }
+            } catch(e){}
         });
     
         if (each)

@@ -5,7 +5,7 @@
 
 function setCanvasSizes(){
     /**@ts-ignore @type {HTMLCanvasElement} */
-    const canvas = document.getElementById("shishiji-canvas");
+    const canvas = document.getElementById(cssName.mcvs);
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     canvas.style.width = canvas.width+"px"; canvas.style.height = canvas.height+"px";
     backcanvas.canvas.width = canvas.width;
@@ -15,45 +15,52 @@ function setCanvasSizes(){
 
 !function(){
     /**@ts-ignore @type {HTMLCanvasElement} */
-    const canvas = document.getElementById("shishiji-canvas");
+    const canvas = document.getElementById(cssName.mcvs);
     /**@ts-ignore @type {CanvasRenderingContext2D} */
     const ctx = canvas.getContext("2d");
     /**@ts-ignore @type {string} */
     const loadType = window.performance?.getEntriesByType("navigation")[0].type;
     const PARAMS = {
-        article: getParam(ParamNames.ARTICLE_ID),
-        zoomRatio: Number(getParam(ParamNames.ZOOM_RATIO)) || 1,
-        floor: getParam(ParamNames.FLOOR),
-        coords: getParam(ParamNames.COORDS)?.split(",").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? null : Number(a); }) || [ 0, 0 ],
-        from: getParam(ParamNames.URL_FROM),
-        lang: isThereLang(getParam(ParamNames.LANGUAGE)) || "JA",
+        article: getParam(ParamName.ARTICLE_ID),
+        zoomRatio: Number(getParam(ParamName.ZOOM_RATIO)) || 1,
+        floor: getParam(ParamName.FLOOR),
+        coords: getParam(ParamName.COORDS)?.split(",").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? 0 : Number(a); }) || [ 0, 0 ],
+        from: getParam(ParamName.URL_FROM),
+        lang: digitLang(getParam(ParamName.LANGUAGE)),
     };
 
-    LANGUAGE = PARAMS.lang;
-    if (PARAMS.coords == [null, null]) PARAMS.coords = [0, 0];
+
+    LANGUAGE = PARAMS.lang || getUserLang() || "JA";
+    
+    if (PARAMS.coords.length != 2 
+        || PARAMS.coords.some(u => {
+        if (!u || isNaN(u))
+            return true;
+        }
+    )) PARAMS.coords = [ 0, 0 ];
 
     if (loadType == "reload"){
         switch (reloadInitializeLevel){
             case reloadInitializeLevels.DO_EVERYTHING:
             case reloadInitializeLevels.INIT_FLOOR:
                 PARAMS.floor = null;
-                delParam(ParamNames.FLOOR);
+                delParam(ParamName.FLOOR);
             case reloadInitializeLevels.INIT_COORDS:
                 PARAMS.coords = [ 0, 0 ];
-                delParam(ParamNames.COORDS);
+                delParam(ParamName.COORDS);
             case reloadInitializeLevels.INIT_ZOOMRADIO:
                 PARAMS.zoomRatio = 1;
-                delParam(ParamNames.ZOOM_RATIO);
+                delParam(ParamName.ZOOM_RATIO);
             case reloadInitializeLevels.CLOSE_ARTICLE:
                 PARAMS.article = null;
-                delParam(ParamNames.ARTICLE_ID);
+                delParam(ParamName.ARTICLE_ID);
             case reloadInitializeLevels.DO_NOTHING:
             default:
 
         }
     }
 
-    delParam(ParamNames.URL_FROM);
+    delParam(ParamName.URL_FROM);
 
     startLoad(TEXT[LANGUAGE].LOADING_MAP);
     setCanvasSizes();
@@ -119,7 +126,7 @@ function setCanvasSizes(){
                     }
                 }
 
-                setParam(ParamNames.FLOOR, CURRENT_FLOOR);
+                setParam(ParamName.FLOOR, CURRENT_FLOOR);
 
                 setPlaceSelColor();
                 
@@ -135,7 +142,7 @@ function setCanvasSizes(){
     
         function _loaded(){
             endLoad(TEXT[LANGUAGE].MAP_LOADED);
-            $("#app-mount").show();
+            $(cssName.app).show();
             if (PARAMS.article){
                 const data = searchObject(PARAMS.article);
                 var fromARTshare = false;
@@ -149,14 +156,14 @@ function setCanvasSizes(){
                 if (data == null || CURRENT_FLOOR != data.object.floor){
                     if (fromARTshare){
                         setTimeout(() => {
-                            Notifier.notifyHTML(
-                                `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_NOT_FOUND}</div>`,
+                            PictoNotifier.notifyError(
+                                TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_NOT_FOUND,
                                 7500,
                                 "share not found",
                             );
                         }, 500);
                     }
-                    delParam(ParamNames.ARTICLE_ID);
+                    delParam(ParamName.ARTICLE_ID);
                     return;
                 }
 
@@ -164,17 +171,17 @@ function setCanvasSizes(){
                     const coords = data.object.coordinate;
                     setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                     setTimeout(() => {
-                        Notifier.notifyHTML(
-                            `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_FOUND}</div>`,
+                        PictoNotifier.notifySuccess(
+                            TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_FOUND,
                             5000,
                             "share found",
                         );
                     }, 1000);
 
-                    var g = getParam(ParamNames.SCROLL_POS);
-                    var y = getParam(ParamNames.ART_TARGET);
-                    delParam(ParamNames.SCROLL_POS);
-                    delParam(ParamNames.ART_TARGET);
+                    var g = getParam(ParamName.SCROLL_POS);
+                    var y = getParam(ParamName.ART_TARGET);
+                    delParam(ParamName.SCROLL_POS);
+                    delParam(ParamName.ART_TARGET);
                     if (g != null || y){
                         setTimeout(() => {
                             Notifier.appendPending({
@@ -208,7 +215,7 @@ function setCanvasSizes(){
 window.addEventListener("resize", function(e){
     e.preventDefault();
     /**@ts-ignore @type {HTMLCanvasElement} */
-    const canvas = document.getElementById("shishiji-canvas");
+    const canvas = document.getElementById(cssName.mcvs);
     setCanvasSizes();
     //@ts-ignore
     moveMapAssistingNegative(canvas, canvas.getContext("2d"), { top: 0, left: 0 });

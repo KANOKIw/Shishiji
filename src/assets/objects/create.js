@@ -14,9 +14,9 @@
  */
 function putMobjonMap(objectData){
     /**@ts-ignore @type {HTMLElement} */
-    const viewer = document.getElementById("shishiji-view");
+    const viewer = document.getElementById(cssName.view);
     /**@ts-ignore @type {HTMLElement} */
-    const overview = document.getElementById("shishiji-overview");
+    const overview = document.getElementById(cssName.ovv);
     const behavior = objectData.object.type.behavior;
     const orgname = objectData.discriminator;
     var zIndex = 1001;
@@ -73,7 +73,7 @@ min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.
             raiseOverview();
             writeArticleOverview(eventDetails, true);
 
-            setParam(ParamNames.ARTICLE_ID, objectData.discriminator);
+            setParam(ParamName.ARTICLE_ID, objectData.discriminator);
             setBehavParam();
         }, { forceLeft: true });
     }

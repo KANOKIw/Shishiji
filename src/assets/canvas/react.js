@@ -2,13 +2,11 @@
 "use strict";
 
 
-
 /**
  * @typedef {import("../shishiji-dts/motion").Position} _Position
  * @typedef {import("../shishiji-dts/motion").Radian} Radian
  * @typedef {import("../shishiji-dts/motion").MoveData} MoveData
  */
-
 
 
 /**
@@ -39,12 +37,19 @@ function setTheta(touches){
  * @param {MoveData} moved
  */
 function moveMapAssistingNegative(canvas, ctx, moved){
-    const x = backcanvas.canvas.coords.x - moved.left/zoomRatio;
-    const y = backcanvas.canvas.coords.y - moved.top/zoomRatio;
+    var x = backcanvas.canvas.coords.x - moved.left/zoomRatio,
+        y = backcanvas.canvas.coords.y - moved.top/zoomRatio;
 
-    backcanvas.canvas.coords = { x: x, y: y };
+
     backcanvas.canvas.width = canvas.width/zoomRatio;
     backcanvas.canvas.height = canvas.height/zoomRatio;
+
+    /*if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x+backcanvas.canvas.width > backcanvas.width) x = backcanvas.width-backcanvas.canvas.width;
+    if (y+backcanvas.canvas.height > backcanvas.height) y = backcanvas.height-backcanvas.canvas.height;*/
+
+    backcanvas.canvas.coords = { x: x, y: y };
 
     _redraw(canvas, ctx, backcanvas,
         ...[ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ],
@@ -79,13 +84,13 @@ function moveMap(canvas, ctx, moved){
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx 
  * @param {number} ratio 
- * @param {NonnullPosition | [number, number]} origin
+ * @param {NonnullPosition} origin
  *   (cursorPosition)
- * @param {NonnullPosition | [number, number]} [pos]
+ * @param {NonnullPosition} [pos]
  * @param {boolean} [forceRatio] 
  */
 function zoomMapAssistingNegative(canvas, ctx, ratio, origin, pos, forceRatio){
-    if (willOverflow(ratio)) return;
+    if (willOverflow(ratio, false)) return;
 
     if (pos === void 0)
         pos = [ backcanvas.canvas.coords.x, backcanvas.canvas.coords.y ];
@@ -181,7 +186,7 @@ function zoomMap(canvas, ctx, ratio, origin, pos){
  *   canvas height
  */
 function _redraw(canvas, ctx, image, sx, sy, sw, sh, dx, dy, dw, dh){
-    /**@type {_Position} */
+    /**@type {NonnullPosition} */
     const canvasCoords = [sx, sy];
     /**@type {NonnullPosition} */
     var transCoords;
@@ -226,9 +231,11 @@ function rotateCanvas(canvas, ctx, origin, rotation){
         rotation = backcanvas.canvas.rotation;
     }
     
-    /*var d = backcanvas.toDataURL();
+    var d = backcanvas.toDataURL();
     var _img = new Image();
+
     _img.src = d;
+
     bctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
     bctx.translate(origin[0] * zoomRatio, origin[1] * zoomRatio);
     bctx.rotate(rotation);
@@ -236,7 +243,7 @@ function rotateCanvas(canvas, ctx, origin, rotation){
     
     _img.onload = function(e){
         bctx.drawImage(_img, 0, 0);
-    }*/
+    }
 
     _redraw(canvas, ctx, backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
         backcanvas.canvas.width, backcanvas.canvas.height,

@@ -1,4 +1,8 @@
-class ShishijiMap{
+import { onTouchDown, onTouchMove, onTouchLeave } from "./touch";
+import { zoomByWheel } from "./mouse";
+
+
+export class ShishijiMap{
     private map_id = this._uuid();
     private map_parent: HTMLElement;
     private map_large: HTMLElement;

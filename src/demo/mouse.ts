@@ -1,9 +1,13 @@
+import { Position, Moved } from "./shishiji";
+import { moveMap } from "./touch";
+
+
 window.addEventListener("mousedown", function(e){
     lastCursorPos = [e.pageX, e.pageY];
 });
 
 
-function zoomByWheel(event: WheelEvent, zoomTarget: HTMLElement, ta_p: HTMLElement): void{
+export function zoomByWheel(event: WheelEvent, zoomTarget: HTMLElement, ta_p: HTMLElement): void{
     function i(p: number): number{
         return p < 0 ? -1 : 1;
     }

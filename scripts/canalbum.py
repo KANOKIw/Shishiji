@@ -25,10 +25,7 @@ def download_image(url, save_path):
         with open(save_path, "wb") as f:
             for ch in res.iter_content(chunk_size=8192):
                 f.write(ch)
-
-        print(f"Downloaded to {save_path}")
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception:...
 
 
 imgs = []

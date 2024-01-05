@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { mapObject } from "./server-dts/server";
 
 
-class Random {
+export class Random {
     /**
      * Returns a pseudorandomly chosen int value between the specified origin (inclusive) and the specified bound (inclusive).
      * @param {number} origin the least value that can be returned
@@ -45,7 +45,7 @@ class Random {
     }
 }
 
-function readJSONSync(path: string, options?: {
+export function readJSONSync(path: string, options?: {
     encoding: BufferEncoding;
     flag?: string | undefined;
 }): any{
@@ -57,13 +57,13 @@ function readJSONSync(path: string, options?: {
 }
 
 
-function dumpJSONSync(path: string, data: {} | any[], indent?: number, options?: fs.WriteFileOptions | undefined): void{
+export function dumpJSONSync(path: string, data: {} | any[], indent?: number, options?: fs.WriteFileOptions | undefined): void{
     indent ??= 4;
     return fs.writeFileSync(path, JSON.stringify(data, null, indent), options);
 }
 
 
-function getOrgMdata(orgname: string): mapObject | null{
+export function getOrgMdata(orgname: string): mapObject | null{
     const path = toMdatapath(orgname);
     try {
         return readJSONSync(path);
@@ -73,18 +73,18 @@ function getOrgMdata(orgname: string): mapObject | null{
 }
 
 
-function saveOrgMdata(orgname: string, data: mapObject): void{
+export function saveOrgMdata(orgname: string, data: mapObject): void{
     const path = toMdatapath(orgname);
     dumpJSONSync(path, data, 4, { encoding: "utf-8" });
 }
 
 
-function toMdatapath(name: string): string{
+export function toMdatapath(name: string): string{
     return "./resources/map-objects/"+name+".json";
 }
 
 
-function convertUnit(byte: number, to: string): number{
+export function convertUnit(byte: number, to: ("KB" | "MB" | "GB")): number{
     const kb = 1024;
     const mb = kb * 1024;
     const bg = mb * 1024;
@@ -97,12 +97,12 @@ function convertUnit(byte: number, to: string): number{
         case "GB":
             return byte / bg;
         default:
-            throw new Error('Invalid unit. Use "KB", "MB", or "GB".');
+            throw new Error('Invalid "to" arg.');
     }
 }
 
 
-function getMediaType(link: string){
+export function getMediaType(link: string){
     var extension = link.split(".").slice(-1)[0].toLowerCase();
 
     if (["jpg", "jpeg", "png", "gif", "webp"].indexOf(extension) !== -1) {
@@ -116,12 +116,4 @@ function getMediaType(link: string){
     return "unknown";
 }
 
-export {
-    readJSONSync,
-    Random,
-    dumpJSONSync,
-    getOrgMdata,
-    saveOrgMdata,
-    convertUnit,
-    getMediaType,
-}
+export { }

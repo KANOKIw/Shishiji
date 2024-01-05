@@ -6,7 +6,6 @@
 :root{
     --font-view: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
     --shishiji-mx-overlay-background-opacity: 0.5;
-    --shishiji-btn-active-color: rgba(190, 190, 190, 0.75);
     --shishiji-load-icon-size: 100px;
     --window-width: 100vw;
     --window-height: 100vh;
@@ -16,10 +15,16 @@
     --shishiji-yd-notifier-width: 250px;
     --shishiji-yd-notifier-height: 45px;
     --shishiji-yd-notifier-top: 30px;
+    --shishiji-ovv-open-duration: 0.5s;
+    --shishiji-ovv-close-duration: 0.2s;
     --shishiji-ovv-theme-height: 20px;
+    --shishiji-ovv-landscape-width: min(calc(var(--window-height)/1.5), var(--window-half-width));
     --shishiji-ovv-tg-height: 50px;
     --shishiji-ovv-tg-color: rgb(235, 235, 235);
     --shishiji-ovv-tg-color-active: rgb(0, 0, 0);
+    --shishiji-fselector-transition: background-color 0.2s ease;
+    --shishiji-button-active-color: rgba(190, 190, 190, 0.75);
+    --shishiji-button-active-transition: background-color 0.2s ease;
 }
 
 .protected{
@@ -39,6 +44,17 @@ a{
     word-break: break-all;
     color: #5555ee;
     text-decoration: underline;
+    -webkit-user-drag: element;
+}
+
+a:link{
+    color: #5555ee;
+    -webkit-user-drag: element;
+}
+
+a:visited{
+    color: #5a009b;
+    -webkit-user-drag: element;
 }
 
 shishiji-mx-overlay{
@@ -64,7 +80,7 @@ shishiji-mx-overlay.pipe{
     z-index: 3001;
     display: block;
     pointer-events: none;
-    animation: _alternative 0.5s linear forwards;
+    animation: _alternative 0.2s linear forwards;
 }
 
 shishiji-yd-notify{
@@ -180,6 +196,12 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
     width: calc(var(--shishiji-yd-notifier-height)*0.5);
 }
 
+#shr-f img{
+    margin-right: 6px;
+    height: calc(var(--shishiji-yd-notifier-height)*0.6);
+    width: calc(var(--shishiji-yd-notifier-height)*0.6);
+}
+
 @keyframes kkl{
     from { rotate: 0deg; }
     to { rotate: 360deg; }
@@ -230,11 +252,16 @@ button{
     border-radius: 50%;
     padding: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--shishiji-button-active-transition);
+}
+
+#ppcls svg{
+    width: 75%;
+    height: 75%;
 }
 
 #ppcls:active{
-    background-color: var(--shishiji-btn-active-color);
+    background-color: var(--shishiji-button-active-color);
 }
 
 @media screen {
@@ -307,6 +334,15 @@ button{
     z-index: 999;
 }
 
+#cg_visible{
+    font-family: var(--font-view);
+    background-image: url(/resources/svg/school.svg);
+    background-repeat: no-repeat;
+    background-size: 22px;
+    padding-left: 24px;
+    font-family: var(--font-view);
+}
+
 #noscript_help{
     display: flex;
     width: var(--window-width);
@@ -317,6 +353,18 @@ button{
     font-size: large;
     position: fixed;
     z-index: 50001;
+}
+
+.kjduiha{
+    padding: 20px 0 20px 180px;
+    background-image: url(/resources/img/logo.png);
+    background-size: 160px 160px;
+    background-repeat: no-repeat;
+}
+
+.aDHUDS{
+    font-size: 30px;
+    font-weight: 300;
 }
 
 #logo_spare_w{
@@ -362,7 +410,7 @@ table{
 }
 
 #overview-context{
-    width: 100vw;
+    width: 100%;
     margin-bottom: var(--window-half-height);
     z-index: 999;
 }
@@ -394,7 +442,17 @@ table{
         opacity: 1;
     }
 }
-  
+
+.gradef{
+    margin: 10px;
+    margin-left: 15px;
+    font-family: var(--font-view);
+}
+
+.evvnon{
+    color: green;
+    font-weight: bold;
+}
 
 .ev_property{
     margin: 10px;
@@ -439,6 +497,7 @@ table{
     scrollbar-width: none;
     box-shadow: inset 0 15px 10px -10px rgba(0, 0, 0, 0.5);
     border-top: 20px solid #000000;
+    animation-fill-mode: forwards;
 }
 
 #shishiji-popup-container{
@@ -454,7 +513,6 @@ table{
     width: calc(var(--window-width) - 48px);
     max-height: 450px;
     height: calc(var(--window-height) - 48px);
-    /*top: calc((var(--window-height) - 48px - 450px)/2);*/
     left: calc((var(--window-width) - 48px - min(500px, var(--window-width) - 48px))/2);
     margin: 24px;
     overflow: hidden;
@@ -507,7 +565,7 @@ table{
 }
 
 .share-icon-w:active{
-    background-color: var(--shishiji-btn-active-color);
+    background-color: var(--shishiji-button-active-color);
 }
 
 .__ppwf{
@@ -521,7 +579,9 @@ table{
 }
 
 #shishiji-overview.raiseup{
-    animation: .5s raiseup ease-in-out;
+    animation-name: raiseup;
+    animation-duration: var(--shishiji-ovv-open-duration);
+    animation-timing-function: ease-in-out;
 }
 
 @keyframes raiseup{
@@ -534,15 +594,50 @@ table{
 }
 
 #shishiji-overview.reducedown{
-    animation: .2s reducedown linear;
+    animation-name: reducedown;
+    animation-duration: var(--shishiji-ovv-close-duration);
+    animation-timing-function: linear;
 }
 
 @keyframes reducedown{
     from{
-        top: 0vh;
+        top: 0;
     }
     to{
         top: var(--window-height);
+        display: none;
+    }
+}
+
+@media (orientation: landscape){
+    #shishiji-overview.raiseup{
+        animation-name: _raiseright;
+        animation-timing-function: ease-in-out;
+    }
+    #shishiji-overview.reducedown{
+        animation-name: _reduceleft;
+    }
+}
+
+@keyframes _raiseright{
+    from{
+        top: 0;
+        right: var(--window-width);
+    }
+    to{
+        top: 0;
+        right: calc(var(--window-width) - var(--shishiji-ovv-landscape-width));
+    }
+}
+
+@keyframes _reduceleft{
+    from{
+        top: 0;
+        right: calc(var(--window-width) - var(--shishiji-ovv-landscape-width));
+    }
+    to{
+        top: 0;
+        right: var(--window-width);
         display: none;
     }
 }
@@ -564,7 +659,7 @@ table{
 }
 
 .overview-c:active{
-    background-color: var(--shishiji-btn-active-color);
+    background-color: var(--shishiji-button-active-color);
 }
 
 .mpobmctx{
@@ -588,14 +683,16 @@ table{
     pointer-events: none;
 }
 
+.doaJSD{
+    cursor: pointer;
+    transform: none;
+    -o-transform: none;
+}
+
 .shadowedObj{
     box-shadow:
     -10px 10px 25px rgba(0, 0, 0, 0.9),
     10px -10px 25px rgba(0, 0, 0, 0.9);
-}
-
-.article-image{
-    cursor: pointer;
 }
 
 .centeral{
@@ -624,7 +721,7 @@ table{
 }
 
 .article.header{
-    width: var(--window-width);
+    width: 100%;
 }
 
 #shishiji-canvas{
@@ -635,42 +732,53 @@ table{
     position: absolute;
     width: var(--window-width);
     height: var(--window-height);
+    opacity: 0.5;
+    background-color: black;
     z-index: 1999;
     display: none;
 }
 
 #user-stricter.active{
-    opacity: 0.5;
-    background-color: black;
-    animation: appear .5s ease;
+    display: block;
+    animation: appear var(--shishiji-ovv-open-duration) ease forwards;
 }
 
 #user-stricter.deactive{
-    animation: disappear .3s ease;
+    opacity: 0.5;
+    display: block;
+    animation: disappear var(--shishiji-ovv-close-duration) ease forwards;
 }
 
 @keyframes appear {
-    0%{
+    from{
         opacity: 0;
     }
-    100%{
+    to{
         opacity: 0.5;
     }
 }
 
 @keyframes disappear {
-    0%{
-        opacity: 0.2;
+    from{
+        display: block;
+        opacity: 0.5;
     }
-    100%{
+    99%{
+        display: block;
+    }
+    to{
+        display: none;
         opacity: 0;
     }
 }
 
 .article.titleC{
+    margin: 15px;
+}
+
+.article.titleC > .titleW{
     display: flex;
     align-items: center;
-    margin: 15px;
     word-wrap: break-word;
     word-break: break-all;
 }
@@ -699,7 +807,7 @@ table{
     0 38.4px 34.8px rgba(0, 0, 0, 0.1),
     0 101px 74px rgba(0, 0, 0, 0.13);
     overflow: hidden;
-    transition: all 0.2s ease;
+    transition: var(--shishiji-fselector-transition);
 }
 
 #place-selector.popped{
@@ -721,6 +829,7 @@ table{
     cursor: pointer;
     margin: 5px;
     margin-left: 0;
+    transition: var(--shishiji-button-active-transition);
 }
 
 .premiumshadow{
@@ -732,7 +841,7 @@ table{
     touch-action: pan-x pan-y;
     user-select: all;
     -webkit-user-select: all;
-    -webkit-user-drag: all;
+    -webkit-user-drag: element;
 }
 
 #place-options-w{
@@ -764,7 +873,7 @@ table{
     margin-right: 7px;
     border-radius: 5px;
     width: var(--shishiji-share-icon-width);
-    transition: all 0.2s ease;
+    transition: var(--shishiji-button-active-transition);
 }
 
 .share-icon-w:first-of-type{
@@ -784,7 +893,7 @@ table{
 #psdummy{       /*#1*/
     width: 100%;
     height: 100%;
-    background-image: url("/resources/img/floorOpt.png");
+    background-image: url("/resources/img/pictogram/fop.png");
     background-repeat: no-repeat;
     background-size: 100%;
     cursor: pointer;
@@ -806,7 +915,7 @@ table{
 }
 
 #place-options-w.undoSel{
-    animation: 0.21s slidedown linear;
+    animation: 0.21s slidedown linear forwards;
 }
 
 @keyframes slideup {
@@ -821,9 +930,14 @@ table{
 @keyframes slidedown{
     0% {
         opacity: 1;
+        display: block;
+    }
+    99% {
+        display: block;
     }
     100% {
         opacity: 0;
+        display: none;
     }
 }
 
@@ -838,12 +952,13 @@ table{
 }
 
 #load_spare.loaddoneman{
-    animation: 1s disappear linear;
+    animation: 1s _disappear linear forwards;
 }
 
-@keyframes disappear{
-    from {opacity: 1;}
-    to {opacity: 0;}
+@keyframes _disappear {
+    from {opacity: 1; display: block;}
+    99% {display: block;}
+    to {opacity: 0; display: none;}
 }
 
 #ppupds{
@@ -914,7 +1029,7 @@ table{
 }
 
 #load_spare{
-    position: absolute;
+    position: fixed;
     width: var(--window-width);
     height: var(--window-height);
     z-index: 1002;
@@ -947,13 +1062,14 @@ table{
 }
 
 #includeScrCh[type=checkbox] + label{
+    transition: var(--shishiji-button-active-transition);
     cursor: pointer;
     padding-left: 30px; 
 }
 
 #includeScrCh[type=checkbox] + label:active{
     padding-right: 5px;
-    background-color: var(--shishiji-btn-active-color);
+    background-color: var(--shishiji-button-active-color);
 }
           
 #includeScrCh[type=checkbox] + label:before{
@@ -985,8 +1101,8 @@ table{
 
 #ovv-tg-a{
     position: fixed;
-    height: 100%;
     z-index: 8001;
+    height: 100%;
 }
 
 #ovv-tg-b{
@@ -1012,10 +1128,15 @@ table{
 }
 
 .ovv-tg-bwr button{
+    transition: var(--shishiji-button-active-transition);
     width: 100%;
     height: 100%;
     color: black;
     font-size: medium;
+}
+
+.ovv-tg-bwr button:active:not(.tg-active){
+    background-color: var(--shishiji-button-active-color);
 }
 
 .ovv-tg-bwr:last-of-type{
@@ -1025,4 +1146,24 @@ table{
 .ovv-tg-bwr .tg-active{
     color: white;
     background-color: var(--shishiji-ovv-tg-color-active);
+    cursor: default;
+}
+
+@media (orientation: landscape){
+    #shishiji-overview{
+        width: var(--shishiji-ovv-landscape-width);
+        box-shadow:
+            0 1.9px 2.5px rgba(0, 0, 0, 0.057),
+            0 5px 6.1px rgba(0, 0, 0, 0.076),
+            0 10.1px 11.4px rgba(0, 0, 0, 0.086),
+            0 19.2px 19.8px rgba(0, 0, 0, 0.092),
+            0 38.4px 34.8px rgba(0, 0, 0, 0.1),
+            0 101px 74px rgba(0, 0, 0, 0.13);
+    }
+    #overview-options{
+        width: var(--shishiji-ovv-landscape-width);
+    }
+    #ovv-tg-b{
+        width: var(--shishiji-ovv-landscape-width);
+    }
 }

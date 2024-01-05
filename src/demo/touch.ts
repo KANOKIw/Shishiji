@@ -1,4 +1,7 @@
-function getMiddlePos(touches: TouchList): Position{
+import { Position, Moved, Coordinate } from "./shishiji";
+
+
+export function getMiddlePos(touches: TouchList): Position{
     var av_x = 0;
     var av_y = 0;
     
@@ -14,7 +17,7 @@ function getMiddlePos(touches: TouchList): Position{
 }
 
 
-function getTouchesDistance(touches: TouchList): number{
+export function getTouchesDistance(touches: TouchList): number{
     if (touches.length == 1)
         return 0;
     var amx = 0;
@@ -38,7 +41,7 @@ function getTouchesDistance(touches: TouchList): number{
 }
 
 
-function moveMap(mapElement: HTMLElement, moved: Moved): void{
+export function moveMap(mapElement: HTMLElement, moved: Moved): void{
     var left = Number(mapElement.style.left.replace("px", ""));
     var top = Number(mapElement.style.top.replace("px", ""));
     var mapImg: Element = mapElement.children[0];
@@ -58,13 +61,13 @@ function moveMap(mapElement: HTMLElement, moved: Moved): void{
 }
 
 
-function onTouchDown(event: TouchEvent, elm: HTMLElement): void{
+export function onTouchDown(event: TouchEvent, elm: HTMLElement): void{
     var touches = event.touches;
     lastTouchPos = getMiddlePos(touches);
 }
 
 
-function onTouchMove(event: TouchEvent, elm: HTMLElement): void{
+export function onTouchMove(event: TouchEvent, elm: HTMLElement): void{
     var touches = event.touches;
     var movedTo = getMiddlePos(touches);
     var map_move: Moved = {left: movedTo[0]! - lastTouchPos[0]!, top: movedTo[1]! - lastTouchPos[1]!};
@@ -77,6 +80,6 @@ function onTouchMove(event: TouchEvent, elm: HTMLElement): void{
 }
 
 
-function onTouchLeave(event: TouchEvent, elm: HTMLElement): void{
+export function onTouchLeave(event: TouchEvent, elm: HTMLElement): void{
     lastTouchPos = [null, null];
 }

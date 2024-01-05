@@ -9,7 +9,7 @@
      */
     !function(){
         return;
-        const $cp = $("#shishiji-popup-container-c");
+        const $cp = $(cssName.ppupcc);
 
         /**@param {string} str  */
         function delpxToNum(str){

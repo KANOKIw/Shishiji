@@ -3,7 +3,7 @@
 
 
 
-var STYLES = {
+const STYLES = {
     "§0": "color:#000000",
     "§1": "color:#0000AA",
     "§2": "color:#00AA00",
@@ -26,19 +26,29 @@ var STYLES = {
     "§o": "font-style:italic",
     "§m": "text-decoration:line-through",
 
-    "§L": "font-weight:bolder",
     "§x": "font-size:48px;line-height:1.5",
     "§y": "font-size:36px;line-height:1.333",
     "§z": "font-size:24px;line-height:1",
+
+    "§q": "font-family:var(--font-view)",
+    "§w": 'font-family:"Horror"',
+    "§t": 'font-family:"Handwritten"',
+    "§u": 'font-family:"Calligraphed"',
+
+    "§k": "",
 };
 
 
 /**
  * 
  * @param {HTMLElement} elem 
+ * @param {string} ctx 
  */
-function _MCobfuscate(elem){
-    elem.classList.add("MCOBF", "crucial");
+function _MCobfuscate(elem, ctx){
+    const child = document.createElement("span");
+    elem.appendChild(child);
+    child.innerHTML = ctx;
+    child.classList.add("MCOBF", "crucial");
 }
 
 
@@ -49,18 +59,23 @@ function _MCobfuscate(elem){
  * @returns {HTMLSpanElement}
  */
 function _applyMCCode(string, codes){
-    var len = codes.length;
-    var elem = document.createElement("span"),
-        obfuscated = false;
+    const len = codes.length;
+    const elem = document.createElement("span");
+    var obfuscated = false;
+
     for (var i = 0; i < len; i++){
-        elem.style.cssText += STYLES[codes[i]] + ";";
+        const style = STYLES[codes[i]];
+        
+        if (typeof style !== "string") continue;
+        elem.style.cssText += style + ";";
         if(codes[i] === "§k") {
-            _MCobfuscate(elem);
+            _MCobfuscate(elem, string);
             obfuscated = true;
         }
     }
 
-    elem.innerHTML = string;
+    if (!obfuscated)
+        elem.innerHTML = string;
 
     return elem;
 }
@@ -91,21 +106,21 @@ function _parseMCFormat(string){
     }
 
     for(var i = 0; i < len; i++){
-    	indexDelta = indexes[i + 1] - indexes[i];
+    	indexDelta = indexes[i+1] - indexes[i];
         if(indexDelta === 2){
             while (indexDelta === 2){
                 apply.push(codes[i]);
                 i++;
-                indexDelta = indexes[i + 1] - indexes[i];
+                indexDelta = indexes[i+1] - indexes[i];
             }
-            apply.push (codes[i]);
+            apply.push(codes[i]);
         } else {
             apply.push(codes[i]);
         }
         if (apply.lastIndexOf("§r") > -1){
-            apply = apply.slice(apply.lastIndexOf("§r") + 1);
+            apply = apply.slice(apply.lastIndexOf("§r")+1);
         }
-        tmpStr = string.substring(indexes[i], indexes[i + 1]);
+        tmpStr = string.substring(indexes[i], indexes[i+1]);
         final.appendChild(_applyMCCode(tmpStr, apply));
     }
     return final;
@@ -129,16 +144,16 @@ function mcFormat(str, srcConverter){
         r += e.outerHTML;
     }
 
-    const imgreg = /%\:IMG-S=([^\-]+)-W=(\d+);%/g;
-    const vidreg = /%\:VIDEO-S=([^\-]+)-W=(\d+);%/g;
-    const linkreg = /#\:LINK-H=(https?:\/\/(?!.*#:).*)-T=(.*);#/g;
+    const imgreg = /%\:IMG-S=([^-]+)-W=(\d+);%/g;
+    const vidreg = /%\:VIDEO-S=([^-]+)-W=(\d+);%/g;
+    const linkreg = /θ\:LINK-H=(https?:\/\/(?:(?!-T=).)+)-T=((?:(?!;θ).)*);θ/g;
     const imgmatches = r.matchAll(imgreg) || [];
     const vidmacthes = r.matchAll(vidreg) || [];
     const linkmacthes = r.matchAll(linkreg) || [];
 
     for (const imgmacth of imgmatches){
         const width = Number(imgmacth[2]);
-        r = r.replace(imgmacth[0], `<img class="article-image protected" src="${srcConverter(imgmacth[1])}" style="width: ${(width > 100 || width < 0) ? 100 : width}%;">`);
+        r = r.replace(imgmacth[0], `<img class="article-image doaJSD protected" src="${srcConverter(imgmacth[1])}" style="width: ${(width > 100 || width < 0) ? 100 : width}%;">`);
     }
 
     for (const vidmacth of vidmacthes){
@@ -147,7 +162,8 @@ function mcFormat(str, srcConverter){
     }
 
     for (const linkmacth of linkmacthes){
-        r = r.replace(linkmacth[0], `<a class="article-outsidelink protected" href="${new URL(linkmacth[1])}" style="color: #5555ee;" target="_blank">${(linkmacth[2].length > 0) ? linkmacth[2] : linkmacth[1]}</a>`);
+        const href = linkmacth[1];
+        r = r.replace(linkmacth[0], `<a class="article-outsidelink protected" href="${new URL(href)}" target="_blank">${(linkmacth[2].length > 0) ? linkmacth[2] : linkmacth[1]}</a>`);
     }
 
     return r;

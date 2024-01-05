@@ -1,47 +1,45 @@
-interface Position extends Array {
-    0: number | null,
-    1: number | null,
-    map: Function,
-    some: Function,
+export interface Position extends Array<number | null> {
+    0: number | null;
+    1: number | null;
+    map: (a: (b: number | null) => void) => any;
+    some: (c: (d: number | null) => boolean) => boolean;
 }
 
-interface NonnullPosition extends Array<number> {
-    0: number,
-    1: number,
-    map: Function,
-    some: Function,
+export interface NonnullPosition extends Array<number> {
+    0: number;
+    1: number;
+    map: (e: (f: number) => void) => any;
+    some: (g: (h: number) => boolean) => boolean;
 }
 
-interface Coords {
-    x: number,
-    y: number
+export interface Coords {
+    x: number;
+    y: number;
 }
 
-interface Distance { 
-    x: number, 
-    y: number, 
-    distance: number 
+export interface Distance extends Coords { 
+    distance: number;
 }
 
-interface touchINFO {
-    touches: Coords[],
-    middle: NonnullPosition,
-    real: Touch[],
-    cross: NonnullPosition,
-    zoom: boolean,
-    jorl? : TouchEvent[],
-    pretend?: TouchType[],
-    match?: TouchType[],
+export interface touchINFO {
+    touches: Coords[];
+    middle: NonnullPosition;
+    real: Touch[];
+    cross: NonnullPosition;
+    zoom: boolean;
+    jorl? : TouchEvent[];
+    pretend?: TouchType[];
+    match?: TouchType[];
 }
 
-interface MoveData {
-    top: number,
-    left: number
+export interface MoveData {
+    top: number;
+    left: number;
 }
 
 
-type Radian = number;
-type Degree = number;
+export type Radian = number;
+export type Degree = number;
 
 
 
@@ -63,15 +61,15 @@ declare var pastRotateMin: boolean;
 declare function formatString(str: string, ...args: any[]): string;
 
 
-interface CanvasAttrs {
-    coords: Coords,
-    width: number,
-    height: number,
-    rotation: Radian
+export interface CanvasAttrs {
+    coords: Coords;
+    width: number;
+    height: number;
+    rotation: Radian;
 }
   
 
-interface BackCanvas extends HTMLCanvasElement {
+export interface BackCanvas extends HTMLCanvasElement {
     canvas: CanvasAttrs;
 }
 
@@ -80,14 +78,4 @@ declare const backcanvas: BackCanvas;
 declare const bctx: CanvasRenderingContext2D;
 
 
-export {
-    BackCanvas,
-    Position,
-    Radian,
-    Degree,
-    NonnullPosition,
-    Distance,
-    Coords,
-    touchINFO,
-    MoveData,
-}
+export { }

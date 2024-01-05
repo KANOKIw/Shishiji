@@ -4,7 +4,7 @@
 
 /**
  * 
- * @param {{ title: string, subtitle?: string }} ovvOptions 
+ * @param {{title: string, subtitle?: string}} ovvOptions 
  * @param {string} share_url 
  * @param {ShareData} share_data 
  *      share_data.text?.replace("{__SHARE_URL__}", finalShareURL<decoded>);
@@ -19,13 +19,13 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
     /**@param {string} [ctx]  */
     function onerr(ctx){
         if (ctx === void 0) ctx = TEXT[LANGUAGE].ERROR_ANY;
-        Notifier.notifyHTML(
-            `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY}</div>`,
+        PictoNotifier.notifyError(
+            TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY,
             2500,
             "sharePopup connection error",
-            !0,
+            { do_not_keep: true },
         );
-        if (Popup.popupping)
+        if (Popup.isPoppingup)
             Popup.showasError(ctx);
     }
 
@@ -45,9 +45,9 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
         timeout: 30000,
         dataType: "html",
     }).done(t => {
-        if (Popup.popupping){
+        if (Popup.isPoppingup){
             Popup.popupContent(t, function(){
-                const shareURL = adp(share_url, ParamNames.URL_FROM, from_where);
+                const shareURL = adp(share_url, ParamName.URL_FROM, from_where);
                 var fch = [];
                 var _fchp = {share: () => {}, copy: () => {}};
 
@@ -56,9 +56,9 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                     return;
                 }
 
-                $("#ppc-title").text(ovvOptions.title);
+                $(cssName.sharettl).text(ovvOptions.title);
                 if (ovvOptions.subtitle)
-                    $("#ppc-subtitle").text(ovvOptions.subtitle);
+                    $(cssName.sharesbttl).text(ovvOptions.subtitle);
 
                 /**
                  * 
@@ -71,12 +71,12 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                             async function T(){
                                 await window.navigator.share(sd);
                             }
-                            $("#share-nav").off("click", _fchp.share).on("click", T);
+                            $(cssName.sharenav).off("click", _fchp.share).on("click", T);
                             _fchp.share = T;
                             return 0;
                         }(share_data);
                     } else {
-                        $("#nav-share").remove();
+                        $(cssName.resharenav).remove();
                     }
                 }
 
@@ -91,13 +91,13 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
 
                     function T(){
                         window.navigator.clipboard.writeText(url || shareURL);
-                        Notifier.notifyHTML(
-                            `<div id="cpy-lin-not" class="flxxt">${GPATH.LINK}${TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK}</div>`,
+                        PictoNotifier.notifyLink(
+                            TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK,
                             2500,
                             "copy artshare",
                         );
                     }
-                    $("#share-copy").off("click", _fchp.copy).on("click", T);
+                    $(cssName.sharecopy).off("click", _fchp.copy).on("click", T);
 
                     _fchp.copy = T;
                 }
@@ -106,14 +106,14 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
 
 
                 if (change_option){
-                    $("#includeScr").text(TEXT[LANGUAGE][change_option.labelkey]);
-                    $("#includeScrCh").on("change", function(e){
+                    $(cssName.btnincludescr).text(TEXT[LANGUAGE][change_option.labelkey]);
+                    $(cssName.btnincludescrch).on("change", function(e){
                         //@ts-ignore
                         if (this.checked){
-                            for (var i = 0; i < document.getElementsByClassName("share_ebtn").length; i++){
-                                $(document.getElementsByClassName("share_ebtn")[i]).off("click", fch[i]);
+                            for (var i = 0; i < document.getElementsByClassName(cssName.btnsharee).length; i++){
+                                $(document.getElementsByClassName(cssName.btnsharee)[i]).off("click", fch[i]);
                             }
-                            const upp = adp(change_option.url, ParamNames.URL_FROM, from_where);
+                            const upp = adp(change_option.url, ParamName.URL_FROM, from_where);
                             setShareLink(upp);
                             shareShare(upp);
                             copyShare(upp);
@@ -124,7 +124,7 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                         }
                     });
                 } else {
-                    $("#includeScrCh").remove();
+                    $(cssName.btnincludescrch).remove();
                 }
                 
                 message = encodeURIComponent(message);
@@ -137,7 +137,7 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
                     const here = encodeURIComponent(share_url || shareURL);
                     const baseText = `${message}%0A${here}`;
                     fch = [];
-                    for (const ch of document.getElementsByClassName("share_ebtn")){
+                    for (const ch of document.getElementsByClassName(cssName.btnsharee)){
                         const appname = ch.id.replace("share-", "");
                         const $ch = $(ch);
                         var href = "";
@@ -181,12 +181,13 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
     
                     /**except japanese */
                     function translate(){
-                        $("#--share-bru").text("Share");
-                        $("#--trans-MAIL").text("Email");
-                        $("#--trans-MESSAGE").text("Messages");
-                        $("#--trans-COPYLINK").text("Copy Link");
-                        $("#--trans-OTHERS").text("Others");
+                        $(cssName.translsh).text("Share");
+                        $(cssName.translma).text("Email");
+                        $(cssName.translme).text("Messages");
+                        $(cssName.translcp).text("Copy Link");
+                        $(cssName.translot).text("Others");
                     }
+
                     if (LANGUAGE != "JA")
                         translate();
                 }
