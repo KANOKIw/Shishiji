@@ -156,20 +156,23 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
      * @param {"h" | "i"} a 
      */
     function onerror(a){
-        if (a == "h")
+        if (a === "h")
             this.outerHTML = `<div class="flxxt nImg-a">${GPATH.ERROR_ZAHUMARU}<h4>No Image</h4></div>`;
-        else if (a == "i")
+        else if (a === "i")
             this.outerHTML = `<div class="flxxt" style="width:48px;height:48px;">${GPATH.ERROR_ZAHUMARU}</div>`;
     };
 
     var article_mainctx = mcFormat(details.article.content, fn => { return pathConvertfunc(orgname, fn); });
 
     if (!window.navigator.onLine){
-        PictoNotifier.notifyError(
+        PictoNotifier.notify(
+            "error",
             TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR,
-            2500,
-            "article connection error",
-            { do_not_keep: true },
+            {
+                duration: 2500,
+                discriminator: "article connection error",
+                do_not_keep_previous: true
+            }
         );
         $(cssName.ovvctxload).html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
         $(cssName.ovvshare).hide();

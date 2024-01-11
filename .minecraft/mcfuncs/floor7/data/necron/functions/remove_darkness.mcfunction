@@ -1,0 +1,1 @@
+execute as @e[tag=necron] at @s run effect clear @a[x=860, y=-100, z=960, dx=160, dy=500, dz=140] darkness

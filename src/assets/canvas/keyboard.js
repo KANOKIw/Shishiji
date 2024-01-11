@@ -144,10 +144,3 @@ window.addEventListener("keyup", function(e){
         }
     }
 });
-
-
-window.addEventListener("wheel", function(e){
-    // Chrome zoom prevention
-    if (spckeystatus.ctr)
-        e.preventDefault();
-}, { passive: false });

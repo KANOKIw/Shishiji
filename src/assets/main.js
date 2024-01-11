@@ -75,11 +75,12 @@ function setCanvasSizes(){
             initial_floor = PARAMS.floor;
             initial_data = data[PARAMS.floor];
         }
+        CURRENT_FLOOR = initial_floor;
 
         backcanvas.width = initial_data.tile_width*(initial_data.xrange+1);
         backcanvas.height = initial_data.tile_height*(initial_data.yrange+1);
 
-        drawMap(canvas, ctx, initial_data, callback);
+        drawMapWithProgressBar(initial_data, { over: TEXT[LANGUAGE].LOADING_MAP, under: CURRENT_FLOOR }, callback);
         
         var loaded = 0;
         
@@ -107,8 +108,6 @@ function setCanvasSizes(){
                 mapObjectComponent = objdata;
     
                 showDigitsOnFloor(initial_floor, mapObjectComponent);
-    
-                CURRENT_FLOOR = initial_floor;
 
                 /**
                  * handles if wrong floor with shared article
@@ -141,7 +140,7 @@ function setCanvasSizes(){
         }();
     
         function _loaded(){
-            endLoad(TEXT[LANGUAGE].MAP_LOADED);
+            endLoad(TEXT[LANGUAGE].MAP_LOADED, 400);
             $(cssName.app).show();
             if (PARAMS.article){
                 const data = searchObject(PARAMS.article);
@@ -150,16 +149,19 @@ function setCanvasSizes(){
                 var article_tg = "description";
                 
                 if (PARAMS.from){
-                    fromARTshare = !0;
+                    fromARTshare = true;
                 }
 
                 if (data == null || CURRENT_FLOOR != data.object.floor){
                     if (fromARTshare){
                         setTimeout(() => {
-                            PictoNotifier.notifyError(
+                            PictoNotifier.notify(
+                                "error",
                                 TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_NOT_FOUND,
-                                7500,
-                                "share not found",
+                                {
+                                    duration: 7500,
+                                    discriminator: "share not found"
+                                }
                             );
                         }, 500);
                     }
@@ -171,23 +173,28 @@ function setCanvasSizes(){
                     const coords = data.object.coordinate;
                     setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                     setTimeout(() => {
-                        PictoNotifier.notifySuccess(
+                        PictoNotifier.notify(
+                            "success",
                             TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_FOUND,
-                            5000,
-                            "share found",
+                            {
+                                duration: 5000,
+                                discriminator: "share found"
+                            }
                         );
                     }, 1000);
 
-                    var g = getParam(ParamName.SCROLL_POS);
-                    var y = getParam(ParamName.ART_TARGET);
+                    const g = getParam(ParamName.SCROLL_POS),
+                        y = getParam(ParamName.ART_TARGET);
                     delParam(ParamName.SCROLL_POS);
                     delParam(ParamName.ART_TARGET);
                     if (g != null || y){
                         setTimeout(() => {
                             Notifier.appendPending({
                                 html: `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_TRANSITIONED}</div>`,
-                                term: 5000,
-                                discriminator: "transitioned to shared position",
+                                options: {
+                                    duration: 5000,
+                                    discriminator: "transitioned to shared position"
+                                }
                             });
                         }, 1050);
                         scr_position = Number(g);
@@ -223,17 +230,7 @@ window.addEventListener("resize", function(e){
 }, { passive: false });
 
 
-window.addEventListener("gesturestart", function(e){
-    e.preventDefault();
-}, { passive: false });
-
-
-window.addEventListener("dblclick", function(e){
-    e.preventDefault();
-}, { passive: false });
-
-
-window.addEventListener("load", function(e){
+window.addEventListener("DOMContentLoaded", function(e){
     window.scroll({ top: 0, behavior: "instant" });
 });
 

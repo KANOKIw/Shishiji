@@ -55,6 +55,7 @@ function saveMainEditorctx(do_not_showmessage, donecallback, errorcallback){
         })  
         .catch(err => {
             clearTimeout(_t.a);
+            allowNsave();
             $("#sv_msg").text("失敗しました").css("color", "red");
             _t.a = setTimeout(() => {
                 $("#sv_msg").text("");
@@ -88,15 +89,21 @@ function nextAutoSave(){
     clearTimeout(kes);
     if (SETTINGS.autosave){
         kes = setTimeout(() => {
-            PictoNotifier.notifySave_("オートセーブ中...", 30000);
+            if (!isSavable())
+                return;
+            PictoNotifier.notifySave("オートセーブ中...", { duration: 30000 });
             saveMainEditorctx.apply(document.getElementById("save_data_norm"), [true, () => {
                 $("#sv_msg").text("オートセーブ完了").css("color", "green");
                 if (SETTINGS.autosaveNotification)
-                    PictoNotifier.notifySave_("オートセーブ完了", 3000);
+                    PictoNotifier.notify("save", "オートセーブ完了");
             }, () => {
+                allowNsave();
                 $("#sv_msg").text("オートセーブ失敗").css("color", "red");
-                PictoNotifier.notifyError("オートセーブに失敗", 3000);
+                PictoNotifier.notify("error", "オートセーブに失敗");
             }]);
-        }, 2500);
+        }, DURATION_BETWEEN_LAST_EDIT_AND_AUTO_SAVE);
     }
 }
+
+
+scriptDone();

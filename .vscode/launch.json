@@ -20,6 +20,19 @@
                 "<node_internals>/**"
             ],
             "type": "node"
+        },
+        {
+            "type": "java",
+            "name": "jjj",
+            "request": "launch",
+            "mainClass": "jjj",
+            "projectName": "Bungeecord_25f17ad4"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
         }
     ]
 }

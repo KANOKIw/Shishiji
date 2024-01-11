@@ -1,9 +1,9 @@
 *{
     margin: 0;
-    touch-action: pan-x pan-y;
+    -webkit-user-drag: none;
 }
 
-:root{
+html{
     --motd-cl-height: 80px;
     --previewer-width: 430px;
     --previewer-height: 932px;
@@ -19,6 +19,7 @@
     --sheart-forelinktag: #7c7cbe;
     --sheart-forelinkarg: #5555ee;
     --sheart-forespace: #727272;
+    --previewer-util-btn-size: 30px;
 }
 
 body{
@@ -34,6 +35,58 @@ body::-webkit-scrollbar-thumb{
     border-radius: 0.25rem;
     --bg-opacity: 1;
     background-color: #4e4e4e;
+}
+
+.oodaji{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    border: solid 2px #dddddd;
+    box-sizing: border-box;
+    border-bottom: none;
+}
+
+.oodaji:nth-of-type(odd){
+    border-right: none;
+}
+
+.oodaji:nth-of-type(odd).oodaji:last-of-type{
+    border-bottom: solid 2px #dddddd;
+}
+
+.oodaji:nth-of-type(odd).oodaji:last-of-type::after{
+    content: "";
+    border-right: solid 2px #dddddd;
+    position: absolute;
+    flex: 1;
+    width: calc(100% + 2px);
+    box-sizing: content-box;
+    height: calc(100% + 4px);
+}
+
+.oodaji:nth-of-type(odd).oodaji:nth-last-of-type(2){
+    border-bottom: solid 2px #dddddd;
+}
+
+.oodaji:nth-of-type(even).oodaji:last-of-type{
+    border-bottom: solid 2px #dddddd;
+}
+
+.oodaji:nth-of-type(even).oodaji:nth-last-of-type(2)::after{
+    content: "";
+    border-bottom: solid 2px #dddddd;
+    position: absolute;
+    flex: 1;
+    width: calc(100% + 4px);
+    box-sizing: content-box;
+    height: calc(100% + 2px);
+}
+
+button{
+    transition: var(--shishiji-button-active-transition);
 }
 
 #app-mount{
@@ -99,6 +152,47 @@ button{
     align-items: center;
 }
 
+#preview_posbtnwrapper{
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 1002;
+}
+
+.preview_posbtn{
+    width: var(--previewer-util-btn-size);
+    height: var(--previewer-util-btn-size);
+    border-radius: 8px;
+    border: solid 1px rgb(197, 197, 197);
+    margin-right: 4px;
+    background-color: white;
+    transition: var(--shishiji-button-active-transition) 0.5s;
+    overflow: hidden;
+}
+
+.preview_posbtn::after{
+    content: "";
+    position: absolute;
+    width: var(--previewer-util-btn-size);
+    height: var(--previewer-util-btn-size);
+    background-color: transparent;
+    transition: var(--shishiji-spread-btn-transition);
+    border-radius: 8px;
+}
+
+.preview_posbtn:active::after{
+    animation: var(--shishiji-spread-btn-animation-circle);
+    background-color: var(--shishiji-spread-btn-bg-color);
+}
+
+.preview_posbtn:active{
+    background-color: var(--shishiji-button-active-color);
+}
+
+.jioojsdia{
+    font-size: calc(var(--previewer-util-btn-size) * 5 / 6);
+}
+
 #logout__{
     padding: 4px 10px 4px 10px;
     background-color: rgb(255, 197, 142);
@@ -107,7 +201,7 @@ button{
     margin-left: 20px;
 }
 
-#logout__:active{
+#logout__:active, #--yesilogout:active{
     background-color: rgb(206, 150, 99);
 }
 
@@ -237,6 +331,14 @@ button{
     border-right: solid 2px rgb(156, 156, 156);
 }
 
+#promax-container{
+    position: relative;
+    top: 0;
+    z-index: 1001;
+    transition-property: transform, top;
+    transition: 0.1s linear;
+}
+
 #jjjadios{
     transition: all var(--editor-setting-toggler-transition-duration);
 }
@@ -250,6 +352,11 @@ button{
     width: 100%;
     height: calc(100% / 2);
     text-align: center;
+}
+
+#motd-www{
+    display: flex;
+    height: 50%;
 }
 
 #-motd-dec-wp{
@@ -292,7 +399,7 @@ button{
 }
 
 #load_spare{
-    position: absolute;
+    position: fixed;
     width: var(--window-width);
     height: var(--window-height);
     z-index: 9002;
@@ -326,12 +433,22 @@ button{
     justify-content: center;
     border-left: 2px solid black;
     cursor: pointer;
+    touch-action: manipulation;
 }
 
 .prehh{
     background-repeat: no-repeat;
     background-size: 24px;
     padding-left: 28px;
+}
+
+.notifier-btn{
+    background-color: white;
+    padding: 4px;
+    border-radius: 8px;
+    margin-left: 4px;
+    font-weight: bold;
+    font-size: 10px;
 }
 
 #autoinput_hh{
@@ -381,6 +498,11 @@ button{
     background-color: rgba(172, 172, 172, 0.7);
 }
 
+.aosdosd{
+    color: white;
+    font-size: 12px;
+}
+
 #main-editor-linen{
     padding-top: 5px;
     font-size: 16px;
@@ -390,17 +512,8 @@ button{
 #main-editor-cd{
     pointer-events: none;
     position: absolute;
-    white-space: nowrap;
-    caret-color: white;
-    font-size: 16px;
-    font-family: var(--code-font);
     color: var(--sheart-forenormal);
-    width: fit-content;
-    min-height: 100%;
-    padding: 5px 5px 15vh 5px;
-    height: fit-content;
     z-index: 2999;
-    background-color: transparent;
 }
 
 .s9uiahd{
@@ -426,54 +539,6 @@ button{
 
 .code-pre.ASOKJjmm:last-of-type{
     left: 0;
-}
-
-.oodaji{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
-    border: solid 2px #dddddd;
-    box-sizing: border-box;
-    border-bottom: none;
-}
-
-.oodaji:nth-of-type(odd){
-    border-right: none;
-}
-
-.oodaji:nth-of-type(odd).oodaji:last-of-type{
-    border-bottom: solid 2px #dddddd;
-}
-
-.oodaji:nth-of-type(odd).oodaji:last-of-type::after{
-    content: "";
-    border-right: solid 2px #dddddd;
-    position: absolute;
-    flex: 1;
-    width: calc(100% + 2px);
-    box-sizing: content-box;
-    height: calc(100% + 4px);
-}
-
-.oodaji:nth-of-type(odd).oodaji:nth-last-of-type(2){
-    border-bottom: solid 2px #dddddd;
-}
-
-.oodaji:nth-of-type(even).oodaji:last-of-type{
-    border-bottom: solid 2px #dddddd;
-}
-
-.oodaji:nth-of-type(even).oodaji:nth-last-of-type(2)::after{
-    content: "";
-    border-bottom: solid 2px #dddddd;
-    position: absolute;
-    flex: 1;
-    width: calc(100% + 4px);
-    box-sizing: content-box;
-    height: calc(100% + 2px);
 }
 
 .jkhafuis{
@@ -510,18 +575,22 @@ button{
 }
 
 #main-editor{
-    white-space: nowrap;
-    caret-color: white;
     cursor: text;
     font-size: 16px;
-    font-family: Consolas, "Courier New", monospace;
     color: transparent;
-    min-width: 100%;
+    min-width: calc(100% - 5px);
+    z-index: 2998;
+}
+
+#main-editor, #main-editor-cd{
+    white-space: nowrap;
+    caret-color: white;
+    font-size: 16px;
+    font-family: var(--code-font);
     width: fit-content;
     min-height: 100%;
-    padding: 5px 5px 15vh 5px;
     height: fit-content;
-    z-index: 2998;
+    padding: 5px 0 15vh 5px;
     background-color: transparent;
 }
 
@@ -564,6 +633,7 @@ button{
     width: var(--previewer-width);
     margin-bottom: var(--window-half-height);
     z-index: 999;
+    touch-action: pan-y;
 }
 
 #sv_msg{
@@ -597,12 +667,13 @@ button{
 
 .iphone-12-pro-max{
     position: relative;
-    top: -35px;
+    top: -10px;
     background-color: rgb(255, 255, 255);
     width: var(--previewer-width);
     height: var(--previewer-height);
     box-shadow: 0 0 10px rgba(0,0,0,.3);
     font-size: var(--previewer-font-size);
+    touch-action: pan-y;
 }
 
 #eaeeaea{
@@ -691,9 +762,9 @@ shishiji-mx-overlay-n.popen{
 shishiji-mx-overlay-n.pipe{
     opacity: 0;
     z-index: 3001;
-    display: none;
+    display: block;
     pointer-events: none;
-    animation: _alternative 0.3s linear;
+    animation: _alternative 0.2s linear forwards;
 }
 
 .okjoipjiok{
@@ -720,7 +791,6 @@ shishiji-mx-overlay-n.pipe{
     position: absolute;
     max-width: 500px;
     width: calc(var(--previewer-width) - 48px);
-    /*top: calc((var(--window-height) - 48px - 450px)/2);*/
     left: calc((var(--previewer-width) - 48px - min(500px, var(--previewer-width) - 48px))/2);
     height: 450px;
     margin: 24px;
@@ -734,7 +804,8 @@ shishiji-mx-overlay-n.pipe{
 
 @keyframes _alternative{
     from { opacity: var(--shishiji-mx-overlay-background-opacity, 0.6); display: block; }
-    to {  opacity: 0; display: block; }
+    99% { display: block; }
+    to {  opacity: 0; display: block; pointer-events: none; }
 }
 
 .doaihd:last-of-type{
@@ -748,7 +819,7 @@ shishiji-mx-overlay-n.pipe{
 }
 
 .rsgafwad{
-    margin: 20px 30px 20px 30px;
+    margin: 10px 20px 10px 20px;
     height: var(--editor-hr-height);
     background-color: var(--editor-hr-color);
     border: none;

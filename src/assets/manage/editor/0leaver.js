@@ -89,7 +89,25 @@ const secReg = /(§[a-zA-Z0-9]){1}/g,
     },
     accepted_cloudfileExtensions = [
         ".jpg", ".jpeg", ".png", ".gif", ".webp", ".mp4", ".webm", ".avi", ".mov", ".flv"
-    ];
+    ],
+    DURATION_BETWEEN_LAST_EDIT_AND_AUTO_SAVE = 5000,
+    WRITE_PREVIEW_COOLDOWN = 250,
+    _zrs = [
+        0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9,
+        1,
+        1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5
+    ],
+    _zr = Number(getLocalStorage(ZOOMRATIOKEY)),
+    _top = Number(getLocalStorage(TOPKEY)),
+    PVSTATUS = {
+        zooms: { delta: 1.1, max: 5, min: 0.4,
+            ratios: _zrs, ratio: _zrs.includes(_zr) ? _zr : 1,
+        },
+        moves: {
+            delta: 20,
+            top: isNaN(_top) ? 0 : _top,
+        }
+    };
 var username = "",
     /**@ts-ignore @type {DmapObject} */
     ARTICLEDATA = {},
@@ -100,7 +118,9 @@ var username = "",
     STORAGESAVES,
     gglmats,
     /**@type {mapObject} */
-    lastsaved;
+    lastsaved,
+    LOADW = 0,
+    scriptlen = 0;
 
 
 try {
@@ -110,10 +130,17 @@ try {
     delLocalStorage(EDITORCONFIGKEY)
 }
 
+for (const G of document.getElementsByTagName("script")){
+    const src = G.src;
+    if (src && (new URL(src)).pathname.startsWith("/src/assets/manage/editor/"))
+        scriptlen++;
+}
+
 const SETTINGS = { 
     autosave: STORAGESAVES[AUTOSAVEKEY] === true ? true : false,
     autosaveNotification: STORAGESAVES[AUTOSAVENOTIFICATIONKEY] === false ? false : true,
     colorEditor: STORAGESAVES[COLOREDITORKEY] === false ? false : true,
+    instapreview: STORAGESAVES[INSTAPREVIEWKEY] === true ? true : false,
     quickInputNotification: STORAGESAVES[QUICKINPUTNOTIFICATIONKEY] === false ? false : true,
     visibleSpace: STORAGESAVES[VISIBLESPACEKEY] === false ? false : true,
     visibleOnlyEndSpace: STORAGESAVES[VISIBLEONLYENDSPACEKEY] === false ? false : true,
@@ -152,7 +179,69 @@ function leaveherep(force){
                 $(this)
                 .text("ログアウト")
                 .css("color", "black");
-            PictoNotifier.notifyError("通信エラー", 10000, "failed to logout", { do_not_keep: true, deny_userclose: true });
+            PictoNotifier.notify("error", "通信エラー", { duration: 10000, do_not_keep_previous: true, deny_userclose: true });
         }
     });
 }
+
+
+/**
+ * 
+ * @param {{over?: string; under?: string;}} [messages] 
+ */
+function loadsProgBar(messages){
+    const loadmsg = `<h4>${messages?.over || ""}</h4><div id="map_load_progress"><div id="ml_progress"></div></div><h4>${messages?.under || ""}</h4>`;
+
+    startLoad(loadmsg);
+    
+    return function(progress){
+        //@ts-ignore
+        document.getElementById("ml_progress").style.width = progress + "%";
+    }
+}
+
+
+/**
+ * 
+ * @param {Event} e 
+ */
+function preventDefault(e){
+    e.preventDefault();
+}
+
+
+window.addEventListener("gesturestart", preventDefault, { passive: false });
+
+
+window.addEventListener("dblclick", preventDefault, { passive: false });
+
+
+window.addEventListener("click", function(e){
+    const target = e.target;
+    //@ts-ignore
+    if (target.tagName.toUpperCase() === "VIDEO" && target.classList.contains("cloudfileel") && target.classList.contains("cloudsh"))
+        e.preventDefault();
+}, { passive: false });
+
+
+window.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("shishiji-overview")?.addEventListener("click", preventDefault, { passive: false });
+});
+
+
+document.getElementById("__cover__")?.remove();
+
+loadsProgBar()(0);
+const updatestartupProgress = loadsProgBar({ over: "エディターへようこそ" });
+
+
+function scriptDone(){
+    LOADW++;
+    const u = LOADW*100/scriptlen;
+    updatestartupProgress(u);
+    if (u >= 100)
+        endLoad("", 500);
+}
+
+
+scriptDone();

@@ -4,13 +4,13 @@
 
 /**
  * 
- * @param {{title: string, subtitle?: string}} ovvOptions 
+ * @param {{title: string; subtitle?: string;}} ovvOptions 
  * @param {string} share_url 
  * @param {ShareData} share_data 
  *      share_data.text?.replace("{__SHARE_URL__}", finalShareURL<decoded>);
  * @param {string} from_where 
  * @param {string} message 
- * @param {{labelkey: string, url: string}} [change_option] 
+ * @param {{labelkey: string; url: string;}} [change_option] 
  * @param {boolean} [ERROR] 
  */
 function openSharePopup(ovvOptions, share_url, share_data, from_where, message, change_option, ERROR){
@@ -19,11 +19,13 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
     /**@param {string} [ctx]  */
     function onerr(ctx){
         if (ctx === void 0) ctx = TEXT[LANGUAGE].ERROR_ANY;
-        PictoNotifier.notifyError(
+        PictoNotifier.notify(
+            "error",
             TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY,
-            2500,
-            "sharePopup connection error",
-            { do_not_keep: true },
+            { 
+                do_not_keep_previous: true, duration: 2500,
+                discriminator: "sharePopup connection error"
+            },
         );
         if (Popup.isPoppingup)
             Popup.showasError(ctx);
@@ -40,7 +42,7 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
     }
     
     $.ajax({
-        url: "/resources/html-ctx/share.html",
+        url: "/share_panel",
         method: "GET",
         timeout: 30000,
         dataType: "html",
@@ -91,10 +93,13 @@ function openSharePopup(ovvOptions, share_url, share_data, from_where, message, 
 
                     function T(){
                         window.navigator.clipboard.writeText(url || shareURL);
-                        PictoNotifier.notifyLink(
+                        PictoNotifier.notify(
+                            "link",
                             TEXT[LANGUAGE].NOTIFICATION_COPIED_LINK,
-                            2500,
-                            "copy artshare",
+                            {
+                                duration: 2500,
+                                discriminator: "copy artshare"
+                            }
                         );
                     }
                     $(cssName.sharecopy).off("click", _fchp.copy).on("click", T);

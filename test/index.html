@@ -20,13 +20,14 @@
         <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="shortcut icon" href="/resources/img/favicon.ico">
         <link rel="apple-touch-icon" href="/resources/img/favicon.ico">
-        <link rel="stylesheet" href="/src/assets/builds/gglMS.css">
+        <link rel="stylesheet" href="/src/assets/builds/gglms.css">
         <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
         <!--script src="/test/db-logger.js"></script-->
         <script src="/socket.io/socket.io.js"></script>
         <script src="/src/assets/builds/jquery.3.4.3.min.js"></script>
         <script src="/src/assets/lang.js"></script>
         <script src="/src/assets/cssroot.js"></script>
+        <script src="/src/assets/strict.js"></script>
         <script src="/src/assets/global.v.js"></script>
         <script src="/src/assets/util.js"></script>
         <script src="/src/assets/mcformat.js"></script>
@@ -43,7 +44,7 @@
         <script src="/src/assets/objects/overview.js"></script>
         <script src="/src/assets/objects/fselector.js"></script>
         <script src="/src/assets/supports/share.js"></script>
-        <script src="/src/assets/supports/notify.js"></script>
+        <script src="/src/assets/supports/notifier.js"></script>
         <script src="/src/assets/supports/pictonotifier.js"></script>
         <script src="/src/assets/supports/popup.js"></script>
     </head>
@@ -120,16 +121,16 @@
                 <div id="shishiji-overview" class="protected">
                     <div id="overview-options">
                         <div class="overview-option" id="overview-share">
-                            <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-share-c" aria-label="閉じる">
-                                <span class="gglmats" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="共有">
+                            <div class="ccENTER_Z ovv-btn realshadow overview-c optionspreads" id="overview-share-c" aria-label="閉じる">
+                                <span class="gglmats protected adhsuoiIUO" aria-label="共有">
                                     ios_share
                                 </span>
                             </div>
                         </div>
                         <div id="overview-close-w">
                             <div class="overview-option" id="overview-close">
-                                <div class="ccENTER_Z ovv-btn realshadow overview-c" id="overview-close-c" aria-label="閉じる">
-                                    <span class="gglmats" style="mix-blend-mode: differnce; cursor: pointer; color: black;" aria-label="閉じる">
+                                <div class="ccENTER_Z ovv-btn realshadow overview-c optionspreads" id="overview-close-c" aria-label="閉じる">
+                                    <span class="gglmats protected adhsuoiIUO" aria-label="閉じる">
                                         close
                                     </span>
                                 </div>
@@ -140,17 +141,17 @@
                     <div id="ovv-tg-a">
                         <div id="ovv-tg-b">
                             <div class="ovv-tg-bwr">
-                                <button id="ovv-t-description-sd">
+                                <button id="ovv-t-description-sd" class="tg-nonuse">
                                     <h4>概要</h4>
                                 </button>
                             </div>
                             <div class="ovv-tg-bwr">
-                                <button id="ovv-t-details-sd">
+                                <button id="ovv-t-details-sd" class="tg-nonuse">
                                     <h4>詳細</h4>
                                 </button>
                             </div>
                             <div class="ovv-tg-bwr">
-                                <button id="ovv-t-else-sd">
+                                <button id="ovv-t-else-sd" class="tg-nonuse">
                                     <h4>else</h4>
                                 </button>
                             </div>
@@ -168,14 +169,14 @@
         <script src="/src/assets/objects/setup.js"></script>
         <script src="/src/assets/canvas/setup.js"></script>
         <script src="/src/assets/main.js"></script>
-        <script>
+        <script>/*
             PictoNotifier.notifyWarn(
                 "特に面白くありません",
                 100000,
                 "SOME OBJECTS ARE BUGGING",
                 true,
                 false,
-            );
+            );*/
         </script>
     </body>
 </html>

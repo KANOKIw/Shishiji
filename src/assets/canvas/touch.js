@@ -92,9 +92,6 @@ function touchZoom(canvas, ctx, event){
     /**@type {Radian} */
     var rotation = 0;
     //#region 
-    /**
-     * can't use this
-     */
     function _rotateHandler(){
         const PI = Math.PI;
         const theta = getThouchesTheta(touches);
@@ -127,7 +124,7 @@ function touchZoom(canvas, ctx, event){
             if (!pastRotateMin){
                 rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
             }
-            pastRotateMin = !0;
+            pastRotateMin = true;
             if (zoomCD > MOVEPROPERTY.touch.zoomCD)
                 rotateCanvas(canvas, ctx, crossPos, rotation);
         }

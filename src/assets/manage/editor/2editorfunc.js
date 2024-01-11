@@ -4,10 +4,11 @@
 
 /**
  * 
- * @param {boolean} [do_image] 
+ * @param {boolean} [do_hadericonimg] 
  * @param {boolean} [sysmove] 
+ * @param {boolean} [do_articleimg] 
  */
-function rewrite(do_image, sysmove){
+function rewrite(do_hadericonimg, sysmove, do_articleimg){
     /**@ts-ignore @type {HTMLElement} */
     var editor = document.getElementById("main-editor");
 
@@ -27,9 +28,9 @@ function rewrite(do_image, sysmove){
     colhistbtn();
     
     ARTICLEDATA.article.content = editor.innerText;
-    writeArticleOverview(ARTICLEDATA, false, scr, void 0, true, true);
+    writePreviewerOverview(ARTICLEDATA, false, scr, void 0, true, true, do_articleimg);
 
-    if (do_image){
+    if (do_hadericonimg){
         /**
          * 
          * @param {"h" | "i"} a 
@@ -46,8 +47,9 @@ function rewrite(do_image, sysmove){
         imageRel.apply(document.getElementById("no-del-image-h") || _dummy, ["h"]);
         imageRel.apply(document.getElementById("no-del-image-i") || _dummy, ["i"]);
 
-        $("#--art-header").on("error", function(){ imageError.apply(this, ["h"]); }).attr("src", toOrgFilepath(username, ARTICLEDATA.article.images.header));
-        $("#--art-icon").on("error", function(){ imageError.apply(this, ["i"]); }).attr("src", toOrgFilepath(username, ARTICLEDATA.object.images.icon));
+        const t = "?"+(new Date).getTime();
+        $("#--art-header").on("error", function(){ imageError.apply(this, ["h"]); }).attr("src", toOrgFilepath(username, ARTICLEDATA.article.images.header)+t);
+        $("#--art-icon").on("error", function(){ imageError.apply(this, ["i"]); }).attr("src", toOrgFilepath(username, ARTICLEDATA.object.images.icon)+t);
     }
 }
 
@@ -90,8 +92,8 @@ function insertText(text, errcb){
     .css("cursor", "pointer");
 
     if (SETTINGS.quickInputNotification)
-        PictoNotifier.notifyInput_(
-            text, 1000, text, { do_not_keep: true }
+        PictoNotifier.notify(
+            "input", text, { duration: 1000, do_not_keep_previous: true }
         );
 
     
@@ -103,9 +105,10 @@ function insertText(text, errcb){
 /**
  * 
  * @param {string} ctx
+ * @param {boolean} [renewmedia] 
  * @param {() => void} [callback] 
  */
-async function writePreviewerOverviewContent(ctx, callback){
+async function writePreviewerOverviewContent(ctx, renewmedia, callback){
     new Promise((resolve, reject) => {
         const shown = document.getElementById("ctx-article");
         const willbe = document.createElement("span");
@@ -116,43 +119,52 @@ async function writePreviewerOverviewContent(ctx, callback){
 
         willbe.innerHTML = ctx;
 
-        /**
-         * Prevent media elements from reloading with every input to avoid flashing in the previewer.
-         */
-        for (const _shownchild of shown?.querySelectorAll("*") || []){
-            const tagName = _shownchild.tagName.toUpperCase();
-            if (!mediatypes.includes(tagName))
-                continue;
-            
-            const src = _shownchild.getAttribute("src");
+        if (!renewmedia){
+            /**
+             * Prevent media elements from reloading with every input to avoid flashing in the previewer.
+             */
+            for (const _shownchild of shown?.querySelectorAll("*") || []){
+                const tagName = _shownchild.tagName.toUpperCase();
+                if (!mediatypes.includes(tagName))
+                    continue;
+                
+                const src = _shownchild.getAttribute("src")?.replace(/\?.*/, "");
 
-            if (src !== null){
-                if (shownmedias[src]?.length > 0){
-                    shownmedias[src].push(_shownchild);
-                } else {
-                    shownmedias[src] = [_shownchild];
+                if (typeof src !== "undefined"){
+                    if (shownmedias[src]?.length > 0){
+                        shownmedias[src].push(_shownchild);
+                    } else {
+                        shownmedias[src] = [_shownchild];
+                    }
                 }
             }
-        }
-        
-        for (const _willbechild of willbe.querySelectorAll("*")){
-            const tagName = _willbechild.tagName.toUpperCase();
-            if (!mediatypes.includes(tagName))
-                continue;
+            
+            for (const _willbechild of willbe.querySelectorAll("*")){
+                const tagName = _willbechild.tagName.toUpperCase();
+                if (!mediatypes.includes(tagName))
+                    continue;
 
-            const src = _willbechild.getAttribute("src");
+                const src = _willbechild.getAttribute("src");
 
-            if (src !== null){
-                const replaceables = shownmedias[src];
-                const replaceable = replaceables?.length > 0 ? replaceables[0] : _willbechild.cloneNode(true);
+                if (src !== null){
+                    const replaceables = shownmedias[src];
+                    const replaceable = replaceables?.length > 0 ? replaceables[0] : _willbechild.cloneNode(true);
 
-                _willbechild.parentNode?.replaceChild(replaceable, _willbechild);
-                //@ts-ignore
-                replaceable.style.width = _willbechild.style.width;
-                shownmedias[src] = shownmedias[src]?.filter(elem => {
-                    if (elem !== replaceable)
-                        return true;
-                });
+                    _willbechild.parentNode?.replaceChild(replaceable, _willbechild);
+                    //@ts-ignore
+                    replaceable.style.width = _willbechild.style.width;
+                    shownmedias[src] = shownmedias[src]?.filter(elem => {
+                        if (elem !== replaceable)
+                            return true;
+                    });
+                }
+            }
+        } else {
+            for (const _willbechild of willbe.querySelectorAll("*")){
+                const tagName = _willbechild.tagName.toUpperCase();
+                if (!mediatypes.includes(tagName))
+                    continue;
+                _willbechild.setAttribute("src", _willbechild.getAttribute("src")?.replace(/\?.*/, "")+"?"+(new Date()).getTime());
             }
         }
 
@@ -207,3 +219,6 @@ async function _writeOverviewContent(ctx, callback){
             callback();
     });
 }
+
+
+scriptDone();

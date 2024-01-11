@@ -3,7 +3,7 @@
     -webkit-user-drag: none;
 }
 
-:root{
+html{
     --font-view: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
     --shishiji-mx-overlay-background-opacity: 0.5;
     --shishiji-load-icon-size: 100px;
@@ -22,9 +22,35 @@
     --shishiji-ovv-tg-height: 50px;
     --shishiji-ovv-tg-color: rgb(235, 235, 235);
     --shishiji-ovv-tg-color-active: rgb(0, 0, 0);
-    --shishiji-fselector-transition: background-color 0.2s ease;
+    --shishiji-fselector-transition: all 0.2s ease;
     --shishiji-button-active-color: rgba(190, 190, 190, 0.75);
     --shishiji-button-active-transition: background-color 0.2s ease;
+    --shishiji-load-progress-bar-height: 15px;
+    --shishiji-load-progress-bar-color: rgb(75, 75, 75);
+    --shishiji-spread-btn-bg-color: rgba(187, 187, 187, 0.5);
+    --shishiji-spread-btn-transition: all 0.1s ease;
+    --shishiji-progbar-transition-duration: 0.1s;
+}
+
+@keyframes optionspreadsc{
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@keyframes optionspreadss{
+    from { width: 0; }
+    to { width: 100%;  }
+}
+
+@keyframes optionspreadssr{
+    from { height: 0; }
+    to { height: 100%;  }
+}
+
+:root{
+    --shishiji-spread-btn-animation-circle: optionspreadsc 0.2s ease-out forwards;
+    --shishiji-spread-btn-animation-square: optionspreadss 0.2s ease-out forwards;
+    --shishiji-spread-btn-animation-square-reversed: optionspreadssr 0.2s ease-out forwards;
 }
 
 .protected{
@@ -150,8 +176,8 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
 
 @keyframes _alternative{
     from { opacity: var(--shishiji-mx-overlay-background-opacity, 0.6); display: block; }
-    99% { display: block; }
-    to {  opacity: 0; display: none; }
+    99% { display: block; pointer-events: all; }
+    to {  opacity: 0; display: none; pointer-events: none; }
 }
 
 #ppc-title{
@@ -164,30 +190,26 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
     animation: kkl 1s infinite;
 }
 
-#cpy-lin-not{
+shishiji-yd-notifier-cd{
     height: 100%;
     width: 100%;
 }
 
-#cpy-lin-not svg{
+#cpy-lin-not svg, #cpy-lin-not img{
     height: calc(var(--shishiji-yd-notifier-height)*0.6);
     width: calc(var(--shishiji-yd-notifier-height)*0.6);
 }
 
-#shr-notf{
-    height: 100%;
-    width: 100%;
-}
-
-#shr-notf svg{
+#shr-notf svg, #shr-notf img{
     margin: 0 4px 0 4px;
     height: calc(var(--shishiji-yd-notifier-height)*0.5);
     width: calc(var(--shishiji-yd-notifier-height)*0.5);
 }
 
-#shr-f{
-    height: 100%;
-    width: 100%;
+#shr-exf svg, #shr-exf img{
+    margin-right: 4px;
+    height: calc(var(--shishiji-yd-notifier-height)*0.5);
+    width: calc(var(--shishiji-yd-notifier-height)*0.5);
 }
 
 #shr-f svg{
@@ -255,13 +277,25 @@ button{
     transition: var(--shishiji-button-active-transition);
 }
 
+#ppcls::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: var(--shishiji-spread-btn-transition);
+}
+
+#ppcls:active::after{
+    animation: var(--shishiji-spread-btn-animation-circle);
+    background-color: var(--shishiji-spread-btn-bg-color);
+}
+
 #ppcls svg{
     width: 75%;
     height: 75%;
-}
-
-#ppcls:active{
-    background-color: var(--shishiji-button-active-color);
 }
 
 @media screen {
@@ -502,20 +536,30 @@ table{
 
 #shishiji-popup-container{
     z-index: 99999;
-    position: absolute;
-    height: var(--window-height);
+    position: fixed;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#shishiji-popup-container > *{
+    pointer-events: all;
 }
 
 #shishiji-popup-container-c{
     display: none;
-    position: absolute;
     max-width: 500px;
     width: calc(var(--window-width) - 48px);
     max-height: 450px;
-    height: calc(var(--window-height) - 48px);
+    height: calc(100% - 48px);
     left: calc((var(--window-width) - 48px - min(500px, var(--window-width) - 48px))/2);
-    margin: 24px;
     overflow: hidden;
+    pointer-events: all;
+    position: sticky;
 }
 
 .share-icon{
@@ -527,6 +571,8 @@ table{
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    z-index: 100;
+    position: sticky;
 }
 
 .share-icon-c{
@@ -562,10 +608,6 @@ table{
     touch-action: pan-x;
     width: fit-content;
     height: 125%;
-}
-
-.share-icon-w:active{
-    background-color: var(--shishiji-button-active-color);
 }
 
 .__ppwf{
@@ -642,6 +684,22 @@ table{
     }
 }
 
+.optionspreads::after{
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    flex: 1;
+    transition: var(--shishiji-spread-btn-transition);
+    background-color: transparent;
+}
+
+.optionspreads:active::after{
+    animation: var(--shishiji-spread-btn-animation-circle);
+    background-color: var(--shishiji-spread-btn-bg-color);
+}
+
 .ev_ppar{
     color: green;
     font-weight: bold;
@@ -649,17 +707,13 @@ table{
     margin-left: 20px;
 }
 
-.overview-c{
+.overview-c, .optionspreads::after{
     width: 40px;
     height: 40px;
     border: none;
-    background-color: white;
+    background-color: transparent;
     border-radius: 50%;
     touch-action: pan-x pan-y;
-}
-
-.overview-c:active{
-    background-color: var(--shishiji-button-active-color);
 }
 
 .mpobmctx{
@@ -724,6 +778,25 @@ table{
     width: 100%;
 }
 
+#map_load_progress{
+    width: 150px;
+    height: var(--shishiji-load-progress-bar-height);
+    background-color: white;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1px;
+    border: solid black 2px;
+    border-radius: 2px;
+}
+
+#ml_progress{
+    width: 0;
+    height: 100%;
+    background-color: var(--shishiji-load-progress-bar-color);
+    transition: width var(--shishiji-progbar-transition-duration) linear;
+}
+
 #shishiji-canvas{
     position: absolute;
 }
@@ -765,8 +838,10 @@ table{
     }
     99%{
         display: block;
+        pointer-events: all;
     }
     to{
+        pointer-events: none;
         display: none;
         opacity: 0;
     }
@@ -829,7 +904,7 @@ table{
     cursor: pointer;
     margin: 5px;
     margin-left: 0;
-    transition: var(--shishiji-button-active-transition);
+    background-color: #ffffff;
 }
 
 .premiumshadow{
@@ -860,6 +935,12 @@ table{
     margin-left: 4px;
 }
 
+.adhsuoiIUO{
+    mix-blend-mode: differnce;
+    cursor: pointer;
+    color: black;
+}
+
 #place-selector.toSel{
     overflow: visible;
 }
@@ -868,12 +949,32 @@ table{
     animation: slideup 1s ease;
 }
 
-.share-icon-w{
+.share-icon-w, .share-icon-w::before{
     padding-top: 8px;
     margin-right: 7px;
     border-radius: 5px;
     width: var(--shishiji-share-icon-width);
     transition: var(--shishiji-button-active-transition);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.share-icon-w::before{
+    content: "";
+    top: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    transition: var(--shishiji-spread-btn-transition);
+    height: 100%;
+}
+
+.share-icon-w:active::before{
+    animation: var(--shishiji-spread-btn-animation-square-reversed);
+    background-color: var(--shishiji-button-active-color);
 }
 
 .share-icon-w:first-of-type{
@@ -1055,6 +1156,10 @@ table{
 #spare_message{
     text-align: center;
     margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 #includeScrCh{
@@ -1127,16 +1232,31 @@ table{
     font-family: var(--font-view);
 }
 
-.ovv-tg-bwr button{
+.ovv-tg-bwr > button{
     transition: var(--shishiji-button-active-transition);
     width: 100%;
     height: 100%;
     color: black;
     font-size: medium;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.ovv-tg-bwr button:active:not(.tg-active){
-    background-color: var(--shishiji-button-active-color);
+.tg-nonuse:not(.tg-active)::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: auto;
+    width: 100%;
+    height: 100%;
+    transition: var(--shishiji-spread-btn-transition);
+}
+
+.tg-nonuse:not(.tg-active):active::after{
+    animation: var(--shishiji-spread-btn-animation-square);
+    background-color: var(--shishiji-spread-btn-bg-color);
 }
 
 .ovv-tg-bwr:last-of-type{

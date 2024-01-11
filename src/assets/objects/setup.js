@@ -15,24 +15,7 @@
             const src = target.getAttribute("src");
 
             if (src)
-                Popup.popupMedia(src, "img");
-        } else if ($(target).hasClass("article-video")){
-            const src = target.getAttribute("src");
-
-            /*if (src)
-                Popup.popupMedia(src, "video");*/
-        }
-    });
-
-    window.addEventListener("dblclick", function(e){
-        /**@ts-ignore @type {HTMLElement} */
-        const target = e.target;
-
-        if ($(target).hasClass("article-video")){
-            const src = target.getAttribute("src");
-
-            /*if (src)
-                Popup.popupMedia(src, "video");*/
+                Popup.popupMedia(src, "img", target);
         }
     });
 

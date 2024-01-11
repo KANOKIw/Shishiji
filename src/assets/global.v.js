@@ -182,7 +182,7 @@ var CURRENT_FLOOR = "";
 
 const overlay_modes = {
     fselector: {
-        opened: !!0,
+        opened: false,
         colors: {
             current: "rgba(90, 434, 37, 0.8)",
             else: "rgba(188, 34, 124, 0.75)",
@@ -192,9 +192,15 @@ const overlay_modes = {
 
 
 /**@enum {string} */
-const Symbol_Span = {
-    loadgingsymbol: `<span class="gglmats loading-symbol">progress_activity</span>`,
-    refreshsymbol: `<span class="gglmats">refresh</span>`,
+const gglSymbols = {
+    loadging: `<span class="gglmats loading-symbol">progress_activity</span>`,
+    refresh: `<span class="gglmats">refresh</span>`,
+    height: `<span class="gglmats">height</span>`,
+    zoom_in: `<span class="gglmats">zoom_in</span>`,
+    zoom_out: `<span class="gglmats">zoom_out</span>`,
+    search: `<span class="gglmats">search</span>`,
+    arrow_upward: `<span class="gglmats">arrow_upward</span>`,
+    arrow_downward: `<span class="gglmats">arrow_downward</span>`,
 };
 
 /**
@@ -220,10 +226,10 @@ const reloadInitializeLevel = reloadInitializeLevels.DO_NOTHING;
 const paramAbstractDeg = 4;
 /**@enum {string} */
 const ParamName = {
-    ZOOM_RATIO: "zr",
-    COORDS: "at",
+    ZOOM_RATIO: "x",
+    COORDS: "@",
     ARTICLE_ID: "art",
-    FLOOR: "fl",
+    FLOOR: "fr",
     URL_FROM: "storm",
     LANGUAGE: "lang",
     SCROLL_POS: "scrp",
@@ -236,18 +242,6 @@ const ParamValues = {
 const objectIdFormat = "disc-{0}";
 
 const ZOOMRATIO_ON_SHARE = 2;
-
-
-const Notifier_prop = {
-    /**@ts-ignore @type {NodeJS.Timeout} FAKE */
-    Timeout: 0,
-    /**@ts-ignore @type {NodeJS.Timeout} FAKE */
-    _Timeout: 0,
-    /**@ts-ignore @type {NodeJS.Timeout} FAKE */
-    __Timeout: 0,
-    current: "",
-    notifying: !!0,
-};
 
 /**milisecond */
 const WAIT_BETWEEN_EACH_MAP_IMAGE = 100;

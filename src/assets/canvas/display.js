@@ -12,17 +12,18 @@
  * @param {HTMLCanvasElement} canvas 
  * @param {CanvasRenderingContext2D} ctx
  * @param {DrawMapData} data 
- * @param {Function} [callback]
+ * @param {(all: HTMLElement[]) => any} [donecallback]
+ * @param {(loaded: number, all: number) => any} [eachdonecallback] 
  * @returns {Promise<void>} 
  */
-async function drawMap(canvas, ctx, data, callback){
+async function drawMap(canvas, ctx, data, donecallback, eachdonecallback){
     const xrange = data.xrange;
     const yrange = data.yrange;
     const tile_width = data.tile_width;
     const tile_height = data.tile_height;
     const src_formatter = data.format;
     /**@type {HTMLImageElement[]} */
-    var al = [];
+    var all = [];
     var wait = 0;
     var processed = 0;
     /**@type {{ x: number, y: number, dx: number, dy: number, dw: number, dh: number, src: string }[]} */
@@ -34,7 +35,10 @@ async function drawMap(canvas, ctx, data, callback){
 
     backcanvas.width = tile_width*(xrange+1);
     backcanvas.height = tile_height*(yrange+1);
-    
+    const eacharg = {
+        all: (xrange+1)*(yrange+1),
+        loaded: 0,
+    }
 
     return new Promise((resolve) => {
         for (var y = 0; y <= yrange; y++){
@@ -53,9 +57,12 @@ async function drawMap(canvas, ctx, data, callback){
                         ctx.drawImage(backcanvas, ...[ backcanvas.canvas.coords.x ,backcanvas.canvas.coords.y ]);
                         
                         processed++;
-                        al.push(img);
+                        eacharg.loaded++;
+                        all.push(img);
 
-                        if (al.length >= tileAmount)
+                        if (eachdonecallback)
+                            eachdonecallback(eacharg.loaded, eacharg.all);
+                        if (all.length >= tileAmount)
                             resolve("map loaded");
                     }
 
@@ -66,11 +73,14 @@ async function drawMap(canvas, ctx, data, callback){
                             setLoadMessage(formatString(TEXT[LANGUAGE].MAP_LOAD_RETRYING, t));
                             $(`#load_spare:not([style*="display: none"]) #spare_logo`).css("animation", "load_rotator .75s infinite linear");
 
-                            PictoNotifier.notifyNoWiFi(
+                            PictoNotifier.notify(
+                                "no-wifi",
                                 TEXT[LANGUAGE].NOTIFICATION_CHECK_YOUR_CONNECTION,
-                                5000,
-                                "check ur WiFi",
-                                { deny_userclose: true }
+                                {
+                                    duration: 5000,
+                                    discriminator: "check ur WiFi",
+                                    deny_userclose: true
+                                }
                             );
 
                             t--;
@@ -97,7 +107,10 @@ async function drawMap(canvas, ctx, data, callback){
                             const img = new Image();
                             const src = cvsidata.src;
 
-                            setLoadMessage(TEXT[LANGUAGE].LOADING_MAP);
+                            if (eachdonecallback)
+                                eachdonecallback(eacharg.loaded, eacharg.all);
+                            else
+                                setLoadMessage(TEXT[LANGUAGE].LOADING_MAP);
                             processed--;
 
                             img.onload = function(){
@@ -106,10 +119,13 @@ async function drawMap(canvas, ctx, data, callback){
 
                                 erroredArray = erroredArray.filter(p => { if (p.src != src) return true; });
                                 processed++;
+                                eacharg.loaded++;
 
-                                al.push(img);
+                                all.push(img);
 
-                                if (al.length >= tileAmount)
+                                if (eachdonecallback)
+                                    eachdonecallback(eacharg.loaded, eacharg.all);
+                                if (all.length >= tileAmount)
                                     resolve("map loaded");
                                 else if (processed >= tileAmount)
                                     reloaderrimg();
@@ -139,8 +155,8 @@ async function drawMap(canvas, ctx, data, callback){
     }).then(() => {
         window.scroll({ top: 0, behavior: "instant" });
         
-        if (typeof callback === "function")
-            callback(al);
+        if (typeof donecallback === "function")
+            donecallback(all);
     });
 }
 
@@ -187,4 +203,37 @@ function setCoordsOnMiddle(coords, abs_zoomRatio){
     backcanvas.canvas.coords = bcoords;
     moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
     setBehavParam();
+}
+
+
+/**
+ * 
+ * @param {DrawMapData} data 
+ * @param {{over?: string; under?: string;}} [messages] 
+ * @param {(all: HTMLElement[]) => any} [donecallback]
+ */
+function drawMapWithProgressBar(data, messages, donecallback){
+    /**@ts-ignore @type {HTMLCanvasElement} */
+    const canvas = document.getElementById(cssName.mcvs);
+    /**@ts-ignore @type {CanvasRenderingContext2D} */
+    const ctx = canvas.getContext("2d");
+    const loadmsg = `<h4>${messages?.over || ""}</h4><div id="map_load_progress"><div id="ml_progress"></div></div><h4>${messages?.under || ""}</h4>`;
+
+    startLoad(loadmsg);
+    drawMap(canvas, ctx, data, donecallback, function(loaded, all){
+        const progress = loaded/all;
+        const bar = document.getElementById("ml_progress");
+        
+        if (!bar) {
+            setLoadMessage(loadmsg);
+        }
+
+        //@ts-ignore
+        document.getElementById("ml_progress").style.width = progress*100 + "%";
+    });
+
+    return function(progress){
+        //@ts-ignore
+        document.getElementById("ml_progress").style.width = progress*100 + "%";
+    }
 }

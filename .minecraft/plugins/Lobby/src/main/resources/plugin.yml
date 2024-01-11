@@ -1,0 +1,30 @@
+main: "com.kanokiw.mc.lobby.Lobby"
+name: "Lobby"
+version: "0.0.1"
+api-version: "1.14"
+
+commands:
+  middle:
+    aliases: ["m"]
+    description: come back to the lobby!
+    permission: lobby.commands.default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  head:
+    aliases: ["h"]
+    description: Gives you a player_head
+    permission: lobby.commands.default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  change:
+    description: Change configuration
+    permission: lobby.commands.default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+
+
+
+permissions:
+  lobby.commands.dmin:
+    description: Admin
+    default: op
+  lobby.commands.default:
+    description: Default
+    default: true

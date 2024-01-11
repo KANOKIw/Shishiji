@@ -111,7 +111,7 @@ function startLoad(message){
     $(cssName.lospare)
     .removeClass("loaddoneman")
     .show();
-    $(cssName.losparemsg).text(message);
+    $(cssName.losparemsg).html(message);
 }
 
 
@@ -127,12 +127,13 @@ function setLoadMessage(html){
 /**
  * 
  * @param {string} [message] 
+ * @param {number} [wait] 
  */
-function endLoad(message){
+function endLoad(message, wait){
     if (message)
         setTimeout(() => {
             $(cssName.losparemsg).text(message);
-        }, 200);
+        }, wait);
     setTimeout(() => {
         $(cssName.lospare).addClass("loaddoneman");
         setTimeout(() => {
@@ -141,7 +142,7 @@ function endLoad(message){
             $(cssName.fselector).addClass("hello").show();
             $(cssName.losparemsg).text("");
         }, 950);
-    }, 1000);
+    }, typeof wait === "number" ? wait+1000 : wait);
 }
 
 
@@ -214,19 +215,20 @@ function listenInterOnEnd(element, callback, options){
                 return;
         }
         
-        var moved = false;
+        var moved = 0;
         $(this)
         .on("touchmove mousemove wheel mousewheel", onmove)
         .on("touchend mouseup mouseleave touchleave", onleave);
 
         function onmove(){
             e.preventDefault();
-            moved = true;
+            moved++;
         }
         /**@this {HTMLElement}*/
         function onleave(e){
             e.preventDefault();
-            if (!moved)
+            // Tolerance!!
+            if (moved <= 2)
                 callback(e);
             $(this)
             .off("touchmove mousemove wheel mousewheel", onmove)

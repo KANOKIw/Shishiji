@@ -24,8 +24,9 @@ function imageError(a){
  * @param {string} [target] 
  * @param {boolean} [FORCE] 
  * @param {boolean} [_fadein] 
+ * @param {boolean} [renewimg] 
  */
-function writeArticleOverview(details, fadein, scroll_top, target, FORCE, _fadein){
+function writePreviewerOverview(details, fadein, scroll_top, target, FORCE, _fadein, renewimg){
     /**@ts-ignore @type {HTMLElement} */
     const ctx = document.getElementById("overview-context");
     /**@ts-ignore @type {HTMLElement} */
@@ -37,11 +38,14 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE, _fadei
 
 
     if (!window.navigator.onLine){
-        PictoNotifier.notifyError(
+        PictoNotifier.notify(
+            "error",
             TEXT[LANGUAGE].NOTIFICATION_CONNECTION_ERROR,
-            2500,
-            "article connection error",
-            { do_not_keep: true },
+            {
+                duration: 2500,
+                discriminator: "article connection error",
+                do_not_keep_previous: true
+            }
         );
         $("#ovv-ctx-loading").html(`<div class="flxxt"><div style="width:40%;">${GPATH.ERROR_ZAHUMARU}</div></div>${TEXT[LANGUAGE].ARTICLE_CONNECTION_ERROR}`);
         $("#overview-share").hide();
@@ -94,7 +98,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE, _fadei
         $("#overview-context").addClass("_wait_f");
         $("#oop").show();
 
-        writePreviewerOverviewContent(article_mainctx, __onload);
+        writePreviewerOverviewContent(article_mainctx, renewimg, __onload);
         $("#core_grade_vh").text(ARTICLEDATA.article.core_grade);
         if (!$("#ovv-t-description-sd").hasClass("tg-active"))
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
@@ -159,7 +163,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE, _fadei
                 </div>
             </div>
             <hr style="margin: 20px;">
-        `, __onload);
+        `, renewimg, __onload);
 
         $("#overview-context").removeClass("fadein").removeClass("_fadein");
         $(".tg-active").removeClass("tg-active");
@@ -178,3 +182,6 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE, _fadei
     
     document.getElementById(`ovv-t-${target}-sd`)?.dispatchEvent(new Event("click"));
 }
+
+
+scriptDone();

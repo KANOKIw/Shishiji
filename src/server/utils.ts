@@ -103,7 +103,7 @@ export function convertUnit(byte: number, to: ("KB" | "MB" | "GB")): number{
 
 
 export function getMediaType(link: string){
-    var extension = link.split(".").slice(-1)[0].toLowerCase();
+    const extension = link.split(".").slice(-1)[0].toLowerCase();
 
     if (["jpg", "jpeg", "png", "gif", "webp"].indexOf(extension) !== -1) {
         return "image";
@@ -115,5 +115,6 @@ export function getMediaType(link: string){
 
     return "unknown";
 }
+
 
 export { }

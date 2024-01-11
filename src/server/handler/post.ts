@@ -1,10 +1,12 @@
 import fs from "fs";
-import { DEFAULT_MAP_OBJECT } from "../mapObjs";
-import { Request, Response } from "express";
-import * as AppAPI from "../utils";
 import * as path from "path";
-import { mapObject, mapObjComponent } from "../server-dts/server";
+import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
+
+import { DEFAULT_MAP_OBJECT } from "../mapobjs";
+import * as AppAPI from "../utils";
+import { mapObject, mapObjComponent } from "../server-dts/server";
+import * as file from "../file";
 
 
 const random = new AppAPI.Random();
@@ -84,6 +86,9 @@ class OrgAuth{
         console.log(new Date() + ": Editor: "+orgname);
 
         const mapdata = AppAPI.getOrgMdata(orgname) || DEFAULT_MAP_OBJECT;
+
+        if (!fs.existsSync(File._toOrgDirname(orgname)))
+            File._createOrgDir(orgname);
 
         res.status(200).json({ artdata: mapdata, usn: orgname, mxcs: File.getOrgMaCloudSize(orgname) });
     }
@@ -221,8 +226,10 @@ class File{
 
         const file: UploadedFile = files.file as UploadedFile;
         const dirpath = File._toOrgDirname(orgname);
+        const mediatype = AppAPI.getMediaType(file.name);
+        const ext = path.extname(file.name);
 
-        if (AppAPI.getMediaType(file.name) == "unknown"){
+        if (mediatype == "unknown"){
             const eres = forbiddenJSON;
             eres.error = "Denied file type";
             res.status(forbiddenJSON.status).json(eres);
@@ -232,16 +239,25 @@ class File{
         if (!fs.existsSync(dirpath))
             File._createOrgDir(orgname);
 
-        const mediatype = AppAPI.getMediaType(file.name);
-        var _findex = 1;
-
-        for (const file of fs.readdirSync(dirpath)){
-            const mtype = AppAPI.getMediaType(file);
-            if (mtype == mediatype)
-                _findex++;
+        const existfiles = fs.readdirSync(dirpath)
+        .map(fn => { return fn.replace(/\..*/, ""); });
+        // Prevent first upload error
+        var filename = mediatype + "_0";
+        var broken = false;
+        
+        for (const i in existfiles){
+            filename = mediatype + "_" + i;
+            
+            if (!existfiles.includes(filename)){
+                broken = true;
+                break;
+            }
         }
+        if (!broken){
+            filename = mediatype + "_" + existfiles.length;
+        }
+        filename += ext;
 
-        const filename = mediatype + "_" + _findex + path.extname(file.name);
         const currentdirsize = File._getDirsize(dirpath, false);
         const aftersize = AppAPI.convertUnit(currentdirsize + file.size, "MB");
         const maxsize = File.getOrgMaCloudSize(orgname);
@@ -263,25 +279,36 @@ class File{
 
     static delete(req: Request, res: Response): void{
         const data = req.body;
-        const filename = data.filename;
+        const files = JSON.parse(data.files) || [];
 	    const session = data.session;
         const orgname = OrgAuth._auth(session);
         
-        if (!filename || !orgname){
+        if (files.length == 0 || !orgname){
             res.status(forbiddenJSON.status).json(forbiddenJSON);
             return;
         }
 
         const dirpath = File._toOrgDirname(orgname);
-
-        fs.unlink(dirpath + "/" + filename, err => {
-            if (err){
-                res.status(500).send({ error: err });
-                return;
+        var deletecount = 0;
+        
+        new Promise((resolve, reject) => {
+            for (const fn of files){
+                fs.unlink(dirpath+"/"+fn, err => {
+                    if (err){
+                        res.status(500).send({ error: err });
+                        reject();
+                        return;
+                    }
+                    deletecount++;
+                    if (deletecount == files.length)
+                        resolve(void 0);
+                });
             }
-
-            File._sendOrgdirInfo(orgname, res, { deleted: filename });
-        });
+        })
+        .then(() => {
+            File._sendOrgdirInfo(orgname, res, { deleted: files });
+        })
+        .catch(() => {});
     }
 
 
@@ -330,6 +357,7 @@ class File{
 
 
     static _filelist(orgname: string): string[]{
+        // folder: never
         return fs.readdirSync(this._toOrgDirname(orgname));
     }
 

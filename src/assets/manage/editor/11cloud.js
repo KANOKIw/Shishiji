@@ -57,7 +57,7 @@ function _cloudok(data){
                     $("#uploadfbh").text("アップロード中...").css("color", "orange");
 
                     setTimeout(() => {
-                        var formData = new FormData();
+                        const formData = new FormData();
                         formData.append("file", file);
                         formData.append("session", session || "");
 
@@ -77,19 +77,26 @@ function _cloudok(data){
                                         contentType: false,
                                     })
                                 ).done(function(uploadData){
+                                    const scr = $("#shishiji-overview").scrollTop();
+
                                     writeCloudonPopup(uploadData);
+
+                                    rewrite(true, true, true);
                         
-                                    PictoNotifier.notifySuccess(
+                                    PictoNotifier.notify(
+                                        "success",
                                         `${uploadData.uploaded} をアップロードしました`,
-                                        5000,
-                                        "file uploaded",
-                                        { do_not_keep: true },
+                                        {
+                                            duration: 5000,
+                                            discriminator: "file uploaded",
+                                            do_not_keep_previous: true
+                                        }
                                     );
                             
                                     $("#uploadfbh").text("アップロードに成功").css("color", "green");
                                     _h.a = setTimeout(() => {
                                         $("#uploadfbh").text("アップロード").css("color", "black");
-                                    }, 5000);
+                                    }, 2500);
                                     //@ts-ignore
                                     document.getElementById("uploadfi").value = "";
                                 }).fail(function(err){
@@ -120,11 +127,15 @@ function _cloudok(data){
                         function sayOverflowing(howmuch){
                             howmuch = Math.ceil(howmuch * 10000) / 10000;
                         
-                            PictoNotifier.notifyError(
+                            PictoNotifier.notify(
+                                "error",
                                 `クラウドに ${howmuch}MB 容量が足りません`,
-                                5000,
-                                "Cloud is overflowing!",
-                                { do_not_keep: true, deny_userclose: true },
+                                {
+                                    duration: 5000,
+                                    discriminator: "Cloud is overflowing!",
+                                    do_not_keep_previous: true,
+                                    deny_userclose: true
+                                }
                             );
                     
                             $("#uploadfbh").text(`${howmuch}MB 容量が足りません`).css("color", "red");
@@ -142,16 +153,16 @@ function _cloudok(data){
             });
 
             document.getElementById("deletefb")?.addEventListener("click", e => {
-                /**@ts-ignore @type {string | null} */
-                const filename = document.getElementById("deletefi").value.replace(/ /g, "");
+                /**@ts-ignore @type {Array<string>} */
+                var filenames = (document.getElementById("deletefi").value || "").split(" "), _fl = filenames;
 
                 if ($("#deletefbh").text() == "削除しています"){
                     return;
                 }
 
                 clearTimeout(_h.b);
-
-                if (!filename){
+                
+                if (filenames.length == 0){
                     $("#deletefbh").text("ファイル名を入力してください").css("color", "red");
                     _h.b = setTimeout(() => {
                         $("#deletefbh").text("削除").css("color", "black");
@@ -159,15 +170,38 @@ function _cloudok(data){
                     return;
                 }
 
-                var exists = false;
+                const af = [];
+                var really = false;
                 Array.from(document.getElementsByClassName("cloudsh")).forEach(e => {
-                    if (e.getAttribute("uname") == filename)
-                        exists = true;
+                    af.push(e.getAttribute("uname"));
                 });
 
-                if (!exists){
+                filenames = filenames.filter(T => T.length > 0);
+                filenames.forEach(fn => {
+                    if (!af.includes(fn)){
+                        const disc = "file: "+fn+" not found",
+                            opt = { duration: 1000 };
+                        if (!really){
+                            Notifier.clearPengings();
+                            Notifier.notifyHTML(disc, opt);
+                            really = true;
+                        } else {
+                            Notifier.appendPending({
+                                html: disc,
+                                options: opt
+                            });
+                        }
+                        filenames = filenames.filter(S => S !== fn);
+                    }
+                });
+                
+
+                if (filenames.length == 0){
+                    var msg = "削除できるファイルがありません";
+                    if (_fl.every(W => W.length == 0))
+                        msg = "ファイル名を入力してください";
                     clearTimeout(_h.b);
-                    $("#deletefbh").text("ファイルが見つかりません").css("color", "red");
+                    $("#deletefbh").text(msg).css("color", "red");
                     _h.b = setTimeout(() => {
                         $("#deletefbh").text("削除").css("color", "black");
                     }, 1500);
@@ -177,16 +211,42 @@ function _cloudok(data){
                 $("#deletefbh").text("削除しています").css("color", "orange");
 
                 setTimeout(() => {
-                    $.post("/org/manage/file/delete", { session: session, filename: filename })
+                    $.post("/org/manage/file/delete", { session: session, files: JSON.stringify(filenames) })
                     .done(data => {
                         writeCloudonPopup(data);
+
+                        rewrite(true, true, true);
                         
-                        PictoNotifier.notifySuccess(
-                            `${data.deleted} を削除しました`,
-                            5000,
-                            "file deleted", 
-                            { do_not_keep: true },
-                        );
+                        /**@type {Array<string>} */
+                        const deleted = data.deleted;
+                        
+                        for (const deld of deleted){
+                            if (deld === deleted[0]){
+                                var e = 1000;
+                                if (deleted.length == 1)
+                                    e = 3000;
+                                Notifier.clearPengings();
+                                PictoNotifier.notify(
+                                    "success",
+                                    `${deld} を削除しました`,
+                                    {
+                                        duration: e,
+                                        discriminator: "file deleted",
+                                        do_not_keep_previous: true
+                                    }
+                                );
+                            } else {
+                                PictoNotifier.notify(
+                                    "success",
+                                    `${deld} を削除しました`,
+                                    {
+                                        duration: 1000,
+                                        discriminator: "file deleted",
+                                        addToPending: true
+                                    }
+                                );
+                            }
+                        }
 
                         $("#deletefbh").text("削除に成功").css("color", "green");
                         _h.b = setTimeout(() => {
@@ -208,16 +268,24 @@ function _cloudok(data){
 }
 
 
-function _cloudfail(){
+
+function _cloudfail(e){
     const ctx = TEXT[LANGUAGE].ERROR_ANY;
     
-    PictoNotifier.notifyError(
-        TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY,
-        2500,
-        "sharePopup connection error",
-        { do_not_keep: true, deny_userclose: true },
-    );
+    if (e.statusText != "abort")
+        PictoNotifier.notify(
+            "error",
+            TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY,
+            {
+                duration: 2500,
+                discriminator: "sharePopup connection error",
+                do_not_keep_previous: true, deny_userclose: true
+            }
+        );
 
     if (Popup.isPoppingup)
         Popup.showasError(ctx);
 }
+
+
+scriptDone();

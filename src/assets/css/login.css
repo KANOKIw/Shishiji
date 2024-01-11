@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    font-family: var(--font-view);
+}
+
+.loginmat{
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+}
+
+#login_enter{
+    border-radius: 0;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: transparent;
+    padding: 2px 4px 2px 4px;
+}
+
+.dsadadaw{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input{
+    outline: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+.wdADW{
+    border-width: thin;
+    border-style: solid;
+    padding-right: 5px;
+}
+
+#buttonEye{
+    cursor: pointer;
+}

@@ -3,4 +3,5 @@ export interface ConfigData {
 	startupfiles: string[]
 }
 
+
 export { }

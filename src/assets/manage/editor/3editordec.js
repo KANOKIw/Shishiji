@@ -23,10 +23,13 @@ function setEditorcdColor(){
             editor
             .trigger("blur")
             .html(cdHTML.replace(/ /g, "&nbsp;").replace("	", "   "));
-            PictoNotifier.notifyInfo(
+            PictoNotifier.notify(
+                "info",
                 `Oops, you can't insert ${single ? "a " : ""}line break${single ? "" : "s"} there!!`,
-                void 0, "no line break there",
-                { do_not_keep: true }
+                {
+                    discriminator: "no line break there",
+                    do_not_keep_previous: true
+                }
             );
         }
     }
@@ -35,7 +38,7 @@ function setEditorcdColor(){
     if (SETTINGS.colorEditor){
         /**
          * Transparented main editor text size fitter!!
-         * This is so good!!
+         * This is awesome!!
          */
         /*const fontcolorres = colorFonts(editor.html(), true);
         if (fontcolorres.found)
@@ -106,8 +109,8 @@ function colorXtext(text){
         video: /%\:(VIDEO)-S=([^-]+)-W=(\d+);%/,
         link: /θ\:LINK-H=(https?:\/\/(?:(?!-T=).)+)-T=((?:(?!;θ).)*);θ/
     };
-    const mediable = text.matchAll(/%(?:(?!%).)+%/g);
-    const linkable = text.matchAll(/θ(?:(?!θ).)+θ/g);
+    const mediable = text.matchAll(/%(?:(?!%).)+%/g);   //*/const mediable = text.matchAll(/(%:(?:(?!;%).)+;%)|(%<br>:(?:(?!;%).)+;%)|(%:(?:(?!;<br>%).)+;<br>%)/g);
+    const linkable = text.matchAll(/θ(?:(?!θ).)+θ/g);   //*/const linkable = text.matchAll(/(θ:(?:(?!;θ).)+;θ)|(θ<br>:(?:(?!;θ).)+;θ)|(θ:(?:(?!;<br>θ).)+;<br>θ)/g);
     
 
     for (const mediam of mediable){
@@ -164,3 +167,6 @@ function visibleSpace(htmlLike){
         return `<span class="sheart35">${points}</span>`;
     });
 }
+
+
+scriptDone();

@@ -5,7 +5,6 @@ import * as fs from "fs";
 import { ConfigData } from "./ofos";
 
 
-
 export function getConfigData(): ConfigData | null{
 	const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
 	if (!workspaceFolder)
@@ -74,5 +73,6 @@ export function toSlashPath(path: string){
 			   .replace(/\\\\/g, "/")
 			   .replace(/\/\//g, "/");
 }
+
 
 export { }

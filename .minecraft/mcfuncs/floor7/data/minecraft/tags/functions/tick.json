@@ -1,0 +1,21 @@
+{
+  "values": [
+    "maxor:while_true",
+    "maxor:skull_move",
+    "maxor:maxor_move",
+    "maxor:maxor_on_caught",
+    "maxor:maxor_crystal",
+    "maxor:maxor_fireball_move",
+    "maxor:armor_stands",
+    "maxor:__player_interaction",
+    "maxor:jerry_chine_gun_move",
+    "maxor:energy_dummy_move",
+    "maxor:crystal_dummy",
+    "maxor:__stuff_mana",
+    "goldor:move",
+    "goldor:skull_move",
+    "necron:necron_move",
+    "necron:skull_move",
+    "necron:lava_jump"
+  ]
+}

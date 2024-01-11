@@ -21,9 +21,9 @@
         const target = e.target;
         //@ts-ignore
         if (target?.classList.contains("canvas_interactive") || target?.tagName.toLowerCase() === "canvas"){
-            return !!0;
+            return false;
         }
-        return !0;
+        return true;
     }
 
     window.addEventListener("touchstart", (e) => {
@@ -37,8 +37,8 @@
 
 
         if (overlay_modes.fselector.opened){
-            toggleFeslOn.apply($(fselector), [!0]);
-            overlay_modes.fselector.opened = !!0;
+            toggleFeslOn.apply($(fselector), [true]);
+            overlay_modes.fselector.opened = false;
         }
         
         init_friction();
@@ -59,8 +59,8 @@
 
         
         if (overlay_modes.fselector.opened){
-            toggleFeslOn.apply($(fselector), [!0]);
-            overlay_modes.fselector.opened = !!0;
+            toggleFeslOn.apply($(fselector), [true]);
+            overlay_modes.fselector.opened = false;
         }
 
         init_friction();
@@ -116,7 +116,7 @@
                 p.style.cursor = "move";
             }
         );
-        DRAGGING = !0;
+        DRAGGING = true;
         onMouseMove(e, canvas, ctx);
     }
 

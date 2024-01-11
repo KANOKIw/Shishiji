@@ -128,3 +128,6 @@ function colhistbtn(){
         redob.style.cursor = "pointer";
     }
 }
+
+
+scriptDone();

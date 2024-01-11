@@ -4,7 +4,6 @@ import * as fs from "fs";
 import * as file from "./file";
 
 
-
 export function openStartupFiles(): void{
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
 	const leditor = vscode.window.activeTextEditor;
@@ -146,5 +145,6 @@ export async function createConfigFile(): Promise<unknown>{
 		resolve("");
 	});
 }
+
 
 export { }

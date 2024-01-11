@@ -1,6 +1,13 @@
 node_modules/
 npm-debug.log
-.db/
+
+.minecraft/server/**
+.minecraft/server/servers/**/*
+.minecraft/plugins/**/.settings/
+.minecraft/plugins/**/target/
+!.minecraft/plugins/**/src/
+!.minecraft/server/BungeeCord.*
+.minecraft/plugins/**/src/test/
 
 extensions/**/node_modules/
 
@@ -14,3 +21,5 @@ resources/cloud
 .cert/
 
 scripts/*.exe
+*.exe
+*.jar

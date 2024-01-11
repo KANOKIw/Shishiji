@@ -3,7 +3,7 @@ import http from "http";
 import { Server as SocketIO } from "socket.io";
 import fs from "fs";
 import https from "https";
-import * as mapObjAPI from "./mapObjs";
+import * as mapObjAPI from "./mapobjs";
 import { readJSONSync, Random } from "./utils";
 import * as PostHandler from "./handler/post";
 import fileUpload from "express-fileupload";
@@ -23,10 +23,19 @@ const ws = new SocketIO(server);
 __dirname = __dirname.replace(/[/, \\]src[/, \\]server/, "");
 
 
+
+app.all("/.*", (req, res, next) => {
+	res.send({ status: 403, error: "Access denied" });
+});
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(fileUpload());
 app.use(express.static("./"));
+
+
+
 
 
 ws.on("connection", (socket) => {
@@ -72,6 +81,11 @@ app.post("/data/map-data/objects", (req, res) => {
 
 app.post("/data/map-data/conf", (req, res) => {
 	res.send(mapConfData);
+});
+
+
+app.get("/share_panel", (req, res) => {
+	res.sendFile(__dirname + "/resources/html-ctx/share.html");
 });
 
 

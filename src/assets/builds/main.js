@@ -240,7 +240,7 @@
     
     const overlay_modes = {
         fselector: {
-            opened: !!0,
+            opened: false,
             colors: {
                 current: "rgba(90, 434, 37, 0.8)",
                 else: "rgba(188, 34, 124, 0.75)",
@@ -304,7 +304,7 @@
         /**@ts-ignore @type {NodeJS.Timeout} FAKE */
         __Timeout: 0,
         current: "",
-        notifying: !!0,
+        notifying: false,
     };
     
     /**milisecond */
@@ -1971,7 +1971,7 @@
                 if (!pastRotateMin){
                     rotatedThisTime -= toRadians(MOVEPROPERTY.touch.rotate.min);
                 }
-                pastRotateMin = !0;
+                pastRotateMin = true;
                 if (zoomCD > MOVEPROPERTY.touch.zoomCD)
                     rotateCanvas(canvas, ctx, crossPos, rotation);
             }
@@ -2718,8 +2718,8 @@
     
     
         startLoad(TEXT[LANGUAGE].LOADING_MAP);
-        toggleFeslOn.apply($(fselector), [!0]);
-        overlay_modes.fselector.opened = !!0;
+        toggleFeslOn.apply($(fselector), [true]);
+        overlay_modes.fselector.opened = false;
     
         const data_size = {
             width: data.tile_width*(data.xrange+1),
@@ -2770,7 +2770,7 @@
                 `<div id="shr-notf" class="flxxt" style="font-size: 12px;">${GPATH.ERROR}${TEXT[LANGUAGE].NOTIFICATION_ERROR_ANY}</div>`,
                 2500,
                 "sharePopup connection error",
-                !0,
+                true,
             );
             if (Popup.popupping)
                 Popup.showasError(ctx);

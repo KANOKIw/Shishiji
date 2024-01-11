@@ -12,10 +12,13 @@ window.addEventListener("click", function(e){
 
         if (uname){
             window.navigator.clipboard.writeText(uname);
-            PictoNotifier.notifyLink(
+            PictoNotifier.notify(
+                "link",
                 `${uname} をコピーしました`,
-                2500,
-                uname,
+                {
+                    duration: 2500,
+                    discriminator: uname
+                }
             );
         }
     } else if ($(target).hasClass("article-image")){
@@ -23,7 +26,8 @@ window.addEventListener("click", function(e){
 
         if (src){
             const _html = `${GPATH.X}<img class="suhDWAgd" src="${src}">`;
-
+            /**@ts-ignore @type {HTMLElement} */
+            const clone = target.cloneNode();
 
             function popupping(){
                 const me = document.getElementById("shishiji-popup-container-cn");
@@ -51,6 +55,9 @@ window.addEventListener("click", function(e){
                 }
             }
             
+            
+            $(clone).attr("id", "").attr("class", "suhDWAgd").attr("style", "");
+            
             new Promise((resolve, reject) => {
                 this.window.addEventListener("keydown", noMish);
                 $("shishiji-mx-overlay-n")
@@ -61,7 +68,8 @@ window.addEventListener("click", function(e){
                 .addClass("flxxt")
                 .css("height", "fit-content")
                 .css("overflow", "visible")
-                .html(_html)
+                .html(GPATH.X)
+                .append(clone)
                 .show();
                 resolve("");
             }).then(() => {
@@ -92,3 +100,6 @@ window.addEventListener("beforeunload", e => {
         return message;
     }
 }, { passive: false });
+
+
+scriptDone();

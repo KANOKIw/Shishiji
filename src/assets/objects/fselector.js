@@ -54,8 +54,8 @@ function changeFloor(floor, data, callback){
 
 
     startLoad(TEXT[LANGUAGE].LOADING_MAP);
-    toggleFeslOn.apply($(fselector), [!0]);
-    overlay_modes.fselector.opened = !!0;
+    toggleFeslOn.apply($(fselector), [true]);
+    overlay_modes.fselector.opened = false;
 
     const data_size = {
         width: data.tile_width*(data.xrange+1),
@@ -63,7 +63,8 @@ function changeFloor(floor, data, callback){
     };
     backcanvas.width = data_size.width;
     backcanvas.height = data_size.height;
-    drawMap(canvas, ctx, data, function(){
+
+    drawMapWithProgressBar(data, { over: TEXT[LANGUAGE].LOADING_MAP, under: floor }, function(){
         backcanvas.canvas.coords = {
             x: 0,
             y: 0
@@ -72,10 +73,11 @@ function changeFloor(floor, data, callback){
         moveMapAssistingNegative(canvas, ctx, { left: 0, top: 0 });
         clearObj();
         showDigitsOnFloor(floor, mapObjectComponent);
-        endLoad(TEXT[LANGUAGE].MAP_LOADED);
+        endLoad(TEXT[LANGUAGE].MAP_LOADED, 400);
         if (callback !== void 0)
             callback();
     });
+
     CURRENT_FLOOR = floor;
     setParam(ParamName.FLOOR, CURRENT_FLOOR);
     setPlaceSelColor();

@@ -231,24 +231,30 @@ function rotateCanvas(canvas, ctx, origin, rotation){
         rotation = backcanvas.canvas.rotation;
     }
     
-    var d = backcanvas.toDataURL();
-    var _img = new Image();
+    /**
+     * 
+     * @param {number} rotation 
+     */
+    function never(rotation){
+        var d = backcanvas.toDataURL();
+        var _img = new Image();
 
-    _img.src = d;
+        _img.src = d;
 
-    bctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
-    bctx.translate(origin[0] * zoomRatio, origin[1] * zoomRatio);
-    bctx.rotate(rotation);
-    bctx.translate(-origin[0] * zoomRatio, -origin[1] * zoomRatio);
-    
-    _img.onload = function(e){
-        bctx.drawImage(_img, 0, 0);
+        bctx.clearRect(0, 0, backcanvas.width, backcanvas.height);
+        bctx.translate(origin[0] * zoomRatio, origin[1] * zoomRatio);
+        bctx.rotate(rotation);
+        bctx.translate(-origin[0] * zoomRatio, -origin[1] * zoomRatio);
+        
+        _img.onload = function(e){
+            bctx.drawImage(_img, 0, 0);
+        }
+
+        _redraw(canvas, ctx, backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
+            backcanvas.canvas.width, backcanvas.canvas.height,
+            0, 0, canvas.width, canvas.height
+        );
+
+        backcanvas.canvas.rotation += rotation;
     }
-
-    _redraw(canvas, ctx, backcanvas, backcanvas.canvas.coords.x, backcanvas.canvas.coords.y,
-        backcanvas.canvas.width, backcanvas.canvas.height,
-        0, 0, canvas.width, canvas.height
-    );
-
-    backcanvas.canvas.rotation += rotation;
 }

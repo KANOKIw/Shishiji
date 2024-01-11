@@ -3,13 +3,13 @@
 
 
 /**
- * @typedef {import("../shishiji-dts/objects").PopupOptions} PopupOptions
- * @typedef {import("../shishiji-dts/objects").PopupCloseMethod} PopupCloseMethod
- * @typedef {import("../shishiji-dts/objects").PopupCloseListener} PopupCloseListener
+ * @typedef {import("../shishiji-dts/util").PopupOptions} PopupOptions
+ * @typedef {import("../shishiji-dts/util").PopupCloseMethod} PopupCloseMethod
+ * @typedef {import("../shishiji-dts/util").PopupCloseListener} PopupCloseListener
  */
 
 
-class Popup{
+const Popup = class Popup{
     /**
      * @see {@link _keydisposal}
      */
@@ -79,19 +79,32 @@ class Popup{
      * 
      * @param {string} src 
      * @param {"img" | "video"} mediatype 
+     * @param {HTMLElement} [sourceelem] 
      * @param {() => void} [callback] 
      */
-    static async popupMedia(src, mediatype, callback){
+    static async popupMedia(src, mediatype, sourceelem, callback){
         const ppcls = GPATH.X;
+        /**@ts-ignore @type {HTMLElement} */
+        const clone = sourceelem ? sourceelem.cloneNode(true) : document.createElement("span");
         var _html = ppcls;
         
-        switch (mediatype){
-            case "img":
-                _html += `<img class="suhDWAgd" src="${src}">`;
-                break;
-            case "video":
-                _html += `<video class="suhDWAgd" src="${src}" controls preload="metadata" playsinline=""></video>`;
-                break;
+        if (clone){
+            $(clone).attr("id", "").attr("class", "").attr("style", "");
+            switch (mediatype){
+                case "video":
+                    $(clone).attr("controls", "").attr("preload", "metadata").attr("playsinline", "");
+                default:
+                    clone.classList.add("suhDWAgd");
+            }
+        } else {
+            switch (mediatype){
+                case "img":
+                    _html += `<img class="suhDWAgd" src="${src}">`;
+                    break;
+                case "video":
+                    _html += `<video class="suhDWAgd" src="${src}" controls preload="metadata" playsinline=""></video>`;
+                    break;
+            }
         }
 
         return new Promise((resolve, reject) => {
@@ -106,6 +119,7 @@ class Popup{
             .css("height", "fit-content")
             .css("overflow", "visible")
             .html(_html)
+            .append(clone)
             .show();
             resolve("");
         }).then(() => {
@@ -124,7 +138,7 @@ class Popup{
 
 
     static startLoad(){
-        this.popupContent(`<div class="protected" id="ppupds"><div class="mx-text-center flxxt">${Symbol_Span.loadgingsymbol}</div></div>`);
+        this.popupContent(`<div class="protected" id="ppupds"><div class="mx-text-center flxxt">${gglSymbols.loadging}</div></div>`);
     }
 
 

@@ -1,0 +1,4 @@
+main: "com.kanokiw.mitminecraft.disablechat.Main"
+name: "DisableChat"
+version: "0.0.1"
+api-version: "1.14"

@@ -19,63 +19,40 @@
         <title>Login - Shishiji fes</title>
         <link rel="icon" href="/resources/img/favicon.ico">
         <link rel="stylesheet" href="/src/assets/builds/gglMS.css">
-        <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+        <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
+        <link rel="stylesheet" href="/src/assets/css/login.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
         <script src="/src/assets/util.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/src/assets/manage/coop.js"></script>
-        <style>
-            *{
-                margin: 0;
-                font-family: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
-            }
-
-            .loginmat{
-                position: fixed;
-                inset: 0;
-                margin: auto;
-                width: fit-content;
-                height: fit-content;
-                text-align: center;
-            }
-
-            #login_enter{
-                border-radius: 0;
-                color: black;
-                border: 1px solid black;
-            }
-
-            input{
-                outline: none;
-                border: none;
-            }
-
-            .wdADW{
-                border-width: thin;
-                border-style: solid;
-                padding-right: 5px;
-            }
-        </style>
+        <script defer>
+            window.focus();
+        </script>
     </head>
     <body>
-        <div class="loginmat">
+        <div class="loginmat protected">
             <h2>Login</h2>
             <p>実行委員から提供されたものを使用してください</p>
             <div style="height: 150px; display: flex; align-items: center; justify-content: center;">
                 <form action="" method="get" class="form-login">
                     <p style="color: red; display: none;" id="required-not-filled"></p>
                     <div class="form-login">
-                        <label for="name">username:&nbsp;</label>
-                        <span class="wdADW">
-                            <input type="text" name="username" id="login_username">
-                        </span>
+                        <div class="dsadadaw">
+                            <label for="name">username:&nbsp;</label>
+                            <div class="wdADW">
+                                <input type="text" name="username" id="login_username">
+                            </div>
+                        </div>
                     </div>
                     <div style="height: 5px;"></div>
                     <div class="form-login">
-                        <label for="email">password:&nbsp;</label>
-                        <span class="wdADW">
-                            <input type="password" name="password" id="login_password">
-                            <span id="buttonEye" class="fa fa-eye"></span>
-                        </span>
+                        <div class="dsadadaw">
+                            <label for="email">password:&nbsp;</label>
+                            <div class="wdADW">
+                                <input type="password" name="password" id="login_password">
+                                <span id="buttonEye" class="fa fa-eye"></span>
+                            </div>
+                        </div>
                     </div>
                     <hr style="margin: 5px;">
                     <div class="form-login">
