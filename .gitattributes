@@ -9,4 +9,4 @@ LICENSE eol=crlf
 *.rtf -text
 **/*.json linguist-language=jsonc
 
-.minecraft/mcfuncs/* linguist-vendored
+.minecraft/mcfuncs/**/* linguist-vendored
