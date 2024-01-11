@@ -10,4 +10,4 @@ LICENSE eol=crlf
 
 
 **/*.json linguist-language=jsonc
-.minecraft/mcfuncs/floor7/*.mcfunction linguist-vendored
+.minecraft/mcfuncs/floor7/**/*.mcfunction linguist-vendored
