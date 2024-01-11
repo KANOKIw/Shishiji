@@ -7,6 +7,7 @@ LICENSE eol=crlf
 *.ps1 eol=lf
 *.sh eol=lf
 *.rtf -text
-**/*.json linguist-language=jsonc
 
+
+**/*.json linguist-language=jsonc
 *.mcfunction linguist-vendored=false
