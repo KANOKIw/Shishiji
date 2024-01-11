@@ -18,11 +18,14 @@ from discord.ext import commands
 
 
 config_path = "./protocol.config.cnf"
-token = "MTEyNzk4NjE0OTc3Njk0OTMwOQ.GRDYTX.vdviRdXXG7aS9VBP5rI_6XBNXjv06hD65ZrT8s"
+token = ""
 jar_exited = False
 
 with open(config_path) as f:
     config = json.load(f)
+
+with open("./token.txt") as f:
+    token = f.read()
 
 jar_path = config["jar_filename"]
 console_channel_id = int(config["console_channel_id"])
