@@ -10,6 +10,4 @@ LICENSE eol=crlf
 
 
 **/*.json linguist-language=jsonc
-.minecraft/mcfuncs/floor7/**/*.mcfunction linguist-vendored
-.minecraft/mcfuncs/mana/**/*.mcfunction linguist-vendored
-.minecraft/mcfuncs/maor_belt/**/*.mcfunction linguist-vendored
+*.mcfunction linguist-vendored
