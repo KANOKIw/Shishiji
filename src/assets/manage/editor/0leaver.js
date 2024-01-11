@@ -193,11 +193,15 @@ function loadsProgBar(messages){
     const loadmsg = `<h4>${messages?.over || ""}</h4><div id="map_load_progress"><div id="ml_progress"></div></div><h4>${messages?.under || ""}</h4>`;
 
     startLoad(loadmsg);
-    
-    return function(progress){
+
+
+    function d(p){
         //@ts-ignore
-        document.getElementById("ml_progress").style.width = progress + "%";
+        document.getElementById("ml_progress").style.width = p + "%";
+        return d;
     }
+    
+    return d;
 }
 
 
@@ -231,16 +235,17 @@ window.addEventListener("DOMContentLoaded", function(){
 
 document.getElementById("__cover__")?.remove();
 
-loadsProgBar()(0);
-const updatestartupProgress = loadsProgBar({ over: "エディターへようこそ" });
+
+const updatestartupProgress = loadsProgBar({ over: "Welcome to Shishiji Editor" })(0);
 
 
 function scriptDone(){
     LOADW++;
     const u = LOADW*100/scriptlen;
     updatestartupProgress(u);
-    if (u >= 100)
-        endLoad("", 500);
+    if (u >= 100){
+        endLoad(void 0, 750);
+    }
 }
 
 

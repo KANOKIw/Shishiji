@@ -27,7 +27,7 @@ function saveEditorConfig(){
 }
 
 
-this.document.getElementById("editorSettings")?.addEventListener("click", function(){
+document.getElementById("editorSettings")?.addEventListener("click", function(){
     const spacePreview = {
         half: {
             none: `<span class="sheart0">I&nbsp;love&nbsp;tomatos&nbsp;&nbsp;&nbsp;</span>`,

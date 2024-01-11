@@ -59,11 +59,14 @@ const Popup = class Popup{
             .addClass("popen");
             $("#shishiji-popup-container-c")
             .removeClass("flxxt")
-            .css("overflow", "")
-            .css("height", "")
-            .css("width", "")
-            //@ts-ignore
-            .css("max-width", options.width).css("max-height", options.height).css("left", `calc((var(--window-width) - 48px - min(${options.width}px, var(--window-width) - 48px))/2)`)
+            .css({
+                "overflow": "",
+                "height": "",
+                "width": "",
+                "max-width": options.width+"px",
+                "max-height": options.height+"px",
+                "left": `calc((var(--window-width) - 48px - min(${options.width}px, var(--window-width) - 48px))/2)`
+            })
             .html(_innerHTML)
             .show();
             resolve("");
@@ -115,17 +118,21 @@ const Popup = class Popup{
             .on("click", this._dispose);
             $("#shishiji-popup-container-c")
             .addClass("flxxt")
-            .css("max-height", "fit-content")
-            .css("height", "fit-content")
-            .css("overflow", "visible")
+            .css({
+                "max-height": "fit-content",
+                "height": "fit-content",
+                "overflow": "visible",
+            })
             .html(_html)
             .append(clone)
             .show();
             resolve("");
         }).then(() => {
             $("#ppcls")
-            .css("top", "-40px")
-            .css("right", "0")
+            .css({
+                "top": "-40px",
+                "right": "0",
+            })
             .on("click", this._disposition);
             /**<path fill="#ffffff"></path> */
             $($($("#ppcls").children()[0]).children()[0])

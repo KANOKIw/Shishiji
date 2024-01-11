@@ -2,7 +2,7 @@
 "use strict";
 
 
-this.setInterval(() => {
+setInterval(() => {
     var sel = window.getSelection();
     //@ts-ignore
     if (!sel || (sel.anchorNode?.parentElement?.id != "main-editor" && sel.anchorNode?.id != "main-editor"))
@@ -110,11 +110,15 @@ function nextWrite(){
         }, WRITE_PREVIEW_COOLDOWN);
     }
 }
+
+
 function write(){
     const scr = $("#shishiji-overview").scrollTop();
     writePreviewerOverview(ARTICLEDATA, false, scr, void 0, true, true);
 }
-this.document.getElementById("main-editor")?.addEventListener("input", function(e){
+
+
+document.getElementById("main-editor")?.addEventListener("input", function(e){
     const me = $("#main-editor");
 
     // Illegal TAB
@@ -151,7 +155,7 @@ this.document.getElementById("main-editor")?.addEventListener("input", function(
 });
 
 
-this.document.getElementById("main-editor")?.addEventListener("keydown", function(ke){
+document.getElementById("main-editor")?.addEventListener("keydown", function(ke){
     const key = ke.key.toUpperCase();
     if (key === "TAB"){
         ke.preventDefault();

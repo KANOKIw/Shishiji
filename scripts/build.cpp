@@ -166,7 +166,7 @@ private:
             NULL
         );
 
-        if (hDir == INVALID_HANDLE_VALUE) {
+        if (hDir == INVALID_HANDLE_VALUE){
             std::cerr << "Error opening directory\n";
             return;
         }
@@ -193,44 +193,74 @@ private:
 
 int main()
 {
-    std::string folder = "../src/assets/";
-    std::string outFolder = folder + "builds/";
+    std::string foldor = "../src/assets/manage/editor/";
+    std::string outFoldor = "../src/assets/builds/editor/";
+
+    std::vector<std::string> scriptFiles = {
+        foldor + "0leaver.js",
+        foldor + "1previewerfunc.js",
+        foldor + "2editorfunc.js",
+        foldor + "3editordec.js",
+        foldor + "4editordecutil.js",
+        foldor + "5editutil.js",
+        foldor + "6maininter.js",
+        foldor + "7artdetail.js",
+        foldor + "8appevent.js",
+        foldor + "9objectins.js",
+        foldor + "10cloudpop.js",
+        foldor + "11cloud.js",
+        foldor + "12cloudajax.js",
+        foldor + "13utilevent.js",
+        foldor + "14editorconfig.js",
+        foldor + "15pvutil.js",
+    };
+    
+    Builder jsbuilder({}, { scriptFiles }, outFoldor+"editor.js", false);
+    jsbuilder.build();
+    jsbuilder.minify();
+}
+
+
+int _main()
+{
+    std::string foldor = "../src/assets/";
+    std::string outFoldor = foldor + "builds/";
 
     std::vector<std::string> onLoads = {
-        folder + "canvas/setup.js",
-        folder + "objects/listener.js",
-        folder + "objects/setup.js",
-        folder + "supports/setup.js",
-        folder + "main.js",
+        foldor + "canvas/setup.js",
+        foldor + "objects/listener.js",
+        foldor + "objects/setup.js",
+        foldor + "supports/setup.js",
+        foldor + "main.js",
     };
 
     std::vector<std::string> scriptFiles = {
-        folder + "lang.js",
-        folder + "global.v.js",
-        folder + "gpath.js",
-        folder + "util.js",
-        folder + "mcformat.js",
-        folder + "speed.js",
-        folder + "cssroot.js",
+        foldor + "lang.js",
+        foldor + "global.v.js",
+        foldor + "gpath.js",
+        foldor + "util.js",
+        foldor + "mcformat.js",
+        foldor + "speed.js",
+        foldor + "cssroot.js",
 
-        folder + "canvas/calculate.js",
-        folder + "canvas/display.js",
-        folder + "canvas/react.js",
-        folder + "canvas/touch.js",
-        folder + "canvas/mouse.js",
+        foldor + "canvas/calculate.js",
+        foldor + "canvas/display.js",
+        foldor + "canvas/react.js",
+        foldor + "canvas/touch.js",
+        foldor + "canvas/mouse.js",
 
-        folder + "objects/create.js",
-        folder + "objects/move.js",
-        folder + "objects/overview.js",
-        folder + "objects/fselector.js",
+        foldor + "objects/create.js",
+        foldor + "objects/move.js",
+        foldor + "objects/overview.js",
+        foldor + "objects/fselector.js",
 
-        folder + "supports/share.js",
-        folder + "supports/notify.js",
-        folder + "supports/popup.js",
+        foldor + "supports/share.js",
+        foldor + "supports/notify.js",
+        foldor + "supports/popup.js",
     };
 
-    Builder jsbuilder(onLoads, scriptFiles, outFolder+"main.js", false);
-    Builder cssbuilder({}, { folder + "css/shishijimap.css" }, outFolder+"shishijimap.css", false);
+    Builder jsbuilder(onLoads, scriptFiles, outFoldor+"main.js", false);
+    Builder cssbuilder({}, { foldor + "css/shishijimap.css" }, outFoldor+"shishijimap.css", false);
     
     jsbuilder.build();
     jsbuilder.minify();

@@ -2,7 +2,7 @@
 "use strict";
 
 
-this.document.getElementById("smthElse")?.addEventListener("click", function(e){
+document.getElementById("smthElse")?.addEventListener("click", function(e){
     Popup.popupContent(`
     <div class="protected aioshud" id="ppupds" style="display:flex;align-items:center;justify-content:center;flex-flow:column;">
         <h4 style="padding-top: 5px;">テーマカラー</h4>

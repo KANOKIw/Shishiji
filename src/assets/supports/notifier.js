@@ -165,18 +165,18 @@ const Notifier = class Notifier{
 
 
     static _add_closeOnInter(){
-        const $notifier = $("#--yd-notifier");
+        const yfr = $("#--yd-notifier");
         
-        $notifier
+        yfr
         .removeClass("--path-through")
         .on("touchstart mousedown", this._interClose);
     }
 
 
     static _removeCloseonInter(){
-        const $notifier = $("#--yd-notifier");
+        const yfr = $("#--yd-notifier");
         
-        $notifier.off("touchstart mousedown", this._interClose);
+        yfr.off("touchstart mousedown", this._interClose);
     }
 
 

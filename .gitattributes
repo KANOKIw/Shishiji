@@ -10,4 +10,4 @@ LICENSE eol=crlf
 
 
 **/*.json linguist-language=jsonc
-*.mcfunction linguist-vendored=false
+*.mcfunction linguist-vendored

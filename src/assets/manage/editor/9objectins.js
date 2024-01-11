@@ -2,7 +2,7 @@
 "use strict";
 
 
-this.document.getElementById("addImageb")?.addEventListener("click", e => {
+document.getElementById("addImageb")?.addEventListener("click", e => {
     Popup.popupContent(`
     <div class="protected" id="ppupds" style="display: flex; align-items: center; flex-flow: column;">
         <h2 style="padding-top: 30px;">写真を挿入</h2>
@@ -60,7 +60,7 @@ this.document.getElementById("addImageb")?.addEventListener("click", e => {
 });
 
 
-this.document.getElementById("addVideob")?.addEventListener("click", e => {
+document.getElementById("addVideob")?.addEventListener("click", e => {
     Popup.popupContent(`
     <div class="protected" id="ppupds" style="display: flex; align-items: center; flex-flow: column;">
         <h2 style="padding-top: 30px;">動画を挿入</h2>
@@ -116,7 +116,7 @@ this.document.getElementById("addVideob")?.addEventListener("click", e => {
 });
 
 
-this.document.getElementById("addLinkb")?.addEventListener("click", e => {
+document.getElementById("addLinkb")?.addEventListener("click", e => {
     Popup.popupContent(`
     <div class="protected" id="ppupds" style="display: flex; align-items: center; flex-flow: column;">
         <h2 style="padding-top: 30px;">リンクを挿入</h2>

@@ -2,7 +2,7 @@
 "use strict";
 
 
-this.document.getElementById("manageFileb")?.addEventListener("click", function(){
+document.getElementById("manageFileb")?.addEventListener("click", function(){
     Popup.startLoad();
     
     var cloudAjax;

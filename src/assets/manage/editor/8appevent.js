@@ -37,13 +37,13 @@ document.getElementById("logout__")?.addEventListener("click", () => {
 });
 
 
-this.document.getElementById("save_data_norm")?.addEventListener("click", function(){
+document.getElementById("save_data_norm")?.addEventListener("click", function(){
     clearTimeout(kes);
     saveMainEditorctx.apply(this);
 });
 
 
-this.document.getElementById("__undo_-")?.addEventListener("click", function(){
+document.getElementById("__undo_-")?.addEventListener("click", function(){
     if (HIST_INDEX <= 0)
         return;
     HIST_INDEX--;
@@ -54,7 +54,7 @@ this.document.getElementById("__undo_-")?.addEventListener("click", function(){
 });
 
 
-this.document.getElementById("__redo_-")?.addEventListener("click", function(){
+document.getElementById("__redo_-")?.addEventListener("click", function(){
     if (HIST_INDEX >= EDITOR_HISTORY.raw.length-1)
         return;
     HIST_INDEX++;

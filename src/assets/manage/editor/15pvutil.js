@@ -1,6 +1,8 @@
 //@ts-check
 "use strict";
 
+const { fn } = require("jquery");
+
 
 /**
  * 
@@ -111,31 +113,31 @@ function _ye(){
 }
 
 
-this.document.getElementById("pvzoom_in")?.addEventListener("click", function(){
+document.getElementById("pvzoom_in")?.addEventListener("click", function(){
     zoomPV("in");
     _ye();
 });
 
 
-this.document.getElementById("pvzoom_out")?.addEventListener("click", function(){
+document.getElementById("pvzoom_out")?.addEventListener("click", function(){
     zoomPV("out");
     _ye();
 });
 
 
-this.document.getElementById("pvarrow_upward")?.addEventListener("click", function(){
+document.getElementById("pvarrow_upward")?.addEventListener("click", function(){
     updownPV("up");
     _ye();
 });
 
 
-this.document.getElementById("pvarrow_downward")?.addEventListener("click", function(){
+document.getElementById("pvarrow_downward")?.addEventListener("click", function(){
     updownPV("down");
     _ye();
 });
 
 
-this.document.getElementById("pvarrow_power_settings_new")?.addEventListener("click", function(){
+document.getElementById("pvarrow_power_settings_new")?.addEventListener("click", function(){
     PVSTATUS.zooms.ratio = 1;
     PVSTATUS.moves.top = 0;
     showZoom(false);
@@ -145,6 +147,67 @@ this.document.getElementById("pvarrow_power_settings_new")?.addEventListener("cl
         Notifier.closeNotifier();
     }
 });
+
+
+const whatsnow = {
+    up: {
+        active: false,
+        func: function(){
+            updownPV("up");
+            _ye();
+        }
+    },
+    down: {
+        active: false,
+        func: function(){
+            updownPV("down");
+            _ye();
+        }
+    },
+    ctrl: false,
+};
+
+
+window.addEventListener("keydown", function(e){
+    const KEY = e.key.toUpperCase();
+    const g = e.ctrlKey || e.metaKey;
+
+    function a(){
+        e.preventDefault();
+    }
+    if (KEY == "ARROWUP"){
+        if (g) a();
+        whatsnow.up.active = true;
+    } else if (KEY == "ARROWDOWN"){
+        if (g) a();
+        whatsnow.down.active = true;
+    } else if (KEY == "CONTROL"){
+        whatsnow.ctrl = true;
+    }
+}, { passive: false });
+
+
+window.addEventListener("keyup", function(e){
+    const KEY = e.key.toUpperCase();
+
+    if (KEY == "ARROWUP"){
+        whatsnow.up.active = false;
+    } else if (KEY == "ARROWDOWN"){
+        whatsnow.down.active = false;
+    } else if (KEY == "CONTROL"){
+        whatsnow.ctrl = false;
+    }
+}, { passive: false });
+
+
+setInterval(() => {
+    if (whatsnow.ctrl){
+        if (whatsnow.up.active)
+            whatsnow.up.func();
+        if (whatsnow.down.active)
+            whatsnow.down.func();
+    }
+}, 100);
 
 
 showZoom(false);
