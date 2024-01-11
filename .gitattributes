@@ -10,4 +10,5 @@ LICENSE eol=crlf
 
 
 **/*.json linguist-language=jsonc
-.minecraft/mcfuncs/floor7/**/*.mcfunction linguist-vendored
+*.mcfunction linguist-vendored
+.minecraft/mcfuncs/sbitems/**/*.mcfunction linguist-vendored=false
