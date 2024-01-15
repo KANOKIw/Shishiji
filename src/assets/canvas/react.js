@@ -44,11 +44,6 @@ function moveMapAssistingNegative(canvas, ctx, moved){
     backcanvas.canvas.width = canvas.width/zoomRatio;
     backcanvas.canvas.height = canvas.height/zoomRatio;
 
-    /*if (x < 0) x = 0;
-    if (y < 0) y = 0;
-    if (x+backcanvas.canvas.width > backcanvas.width) x = backcanvas.width-backcanvas.canvas.width;
-    if (y+backcanvas.canvas.height > backcanvas.height) y = backcanvas.height-backcanvas.canvas.height;*/
-
     backcanvas.canvas.coords = { x: x, y: y };
 
     _redraw(canvas, ctx, backcanvas,

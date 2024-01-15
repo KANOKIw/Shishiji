@@ -1,3 +1,4 @@
+"""Watch Fortnite update"""
 import time
 import keyboard
 import pyautogui as ag

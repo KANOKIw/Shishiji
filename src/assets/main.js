@@ -2,7 +2,6 @@
 "use strict";
 
 
-
 function setCanvasSizes(){
     /**@ts-ignore @type {HTMLCanvasElement} */
     const canvas = document.getElementById(cssName.mcvs);
@@ -24,7 +23,7 @@ function setCanvasSizes(){
         article: getParam(ParamName.ARTICLE_ID),
         zoomRatio: Number(getParam(ParamName.ZOOM_RATIO)) || 1,
         floor: getParam(ParamName.FLOOR),
-        coords: getParam(ParamName.COORDS)?.split(",").map(a => { return (a === String(void 0) || isNaN(Number(a))) ? 0 : Number(a); }) || [ 0, 0 ],
+        coords: getParam(ParamName.COORDS)?.split(",").map(a => { return (typeof a === "undefined" || isNaN(Number(a))) ? 0 : Number(a); }) || [ 0, 0 ],
         from: getParam(ParamName.URL_FROM),
         lang: digitLang(getParam(ParamName.LANGUAGE)),
     };
@@ -174,7 +173,7 @@ function setCanvasSizes(){
                     setCoordsOnMiddle(coords, ZOOMRATIO_ON_SHARE);
                     setTimeout(() => {
                         PictoNotifier.notify(
-                            "success",
+                            "info",
                             TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_FOUND,
                             {
                                 duration: 5000,
@@ -189,6 +188,7 @@ function setCanvasSizes(){
                     delParam(ParamName.ART_TARGET);
                     if (g != null || y){
                         setTimeout(() => {
+                            return;
                             Notifier.appendPending({
                                 html: `<div id="shr-f" class="flxxt" style="font-size: 12px;">${GPATH.SUCCESS}${TEXT[LANGUAGE].NOTIFICATION_SHARED_EVENT_TRANSITIONED}</div>`,
                                 options: {
@@ -211,10 +211,7 @@ function setCanvasSizes(){
         }
         return 0;
     })
-    .fail(function(e){
-
-    });
-    
+    .fail(function(e){});
     return 0;
 }();
 

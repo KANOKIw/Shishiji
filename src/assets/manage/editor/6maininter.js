@@ -27,6 +27,7 @@ $.post("/org/manage/auth/editor", { session: session })
         leaveherep();
 
     ARTICLEDATA = lastsaved = data.artdata;
+    lscontent = ARTICLEDATA.article.content;
     orgCloudfi.maxsize = data.mxcs;
 })
 .catch(leaveherep);
@@ -132,7 +133,6 @@ document.getElementById("main-editor")?.addEventListener("input", function(e){
 
     change_not_saved_remaining = true;
     $("#sv_msg").text("");
-    allowNsave();
     setEditorcdColor();
     
     const _ihtml = document.getElementById("main-editor")?.innerHTML;
@@ -151,6 +151,8 @@ document.getElementById("main-editor")?.addEventListener("input", function(e){
     else
         nextWrite();
 
+    if (!allowNsave())
+        change_not_saved_remaining = false;
     nextAutoSave();
 });
 

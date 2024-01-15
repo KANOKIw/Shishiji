@@ -3,9 +3,9 @@
 
 
 /**
- * @typedef {import("../shishiji-dts/util").NotifierArgs} NotifierArgs
- * @typedef {import("../shishiji-dts/util").Pictograms} Pictograms
- * @typedef {import("../shishiji-dts/util").PictoNotifierOptions} PictoNotifierOptions
+ * @typedef {import("../shishiji-dts/supports").NotifierArgs} NotifierArgs
+ * @typedef {import("../shishiji-dts/supports").Pictograms} Pictograms
+ * @typedef {import("../shishiji-dts/supports").PictoNotifierOptions} PictoNotifierOptions
  */
 
 
@@ -175,8 +175,9 @@ const PictoNotifier = class PictoNotifier extends Notifier{
         const elem = document.createElement("img");
 
         elem.src = src;
+        elem.loading = "eager";
         parent.appendChild(elem);
-        parent.style.display = "none";
+        parent.classList.add("shy");
         parent.setAttribute("name", name);
         document.body.appendChild(parent);
         return parent;

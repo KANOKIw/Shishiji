@@ -631,7 +631,7 @@ button{
 
 #overview-context{
     width: var(--previewer-width);
-    margin-bottom: var(--window-half-height);
+    margin-bottom: calc(var(--shishiji-ovv-tg-height) + var(--shishiji-article-scroll-adjust));
     z-index: 999;
     touch-action: pan-y;
 }
@@ -646,6 +646,7 @@ button{
     background-color: rgb(144 149 81);
     border-radius: 4px;
     border: 2px solid rgb(65, 47, 0);
+    transition: none;
 }
 
 #save_wrap{
@@ -694,7 +695,7 @@ button{
 #ovv-tg-b{
     width: var(--previewer-width);
     bottom: 0;
-    height: 50px;
+    height: var(--shishiji-ovv-tg-height);
     background-color: var(--shishiji-ovv-tg-color);
     display: flex;
     box-shadow: 0 -3px 7px rgba(0, 0, 0, 0.5);

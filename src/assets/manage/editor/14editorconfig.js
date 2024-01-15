@@ -61,7 +61,7 @@ document.getElementById("editorSettings")?.addEventListener("click", function(){
             </div>
             <div class="okjoipjiok konogt">
                 <h4>即時プレビュー</h4>
-                <t style="font-size:8px;">This may takes more battery!!</t>
+                <t style="font-size:8px;">This may take more battery!!</t>
                 <div class="toggle_button">
                     <input id="instapreview_tg" class="toggle_input" type="checkbox" ${SETTINGS.instapreview ? "checked" : ""}>
                     <label for="toggle" class="toggle_label"></label>

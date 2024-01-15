@@ -3,9 +3,9 @@
 
 
 /**
- * @typedef {import("../shishiji-dts/util").PopupOptions} PopupOptions
- * @typedef {import("../shishiji-dts/util").PopupCloseMethod} PopupCloseMethod
- * @typedef {import("../shishiji-dts/util").PopupCloseListener} PopupCloseListener
+ * @typedef {import("../shishiji-dts/supports").PopupOptions} PopupOptions
+ * @typedef {import("../shishiji-dts/supports").PopupCloseMethod} PopupCloseMethod
+ * @typedef {import("../shishiji-dts/supports").PopupCloseListener} PopupCloseListener
  */
 
 
@@ -92,7 +92,7 @@ const Popup = class Popup{
         var _html = ppcls;
         
         if (clone){
-            $(clone).attr("id", "").attr("class", "").attr("style", "");
+            $(clone).attr("id", "").attr("class", "").attr("style", "").attr("draggable", "true");
             switch (mediatype){
                 case "video":
                     $(clone).attr("controls", "").attr("preload", "metadata").attr("playsinline", "");
@@ -102,14 +102,15 @@ const Popup = class Popup{
         } else {
             switch (mediatype){
                 case "img":
-                    _html += `<img class="suhDWAgd" src="${src}">`;
+                    _html += `<img class="suhDWAgd" src="${src}" draggable="true">`;
                     break;
                 case "video":
-                    _html += `<video class="suhDWAgd" src="${src}" controls preload="metadata" playsinline=""></video>`;
+                    _html += `<video class="suhDWAgd" src="${src}" controls preload="metadata" playsinline="" draggable="true"></video>`;
                     break;
             }
         }
 
+        // Why
         return new Promise((resolve, reject) => {
             window.addEventListener("keydown", this._keydisposal);
             $("shishiji-mx-overlay")

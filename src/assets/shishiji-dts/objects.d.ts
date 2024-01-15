@@ -29,6 +29,11 @@ type ArticleLike = {
     schedule: string;
 };
 
+export interface Sizes {
+    width: number;
+    height: number;
+}
+
 type ObjectLike = {
     type: {
         event: string;
@@ -42,21 +47,18 @@ type ObjectLike = {
     images: {
         icon: string;
     };
-    size: {
-        width: number;
-        height: number;
-    };
+    size: Sizes;
     floor: string;
 };
 
-export interface mapObject {
+export interface mapObj {
     article: ArticleLike;
     object: ObjectLike;
     discriminator: string;
 }
 
 export interface mapObjComponent {
-    [key: string]: mapObject;
+    [key: string]: mapObj;
 }
 
 export interface Intervals {

@@ -2,7 +2,7 @@ import re
 
 from inspect import cleandoc
 from colorama import Fore
-from assign import fetch_url
+from minecraft.plugins.leave.util.fetch import fetch_url
 
 
 class Main:

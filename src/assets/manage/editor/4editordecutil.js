@@ -98,9 +98,21 @@ function parseXtext(text){
 
 
 function allowNsave(){
-    $("#save_data_norm")
-    .css("background-color", "rgb(247, 255, 142)")
-    .css("cursor", "pointer");
+    if (lscontent === ARTICLEDATA.article.content){
+        $("#save_data_norm")
+        .css({
+            "background-color": "rgb(144 149 81)",
+            "cursor": "not-allowed",
+        });
+        return false;
+    } else {
+        $("#save_data_norm")
+        .css({
+            "background-color": "rgb(247, 255, 142)",
+            "cursor": "pointer",
+        });
+        return true;
+    }
 }
 
 

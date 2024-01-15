@@ -3,7 +3,7 @@
 
 
 /**
- * @typedef {import("../../shishiji-dts/objects").mapObject} DmapObject
+ * @typedef {import("../../shishiji-dts/objects").mapObj} DmapObject
 */
 
 
@@ -120,7 +120,8 @@ var username = "",
     /**@type {mapObject} */
     lastsaved,
     LOADW = 0,
-    scriptlen = 0;
+    scriptlen = 0,
+    lscontent = "";
 
 
 try {
@@ -132,7 +133,7 @@ try {
 
 for (const G of document.getElementsByTagName("script")){
     const src = G.src;
-    if (src && (new URL(src)).pathname.startsWith("/src/assets/manage/editor/"))
+    if (src && src.includes("/src/assets/manage/editor/"))
         scriptlen++;
 }
 
@@ -148,6 +149,7 @@ const SETTINGS = {
     _solidObject: STORAGESAVES[_SOLIDOBJECTKEY] === false ? false : true,
 };
 var logout_is_peiding = false;
+
 
 /**
  * 

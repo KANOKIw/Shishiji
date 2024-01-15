@@ -20,16 +20,21 @@ html{
     --shishiji-ovv-theme-height: 20px;
     --shishiji-ovv-landscape-width: min(calc(var(--window-height)/1.5), var(--window-half-width));
     --shishiji-ovv-tg-height: 50px;
-    --shishiji-ovv-tg-color: rgb(235, 235, 235);
+    --shishiji-ovv-tg-color: hsl(0, 0%, 92%);
     --shishiji-ovv-tg-color-active: rgb(0, 0, 0);
     --shishiji-fselector-transition: all 0.2s ease;
-    --shishiji-button-active-color: rgba(190, 190, 190, 0.75);
+    --shishiji-button-active-color: hsla(0, 0%, 74%, 0.75);
     --shishiji-button-active-transition: background-color 0.2s ease;
     --shishiji-load-progress-bar-height: 15px;
     --shishiji-load-progress-bar-color: rgb(75, 75, 75);
-    --shishiji-spread-btn-bg-color: rgba(187, 187, 187, 0.5);
-    --shishiji-spread-btn-transition: all 0.1s ease;
+    --shishiji-spread-btn-bg-color: hsla(0, 0%, 73%, 0.5);
+    --shishiji-spread-btn-transition: all 0.2s ease;
     --shishiji-progbar-transition-duration: 0.1s;
+    --shishiji-article-scroll-adjust: calc(var(--shishiji-ovv-tg-height) + 55px);
+    --shishiji-fselector-parent: hsl(0, 0%, 77%);
+    --shishiji-fselector-current: hsla(105, 100%, 57%, 0.8);
+    --shishiji-fselector-else: hsla(325, 69%, 44%, 0.75);
+    --shishiji-core-grade-color: hsl(143 calc(1 * 60.7%) 35.9%);
 }
 
 @keyframes optionspreadsc{
@@ -151,6 +156,7 @@ shishiji-yd-notify shishiji-yd-notifier.vpopen{
     width: fit-content;
     height: 100%;
     color: white;
+    font-weight: 600;
 }
 
 @keyframes _hello{
@@ -441,11 +447,12 @@ table{
     display: flex;
     justify-content: flex-end;
     position: fixed;
+    pointer-events: none;
 }
 
 #overview-context{
     width: 100%;
-    margin-bottom: var(--window-half-height);
+    margin-bottom: calc(var(--shishiji-ovv-tg-height) + var(--shishiji-article-scroll-adjust));
     z-index: 999;
 }
 
@@ -453,6 +460,7 @@ table{
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
+    pointer-events: all;
 }
 
 #overview-context.fadein{
@@ -460,7 +468,7 @@ table{
 }
 
 #overview-context._fadein{
-    animation: 2s fadein forwards;
+    animation: 1250ms fadein forwards;
 }
 
 #overview-context._wait_f{
@@ -471,7 +479,6 @@ table{
     from {
         opacity: 0;
     }
-  
     to {
         opacity: 1;
     }
@@ -484,7 +491,7 @@ table{
 }
 
 .evvnon{
-    color: green;
+    color: var(--shishiji-core-grade-color);
     font-weight: bold;
 }
 
@@ -873,7 +880,7 @@ table{
     position: absolute;
     border-radius: 50px;
     margin: 10px;
-    background-color: rgb(196, 196, 196);
+    background-color: var(--shishiji-fselector-parent);
     box-shadow:
     0 1.9px 2.5px rgba(0, 0, 0, 0.057),
     0 5px 6.1px rgba(0, 0, 0, 0.076),
@@ -917,6 +924,10 @@ table{
     user-select: all;
     -webkit-user-select: all;
     -webkit-user-drag: element;
+}
+
+.shy{
+    display: none;
 }
 
 #place-options-w{
@@ -1168,13 +1179,11 @@ table{
 
 #includeScrCh[type=checkbox] + label{
     transition: var(--shishiji-button-active-transition);
-    cursor: pointer;
     padding-left: 30px; 
 }
 
 #includeScrCh[type=checkbox] + label:active{
-    padding-right: 5px;
-    background-color: var(--shishiji-button-active-color);
+    padding-right: 12px;
 }
           
 #includeScrCh[type=checkbox] + label:before{
@@ -1197,7 +1206,7 @@ table{
     height: 5px;
     border-bottom: 4px solid;
     border-left: 4px solid;
-    border-color: #ff0080;
+    border-color: hsl(234, 100%, 63%);
     transform: rotate(-45deg);
     top: 50%;
     left: 4px;
@@ -1223,7 +1232,7 @@ table{
 .ovv-tg-bwr{
     width: 100%;
     height: 100%;
-    border-right: solid 2px rgb(136, 136, 136);
+    border-right: solid 1px rgb(136, 136, 136);
     display: flex;
     text-align: center;
     cursor: pointer;
@@ -1261,6 +1270,11 @@ table{
 
 .ovv-tg-bwr:last-of-type{
     border-right: none;
+    border-left: solid 1px rgb(136, 136, 136);
+}
+
+.ovv-tg-bwr:nth-last-of-type(even){
+    border-left: solid 1px rgb(136, 136, 136);
 }
 
 .ovv-tg-bwr .tg-active{

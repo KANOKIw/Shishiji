@@ -153,17 +153,17 @@ function mcFormat(str, srcConverter){
 
     for (const imgmacth of imgmatches){
         const width = Number(imgmacth[2]);
-        r = r.replace(imgmacth[0], `<img class="article-image doaJSD protected" src="${srcConverter(imgmacth[1])}" style="width: ${(width > 100 || width < 0) ? 100 : width}%;">`);
+        r = r.replace(imgmacth[0], `<img class="article-image doaJSD protected" loading="lazy" draggable="false" src="${srcConverter(imgmacth[1])}" style="width: ${(width > 100 || width < 0) ? 100 : width}%;">`);
     }
 
     for (const vidmacth of vidmacthes){
         const width = Number(vidmacth[2]);
-        r = r.replace(vidmacth[0], `<video class="article-video protected" src="${srcConverter(vidmacth[1])}#t=0.001" controls preload="metadata" playsinline style="width: ${(width > 100 || width < 0) ? 100 : width}%;"></video>`);
+        r = r.replace(vidmacth[0], `<video class="article-video protected" loading="lazy" draggable="false" src="${srcConverter(vidmacth[1])}#t=0.001" controls preload="metadata" playsinline style="width: ${(width > 100 || width < 0) ? 100 : width}%;"></video>`);
     }
 
     for (const linkmacth of linkmacthes){
         const href = linkmacth[1];
-        r = r.replace(linkmacth[0], `<a class="article-outsidelink protected" href="${new URL(href)}" target="_blank">${(linkmacth[2].length > 0) ? linkmacth[2] : linkmacth[1]}</a>`);
+        r = r.replace(linkmacth[0], `<a class="article-outsidelink protected" draggable="true" href="${new URL(href)}" target="_blank">${(linkmacth[2].length > 0) ? linkmacth[2] : linkmacth[1]}</a>`);
     }
 
     return r;

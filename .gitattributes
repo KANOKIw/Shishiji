@@ -8,6 +8,5 @@ LICENSE eol=crlf
 *.sh eol=lf
 *.rtf -text
 
-
 **/*.json linguist-language=jsonc
 *.mcfunction linguist-vendored

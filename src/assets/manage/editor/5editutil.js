@@ -36,6 +36,7 @@ function saveMainEditorctx(do_not_showmessage, donecallback, errorcallback){
         .done(d => {
             change_not_saved_remaining = false;
             lastsaved = ARTICLEDATA;
+            lscontent = ARTICLEDATA.article.content;
 
             clearTimeout(_t.a);
 
@@ -46,8 +47,10 @@ function saveMainEditorctx(do_not_showmessage, donecallback, errorcallback){
                 }, 3000);
             }
             $("#save_data_norm")
-            .css("background-color", "rgb(144 149 81)")
-            .css("cursor", "not-allowed");
+            .css({
+                "background-color": "rgb(144 149 81)",
+                "cursor": "not-allowed",
+            });
 
             rewrite(false, true);
             if (donecallback)

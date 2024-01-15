@@ -19,13 +19,24 @@
         }
     });
 
+
     "touchstart mousedown".split(" ").forEach(m => {
         document.getElementById("user-stricter")?.addEventListener(m, function(){
             if (OverView.isfullyopened){
                 reduceOverview();
             }
         });
-    })
+    });
+
+
+    document.getElementById("shishiji-overview")?.addEventListener("click", function(e){
+        if (e.pageY < 20){
+            document.getElementById(cssName.ovv)?.scrollTo({
+                behavior: "smooth",
+                top: 0,
+            })
+        }
+    });
 
     return 0;
 }();

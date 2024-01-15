@@ -3,9 +3,9 @@
 
 
 /**
- * @typedef {import("../shishiji-dts/util").NotifierOptions} NotifierOptions
- * @typedef {import("../shishiji-dts/util").NoticeComponent} NoticeComponent
- * @typedef {import("../shishiji-dts/util").PendingNoticeComponent} PendingNoticeComponent
+ * @typedef {import("../shishiji-dts/supports").NotifierOptions} NotifierOptions
+ * @typedef {import("../shishiji-dts/supports").NoticeComponent} NoticeComponent
+ * @typedef {import("../shishiji-dts/supports").PendingNoticeComponent} PendingNoticeComponent
  */
 
 

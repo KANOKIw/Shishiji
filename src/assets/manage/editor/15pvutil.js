@@ -1,8 +1,6 @@
 //@ts-check
 "use strict";
 
-const { fn } = require("jquery");
-
 
 /**
  * 

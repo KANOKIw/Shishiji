@@ -4,7 +4,7 @@
 
 /**
  * @typedef {import("../shishiji-dts/objects").mapObjElement} mapObjectElement
- * @typedef {import("../shishiji-dts/objects").mapObject} mapObject
+ * @typedef {import("../shishiji-dts/objects").mapObj} mapObject
  */
 
 
@@ -63,7 +63,8 @@ min-width:${objectData.object.size.width}px;min-height:${objectData.object.size.
             </div>
         </div>
     `;
-
+    const mObject = new MapObject(objectData);
+    mObject.drawSelf(backcanvas);
     $(viewer).append(element_outerHTML)
     const el = $(viewer).children()[$(viewer).children().length - 1];
     if (objectData.article){

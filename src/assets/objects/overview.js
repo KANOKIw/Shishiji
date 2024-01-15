@@ -1,6 +1,7 @@
 //@ts-check
 "use strict";
 
+
 class OverView {
     static fullyopened = false;
     /**
@@ -149,6 +150,8 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
     const font = (details.article.font_family) ? details.article.font_family : "";
     const orgname = details.discriminator;
     const pathConvertfunc = getPathConverter(details);
+    /**@type {(HTMLImageElement | HTMLVideoElement)[]} */
+    const imageNodes = [];
 
 
     /**
@@ -228,21 +231,62 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
         }, 25);
     }
 
+    /**@this {HTMLElement | JQuery.PlainObject} */
+    function mkundraggable(){
+        $(this).attr("draggable", "false");
+    }
+
     class ctx_article_C{
         static get exists(){
             return document.getElementById(cssName.ovvctxart) ? true : false;
         }
 
-        /**@param {string} _html @param {() => void} [cb] */
-        static async write(_html, cb){
+        /**@param {string} _html @param {() => void} [cb] @param {(HTMLImageElement | HTMLVideoElement)[]} [imageNodeList] */
+        static async write(_html, cb, imageNodeList){
             const r = document.getElementById(cssName.ovvctxart);
-     
-            if (r)
-                r.innerHTML = _html;
+            const textnode = document.createElement("span");
+
+            textnode.innerHTML = _html;
+
+            if (imageNodeList){
+                const imgsrcMap = {};
+                for (const extimg of imageNodeList){
+                    const src = extimg.src || "";
+                    if (imgsrcMap[src])
+                        imgsrcMap[src].push(extimg);
+                    else 
+                        imgsrcMap[src] = [extimg];
+                }
+                for (const willbe of [...textnode.querySelectorAll("img"), ...textnode.querySelectorAll("video")]){
+                    const src = willbe.src || "";
+                    const becamables = imgsrcMap[src];
+                    const becomes = becamables?.length > 0 ? becamables[0] : willbe.cloneNode(true);
+
+                    willbe.parentNode?.replaceChild(becomes, willbe);
+                    becomes.style.width = willbe.style.width;
+                    imgsrcMap[src] = imgsrcMap[src]?.filter(E => {
+                        return E !== becomes;
+                    });
+                }
+            }
+            if (r){
+                r.innerHTML = "";
+                r.appendChild(textnode);
+            }
             if (cb)
                 cb();
         }
     };
+
+    function chOvv(){
+        $(".tg-active").removeClass("tg-active");
+        $(this).addClass("tg-active");
+        $(".article-image").addClass("doaJSD");
+        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
+        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
+        mkundraggable.call($("#--art-header"));
+        mkundraggable.call($("#--art-icon"));
+    }
 
     /**@this {HTMLElement} */
     function showDescription(){
@@ -251,18 +295,23 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
 
         $(cssName.ovvctx).addClass("_wait_f");
 
+        function then(){
+            if (imageNodes.length == 0){
+                document.getElementById("ctx-article")?.querySelectorAll("img").forEach(Y => imageNodes.push(Y));
+                document.getElementById("ctx-article")?.querySelectorAll("video").forEach(Y => imageNodes.push(Y));
+            }
+        }
+
         if (ctx_article_C.exists)
-            ctx_article_C.write(article_mainctx, __onload);
+            ctx_article_C.write(article_mainctx, __onload, imageNodes)
+            .then(then);
         else
             writeOverviewContent(
-                `${EVENT_HEADER}<div id="ctx-article" class="article">${article_mainctx}</div>`, __onload);
+                `${EVENT_HEADER}<div id="ctx-article" class="article">${article_mainctx}</div>`, __onload)
+            .then(then);
         if (fadein)
-        $(cssName.ovvctx).removeClass("fadein").removeClass("_fadein");
-        $(".tg-active").removeClass("tg-active");
-        $(this).addClass("tg-active");
-        $(".article-image").addClass("doaJSD");
-        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
-        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
+            $(cssName.ovvctx).removeClass("fadein").removeClass("_fadein");
+        chOvv.call(this);
     }
 
     /**@this {HTMLElement} */
@@ -311,8 +360,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
                 <div class="crowded_deg_bar"></div>
                 <div id="crowed_pointer" style="position: relative;">
                     <div class="ccENTER_B" style="position: absolute; left: ${details.article.crowd_status.level}%;">
-                        <span class="material-symbols-outlined"
-                            style="position: absolute; margin-top: 5px;">
+                        <span class="gglmats" style="position: absolute; margin-top: 5px;">
                             north
                         </span>
                     </div>
@@ -327,11 +375,7 @@ function writeArticleOverview(details, fadein, scroll_top, target, FORCE){
             writeOverviewContent(`${EVENT_HEADER}<div id="ctx-article" class="article">${__htmlw}</div>`, __onload);
 
         $(cssName.ovvctx).removeClass("fadein").removeClass("_fadein");
-        $(".tg-active").removeClass("tg-active");
-        $(this).addClass("tg-active");
-        $(".article-image").addClass("doaJSD");
-        $("#--art-header").on("error", function(){ onerror.apply(this, ["h"]); }).attr("src", pathConvertfunc(orgname, details.article.images.header));
-        $("#--art-icon").on("error", function(){ onerror.apply(this, ["i"]); }).attr("src", pathConvertfunc(orgname, details.object.images.icon));
+        chOvv.call(this);
     }
 
     $("#ovv-t-description-sd").off("click", Ovv_tg_listener.description).on("click", showDescription);
@@ -359,11 +403,4 @@ async function writeOverviewContent(ctx, callback){
         if (callback !== void 0)
             callback();
     });
-}
-
-
-function init(){
-    /**@ts-ignore @type {HTMLElement} */
-    const overview  = document.getElementById(cssName.ovv);
-    const closebtn = document.getElementById(cssName.ovvclose.slice(1));
 }

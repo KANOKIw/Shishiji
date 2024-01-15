@@ -184,8 +184,8 @@ const overlay_modes = {
     fselector: {
         opened: false,
         colors: {
-            current: "rgba(90, 434, 37, 0.8)",
-            else: "rgba(188, 34, 124, 0.75)",
+            current: "var(--shishiji-fselector-current)",
+            else: "var(--shishiji-fselector-else)",
         }
     },
 };

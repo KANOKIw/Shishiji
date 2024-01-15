@@ -1,8 +1,8 @@
-import { mapObject } from "../../assets/shishiji-dts/objects";
+import { mapObj } from "../../assets/shishiji-dts/objects";
 
 
 interface mapObjComponent {
-    [key: string]: mapObject
+    [key: string]: mapObj
 }
 
 interface tr {
@@ -11,6 +11,6 @@ interface tr {
 }
 
 export {
-    mapObject,
+    mapObj as mapObject,
     mapObjComponent
 }
