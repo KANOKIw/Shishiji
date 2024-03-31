@@ -1,9 +1,3 @@
-# Change Log
-
-All notable changes to the "ofos-kanokiw" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+version https://git-lfs.github.com/spec/v1
+oid sha256:d17769b20bbc80584305e690ba342045190337751d227f13e0485c3deebc9d27
+size 247

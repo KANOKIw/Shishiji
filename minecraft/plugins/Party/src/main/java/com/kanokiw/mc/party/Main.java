@@ -1,31 +1,3 @@
-package si.f5.mitminecraft.funcs;
-
-import java.net.http.WebSocket.Listener;
-
-import net.md_5.bungee.api.plugin.Plugin;
-
-public class Main extends Plugin implements Listener {
-    private static Main instance;
-
-    @Override
-    public void onEnable(){
-        setInstance(this);
-        getProxy().getPluginManager().registerCommand(this, new Lobby());
-        getProxy().getPluginManager().registerCommand(this, new Mmbetac());
-        getProxy().getPluginManager().registerCommand(this, new Party());
-        getProxy().getPluginManager().registerCommand(this, new Grsn());
-        getProxy().getPluginManager().registerCommand(this, new Pl());
-        getProxy().getPluginManager().registerCommand(this, new Chat());
-        getProxy().getPluginManager().registerCommand(this, new Pc());
-        getProxy().getPluginManager().registerListener(this , new Events());
-        getLogger().info("< KANOKIw-BungeeCOrd loaded!! >");
-    }
-
-    public static Main getInstance(){
-        return instance;
-    }
-
-    private static void setInstance(Main instance){
-        Main.instance = instance;
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:c75ceebf32ff7aece9c2839d14058323c8913b5e6905926018f749bd19d2a0e1
+size 1127

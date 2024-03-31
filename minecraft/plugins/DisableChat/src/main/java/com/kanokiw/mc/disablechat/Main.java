@@ -1,20 +1,3 @@
-package si.f5.mitminecraft.disablechat;
-
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.Listener;
-
-public class Main extends JavaPlugin implements Listener{
-    @Override
-    public void onEnable(){
-        getServer().getPluginManager().registerEvents(this, this);
-        getLogger().info("DisableChat loaded");
-    }
-
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event){
-        if (event.getMessage().startsWith("/")) return;
-        event.setCancelled(true);
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a913eb6d2755523ceb71f47c2e202fb216d6ce25f8fafbd9c7b07ca4fea14e44
+size 621

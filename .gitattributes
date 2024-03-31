@@ -1,12 +1,3 @@
-* text=auto
-
-LICENSE eol=crlf
-
-*.bat eol=crlf
-*.cmd eol=crlf
-*.ps1 eol=lf
-*.sh eol=lf
-*.rtf -text
-
-**/*.json linguist-language=jsonc
-*.mcfunction linguist-vendored
+version https://git-lfs.github.com/spec/v1
+oid sha256:3c3746c9139ddca329da7b31e6af5509b9156efb1030ec309200adefe4e489fd
+size 279

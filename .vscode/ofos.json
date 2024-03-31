@@ -1,7 +1,3 @@
-{
-    "enabled": true,
-    "startupfiles": [
-        "src/assets/*^[builds css]",
-        "src/server/*"
-    ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ccab727f837a71785cf066d4e658770474640e07159eed7f1c2d30de1b553c25
+size 121

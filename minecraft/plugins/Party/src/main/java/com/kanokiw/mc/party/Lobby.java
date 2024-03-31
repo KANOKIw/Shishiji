@@ -1,35 +1,3 @@
-package si.f5.mitminecraft.funcs;
-
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.ProxyServer;
-
-public class Lobby extends Command {
-
-    public Lobby() {
-        super("lobby", null, "l");
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (sender instanceof net.md_5.bungee.api.connection.ProxiedPlayer){
-            net.md_5.bungee.api.connection.ProxiedPlayer player = (net.md_5.bungee.api.connection.ProxiedPlayer) sender;
-            String fMsg = ChatColor.GRAY + "Warping you to the lobby...";
-            TextComponent msg = new TextComponent(fMsg);
-            ServerInfo lobby = ProxyServer.getInstance().getServerInfo("lobby");
-            if (!player.getServer().getInfo().getName().equals("lobby")){
-                sender.sendMessage(msg);
-                if (lobby.isRestricted()){
-                    sender.sendMessage(new TextComponent(ChatColor.RED + "エラー: ロビーに接続する権限がありません！"));
-                    return;
-                }
-                player.connect(lobby);
-            } else {
-                sender.sendMessage(new TextComponent(ChatColor.GREEN + "既にロビーに接続しています！"));
-            }
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:b35a3ebf0dbada6323ed386a197ebc486322bace956fb8859f58ce2cafadd941
+size 1467
