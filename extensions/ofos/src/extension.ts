@@ -1,16 +1,3 @@
-import * as vscode from "vscode";
-import * as file from "./file";
-
-import { openStartupFiles, createConfigFile } from "./handler";
-
-
-export function activate(context: vscode.ExtensionContext): void{
-	openStartupFiles();
-
-	const disposable = vscode.commands.registerCommand("ofos.createConfigFIle", createConfigFile);
-
-	context.subscriptions.push(disposable);
-}
-
-
-export {}
+version https://git-lfs.github.com/spec/v1
+oid sha256:61550d078b6f9cf1e427346ca47802199614554776e18f58dd0fe9a3d885e3dc
+size 389
