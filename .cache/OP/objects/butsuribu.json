@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "物理部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#009094",
+        "content": "§c展示紹介↓(文字サイズnormal、強調部分色変更あり、80〜100文字)§v\n§v§r\n　我々物理部は今年も§6セタゴラスイッチ§rを展示します。§v\n物理部は、毎年§6人気投票一位§rを取っていたり、\n過去には§6テレビのニュース§rでも紹介されたクオリティを誇っていますので、\n是非お越しください。§v§v§v\n\n§c↓以降見出し(あってもなくてもよし。SNS、注意事項、ルール等、各々に内容は任せる、見出し間は2〜3行開ける)\n\n§v§l§z§b物理部のSNS§r§c←サイズ大lvl.1、色自由§v\n §l#:LINK-H=https://x.com/SetaGakuPhysics-T=twitter;#§r@SetaGakuPhysics\n§v§v§v\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "物理実験室（放光館３階）",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 339,
+            "y": 581
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "butsuribu"
+}

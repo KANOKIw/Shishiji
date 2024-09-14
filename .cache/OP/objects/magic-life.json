@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "Magic life",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z§v観客のみなさんの目の前で、あっと驚くような現象を見せましょう！§vもしかしたらテレビでの§l「あの」§r§zマジックもあるかも知れないです",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "2D",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1302,
+            "y": 213
+        },
+        "images": {
+            "icon": "image_2.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "magic-life"
+}

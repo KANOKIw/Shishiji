@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "いきものがたり",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#98d400",
+        "content": "\n§z生物部では§b虫の標本§r§zや§b熱帯魚、爬虫類生物§r§zを展示しており\nイベントとして§b§vカイコの解剖実験§r§zもしています\n§vぜひお越しください！！\n§v§v§b放光館4F§r§zでやってます\n\n\n\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "生物実験室",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "biobio"
+}

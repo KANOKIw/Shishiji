@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "Let's tennis",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#fff76b",
+        "content": "§6§z硬式テニス部ではストラックアウト、ミニゴルフ、ラリーを体験できます！\n§v§vストラックアウトとミニゴルフは、高得点者ランキングが載ります。頑張ってください！\n§v§vラリー体験では、優しいテニス部員と１対１で打ち合いができます。\n未経験者も楽しめます！\n§v§vぜひお越しください！！\n\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_5.jpeg"
+        },
+        "venue": "グラウンド(校舎側)",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1774,
+            "y": 940
+        },
+        "images": {
+            "icon": "image_2.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "kousikiT"
+}

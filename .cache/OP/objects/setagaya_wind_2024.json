@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "光る世田谷wind2024",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z私たちは吹奏楽部です。§v誰もが一度は聞いたことのある曲を金管楽器の迫力ある音と木管楽器の明るいメロディーでお届けします。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpg"
+        },
+        "venue": "修道館ホール",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 392,
+            "y": 1488
+        },
+        "images": {
+            "icon": "image_1.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "setagaya_wind_2024"
+}

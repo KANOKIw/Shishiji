@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "鉄道研究同好会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "　鉄研は今年で50年。\n§v§6 クイズ大会§r、§6発車メロディ体験§rなどの参加型のイベントのほか、\n§v§d部員の研究内容§rや§dジオラマの展示§rを行っています。\n§v    新幹線で実際に使われていた§n§a§lグリーン車の座席§rにも座れます！§r\n§v　その他様々な展示を用意しています。\n§v§v    §z発心館§c§z3階 2D・2E教室§rです。§v    ぜひお越しください！\n§v§v§v鉄研に関する情報を発信！\n§v§b§z§l§o鉄研公式Twitter§r(現X)§z§l§b§o↓§r§v§v§z#:LINK-H=https://x.com/SetagakuTekken?t=kI_2uFJ1MhJT5hdOR8NPIw&s=06-T=@SetagakuTekken;#\n\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "2D, 2E",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1233,
+            "y": 262
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "tetudou"
+}

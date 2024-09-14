@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "模型研究会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "\n模型研究会は模型を展示します。展示する模型は、ガンプラや航空機の模型などです§r\n。今年初めて展示しますが、部員全員で作り上げた作品はどれも§r§vクオリティが高いため是非お越しください！\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "2B, 後ろ側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1718,
+            "y": 524
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "2F"
+    },
+    "discriminator": "mokeikenkyu"
+}

@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "世界のトランプ大全4",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "ここではみなさんが知らないような§l§aトランプを使った世界各国の特殊なルール§rで遊べます！いつも同じトランプゲームのルールに飽き飽きしている、世界のトランプゲームのルールを知りたい！と思っている方々はぜひお越しください！\n\n\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.png"
+        },
+        "venue": "3B",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1642,
+            "y": 232
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "igloo3"
+}

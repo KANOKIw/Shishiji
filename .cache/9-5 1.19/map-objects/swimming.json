@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "Aqua riders(水泳部)",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "∫:IMG-S=image_1.jpeg-W=100;∫§b§a§b§l§y§bウォーターボール§r§zで§v§b§y§l水上散歩！\n§z§l§r§v透明なボールに入って、水上を歩く感覚を楽しめる新体験 です‼§v\n\n整理券を配布中！階段を下った先の受付で整理券をゲットしてね。§v\n\n水泳部が提供する自慢のアトラクションです。§v\n\nぜひこの機会にチャレンジしてみてください～！\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.png"
+        },
+        "venue": "VERY HARD",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": ""
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "swimming"
+}

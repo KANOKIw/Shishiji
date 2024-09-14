@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "数学科",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#0050ff",
+        "content": "§v§z数学の問題を一緒に解きます！\n§v中学生で学ぶ数学を一足先に触れてみましょう！\n§v§v§c§l注意事項\n§v§r§l§n途中参加ができない可能性がありますので、ご了承ください。",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.png"
+        },
+        "venue": "3A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1700,
+            "y": 180
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "suugakuka"
+}

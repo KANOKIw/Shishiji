@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "不思議な檻宮",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z§6謎を解き進めて制限時間以内に脱出せよ！！\n§r§v4E有志で§a新しい脱出ゲーム§rを作ってみました。\n§r§v§c問題作成§rや§c装飾§r、§c仕掛け§rにもこだわりました。\n§r§v§b難易度ごとに挑戦できるので、小学生から大人まで、多くの人の挑戦お待ちしています！\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "選択教室 5",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1355,
+            "y": 551
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "fushiji"
+}

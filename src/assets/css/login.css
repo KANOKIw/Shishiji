@@ -1,0 +1,58 @@
+*{
+    margin: 0;
+    font-family: var(--font-view);
+}
+
+.sakcmo{
+    min-height:100%;
+    background: 
+    linear-gradient(rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100%) 
+    0 0/100% 200%;
+    animation: rain .5s linear infinite;
+}
+
+@keyframes rain{
+    to {background-position:0 -200%}
+}
+
+.loginmat{
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+}
+
+#login_enter{
+    border-radius: 0;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: transparent;
+    padding: 2px 4px 2px 4px;
+}
+
+.dsadadaw{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input{
+    outline: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+.wdADW{
+    border-width: thin;
+    border-style: solid;
+    padding-right: 5px;
+    background-color: white;
+}
+
+#buttonEye{
+    cursor: pointer;
+}

@@ -1,0 +1,851 @@
+{
+    "band": {
+        "delay": 0,
+        "vote": [
+            "AIAN's",
+            "HEKI",
+            "背骨軟骨",
+            "ラムダ",
+            "険悪",
+            "T-RUSHES",
+            "ベジタリアンズ",
+            "くいんてっと",
+            "へっじほっぐ！！",
+            "バレー部バンド！？",
+            "Blue mates",
+            "ポジニ来ズ",
+            "OCTED",
+            "ごっつあんクラブ"
+        ],
+        "day1": [
+            {
+                "name": "AIAN's",
+                "description": "AIAN'sです。Pretender、ないものねだり、恋をやります。よろしく！！",
+                "musics": [
+                    "pretender",
+                    "ないものねだり",
+                    "恋"
+                ],
+                "takes": 14,
+                "starts": "9:30"
+            },
+            {
+                "name": "HEKI",
+                "description": "シンデレラボーイをやります！本気で演奏するので来てください！",
+                "musics": [
+                    "シンデレラボーイ"
+                ],
+                "takes": 4,
+                "starts": "9:45"
+            },
+            {
+                "name": "背骨軟骨",
+                "description": "丸の内サディスティックと春泥棒はどちらも僕たちにとって難しい曲なので、なるべくミスの無いよう頑張ります。",
+                "musics": [
+                    "春泥棒",
+                    "丸の内サディスティック"
+                ],
+                "takes": 9,
+                "starts": "9:50"
+            },
+            {
+                "name": "ラムダ",
+                "description": "飛行艇という盛り上がれる曲を演奏します。",
+                "musics": [
+                    "飛行艇"
+                ],
+                "takes": 5,
+                "starts": "10:03"
+            },
+            {
+                "name": "険悪",
+                "description": "人生にある沢山の悩み・不安。それらは生きていく上で避けられない不可抗力ですが、今日だけは忘れさせます。楽しんでね。",
+                "musics": [
+                    "不可抗力",
+                    "逆光",
+                    "晴る"
+                ],
+                "takes": 12,
+                "starts": "10:10"
+            },
+            {
+                "name": "T-RUSHES",
+                "description": "私たちT-RUSHESは今回ピースサインとナンセンス文学を演奏させていただきます。",
+                "musics": [
+                    "ナンセンス文学",
+                    "ピースサイン"
+                ],
+                "takes": 9,
+                "starts": "10:25"
+            },
+            {
+                "name": "ベジタリアンズ",
+                "description": "ベジタリアンは豪雨",
+                "musics": [
+                    "群青日和",
+                    "kick back"
+                ],
+                "takes": 8,
+                "starts": "10:35"
+            },
+            {
+                "name": "くいんてっと",
+                "description": "ゆったりなテンポの曲から激し目のテンポの曲まで色々な曲を披露します。ぜひ男子校の影(シルエット)を見て行ってください。",
+                "musics": [
+                    "シルエット",
+                    "さよならエレジー",
+                    "欲望に満ちた青年団"
+                ],
+                "takes": 13,
+                "starts": "10:47"
+            },
+            {
+                "name": "へっじほっぐ！！",
+                "description": "私たちはdistortionとインフェルノを披露します。ぜひ見てください",
+                "musics": [
+                    "インフェルノ",
+                    "distotion"
+                ],
+                "takes": 6,
+                "starts": "11:10"
+            },
+            {
+                "name": "バレー部バンド！？",
+                "description": "ピースサインとチェリーの2曲を演奏します。気持ちっしょ！",
+                "musics": [
+                    "ピースサイン",
+                    "チェリー"
+                ],
+                "takes": 10,
+                "starts": "11:18"
+            },
+            {
+                "name": "Blue mates",
+                "description": "僕たちのバンドは今年の春に結成した初心者バンドですが文化祭で青と夏、小さな恋の歌を演奏するために練習してきたので是非聞きに来てください。",
+                "musics": [
+                    "青と夏",
+                    "小さな恋のうた"
+                ],
+                "takes": 8,
+                "starts": "11:30"
+            },
+            {
+                "name": "ポジニ来ズ",
+                "description": "バンプとラッドの曲をやります!",
+                "musics": [
+                    "アカシア",
+                    "君と羊と青",
+                    "前前前世"
+                ],
+                "takes": 12,
+                "starts": "11:41"
+            },
+            {
+                "name": "OCTED",
+                "description": "Mrs. GREEN APPLE、KingGnuなど大人気アーティストの曲を最高の6人で披露します！どれもめちゃめちゃ難しい曲ばかりですが、その分盛り上がること間違いなしなのでぜひ来てください！",
+                "musics": [
+                    "シャルル",
+                    "一途",
+                    "スパークル",
+                    "ライラック"
+                ],
+                "takes": 19,
+                "starts": "11:55"
+            },
+            {
+                "name": "#雨と晴れ",
+                "description": "田園調布学園のバンドが獅子児祭に出張公演！",
+                "musics": [
+                    "イケナイ太陽"
+                ],
+                "takes": 5,
+                "starts": "12:17"
+            },
+            {
+                "name": "ごっつあんクラブ",
+                "description": "文化祭名物ごっつあんクラブです",
+                "musics": [
+                    "The beginning",
+                    "全力少年",
+                    "できっこないをやらなくちゃ",
+                    "完全感覚ドリーマー"
+                ],
+                "takes": 19,
+                "starts": "12:25"
+            }
+        ],
+        "day2": [
+            {
+                "name": "AIAN's",
+                "description": "AIAN'sです。Pretender、ないものねだり、恋をやります。よろしく！！",
+                "musics": [
+                    "pretender",
+                    "ないものねだり",
+                    "恋"
+                ],
+                "takes": 14,
+                "starts": "12:15"
+            },
+            {
+                "name": "HEKI",
+                "description": "シンデレラボーイをやります！本気で演奏するので来てください！",
+                "musics": [
+                    "シンデレラボーイ"
+                ],
+                "takes": 4,
+                "starts": "12:30"
+            },
+            {
+                "name": "背骨軟骨",
+                "description": "丸の内サディスティックと春泥棒はどちらも僕たちにとって難しい曲なので、なるべくミスの無いよう頑張ります。",
+                "musics": [
+                    "春泥棒",
+                    "丸の内サディスティック"
+                ],
+                "takes": 9,
+                "starts": "12:35"
+            },
+            {
+                "name": "ラムダ",
+                "description": "飛行艇という盛り上がれる曲を演奏します。",
+                "musics": [
+                    "飛行艇"
+                ],
+                "takes": 5,
+                "starts": "12:48"
+            },
+            {
+                "name": "険悪",
+                "description": "人生にある沢山の悩み・不安。それらは生きていく上で避けられない不可抗力ですが、今日だけは忘れさせます。楽しんでね。",
+                "musics": [
+                    "不可抗力",
+                    "逆光",
+                    "晴る"
+                ],
+                "takes": 12,
+                "starts": "12:55"
+            },
+            {
+                "name": "T-RUSHES",
+                "description": "私たちT-RUSHESは今回ピースサインとナンセンス文学を演奏させていただきます。初心者バンドですが精一杯やらせてもらいますので温かい目で見てもらえると嬉しいです。",
+                "musics": [
+                    "ナンセンス文学",
+                    "ピースサイン"
+                ],
+                "takes": 9,
+                "starts": "13:10"
+            },
+            {
+                "name": "ベジタリアンズ",
+                "description": "ベジタリアンは豪雨",
+                "musics": [
+                    "群青日和",
+                    "kick back"
+                ],
+                "takes": 13,
+                "starts": "13:20"
+            },
+            {
+                "name": "くいんてっと",
+                "description": "ゆったりなテンポの曲から激し目のテンポの曲まで色々な曲を披露します。ぜひ男子校の影(シルエット)を見て行ってください。",
+                "musics": [
+                    "シルエット",
+                    "さよならエレジー",
+                    "欲望に満ちた青年団"
+                ],
+                "takes": 13,
+                "starts": "13:32"
+            },
+            {
+                "name": "へっじほっぐ！！",
+                "description": "私たちはdistortionとインフェルノを披露します。ぜひ見てください",
+                "musics": [
+                    "インフェルノ",
+                    "distotion"
+                ],
+                "takes": 6,
+                "starts": "14:00"
+            },
+            {
+                "name": "バレー部バンド！？",
+                "description": "ピースサインとチェリーの2曲を演奏します。気持ちっしょ！",
+                "musics": [
+                    "ピースサイン",
+                    "チェリー"
+                ],
+                "takes": 10,
+                "starts": "14:08"
+            },
+            {
+                "name": "Blue mates",
+                "description": "僕たちのバンドは今年の春に結成した初心者バンドですが文化祭で青と夏、小さな恋の歌を演奏するために練習してきたので是非聞きに来てください。",
+                "musics": [
+                    "青と夏",
+                    "小さな恋のうた"
+                ],
+                "takes": 8,
+                "starts": "14:20"
+            },
+            {
+                "name": "ポジニ来ズ",
+                "description": "バンプとラッドの曲をやります!",
+                "musics": [
+                    "アカシア",
+                    "君と羊と青",
+                    "前前前世"
+                ],
+                "takes": 12,
+                "starts": "14:31"
+            },
+            {
+                "name": "OCTED",
+                "description": "Mrs. GREEN APPLE、KingGnuなど大人気アーティストの曲を最高の6人で披露します！どれもめちゃめちゃ難しい曲ばかりですが、その分盛り上がること間違いなしなのでぜひ来てください！",
+                "musics": [
+                    "シャルル",
+                    "一途",
+                    "スパークル",
+                    "ライラック"
+                ],
+                "takes": 19,
+                "starts": "14:45"
+            },
+            {
+                "name": "ごっつあんクラブ",
+                "description": "文化祭名物ごっつあんクラブです",
+                "musics": [
+                    "The beginning",
+                    "全力少年",
+                    "できっこないをやらなくちゃ",
+                    "完全感覚Dreamer"
+                ],
+                "takes": 19,
+                "starts": "15:07"
+            }
+        ]
+    },
+    "dance": {
+        "vote": [
+            "stylish cowards",
+            "獅子児祭ARASHI",
+            "じゅに坂",
+            "あっぷるぱい",
+            "踊るバレー部サーブ&サンバ",
+            "LADY:FIRST",
+            "Da-iZU",
+            "ジョージーンズ",
+            "once",
+            "スンドゥブチゲ豆腐",
+            "リアルセタボーイズ",
+            "XⅡCBOYZ",
+            "2代目仏教少年団",
+            "SetarayKids",
+            "Plaisir",
+            "Arise"
+        ],
+        "day1": [
+            {
+                "name": "stylish cowards",
+                "description": "ダンス経験が全くない6人が、頑張って練習しました。new jeansのomgとtwiceのi can’t stop me を踊ります。一緒に楽しみましょう！！",
+                "musics": [
+                    "I CAN'T STOP ME",
+                    "OMG"
+                ],
+                "takes": 7,
+                "starts": "13:15"
+            },
+            {
+                "name": "獅子児祭ARASHI",
+                "description": "嵐の如きダンスを披露します。",
+                "musics": [
+                    "ARASHI",
+                    "Happiness"
+                ],
+                "takes": 5,
+                "starts": "13:25"
+            },
+            {
+                "name": "じゅに坂",
+                "description": "恋するフォーチュンクッキー",
+                "musics": [
+                    "恋するフォーチュンクッキー"
+                ],
+                "takes": 5,
+                "starts": "13:30"
+            },
+            {
+                "name": "あっぷるぱい",
+                "description": "青のすみかと第六感を踊ります！",
+                "musics": [
+                    "青のすみか",
+                    "第六感"
+                ],
+                "takes": 3,
+                "starts": "13:37"
+            },
+            {
+                "name": "踊るバレー部サーブ&サンバ",
+                "description": "僕たちは大森元貴さんのmidnightを踊ります！全員バレー部のダンスお楽しみください♪",
+                "musics": [
+                    "mid night"
+                ],
+                "takes": 4,
+                "starts": "13:42"
+            },
+            {
+                "name": "LADY:FIRST",
+                "description": "",
+                "musics": [
+                    "master plan"
+                ],
+                "takes": 4,
+                "starts": "13:47"
+            },
+            {
+                "name": "Da-iZU",
+                "description": "スターマインを踊り、千本桜のヲタ芸をします！盛り上げに来てください！",
+                "musics": [
+                    "千本桜",
+                    "スターマイン"
+                ],
+                "takes": 7,
+                "starts": "13:52"
+            },
+            {
+                "name": "ジョージーンズ",
+                "description": "",
+                "musics": [
+                    "super shy"
+                ],
+                "takes": 3,
+                "starts": "14:00"
+            },
+            {
+                "name": "once",
+                "description": "",
+                "musics": [
+                    "What is love?"
+                ],
+                "takes": 5,
+                "starts": "14:30"
+            },
+            {
+                "name": "リアルセタボーイズ",
+                "description": "世田学唯一のブレイクダンスチームREAL SETA BOYZ！",
+                "musics": [
+                    "脳漿炸裂ガール",
+                    "chariot"
+                ],
+                "takes": 4,
+                "starts": "14:38"
+            },
+            {
+                "name": "スンドゥブチゲ豆腐",
+                "description": "7人でNCT127のFactCheckを踊ります！掛け声をして一緒に盛り上がりましょう‼︎",
+                "musics": [
+                    "FactCheck"
+                ],
+                "takes": 4,
+                "starts": "14:43"
+            },
+            {
+                "name": "2代目仏教少年団",
+                "description": "easy impossible DNAの3曲を踊ります！1曲1曲気合い入れてるので是非見てください！",
+                "musics": [
+                    "EASY.Impossible",
+                    "DNA"
+                ],
+                "takes": 11,
+                "starts": "14:48"
+            },
+            {
+                "name": "XⅡCBOYZ",
+                "description": "3dとseven を踊ります。メンバーみんな初心者なので温かい目で見守ってくれると嬉しいです",
+                "musics": [
+                    "3D",
+                    "Seven"
+                ],
+                "takes": 3,
+                "starts": "15:00"
+            },
+            {
+                "name": "Arise",
+                "description": "会場をfireのように熱く盛り上げます。",
+                "musics": [
+                    "Fire"
+                ],
+                "takes": 4,
+                "starts": "15:05"
+            },
+            {
+                "name": "Plaisir",
+                "description": "こんにちはplaisirです。僕たちが披露する曲はrunway baby です。頑張って練習したのでぜひ見にきてください！",
+                "musics": [
+                    "runnaway baby"
+                ],
+                "takes": 5,
+                "starts": "15:11"
+            },
+            {
+                "name": "SetarayKids",
+                "description": "Stray kidsのLALALA踊ります。イケメンマッチョ集団で〜す。見たら気持ちよくなるよ〜ん。これをみたLA, 君LAは, 心を踊LAさせずには, いLAれない(樂)",
+                "musics": [
+                    "LALALALA"
+                ],
+                "takes": 4,
+                "starts": "15:17"
+            }
+        ],
+        "day2": [
+            {
+                "name": "stylish cowards",
+                "description": "ダンス経験が全くない6人が、頑張って練習しました。new jeansのomgとtwiceのi can’t stop me を踊ります。一緒に楽しみましょう！！",
+                "musics": [
+                    "I CAN'T STOP ME",
+                    "OMG"
+                ],
+                "takes": 7,
+                "starts": "9:30"
+            },
+            {
+                "name": "獅子児祭ARASHI",
+                "description": "嵐の如きダンスを披露します。",
+                "musics": [
+                    "ARASHI",
+                    "Happiness"
+                ],
+                "takes": 5,
+                "starts": "9:40"
+            },
+            {
+                "name": "じゅに坂",
+                "description": "恋するフォーチュンクッキー",
+                "musics": [
+                    "恋するフォーチュンクッキー"
+                ],
+                "takes": 5,
+                "starts": "9:46"
+            },
+            {
+                "name": "あっぷるぱい",
+                "description": "青のすみかと第六感を踊ります！",
+                "musics": [
+                    "青のすみか",
+                    "第六感"
+                ],
+                "takes": 3,
+                "starts": "9:52"
+            },
+            {
+                "name": "踊るバレー部サーブ&サンバ",
+                "description": "僕たちは大森元貴さんのmidnightを踊ります！全員バレー部のダンスお楽しみください♪",
+                "musics": [
+                    "mid night"
+                ],
+                "takes": 4,
+                "starts": "9:57"
+            },
+            {
+                "name": "LADY:FIRST",
+                "description": "",
+                "musics": [
+                    "master plan"
+                ],
+                "takes": 4,
+                "starts": "10:02"
+            },
+            {
+                "name": "Da-iZU",
+                "description": "スターマインを踊り、千本桜のヲタ芸をします！盛り上げに来てください！",
+                "musics": [
+                    "千本桜",
+                    "スターマイン"
+                ],
+                "takes": 7,
+                "starts": "10:07"
+            },
+            {
+                "name": "ジョージーンズ",
+                "description": "",
+                "musics": [
+                    "super shy"
+                ],
+                "takes": 3,
+                "starts": "10:16"
+            },
+            {
+                "name": "once",
+                "description": "",
+                "musics": [
+                    "What is love?"
+                ],
+                "takes": 5,
+                "starts": "10:45"
+            },
+            {
+                "name": "リアルセタボーイズ",
+                "description": "世田学唯一のブレイクダンスチームREAL SETA BOYZ！",
+                "musics": [
+                    "脳漿炸裂ガール",
+                    "chariot"
+                ],
+                "takes": 4,
+                "starts": "10:53"
+            },
+            {
+                "name": "スンドゥブチゲ豆腐",
+                "description": "7人でNCT127のFactCheckを踊ります！掛け声をして一緒に盛り上がりましょう‼︎",
+                "musics": [
+                    "FactCheck"
+                ],
+                "takes": 4,
+                "starts": "10:58"
+            },
+            {
+                "name": "2代目仏教少年団",
+                "description": "easy impossible DNAの3曲を踊ります！1曲1曲気合い入れてるので是非見てください！",
+                "musics": [
+                    "EASY",
+                    "Impossible",
+                    "DNA"
+                ],
+                "takes": 11,
+                "starts": "11:03"
+            },
+            {
+                "name": "Stella",
+                "description": "田園調布学園のバンドが獅子児祭に出張",
+                "musics": [
+                    "Stellaスペシャルメドレー"
+                ],
+                "takes": 6,
+                "starts": "11:16"
+            },
+            {
+                "name": "XⅡCBOYZ",
+                "description": "3dとseven を踊ります。メンバーみんな初心者なので温かい目で見守ってくれると嬉しいです",
+                "musics": [
+                    "3D",
+                    "Seven"
+                ],
+                "takes": 3,
+                "starts": "11:23"
+            },
+            {
+                "name": "SetarayKids",
+                "description": "Stray kidsのLALALA踊ります。イケメンマッチョ集団で〜す。見たら気持ちよくなるよ〜ん。これをみたLA, 君LAは, 心を踊LAさせずには, いLAれない(樂)",
+                "musics": [
+                    "LALALALA"
+                ],
+                "takes": 4,
+                "starts": "11:28"
+            },
+            {
+                "name": "Plaisir",
+                "description": "こんにちはplaisirです。僕たちが披露する曲はrunway baby です。頑張って練習したのでぜひ見にきてください！",
+                "musics": [
+                    "runnaway baby"
+                ],
+                "takes": 5,
+                "starts": "11:33"
+            },
+            {
+                "name": "Arise",
+                "description": "会場をfireのように熱く盛り上げます。",
+                "musics": [
+                    "Fire"
+                ],
+                "takes": 4,
+                "starts": "11:40"
+            }
+        ]
+    },
+    "misc": {
+        "vote": [
+            "CHORUS FESTIVAL(2年合唱コンクール)2024",
+            "ダンスフリーステージ",
+            "先生 & 生徒歌唱大会",
+            "クイズ世田学生は受験生より賢いの?!",
+            "クイズ先生はもちろん生徒より賢いよね？",
+            "SETAGAKU筋肉自慢",
+            "教員によるクラシックコンサート",
+            "獅子児ピアノの森",
+            "映研ロードショー",
+            "弾き語りライブ(竹原ピストル cover)",
+            "S1グランプリ(お笑いライブ)",
+            "トロワ・クール　ミニコンサート",
+            "S1グランプリ",
+            "劇団獅子〜演劇・コント",
+            "吹奏楽部 Festival Concert 2024",
+            "みんなでプレゼン！(政治経済研究部)",
+            "この素晴らしい学園に爆砲を"
+        ],
+        "武道場": {
+            "day1": [
+                {
+                    "name": "CHORUS FESTIVAL(2年合唱コンクール)2024",
+                    "starts": "10:00",
+                    "takes": 120,
+                    "description": "2年生の各クラスが、コンクール形式で合唱を披露します。男子だけの合唱にどうぞご注目ください。〈課題曲〉マイバラード〈自由曲〉: A組:COSMOS, B組:時の旅人, C組:新しい世界へ, D組:予感, E組:時を越えて, 〈全体合唱〉We’ll Find The Way"
+                },
+                {
+                    "name": "ダンスフリーステージ",
+                    "starts": "12:30",
+                    "takes": 30,
+                    "description": ""
+                },
+                {
+                    "name": "先生 & 生徒歌唱大会",
+                    "starts": "13:30",
+                    "takes": 30,
+                    "description": "生徒と先生それぞれが練習してきた曲を歌います。歌の先生と言えば.....という方を2人招待させて頂きました。生徒と先生のデュエットもあるのでお楽しみに！第ゼロ感, 栄光の架橋, スパークル, ギラギラ, 怪獣の花唄, スターマイン"
+                },
+                {
+                    "name": "クイズ世田学生は受験生より賢いの?!",
+                    "starts": "14:45",
+                    "takes": 30,
+                    "description": "受験生と世田学生でクイズ対決をします！世田学の過去問や、さまざまな分野から出題予定なので是非来てみてください！"
+                }
+            ],
+            "day2": [
+                {
+                    "name": "クイズ先生はもちろん生徒より賢いよね？",
+                    "starts": "11:00",
+                    "takes": 30,
+                    "description": "受験生と世田学生でクイズ対決をします！世田学の過去問や、さまざまな分野から出題予定なので是非来てみてください！"
+                },
+                {
+                    "name": "SETAGAKU筋肉自慢",
+                    "starts": "12:00",
+                    "takes": 30,
+                    "description": "世田谷学園のゴリマッチョ1位を決めます。"
+                },
+                {
+                    "name": "ダンスフリーステージ",
+                    "starts": "13:00",
+                    "takes": 30,
+                    "description": ""
+                }
+            ]
+        },
+        "放光館": {
+            "day1": [
+                {
+                    "name": "教員によるクラシックコンサート",
+                    "starts": "9:30",
+                    "takes": 60,
+                    "description": ""
+                },
+                {
+                    "name": "獅子児ピアノの森",
+                    "starts": "11:00",
+                    "takes": 60,
+                    "description": "少しでも興味があったら是非来てくださいな素敵な演奏を届けます"
+                },
+                {
+                    "name": "映研ロードショー",
+                    "starts": "12:15",
+                    "takes": 30,
+                    "description": "合宿で撮影した、自主制作映画「摩訶」を放光館ホールにて上映します。サスペンス映画なのですが、特別怖いシーンはないので、ぜひ、立ち寄ってみて下さい。"
+                },
+                {
+                    "name": "弾き語りライブ(竹原ピストル cover)",
+                    "starts": "13:15",
+                    "takes": 30,
+                    "description": "竹原ピストルが大好きです。竹原ピストルのカバーと今は解散してしまった竹原ピストル（ボーカル、アコースティックギター）と濱埜宏哉（鍵盤、コーラス）による二人組ユニットである野狐禅のカバーを2人でそれぞれ半々で披露します。"
+                },
+                {
+                    "name": "S1グランプリ(お笑いライブ)",
+                    "starts": "14:00",
+                    "takes": 75,
+                    "description": "グループ順序:<br>&nbsp;マミろれん: 緊張してます。<br>&nbsp;GGEZ(じーじーいーじー): Good game,Easy!<br>&nbsp;かせのまた: 優勝したら賞金で車 買います！"
+                },
+                {
+                    "name": "映研ロードショー",
+                    "starts": "15:30",
+                    "takes": 15,
+                    "description": "合宿で撮影した、自主制作映画「摩訶」を放光館ホールにて上映します。サスペンス映画なのですが、特別怖いシーンはないので、ぜひ、立ち寄ってみて下さい。"
+                }
+            ],
+            "day2": [
+                {
+                    "name": "トロワ・クール　ミニコンサート",
+                    "starts": "9:45",
+                    "takes": 60,
+                    "description": ""
+                },
+                {
+                    "name": "S1グランプリ(お笑いライブ)",
+                    "starts": "14:00",
+                    "takes": 75,
+                    "description": "グループ順序:<br>&nbsp;マミろれん: 緊張してます。<br>&nbsp;GGEZ(じーじーいーじー): Good game,Easy!<br>&nbsp;かせのまた: 優勝したら賞金で車 買います！"
+                },
+                {
+                    "name": "映研ロードショー",
+                    "starts": "12:15",
+                    "takes": 30,
+                    "description": "合宿で撮影した、自主制作映画「摩訶」を放光館ホールにて上映します。サスペンス映画なのですが、特別怖いシーンはないので、ぜひ、立ち寄ってみて下さい。"
+                },
+                {
+                    "name": "劇団獅子〜演劇・コント",
+                    "starts": "13:00",
+                    "takes": 30,
+                    "description": "劇団獅子が贈るコントと演劇。それが見れるのは二日目の演劇部のステージのみです！是非来てください！"
+                },
+                {
+                    "name": "弾き語りライブ(竹原ピストル cover)",
+                    "starts": "13:45",
+                    "takes": 45,
+                    "description": "竹原ピストルが大好きです。竹原ピストルのカバーと今は解散してしまった竹原ピストル（ボーカル、アコースティックギター）と濱埜宏哉（鍵盤、コーラス）による二人組ユニットである野狐禅のカバーを2人でそれぞれ半々で披露します。"
+                },
+                {
+                    "name": "映研ロードショー",
+                    "starts": "14:45",
+                    "takes": 30,
+                    "description": "合宿で撮影した、自主制作映画「摩訶」を放光館ホールにて上映します。サスペンス映画なのですが、特別怖いシーンはないので、ぜひ、立ち寄ってみて下さい。"
+                }
+            ]
+        },
+        "修道館ホール": {
+            "day1": [
+                {
+                    "name": "吹奏楽部 Festival Concert 2024",
+                    "starts": "13:30",
+                    "takes": 120,
+                    "description": "今年は辰年ということで迫力あるドラゴンの曲を演奏します！他にもJ-popや大河テーマ曲等、心踊るコンサートをぜひ聴きに来てください♪"
+                }
+            ],
+            "day2": [
+                {
+                    "name": "吹奏楽部 Festival Concert 2024",
+                    "starts": "10:00",
+                    "takes": 120,
+                    "description": "今年は辰年ということで迫力あるドラゴンの曲を演奏します！他にもJ-popや大河テーマ曲等、心踊るコンサートをぜひ聴きに来てください♪"
+                },
+                {
+                    "name": "みんなでプレゼン！(政治経済研究部)",
+                    "starts": "13:30",
+                    "takes": 30,
+                    "description": "政治経済研究部が各々研究した成果を発表します。ライトノベルから民主主義まで幅広い分野を発表しますので、ぜひ足を運んで見てください！"
+                }
+            ]
+        },
+        "校舎前": {
+            "day1": [
+                {
+                    "name": "この素晴らしい学園に爆砲を",
+                    "starts": "11:30",
+                    "takes": 30,
+                    "description": "化学部が、最大規模の実験を行います！！"
+                }
+            ],
+            "day2": [
+                {
+                    "name": "この素晴らしい学園に爆砲を",
+                    "starts": "11:30",
+                    "takes": 30,
+                    "description": "化学部が、最大規模の実験を行います！！"
+                }
+            ]
+        }
+    }
+}

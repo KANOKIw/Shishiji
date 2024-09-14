@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "Rebound1",
+        "subtitle": "",
+        "core_grade": "3年生",
+        "theme_color": "#fff0a3",
+        "content": "§y§l§6Uターンボーリング§r§v§h§v§z中学3年生たちの展示です！§r§v§r§v\n§z曲がったレーンに、様々なボール。§v§r§z普通とは一味違ったボーリングを\nお楽しみいただけます！§r§v§v§z今年は例年とは違い、クラスではなく§b自分たちが主体\n§r§zとなって制作を行いました。\n§r§v§v§y§6ぜひお越しください！\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "3D",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "igloo5"
+}

@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "模型製作会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "この団体では、メンバーで作った模型を使って、§6大規模ジオラマ§rを展示\nします。男子校ならではの§6「男のロマン」§rを存分に感じられる展示です。\nぜひお越しください。§v§v§zお願い§r§v展示物はメンバーが丁寧に作った\nもので、その特性上壊れやすいです。手を触れない様にして、小さなお子様がいらっしゃる場合は目を離さない様にお願いします。",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "2B, 黒板側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "mokeiseisaku"
+}

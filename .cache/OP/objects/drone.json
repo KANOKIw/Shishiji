@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "ドローン研究同好会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§zドローンの操縦体験と、レース中のカメラ映像が見られるFPVレース体験を実施しています！\n§v§c§y§l注意事項\n§v§z§0操縦体験の整理券は\n§v第一部  10時～48枚\n§v第二部  12時～48枚\n§v第三部  14時～48枚\n§v各部15分前から配布します\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "発心館4階（廊下・教室）",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1676,
+            "y": 365
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "drone"
+}

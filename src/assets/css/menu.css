@@ -1,0 +1,73 @@
+:root{
+    --font-view: "SF Pro JP", "SF Pro SC", "SF Pro TC", "SF Pro KR", "SF Pro Text", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ Pro W3", "Noto Sans JP", メイリオ, Meiryo, "ＭＳ Ｐゴシック", PingFang, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+*{
+    margin: 0;
+}
+
+html{
+    overflow-y: scroll;
+}
+
+body{
+    font-family: var(--font-view);
+    background-color: #bab8c5;
+}
+
+body{
+    min-height:100%;
+    background: 
+    linear-gradient(rgba(255,0,0,1) 0%, rgba(255,154,0,1) 10%, rgba(208,222,33,1) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgba(95,21,242,1) 70%, rgba(186,12,248,1) 80%, rgba(251,7,217,1) 90%, rgba(255,0,0,1) 100%) 
+    0 0/100% 200%;
+    animation: rain 500ms linear infinite;
+    overflow-y: scroll;
+}
+
+body > h1{
+    animation: brain 250ms linear infinite;
+}
+
+@keyframes brain{
+    0% { color: Magenta; }
+    33% { color: yellow; }
+    66% { color: Cyan; }
+    100% { color: Magenta; }
+}
+
+@keyframes rain{
+    to {background-position:0 200%}
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.container .image {
+    width: 50%;
+    position: relative;
+}
+
+.container img {
+    width: calc(100% - (20px * 2));
+    margin: 20px;
+    margin-top: 0;
+}
+
+.container h4 {
+    margin-left: 20px;
+}
+
+.protected{
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -webkit-user-drag: none;
+    -khtml-user-select: none;
+    -khtml-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}

@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "歴史部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "\n§v§r§z歴史部員が活動で創作した模型の展示や、クイズ、\nそして\n歴史部の所持する歴史的な物品の展示を行っています！\n§vぜひお越しください！\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpg"
+        },
+        "venue": "3C",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1734,
+            "y": 533
+        },
+        "images": {
+            "icon": "image_2.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "rekishibu"
+}

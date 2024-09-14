@@ -1,0 +1,21 @@
+{
+    "object": {
+        "type": {
+            "event": "facility",
+            "behavior": "static"
+        },
+        "coordinate": {
+            "x": 1250,
+            "y": 1250
+        },
+        "images": {
+            "icon": "shop.png"
+        },
+        "size": {
+            "width": 250,
+            "height": 250
+        },
+        "floor": "2F"
+    },
+    "discriminator": "shop"
+}

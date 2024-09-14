@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "オリジナルカードゲーム対戦会",
+        "subtitle": "",
+        "core_grade": "4年生",
+        "theme_color": "#000000",
+        "content": "\n§r§v§z当団体では、僕達が趣向を凝らしたオリジナル§r§zのカードゲーム、§r§z§c§lヒーローカードゲーム\n§r§zの対戦会を実施しております。\n§v必ず楽しませるので、ぜひお越しください。\n§v詳しくは下記のルールとサンプル画像をチェックしてみてください。\n§v※ヘッダー画像、サンプル画像はイメージです。\n§r§v\n§r§v§z#:LINK-H=https://happyadlerlife.com/wp-content/uploads/2024/09/0ba1f127dcbe085881814a5be395dc6b.pdf-T=ヒーローカードゲームルール　リンク;#\n§r§v\n§r§v∫:IMG-S=image_9.png-W=100;∫\n∫:IMG-S=image_10.png-W=100;∫\n∫:IMG-S=image_11.jpg-W=100;∫\n∫:IMG-S=image_13.jpg-W=100;∫\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_8.jpg"
+        },
+        "venue": "6D, 黒板側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1104,
+            "y": 1297
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "origcard"
+}

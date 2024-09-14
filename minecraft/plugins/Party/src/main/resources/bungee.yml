@@ -1,0 +1,13 @@
+name: Party
+main: com.kanokiw.mc.party.Main
+version: 1.0
+author: KANOKIw
+commands:
+  lobby:
+    description: come back to the lobby!
+    permission: default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  mmbetac:
+    description: null
+    permission: default
+    permission-message: "&cこのコマンドを使用する権限がありません！"

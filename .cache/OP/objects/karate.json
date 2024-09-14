@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "空手道部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z空手道演武を行います！\n§vまず最初に形を披露し、その後団体形を行います！§v次に組み手の打ち込みを行い、§vメインである板割りをやります！\n§v最後に来園者も道場に上がってもらい、§v突きや蹴りをミットを使っての簡単な練習をします！\n§v是非お越しください！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "武道場",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 247,
+            "y": 904
+        },
+        "images": {
+            "icon": "image_1.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "karate"
+}

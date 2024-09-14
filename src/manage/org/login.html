@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"></meta>
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Login - Shishiji fes">
+        <meta property="og:description" content="">
+        <meta property="og:site_name" content="KANOKIw">
+        <meta property="og:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta property="og:locale" content="ja">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shishijifes">
+        <meta name="twitter:creator" content="@KUMANKENw">
+        <meta name="twitter:title" content="Login - Shishiji fes">
+        <meta name="twitter:description" content="">
+        <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta name="theme-color" content="#15202b">
+        <title>Login - Shishiji fes</title>
+        <link rel="icon" href="/resources/img/favicon-org.ico">
+        <link rel="shortcut icon" href="/resources/img/favicon-org.ico">
+        <link rel="apple-touch-icon" href="//resources/img/favicon-org.ico">
+        <link rel="stylesheet" href="/src/assets/builds/gglMS.css">
+        <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
+        <link rel="stylesheet" href="/src/assets/css/login.css">
+        <link rel="manifest" href="/resources/pwa/manifest-org.json">
+        <script type="text/javascript" defer src="/src/assets/builds/jquery.3.4.3.min.js"></script>
+        <script type="text/javascript" defer src="/src/assets/utils.js"></script>
+        <script type="text/javascript" defer src="/src/assets/properties.js"></script>
+        <script type="text/javascript" defer src="/src/assets/manage/coop.js"></script>
+        <script type="text/javascript" defer src="/src/assets/manage/login.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/notifier.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/pictonotifier.js"></script>
+        <script type="text/javascript" defer src="/src/assets/manage/go_standalone.js"></script>
+        <script defer>
+            window.focus();
+        </script>
+    </head>
+    <body class="sakcmo">
+        <div class="loginmat protected">
+            <h2>Login</h2>
+            <p>実行委員から提供されたものを使用してください</p>
+            <div style="height: 150px; display: flex; align-items: center; justify-content: center;">
+                <form action="" method="get" class="form-login">
+                    <p style="color: red; display: none;" id="required-not-filled"></p>
+                    <div class="form-login">
+                        <div class="dsadadaw">
+                            <label for="name">username:&nbsp;</label>
+                            <div class="wdADW">
+                                <input type="text" name="username" id="login_username" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 5px;"></div>
+                    <div class="form-login">
+                        <div class="dsadadaw">
+                            <label for="email">password:&nbsp;</label>
+                            <div class="wdADW">
+                                <input type="password" name="password" id="login_password" autocomplete="off">
+                                <span id="buttonEye" class="fa fa-eye"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin: 5px;">
+                    <div class="form-login">
+                        <input id="login_enter" type="button" name="submit" value="Enter">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

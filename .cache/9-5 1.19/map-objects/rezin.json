@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "放課後レジンとか製作所",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "私たちは「§n§b§z放課後レジン製作所§r」です。\n§v§v昨年の獅子児祭で大好評だったレジンアクセサリーの§z§6【手作り体験】§rを、今年も開催します。\n§v§v§a【缶バッジ製作】§rも同じ教室でやっています！（作りたい方を選んでくださいね♪）\n§v§v楽しくレジンアクセサリーを手作りしませんか？§v§a【獅子児祭のお土産】§rにピッタリですよ！\n§v§v小学生のみなさんも、私たちがお手伝いしますので、安心してきてくださいね♪",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpg"
+        },
+        "venue": "4C",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "rezin"
+}

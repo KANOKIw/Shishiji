@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "バスケットボール部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#d19d01",
+        "content": "\n§r§v§v§zモデルゲームの見学と§v初心者でも楽しめるフリースロー体験を行っています！\n§vぜひお越しください！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.png"
+        },
+        "venue": "アリーナ(体育館)",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1638,
+            "y": 1308
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "basketball"
+}

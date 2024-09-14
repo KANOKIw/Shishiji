@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "演劇部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#320000",
+        "content": "§zショートコントを行います！§vぜひお越しください！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "2E",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1504,
+            "y": 200
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "engeki"
+}

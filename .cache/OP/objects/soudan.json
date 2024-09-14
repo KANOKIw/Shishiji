@@ -1,0 +1,39 @@
+{
+    "article": {
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "世田谷学園に関する質問を随時受け付けています！\n学校生活や受験のことまでどんな質問でもお答えします！§v§v\n§z§c§l注意事項§v\n§r§n§l§0図書室へは、発心館(一般教室がある建物)２階からは直接お越しになれません。§v\n発心館３階から渡り廊下を通ってお越しください。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "図書室",
+        "schedule": "",
+        "title": "相談コーナー"
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 850,
+            "y": 2155
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "2F"
+    },
+    "discriminator": "soudan"
+}

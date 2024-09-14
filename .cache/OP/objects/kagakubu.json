@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "化学部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§zもうまもなく七夕。七夕といえば星。星といえば光。ということで光に関する不思議な化学実験を行います。§v\n§v§c§l注意事項§v\n§r§0§n§l化学講義室のある放光館２階は発心館（一般教室のある建物）§r§c§l§n３階§r§n§lと渡り廊下でつながっています。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "化学講義室（放光館２階）",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 737,
+            "y": 145
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "kagakubu"
+}

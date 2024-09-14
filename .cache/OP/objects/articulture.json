@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "美術部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#e6c95b",
+        "content": "§z作品展示とキャンドル制作ワークショップを行います。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "美術室",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 906,
+            "y": 2201
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "articulture"
+}

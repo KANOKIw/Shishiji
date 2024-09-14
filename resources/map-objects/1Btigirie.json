@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "1B ちぎり絵",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§a§z世田谷ミュージアム2024§v§r\n1年B組は、§6黒姫サマースクール§rのまとめパネルと東山蝦夷「緑響く」の§6巨大ちぎり絵アート§rを展示！さらに土曜プログラムの美術各コースで生まれた作品を展示！お楽しみに！",
+        "crowd_status": 1,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "1B",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1317,
+            "y": 259
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "2F"
+    },
+    "discriminator": "1Btigirie"
+}

@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "劇団獅子座",
+        "subtitle": "",
+        "core_grade": "3年生",
+        "theme_color": "#fefb41",
+        "content": "§y§o§a§n3年生による劇です！§r§z§l§v日頃あまり聞けない生徒のあるあるなどを劇にしてみました。\n§v生徒の§mおっちょこちょいな§r§z§l思いもよらないような一面が見れる§bかも§r§z§l？\n§v他にも学園ミステリーを作ってみました。§h§§v§dあらすじ§r§v§z一年生の世田谷くんは普通の世田学生ですが、ある朝、\n親が起こしに行くとすでに世田谷くんはいませんでした。実は世田谷くんは§v§k 臘八摂心に行っていた§r§l§zのです。\n",
+        "crowd_status": 3,
+        "font_family": "Calligraphed",
+        "custom_tr": [],
+        "images": {
+            "header": "image_4.png"
+        },
+        "venue": "3E",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1842,
+            "y": 516
+        },
+        "images": {
+            "icon": "image_1.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "igloo6"
+}

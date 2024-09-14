@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "卓球部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#00ffb4",
+        "content": "§zご家族やお友達と一緒に卓球ができます！\nさらにミニゲームもやっているので是非お越しください！§v§v\n§c§z§l注意事項§v§r\n§n§l卓球場へはアリーナ（体育館）の奥の階段をのぼってお越しください。",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "卓球場",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 479,
+            "y": 2047
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "table-tennis"
+}

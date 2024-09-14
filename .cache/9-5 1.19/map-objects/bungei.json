@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "文芸部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "\n§l§xすりぬける展§r§v§v§l①コント披露§r§v自作コントを披露します。§v§v§l②部誌の配布§r§v部員達の作品集です。短編小説・エッセイからグラフィックデザインまで、ジャンルは様々。§v§v§l③「いわくつき」な品々の展示§v§r何の変哲もないモノに、架空の物語を添える。部員達が日常に潜ませた小さなドラマをお楽しみください。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_3.png"
+        },
+        "venue": "5D",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "bungei"
+}

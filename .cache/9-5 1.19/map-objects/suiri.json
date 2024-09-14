@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "推理ゲーム",
+        "subtitle": "",
+        "core_grade": "5年生",
+        "theme_color": "#000000",
+        "content": "§lこの教室では本格的な推理ゲームが出来ます！§r§v\n§l§n初心者の人も大歓迎§r§lなので是非来てみて下さい！\n§r§v§v\n§y§l企画内容§r§v\n§h§r\n§o§l§cある研究所で殺人事件が発生した。§r§v\n§oそこで私達は事件の犯人を突き止めようとしたが私達には犯人を見つけることが出来なかった§r§v\n§oなので私達は探偵を呼んでこの事件を解決してもらおうと思う。§r§v\n§o§lこれを読んでいるあなたが探偵だ§r§v\n§o§r§lぜひとも私達に力を貸して欲しい§r§v\n§h§r§v\n\n\n\n§r§r§v\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "5A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_7.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "suiri"
+}

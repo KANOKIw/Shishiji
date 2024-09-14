@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "仏教青年会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "こんにちは！仏教青年会です！§v今回、私たち仏教青年会は毎年恒例「坐禅体験」をする事になりました！初めは気が乗らないかもしれないけれど、学校中の展示物を回った後に思い出を整理する場としてなど活用できるかもしれないので、よかったら見に来て下さい！もちろん見学だけでも大丈夫です！よろしくお願い致します！\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "禅堂",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 994,
+            "y": 1891
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "bukkyou"
+}

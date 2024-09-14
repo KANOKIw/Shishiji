@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "何でも占い",
+        "subtitle": "",
+        "core_grade": "4年生",
+        "theme_color": "#ffffff",
+        "content": "§z何でも占いでは、何でも占いに来た人が使っているアイコンを使用して占うアイコン占いがあり、手相を使って占う手相占いがあります\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.webp"
+        },
+        "venue": "選択教室 4",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1230,
+            "y": 565
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "nademo"
+}

@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "ドット・ゴム",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z§eドット・ゴム§rでは、来場者の皆さんに輪ゴムを使ったゴム鉄砲を作っていただきます！作ったゴム鉄砲を用いて的当てをしたりすることができます！ぜひ来てください！",
+        "crowd_status": 1,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "3C",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1518,
+            "y": 541
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "igloo4"
+}

@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "柔道部",
+        "subtitle": "",
+        "core_grade": "4年生",
+        "theme_color": "#000000",
+        "content": "§r展示として僕達柔道部は、ダーツやバスケットボールを使って§6ゲームセンター§rを作りました。ゲームの§6スコア§rで他の人と競い、自分の名前を歴史に刻みましょう。自分の力を試したい方は是非お越しください。",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpg"
+        },
+        "venue": "4A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "zyudo"
+}

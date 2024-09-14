@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "生徒会執行部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§l§z§b生徒会執行部§r§v\n§l§aクイズ§rと§l§c人生ゲーム§rをやってます。§v\n§l§aクイズ§rは、学校の§l§d7箇所§rにクイズを貼っているのでぜひ解いてみてくださ\nい。\n§v§l§c人生ゲーム§rは、世田谷学園生の生活を体験§rできる§l§d双六§r\nを§l§d1階§b生徒会室§rで準備しているので、一緒に遊びましょう‼️\n§v§v§p§z是非来てください‼️\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.png"
+        },
+        "venue": "生徒会室",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "seitokai"
+}

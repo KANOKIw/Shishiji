@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "地理部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "ブラチリブこと地理部です！§v\n地理部では、今年§6スリーヒントクイズ§rを行います。\n主に地理部で定期的に行っている§6巡検§rの展示をしています。§v\n是非お越しください！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_3.jpeg"
+        },
+        "venue": "6B",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "tiringo"
+}

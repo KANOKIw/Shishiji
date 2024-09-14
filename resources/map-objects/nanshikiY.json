@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "軟式野球部",
+        "subtitle": "",
+        "core_grade": "5年生",
+        "theme_color": "#000000",
+        "content": "　　　　　§y§e\\初心者大歓迎/\n\n§r§z§v§v∫:IMG-S=image_2.jpeg-W=100;∫§v内容　バッティングセンター§v§z場所\n　グラウンド\n§v昼休憩以外全て活動しています！\n§v心してお待ちしております\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "校庭(野球倉庫側)",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1642,
+            "y": 1935
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "nanshikiY"
+}

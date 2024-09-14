@@ -1,0 +1,95 @@
+<style>
+    *{
+        margin: 0;
+    }
+    body{
+        background-color: gray;
+        --neoncolor: #ffffff;
+        --bsize: 100px;
+        --borderwidth: 4px;
+    }
+    .neonwww{
+        box-shadow: -1px -1px var(--neoncolor), 1px -1px var(--neoncolor),
+            1px 1px var(--neoncolor), -1px 1px var(--neoncolor),
+            0 0 0.1em var(--neoncolor), 0 0 0.1em var(--neoncolor) inset,
+            0 0 0.5em var(--neoncolor), 0 0 0.5em var(--neoncolor) inset,
+            0 0 1em var(--neoncolor), 0 0 1em var(--neoncolor);
+    }
+    .flxxt{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .uyhiagaalk{
+        width: var(--bsize);
+        height: var(--bsize);
+        border-radius: 50%;
+        position: relative;
+    }
+    .fourpoints{
+        position: absolute;
+        width: var(--bsize);
+        height: var(--bsize);
+    }
+    .fourpoints > span{
+        position: absolute;
+    }
+    .fourpoints > .point_1x{
+        position: absolute;
+        top: calc(var(--borderwidth)/2 * -1);
+        left: 50%;
+    }
+    .fourpoints > .point_2x{
+        position: absolute;
+        top: 50%;
+        left: calc(var(--borderwidth)/2 * -1);
+    }
+    .fourpoints > .point_3x{
+        position: absolute;
+        top: 50%;
+        right: calc(var(--borderwidth)/2 * -1);
+    }
+    .fourpoints > .point_4x{
+        position: absolute;
+        bottom: calc(var(--borderwidth)/2 * -1);
+        left: 50%;
+    }
+    .aTWs > span{
+        position: absolute;
+        background-color: white;
+        width: calc(var(--bsize)/10);
+        height: calc(var(--bsize)/10);
+        border-radius: 50%;
+    }
+    .ahcircle{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
+    .gaSg{
+        position: absolute;
+        border-radius: 50%;
+        background: conic-gradient(
+          transparent 20deg,
+          #000 20deg,
+          #000 180deg,
+          transparent 180deg
+        );
+        width: var(--bsize);
+        height: var(--bsize);
+        background-color: transparent;
+    }
+</style>
+<div style="margin: 10px;">
+    <div class="uyhiagaalk flxxt">
+        <div class="fourpoints flxxt">
+            <span class="point_1x aTWs flxxt"><span></span></span>
+            <span class="point_2x aTWs flxxt"><span></span></span>
+            <span class="point_3x aTWs flxxt"><span></span></span>
+            <span class="point_4x aTWs flxxt"><span></span></span>
+        </div>
+        <div class="ahcircle">
+            <span class="gaSg"></span>
+        </div>
+    </div>
+</div>

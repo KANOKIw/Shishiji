@@ -1,0 +1,88 @@
+<style>
+    *{
+        margin: 0;
+    }
+    .flxxt{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ygg{
+        position: relative;
+        width: 100vw;
+        height: 100dvh;
+    }
+    .pkgo_menu{
+        position: absolute;
+        left: 50%;
+        bottom: 80px;
+        width: 0;
+        height: 0;
+        overflow: visible;
+    }
+    #pkgo_mainb{
+        position: absolute;
+        background-color: gray;
+        border-radius: 50%;
+        width: 84px;
+        height: 84px;
+    }
+    #pkgo_ballw{
+        content: "";
+        border-top: red;
+        border-bottom: white;
+        border-right: red;
+        border-left: white;
+        transform: rotate(-45deg);
+        border-radius: 50%;
+        border-width: 40px;
+        border-style: solid;
+        position: absolute;
+    }
+    #pkgo_ball_g{
+        position: absolute;
+        background-color: gray;
+        border: solid white 4px;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+    }
+    .pkgo_nml_menuG{
+        border-radius: 50%;
+        border: solid gray 2px;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        background-color: azure;
+    }
+    .pkgo_menu_insidew{
+        background-color: white;
+        border: solid rgb(0, 58, 0) 2px;
+        border-radius: 50%;
+        width: 90px;
+        height: 90px;
+        position: absolute;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+</style>
+<div class="ygg">
+    <div id="pokemonGO_menu" class="flxxt pkgo_menu">
+        <div id="pkgo_mainb" class="flxxt">
+            <div id="pkgo_ballw" class="flxxt">
+                <div id="pkgo_ball_g" class="flxxt">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="pkgo_menu1" class="pkgo_menu flxxt">
+            <div class="pkgo_nml_menuG flxxt">
+                <div class="pkgo_menu_insidew flxxt" style="background-image: url(/resources/img/pokemonGO/pokebox.jpg);">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

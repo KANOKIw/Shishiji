@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "セタズアイ",
+        "subtitle": "",
+        "core_grade": "1年生",
+        "theme_color": "#012f7b",
+        "content": "§y私たちは一二年の中から集まった有志団体です§r\n§v§z私たちは§3的§r§zにボールを当てる§v的当てをしますぜひ来てください！\n",
+        "crowd_status": 0,
+        "font_family": "Calligraphed",
+        "custom_tr": [],
+        "images": {
+            "header": "image_4.png"
+        },
+        "venue": "2A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1518,
+            "y": 541
+        },
+        "images": {
+            "icon": "image_3.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "2F"
+    },
+    "discriminator": "igloo1"
+}

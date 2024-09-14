@@ -1,0 +1,1094 @@
+{
+    "articulture": {
+        "article": {
+            "title": "美術部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#e6c95b",
+            "content": "§z作品展示とキャンドル制作ワークショップを行います。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "美術室",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 906,
+                "y": 2201
+            },
+            "images": {
+                "icon": "image_0.jpg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "articulture"
+    },
+    "basketball": {
+        "article": {
+            "title": "バスケットボール部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#d19d01",
+            "content": "\n§r§v§v§zモデルゲームの見学と§v初心者でも楽しめるフリースロー体験を行っています！\n§vぜひお越しください！",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.png"
+            },
+            "venue": "アリーナ(体育館)",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 485,
+                "y": 876
+            },
+            "images": {
+                "icon": "image_0.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "basketball"
+    },
+    "bukkyou_seinen": {
+        "article": {
+            "title": "仏教青年会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#11053b",
+            "content": "§z禅堂内覧および坐禅体験を行います。\n§v§v\n§z§c§l注意事項§v\n§0§r§l§n時間によって催し物が異なりますので、 §r§l#:LINK-H=https://open-campus.shishijifes.com/information/time-table-T=タイムテーブル;#§r§l§n をご覧ください。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_3.jpeg"
+            },
+            "venue": "禅堂",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1114,
+                "y": 2162
+            },
+            "images": {
+                "icon": "image_4.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "bukkyou_seinen"
+    },
+    "butsuribu": {
+        "article": {
+            "title": "物理部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#009094",
+            "content": "§v§zエコーマイクの作成体験ができます！\n§vイライラ棒などでも遊べるので、\n§vぜひ来てくださ〜い‼︎\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "物理実験室（放光館３階）",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 339,
+                "y": 581
+            },
+            "images": {
+                "icon": "image_0.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "4F"
+        },
+        "discriminator": "butsuribu"
+    },
+    "dance": {
+        "article": {
+            "title": "ダンス同好会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§zダンス同好会では、ランダムダンスを実施します。§v\nランダムダンスとは、色々な曲のメドレーを流していき、踊れる曲が\nあったときだけダンスに参加する、というものです。\n§v来場者の皆さんも、知っている曲が流れたら、是非一緒に踊ってみてください！\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.png"
+            },
+            "venue": "3D",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1930,
+                "y": 514
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "dance"
+    },
+    "drone": {
+        "article": {
+            "title": "ドローン研究同好会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§zドローンの操縦体験と、レース中のカメラ映像が見られるFPVレース体験を実施しています！\n§v§c§y§l注意事項\n§v§z§0操縦体験の整理券は\n§v第一部  10時～48枚\n§v第二部  12時～48枚\n§v第三部  14時～48枚\n§v各部15分前から配布します\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "発心館4階（廊下・教室）",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1676,
+                "y": 365
+            },
+            "images": {
+                "icon": "image_0.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "4F"
+        },
+        "discriminator": "drone"
+    },
+    "eigoka-eigobu": {
+        "article": {
+            "title": "英語科英語部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#ff4839",
+            "content": "§z英語でクイズをします！\n\n§v英語に自信のある方も、ない方もぜひお越しください！\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpg"
+            },
+            "venue": "3B",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1900,
+                "y": 160
+            },
+            "images": {
+                "icon": "image_0.jpg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "eigoka-eigobu"
+    },
+    "eiken-1": {
+        "article": {
+            "title": "映画研究同好会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#004d00",
+            "content": "§z自分たちで作った映画を§v公開しています！§v世田谷学園の映画制作技術を§vぜひご覧あれ！\n§v§r§z",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.JPG"
+            },
+            "venue": "放光館ホール",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 515,
+                "y": 232
+            },
+            "images": {
+                "icon": "image_1.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "eiken-1"
+    },
+    "engeki": {
+        "article": {
+            "title": "演劇部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#320000",
+            "content": "§zショートコントを行います！§vぜひお越しください！",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpeg"
+            },
+            "venue": "2E",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1504,
+                "y": 200
+            },
+            "images": {
+                "icon": "image_1.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "engeki"
+    },
+    "info": {
+        "article": {
+            "subtitle": "",
+            "core_grade": "5年生",
+            "theme_color": "#00a1d8",
+            "content": "§zこのwebアプリに関する不明点がある場合や、不具合を発見した場合はこちらにお越しください。§v\nまた、#:LINK-H=https://forms.gle/3d2ij6Me6puEKYfm9-T=こちらのGoogleフォーム;#から不具合を報告できますので、ご協力をお願いします。\n§v§v右下のスタンプラリーの達成度が20/26以上の方には先着25名にボールペンを配っています！\n§vぜひスタンプラリーをお楽しみください！§v\n\n\nEditor: #:LINK-H=https://shishiji.kanokiw.com/org/manage/edit-T=;#",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "Horror",
+            "custom_tr": [],
+            "images": {
+                "header": "image_3.png"
+            },
+            "venue": "面談室５（職員室前）",
+            "schedule": "",
+            "title": "インフォメーションセンター"
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1085,
+                "y": 805
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "2F"
+        },
+        "discriminator": "info"
+    },
+    "kagakubu": {
+        "article": {
+            "title": "化学部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§zもうまもなく七夕。七夕といえば星。星といえば光。ということで光に関する不思議な化学実験を行います。§v\n§v§c§l注意事項§v\n§r§0§n§l化学講義室のある放光館２階は発心館（一般教室のある建物）§r§c§l§n３階§r§n§lと渡り廊下でつながっています。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_2.jpeg"
+            },
+            "venue": "化学講義室（放光館２階）",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 737,
+                "y": 145
+            },
+            "images": {
+                "icon": "image_0.jpg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "kagakubu"
+    },
+    "karate": {
+        "article": {
+            "title": "空手道部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z空手道演武を行います！\n§vまず最初に形を披露し、その後団体形を行います！§v次に組み手の打ち込みを行い、§vメインである板割りをやります！\n§v最後に来園者も道場に上がってもらい、§v突きや蹴りをミットを使っての簡単な練習をします！\n§v是非お越しください！",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_2.jpeg"
+            },
+            "venue": "武道場",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 247,
+                "y": 904
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "karate"
+    },
+    "kendoubu": {
+        "article": {
+            "title": "剣道部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#001a72",
+            "content": "§z竹刀で新聞紙を切ります！§vぜひお越しください！§r§v§y\n ",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "武道場",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 714,
+                "y": 914
+            },
+            "images": {
+                "icon": "image_0.jpg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "kendoubu"
+    },
+    "literature": {
+        "article": {
+            "title": "文芸部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z部誌（部員の作品集）の配布、コント披露を行います。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "選択５教室",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1537,
+                "y": 555
+            },
+            "images": {
+                "icon": "image_0.jpg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "literature"
+    },
+    "magic-life": {
+        "article": {
+            "title": "Magic life",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z§v観客のみなさんの目の前で、あっと驚くような現象を見せましょう！§vもしかしたらテレビでの§l「あの」§r§zマジックもあるかも知れないです",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpeg"
+            },
+            "venue": "2D",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1302,
+                "y": 213
+            },
+            "images": {
+                "icon": "image_2.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "magic-life"
+    },
+    "paken": {
+        "article": {
+            "title": "パソコン研究同好会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#999999",
+            "content": "§z§c§l注意事項§r§v\n§n§lコンピュータ教室へは、発心館(一般教室がある建物)２階からは直接お越しになれません。§v\n発心館３階から渡り廊下を通ってお越しください。",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpeg"
+            },
+            "venue": "コンピュータ教室",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1249,
+                "y": 2168
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "2F"
+        },
+        "discriminator": "paken"
+    },
+    "rekishibu": {
+        "article": {
+            "title": "歴史部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "\n§v§r§z歴史部員が活動で創作した模型の展示や、クイズ、\nそして\n歴史部の所持する歴史的な物品の展示を行っています！\n§vぜひお越しください！\n\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpg"
+            },
+            "venue": "3C",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1734,
+                "y": 533
+            },
+            "images": {
+                "icon": "image_2.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "rekishibu"
+    },
+    "seibutsubu": {
+        "article": {
+            "title": "生物部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#96d35f",
+            "content": "§z生き物の展示とみんなが楽しめる簡単な参加型の実験を行います！",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_3.jpeg"
+            },
+            "venue": "生物講義室・実験室（放光館４階)",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 548,
+                "y": 143
+            },
+            "images": {
+                "icon": "image_2.webp"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "4F"
+        },
+        "discriminator": "seibutsubu"
+    },
+    "seitokai": {
+        "article": {
+            "title": "生徒会執行部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z学校のツアーガイド、生徒による受験相談、\n11時から11時45分、13時30分から14時15分にかぎり座談会を行ないます。\n\n§v\n§v§z§c§l注意事項§v\n§r§n§l座談会を行なっている11時から11時45分、\n13時30分から14時15分は、受験相談を行なっていません。ご注意ください。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "4A",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1246,
+                "y": 1398
+            },
+            "images": {
+                "icon": "image_0.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "seitokai"
+    },
+    "setagaya_wind_2024": {
+        "article": {
+            "title": "光る世田谷wind2024",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z私たちは吹奏楽部です。§v誰もが一度は聞いたことのある曲を金管楽器の迫力ある音と木管楽器の明るいメロディーでお届けします。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpg"
+            },
+            "venue": "修道館ホール",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 392,
+                "y": 1488
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "setagaya_wind_2024"
+    },
+    "shishijifes": {
+        "article": {
+            "title": "獅子児祭実行委員会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z文化祭では\n様々なコンテンツが盛りだくさん！\n§v今回はその中のジェットコースターの一部を公開します！\n§vぜひ文化祭当日の9/15、9/16にもお越しください！",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "ピロティ（武道場前）",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 926,
+                "y": 912
+            },
+            "images": {
+                "icon": "image_0.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "shishijifes"
+    },
+    "soft-tennis": {
+        "article": {
+            "title": "ソフトテニス部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#2bff01",
+            "content": "§zソフトテニスの体験を行います！\n§v優しい先輩がボールの打ち方を丁寧に教えます！\n§v初心者でも楽しめる内容なので是非お越しください！\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpeg"
+            },
+            "venue": "野球部室内練習場",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 2459,
+                "y": 2043
+            },
+            "images": {
+                "icon": "image_0.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "1F"
+        },
+        "discriminator": "soft-tennis"
+    },
+    "soudan": {
+        "article": {
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "世田谷学園に関する質問を随時受け付けています！\n学校生活や受験のことまでどんな質問でもお答えします！§v§v\n§z§c§l注意事項§v\n§r§n§l§0図書室へは、発心館(一般教室がある建物)２階からは直接お越しになれません。§v\n発心館３階から渡り廊下を通ってお越しください。\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "Handwritten",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.jpeg"
+            },
+            "venue": "図書室",
+            "schedule": "",
+            "title": "相談コーナー"
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 850,
+                "y": 2155
+            },
+            "images": {
+                "icon": "image_0.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "2F"
+        },
+        "discriminator": "soudan"
+    },
+    "suugakuka": {
+        "article": {
+            "title": "数学科",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#0050ff",
+            "content": "§v§z数学の問題を一緒に解きます！\n§v中学生で学ぶ数学を一足先に触れてみましょう！\n§v§v§c§l注意事項\n§v§r§l§n途中参加ができない可能性がありますので、ご了承ください。",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_1.png"
+            },
+            "venue": "3A",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1700,
+                "y": 180
+            },
+            "images": {
+                "icon": "image_0.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "suugakuka"
+    },
+    "table-tennis": {
+        "article": {
+            "title": "卓球部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#00ffb4",
+            "content": "§zご家族やお友達と一緒に卓球ができます！\nさらにミニゲームもやっているので是非お越しください！§v§v\n§c§z§l注意事項§v§r\n§n§l卓球場へはアリーナ（体育館）の奥の階段をのぼってお越しください。",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpeg"
+            },
+            "venue": "卓球場",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 479,
+                "y": 2047
+            },
+            "images": {
+                "icon": "image_1.jpeg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "4F"
+        },
+        "discriminator": "table-tennis"
+    },
+    "tetuken": {
+        "article": {
+            "title": "鉄道研究同好会",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§z鉄道模型展示をします！",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.jpeg"
+            },
+            "venue": "4C・4D",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1250,
+                "y": 899
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "tetuken"
+    },
+    "tigakubu": {
+        "article": {
+            "title": "地理部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#000000",
+            "content": "§zビンゴとクイズを融合した、3ヒントビンゴを実施します。",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.png"
+            },
+            "venue": "4B",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 1246,
+                "y": 1193
+            },
+            "images": {
+                "icon": "image_1.png"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "tigakubu"
+    },
+    "volley_ball": {
+        "article": {
+            "title": "バレーボール部",
+            "subtitle": "",
+            "core_grade": "...",
+            "theme_color": "#cbc500",
+            "content": "§z世田学生と一緒にソフトバレーボールをしましょう！\n\n",
+            "crowd_status": {
+                "level": 0,
+                "estimated": 0
+            },
+            "font_family": "",
+            "custom_tr": [],
+            "images": {
+                "header": "image_0.png"
+            },
+            "venue": "アリーナ(体育館)",
+            "schedule": ""
+        },
+        "object": {
+            "type": {
+                "event": "org",
+                "behavior": "dynamic"
+            },
+            "coordinate": {
+                "x": 484,
+                "y": 1325
+            },
+            "images": {
+                "icon": "image_1.jpg"
+            },
+            "size": {
+                "width": 50,
+                "height": 50
+            },
+            "floor": "3F"
+        },
+        "discriminator": "volley_ball"
+    }
+}

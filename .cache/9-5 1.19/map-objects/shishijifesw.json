@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "獅子児祭り",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "入り口には門を構え、中に入っていくと屋台が立ち並びます。その一角には§c射的§rや遊園地にあるような§bミニゲーム§rも用意しています。もう一度夏祭りを楽しもう‼️§v(射的、ボール転がし、ボーリング、カーニバルゲーム)",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_4.jpeg"
+        },
+        "venue": "5B",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": ""
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "shishijifesw"
+}

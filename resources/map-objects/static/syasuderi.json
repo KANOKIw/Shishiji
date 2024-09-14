@@ -1,0 +1,23 @@
+{
+    "object": {
+        "type": {
+            "event": "drink",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 321,
+            "y": 2008
+        },
+        "images": {
+            "icon": "icon.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F",
+        "open_screen": "drink_screen",
+        "day": 2
+    },
+    "discriminator": "syasuderi"
+}

@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "剣道部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#001a72",
+        "content": "§z竹刀で新聞紙を切ります！§vぜひお越しください！§r§v§y\n ",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "武道場",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 714,
+            "y": 914
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "kendoubu"
+}

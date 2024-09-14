@@ -1,0 +1,34 @@
+main: "com.kanokiw.mc.sushida.Slayer"
+name: "Sushida"
+version: "0.0.1"
+api-version: "1.14"
+
+commands:
+  typing:
+    aliases: ["."]
+    description: null
+    permission: Default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  sushida:
+    description: Typing game
+    permission: Default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  entyping:
+    aliases: ["_"]
+    description: Typing game
+    permission: Default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  nextparticle:
+    description: Typing game
+    permission: Default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  slayer:
+    description: Typing game
+    permission: Default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  set:
+    description: Typing game
+    permission: Default
+    permission-message: "&cこのコマンドを使用する権限がありません！"
+  stuff:
+    description: will give you!

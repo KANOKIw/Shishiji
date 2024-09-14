@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "じゃんじゃん麻雀",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "私たちは普段、サークルという訳では無いですが、それに似たような形で麻雀を楽しんだり、活動記録を報告したりなどしています。今回の展示で\nはそういった活動や、麻雀ってこんなに面白いものなんだ！と思ってくれるようなものになっています。\n§v§v私たちは普段は雀魂というオンラインの麻雀アプリで遊んでいますが、時には本物の卓を囲んで遊んだりすることもあります！\n\n§n教室は§b§y6-C§r§nにて開催です§r§v§y§b是非来てください✨\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "6C",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1106,
+            "y": 1125
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "mazyan"
+}

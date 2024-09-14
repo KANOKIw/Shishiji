@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "かがく処せた庵",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#16202a",
+        "content": "当店は江戸時代中期に創業された§c§l§z\"化学実験\"§rを行うお休み処です。\n\n§r§v§h§h§z§eお品書き\n§r§v§bお飲み物(展示型実験)\n§r§v ビスマス抹茶                        200ペリカ\n§v§b甘味(体験型実験)\n§r§v ニンヒドリン焼き                  300ペリカ\n§v ダイラタンシー餅                   300ペリカ\n§v コバルトパフェ                     700ペリカ\n§v 時計反応ソフト                     500ペリカ\n\n§h§h§z§e営業時間\n§r§v 午前の部　　　9:00〜10:50 (Lo 10:30)\n§v 午後の部　　 13:00〜14:50 (Lo 14:30)\n§h§h§z§e期間限定品\n§r§v§bなんと両日とも、§l11時30分からたった一度のみ§r§b、実験室では提供できない巨大な甘味(実験)を提供します。\n§r§v場所:生徒玄関前(発心館グラウンド脇)\n§v§v§l注意\n§v＊お金はかかりません\n§v＊飲み物や食べ物は出ません\n§v＊化学部です\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.png"
+        },
+        "venue": "化学実験室",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "chemical"
+}

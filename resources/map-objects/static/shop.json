@@ -1,0 +1,22 @@
+{
+    "object": {
+        "type": {
+            "event": "facility",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 997,
+            "y": 504
+        },
+        "images": {
+            "icon": "shop.png"
+        },
+        "size": {
+            "width": 30,
+            "height": 30
+        },
+        "floor": "1F",
+        "open_screen": "showcase_screen"
+    },
+    "discriminator": "shop"
+}

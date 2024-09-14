@@ -1,0 +1,26 @@
+[
+    {
+        "title": "(仮)世田谷学園(仮)",
+        "article": "学園生活、喜びを、多くの人と分かち合える学園生活積極的に行事に参加することやクラブ活動に打ち込むことは、生徒達の成長にとっては欠かせないものです。仲間と共に味わった達成感、成功体験が、グローバルリーダーとして社会で活躍するための心の素地をつくります。生徒会・クラブ活動獅子児祭・体育祭国際交流地球的視野に立って、積極的に行動する人材育成グローバルな人材には、「地球的視野を持ち、地球的規模の問題に取り組む」姿勢が大切です。そのためには、異なる文化や考え方の違いを理解し、世界の多くの人達とコミュニケーションがとれる能力を身につけなければなりません。世田谷学園では、グローバルコミュニケーション能力の育成を重視しています。",
+        "image": {
+            "icon": "/resources/img/advertisement/self.jpg"
+        },
+        "url": "https://www.setagayagakuen.ac.jp/"
+    },
+    {
+        "title": "(仮)河合塾(仮)",
+        "article": "我々は河合塾だ",
+        "image": {
+            "icon": "/resources/img/advertisement/kawai.jpg"
+        },
+        "url": "https://www.kawai-juku.ac.jp/"
+    },
+    {
+        "title": "(仮)鉄緑会(仮)",
+        "article": "我々は鉄緑会だ",
+        "image": {
+            "icon": "/resources/img/advertisement/tetu.png"
+        },
+        "url": "https://www.tetsuryokukai.co.jp/"
+    }
+]

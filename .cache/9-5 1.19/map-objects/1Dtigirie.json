@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "1D ちぎり絵",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§a§z世田谷ミュージアム2024§v§r1年D組は、§6黒姫サマースクール§rのまとめパネルとギュスターヴ・カイユボット「イエールのペリソワール」の§6巨大ちぎり絵§rを展示！さらに土曜プログラムの美術各コースで生まれた作品を展示！お楽しみに！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "1D",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "1Dtigirie"
+}

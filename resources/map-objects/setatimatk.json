@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "世田谷タイムアタック！！",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "\n§v§y§z§n複数のミニゲームをクリアして§r§v§z§n最速を目指す体験型の団体です！§v§r§v§z§j§i好タイムを出せれば景品もでます\n！§r§v展示大賞目指しているので投票お願いします！\n§v§y§x§y自信のある方！§r§v§y§x§y遊びに来てください！§8\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_7.png"
+        },
+        "venue": "6E",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1104,
+            "y": 1596
+        },
+        "images": {
+            "icon": "image_8.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "setatimatk"
+}

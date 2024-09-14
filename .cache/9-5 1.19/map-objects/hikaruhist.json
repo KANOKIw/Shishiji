@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "光る歴史部へ",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "\n　歴史部は§a模型の展示や§a兜を身につけた記念撮影§r、§a手裏剣体験§r、部員や先生の所持する§a歴史を感じるアイテム§rを展示しています。§v§r\n　是非お越しください。",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "5C",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "hikaruhist"
+}

@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "英語科英語部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#ff4839",
+        "content": "§z英語でクイズをします！\n\n§v英語に自信のある方も、ない方もぜひお越しください！\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpg"
+        },
+        "venue": "3B",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1900,
+            "y": 160
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "eigoka-eigobu"
+}

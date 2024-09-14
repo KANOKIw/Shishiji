@@ -1,0 +1,39 @@
+{
+    "article": {
+        "subtitle": "",
+        "core_grade": "5年生",
+        "theme_color": "#00a1d8",
+        "content": "§zこのwebアプリに関する不明点がある場合や、不具合を発見した場合はこちらにお越しください。§v\nまた、#:LINK-H=https://forms.gle/3d2ij6Me6puEKYfm9-T=こちらのGoogleフォーム;#から不具合を報告できますので、ご協力をお願いします。\n§v§v右下のスタンプラリーの達成度が20/26以上の方には先着25名にボールペンを配っています！\n§vぜひスタンプラリーをお楽しみください！§v\n\n\nEditor: #:LINK-H=https://shishiji.kanokiw.com/org/manage/edit-T=;#",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Horror",
+        "custom_tr": [],
+        "images": {
+            "header": "image_3.png"
+        },
+        "venue": "面談室５（職員室前）",
+        "schedule": "",
+        "title": "インフォメーションセンター"
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1085,
+            "y": 805
+        },
+        "images": {
+            "icon": "image_1.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "2F"
+    },
+    "discriminator": "info"
+}

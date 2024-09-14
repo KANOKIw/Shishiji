@@ -1,0 +1,37 @@
+{
+    "article": {
+        "title": "三心会バザー",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "∫:IMG-S=image_2.jpeg-W=100;∫\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "選択教室 2, 3",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1759,
+            "y": 529
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F",
+        "no_admission": true
+    },
+    "discriminator": "sanshinkai"
+}

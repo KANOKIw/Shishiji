@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "お化け屋敷",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z\n\n昨年よりグレードアップした獅子児祭のお化け屋敷。§v\n\n屋敷の中に仕掛けられた様々な仕掛けをかいくぐりあなたは無事に出口まで辿り着けるでしょうか？§v\n獅子児祭当日あなたの挑戦をお待ちしております。",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpg"
+        },
+        "venue": "5E, 5F",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.JPG"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "obake1"
+}

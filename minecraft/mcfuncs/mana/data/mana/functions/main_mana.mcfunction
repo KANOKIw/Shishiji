@@ -1,0 +1,1 @@
+execute as @a[tag=!showing_not_enough_mana, tag=!dont_show_mana] run title @s actionbar [{"score":{"name": "*","objective": "mana_current"},"color": "aqua"},{"text": "/"},{"score":{"name": "*","objective": "mana_max"}},{"text":"✎ Mana"}]

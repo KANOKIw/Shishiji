@@ -1,0 +1,9 @@
+{
+    "tile_width": 500,
+    "tile_height": 500,
+    "xrange": 3,
+    "yrange": 2,
+    "width": 500,
+    "height": 500,
+    "format": "tile_{y}_{x}"
+}

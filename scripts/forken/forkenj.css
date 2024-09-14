@@ -1,0 +1,224 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    text-align: center;
+    background-image: url(images/background-image.png);
+    background-size: cover;
+}
+
+#toppage p{
+    font-family: "futura-pt", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -webkit-user-drag: none;
+    -khtml-user-select: none;
+    -khtml-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#toppage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+#toppage img{
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -webkit-user-drag: none;
+    -khtml-user-select: none;
+    -khtml-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    max-height: 25vh;
+    max-width: 90vw;
+}
+
+#touchable{
+    max-width: 90vw;
+    user-select: initial;
+    -webkit-touch-callout: initial;
+    -webkit-user-select: initial; 
+    -webkit-user-drag: initial;
+    -khtml-user-select: initial;
+    -khtml-user-drag: initial;
+    -khtml-user-drag: initial;
+    -moz-user-select: initial; 
+    -ms-user-select: initial;
+    -webkit-tap-highlight-color: initial;
+}
+
+#info p{
+
+    font-family: "zen-kaku-gothic-new", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    text-align: left;
+
+}
+
+#info{
+    padding-right: 20px;
+    padding-left: 5px;
+    margin-top: 2vh;
+    margin-left: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+
+#sns-itiran{
+    display: flex;
+    justify-content: space-between;
+}
+
+#sns-itiran img{
+    flex: 1;
+    width: 8vw;
+    max-width: 50px;
+    margin: 0 min(3vw, 25px);
+}
+
+.headline1{
+    font-size: 7vh;
+}
+
+.headline2{
+    font-size: 5vh;
+}
+
+.headline2-5{
+    font-size: 3.5vh;
+}
+
+
+.headline3{
+    font-size: 3vh;
+}
+
+.text{
+    font-size: 2vh;
+}
+
+.title-sentence{
+    font-family: "futura-pt", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    font-size: 40px;
+}
+
+  
+
+#pv{
+    max-height: calc(50vh - 230px);
+    max-width: 600px;
+    position: absolute;
+    bottom: 0vh;
+}
+
+header{
+    position: fixed;
+    top: 0vh;
+}
+
+footer {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    bottom: 0vh;
+    width: 100%;
+    height: 8vh; 
+    text-align: center;
+    background-color: #000000;
+
+}
+
+footer div{
+    color: white;
+    flex: 1;
+}
+
+footer p{
+    margin-top: 2.2vh;
+    font-family: "zen-kaku-gothic-new", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -webkit-user-drag: none;
+    -khtml-user-select: none;
+    -khtml-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+footer .emphasized{
+    background-color: #414141;
+}
+
+a{
+    color:#ffffff; text-decoration:none;
+}
+
+.ad-pare{
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --width: 80vw;
+}
+
+.ad-place{
+    display: flex;
+    justify-content: center;
+    width: var(--width);
+    height: calc(var(--width)*(104/382));
+    background-color: white;
+    position: relative;
+}
+
+.ad-place > img{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.see_you_next_time{
+    animation: seikinTV 1s ease forwards;
+}
+
+@keyframes seikinTV{
+    from{opacity: 1;}
+    to{opacity: 0;}
+}
+
+.hello_youtube{
+    animation: hikakinTV 1s ease forwards;
+}
+
+@keyframes hikakinTV{
+    from{opacity: 0;}
+    to{opacity: 1;}
+}

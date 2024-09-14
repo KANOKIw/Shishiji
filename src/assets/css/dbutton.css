@@ -1,0 +1,71 @@
+button{
+    border: none;
+}
+.bot-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #6200EE;
+    color: white;
+    padding: 5px 16px;
+    border-radius: 3px;
+    transition: background-color 170ms ease,color 170ms ease;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+.bot-button-inner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px 2px 4px 0;
+}
+.bot-button-inner > img {
+    width: 1.375em;
+    height: 1.375em;
+    margin-right: 4px;
+}
+.button-content{
+    font-family: inherit;
+    font-style: inherit;
+    display: block;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    user-select: none;
+    -webkit-user-select: none;
+}
+@media(min-width:751px){
+    .bot-button:not(.i-cant):hover{
+        color: #b9bbbe;
+        opacity: .9;
+    }
+    #server-icon:hover{
+        border-radius: 25%;
+    }
+}
+@media(max-width:751px){
+    .no-content-replyGuide{
+        display: none;
+    }
+}
+.i-cant{
+    cursor: not-allowed;
+    opacity: 0.9;
+    color: #b9bbbe;
+}
+.i-cant:hover{
+    opacity: 0.9;
+    color: #b9bbbe;
+}
+.i-cant:active{
+    opacity: 0.9;
+    color: #b9bbbe;
+}
+.bot-button:not(.i-cant):active,.bot-button:not(.i-cant).active{
+    opacity: .8;
+    color: #b9bbbe;
+}
+.bottom-display-slave-img{
+    pointer-events: none;
+}

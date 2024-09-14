@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "獅子児祭実行委員会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z文化祭では\n様々なコンテンツが盛りだくさん！\n§v今回はその中のジェットコースターの一部を公開します！\n§vぜひ文化祭当日の9/15、9/16にもお越しください！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "ピロティ（武道場前）",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 926,
+            "y": 912
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "shishijifes"
+}

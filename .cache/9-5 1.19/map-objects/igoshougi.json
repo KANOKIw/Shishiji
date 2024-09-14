@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "囲碁・将棋同好会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "囲碁•将棋同好会では§e部員と将棋を指すことができます。§0§7§0§0§7§e§z§y§x§r\n§vその他、詰将棋なども展示しています。\n§v§e是非、挑戦しに来てください！\n§r§v※囲碁はできませんのでご注意ください\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "2C, 後ろ側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "igoshougi"
+}

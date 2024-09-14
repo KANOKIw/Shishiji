@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "パソコン研究同好会",
+        "subtitle": "",
+        "core_grade": "4年生",
+        "theme_color": "#ffffff",
+        "content": "§y§2・パソコンゲーム§r§v簡単なRPGゲームや生徒たちが作ったオリジナルゲームなどができます！∫:IMG-S=image_2.jpg-W=100;∫§r§v§2§y・VRゲーム\n§r§vVRを使った未体験のゲームが楽しめます！立体的なワールドで爽快感満載なゲームをしてみませんか？∫:IMG-S=image_3.jpg-W=100;∫\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpg"
+        },
+        "venue": "パソコン室",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1119,
+            "y": 1942
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "2F"
+    },
+    "discriminator": "PCmen"
+}

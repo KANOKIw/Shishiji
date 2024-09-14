@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "FDK有志",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§4§x「異変廃城」§v\n　　§r§xからの脱出§r§v§v\n§y§4〜ストーリー〜§r§v\n今にも崩れそうな古びた古城、§r§v \n君は全ての§4§n異変§rを見つけられるか？！§r§v§r§v\n§y§bイベント説明§r§v\n君は見たことのない、薄暗い廃城に迷い込んだ…§r§v\n全く同じふた部屋、でも何か§4§n異変§rを感じる？§r§v\n左右の部屋の異変を見つけ、直そう！\n\n\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": null,
+        "custom_tr": [],
+        "images": {
+            "header": ""
+        },
+        "venue": "4B",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": ""
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "FDK"
+}

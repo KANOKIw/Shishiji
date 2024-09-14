@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "栴檀林書道展",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "2019年以来5年ぶりの展示会となります。自由な雰囲気の中で、一人ひとりが主体的に取り組み、個別に先生の指導を受け練習に励んできました。7人という少数精鋭の書道部員の成果を、満を持して披露いたします。旃檀林に学ぶ獅子児の迫力ある作品をお楽しみください。\n§vまた有志の先生方に依頼した「秋」をテーマにした作品の展示もございます。黒と白が織りなすアナログな世界を感じに、是非足をお運びください。\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "2C, 黒板側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "syodou"
+}

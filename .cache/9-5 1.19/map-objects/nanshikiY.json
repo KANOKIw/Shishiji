@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "軟式野球部",
+        "subtitle": "",
+        "core_grade": "5年生",
+        "theme_color": "#000000",
+        "content": "\n§y§c野球部が運営する§v\n§aバッティングセンター§v§r§v\n\n§z§b場所§v\nグラウンド（校門入って右側の校庭）\n§v§r§z休止時間§v\n昼休憩時（手が空いた時に1時間ほど）§v§v\n§z§e§y§z§yみんなで元気よく待ってます。§vぜひお越しください！！\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "校庭(野球倉庫側)",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "nanshikiY"
+}

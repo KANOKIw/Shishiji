@@ -1,0 +1,53 @@
+{
+	"initial_floor": "1F",
+	"4F": {
+		"tile_width": 1250,
+		"tile_height": 1250,
+		"xrange": 1,
+		"yrange": 1,
+		"format": "/resources/map-tiles/floor_4/tile_{0}_{1}.png",
+		"spare": "#15202B",
+		"abstract": "",
+		"so-called": "4F"
+	},
+	"3F": {
+		"tile_width": 1250,
+		"tile_height": 1250,
+		"xrange": 1,
+		"yrange": 1,
+		"format": "/resources/map-tiles/floor_3/tile_{0}_{1}.png",
+		"spare": "#15202B",
+		"abstract": "",
+		"so-called": "3F"
+	},
+	"2F": {
+		"tile_width": 1250,
+		"tile_height": 1250,
+		"xrange": 1,
+		"yrange": 1,
+		"format": "/resources/map-tiles/floor_2/tile_{0}_{1}.png",
+		"spare": "#15202B",
+		"abstract": "",
+		"so-called": "2F"
+	},
+	"1F": {
+		"tile_width": 1250,
+		"tile_height": 1250,
+		"xrange": 1,
+		"yrange": 1,
+		"format": "/resources/map-tiles/floor_1/tile_{0}_{1}.png",
+		"spare": "#15202B",
+		"abstract": "",
+		"so-called": "1F"
+	},
+	"B1": {
+		"tile_width": 1250,
+		"tile_height": 1250,
+		"xrange": 1,
+		"yrange": 1,
+		"format": "/resources/map-tiles/basement_1/tile_{0}_{1}.png",
+		"spare": "#15202B",
+		"abstract": "",
+		"so-called": "B1"
+	}
+}

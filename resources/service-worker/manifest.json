@@ -1,0 +1,15 @@
+{
+    "lang": "ja",
+    "name": "獅子児祭 webアプリ",
+    "short_name": "獅子児祭app",
+    "start_url": "/p",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "/resources/img/app.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#15202b"
+}

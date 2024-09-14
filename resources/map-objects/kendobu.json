@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "とある剣道部がカジノしてみた",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§yなんと剣道部がカジノをします！！§cブラックジャック§r§yや\n§c§yルーレット§r§yなどが体験できるので是非！！\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "4D",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1108,
+            "y": 766
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "kendobu"
+}

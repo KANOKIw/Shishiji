@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "生徒会執行部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§z学校のツアーガイド、生徒による受験相談、\n11時から11時45分、13時30分から14時15分にかぎり座談会を行ないます。\n\n§v\n§v§z§c§l注意事項§v\n§r§n§l座談会を行なっている11時から11時45分、\n13時30分から14時15分は、受験相談を行なっていません。ご注意ください。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "4A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1246,
+            "y": 1398
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "seitokai"
+}

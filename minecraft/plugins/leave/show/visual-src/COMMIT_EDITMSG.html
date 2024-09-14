@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>COMMIT_EDITMSG</title>
+        <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"
+            >
+        </script>
+        <script>
+function g(n, u) {
+    if (!u) u = window.location.href;
+    n = n.replace(/[\[\]]/g, "\$&");
+    var regex = new RegExp("[?&]" + n + "(=([^&#]*)|&|#|$)"),
+        re = regex.exec(u);
+    if (!re) return null;
+    if (!re[2]) return '';
+    return decodeURIComponent(re[2].replace(/\+/g, " "));
+}
+
+window.onload = () => {
+    var h = window.innerHeight;
+    var v = g("v");
+    var t = Number.parseInt(g("t"));
+    var u = window.location.href;
+    window.scroll({top: 0, behavior: "smooth"});
+    if (navigator.userAgent.match(/iPhone|Android.+Mobile/)){
+        $("#code-container").css("font-size", "9px");
+        $("body").css("font-weight", "bold");
+    }
+    if (v == "re"){
+        if (t != 0){
+            if (t-1 == 0 || isNaN(t)){
+                u = u.replace(`&t=${t}`, "").replace(`?v=${v}`, "");
+            } else {
+                u = u.replace(`&t=${t}`, `&t=${t-1}`);
+            }
+        }
+        history.pushState({}, "", u);
+    }
+    $("#--player").css("padding-bottom", `${h-90}px`);
+}
+                    
+function k(){
+    window.scroll({top: 0, behavior: "smooth"});
+}
+        </script>
+        <link rel="stylesheet" href="/.stylesheets/vscode.css?r=src">
+    </head>
+    <body oncontextmenu="return false;">
+        <div style="position: fixed;width: 100%;background-color: rgb(30,30,30);">
+            <div class="-window">
+                <div id="window-1" class="window-elem" style="display: flex;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/2048px-Visual_Studio_Code_1.35_icon.svg.png" style="width: 20px;height: 20px;">
+                    <span style="padding-left: 2px;">COMMIT_EDITMSG</span>
+                </div>
+            </div>
+            <div class="--hr"></div>
+            <div class="-top-box"><span class="--path" onClick="k()">COMMIT_EDITMSG > </span><span class="--path">...</span></span></div>
+        </div>
+        <br><br>
+        <div id="--player" style="display: flex;">
+            <div id="divider-">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div id="line">
+                <br>1<br>2<br>
+            </div>
+            <div id="divider--">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div id="code-container">
+                <OMMIT_EDITMSG><br>first&nbsp;commit<br>
+<br></OMMIT_EDITMSG>
+            </div>
+        </div>
+    </body>
+</html>
+                            

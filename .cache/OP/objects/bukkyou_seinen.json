@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "仏教青年会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#11053b",
+        "content": "§z禅堂内覧および坐禅体験を行います。\n§v§v\n§z§c§l注意事項§v\n§0§r§l§n時間によって催し物が異なりますので、 §r§l#:LINK-H=https://open-campus.shishijifes.com/information/time-table-T=タイムテーブル;#§r§l§n をご覧ください。\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_3.jpeg"
+        },
+        "venue": "禅堂",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1114,
+            "y": 2162
+        },
+        "images": {
+            "icon": "image_4.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "bukkyou_seinen"
+}

@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "英語ゲーム!!(by English club)",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "英語部ではドブルやアノミア、スクラッチなど海外のゲームを展示しています。\n§vまた英語の問題なども作りました。\n§v子供から大人まで楽しめるものとなっていますので是非お越しください！",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "6C, 後ろ側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1106,
+            "y": 1051
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "eingo"
+}

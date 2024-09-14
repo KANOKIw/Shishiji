@@ -1,0 +1,47 @@
+html{
+    --shishiji-ovv-tg-height: 50px;
+}
+
+#shpkgoanim{
+    bottom: 80px;
+}
+
+#overview-close-w{
+    bottom: 100px;
+}
+
+shishiji-pkgo-close{
+    bottom: 80px;
+}
+
+.user-profile{
+    bottom: 30px;
+}
+
+.pkgo_menu{
+    bottom: 80px;
+}
+
+#app-version{
+    margin: 12px;
+}
+
+#aiuojfgjsd, #aboigHSDV{
+    height: calc(100% - 240px);
+}
+
+#uihodanBN{
+    height: 240px;
+}
+
+.ahugihdb{
+    height: 180px;
+}
+
+#notreadyw{
+    height: 170px;
+}
+
+.takukiraima{
+    height: calc(100% - 170px);
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja" style="font-family: var(--font-view);" dark-theme>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Setagayagakuen Shishiji festival">
+        <meta property="og:description" content="Manage your organization's article.">
+        <meta property="og:site_name" content="KANOKIw">
+        <meta property="og:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta property="og:locale" content="ja">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shishijifes">
+        <meta name="twitter:creator" content="@KUMANKENw">
+        <meta name="twitter:title" content="Setagayagakuen Shishiji festival">
+        <meta name="twitter:description" content="Manage your organization's article.">
+        <meta name="twitter:image" content="https://pbs.twimg.com/profile_images/1402955393194594308/a5pHbQKZ_400x400.jpg">
+        <meta name="theme-color" content="#15202b">
+        <title>Editor - Shishiji fes</title>
+        <link rel="icon" href="/resources/img/favicon-org.ico">
+        <link rel="shortcut icon" href="/resources/img/favicon-org.ico">
+        <link rel="apple-touch-icon" href="//resources/img/favicon-org.ico">
+        <link rel="stylesheet" href="/src/assets/builds/gglms.css">
+        <link rel="stylesheet" href="/src/assets/css/font.css">
+        <link rel="stylesheet" href="/src/assets/css/shishijimap.css">
+        <link rel="stylesheet" href="/src/assets/css/editor.css">
+        <link rel="manifest" href="/resources/pwa/manifest-org.json">
+        <script id="__cover__">window.io = () => {}</script>
+        <script id="__delete__">window._Audio = class _{start(){};stop(){}}</script>
+        <script type="text/javascript" defer src="/src/assets/builds/jquery.3.4.3.min.js"></script>
+        <script type="text/javascript" defer src="/src/assets/properties.js"></script>
+        <script type="text/javascript" defer src="/src/assets/utils.js"></script>
+        <script type="text/javascript" defer src="/src/assets/globals.v.js"></script>
+        <script type="text/javascript" defer src="/src/assets/mcformat.js"></script>
+        <script type="text/javascript" defer src="/src/assets/objects/overview.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/notifier.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/pictonotifier.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/popup.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/setup.js"></script>
+        <script type="text/javascript" defer src="/src/assets/supports/raidnotifier.js"></script>
+        <script type="text/javascript" defer src="/src/assets/manage/coop.js"></script>
+        <script type="text/javascript" defer src="/src/assets/builds/editor/editor.min.js"></script>
+        <script type="text/javascript" defer src="/src/assets/manage/go_standalone.js"></script>
+    </head>
+    <body>
+        <div id="app-mount">
+            <div id="load_spare" class="protected">
+                <div id="loaders__">
+                    <div id="map__opnner">
+
+                    </div>
+                    <div id="loaders">
+                        <div class="loader__icon _gloads" id="_icon1">
+                            
+                        </div>
+                        <div class="loader__icon _gloads" id="_icon2">
+    
+                        </div>
+                        <div class="loader__icon _gloads" id="_icon3">
+    
+                        </div>
+                        <div class="loader__icon _gloads" id="_icon4">
+    
+                        </div>
+                        <h4 id="spare_message">
+                            
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <shishiji-yd-notify>
+                <shishiji-yd-notify-w>
+                    <shishiji-yd-notifier id="--yd-notifier" class="hpipe protected">
+                        <div id="--ott-us" class="flxxt"></div>
+                    </shishiji-yd-notifier>
+                </shishiji-yd-notify-w>
+            </shishiji-yd-notify>
+            <shishiji-yd-popup id="shishiji-popup-container" class="flxxt">
+                <div id="shishiji-popup-container-c">
+                    <!--popup window content-->
+                </div>
+            </shishiji-yd-popup>
+            <shishiji-mx-overlay class="protected"></shishiji-mx-overlay>
+
+            <div id="user-infomation">
+                <h4>account: <span id="username-d"></span></h4>
+                <button id="logout__"><h4>MENU</h4></button>
+                <button id="__undo_-" class="doaihd">
+                    <h4>
+                        <span class="gglmats">
+                            undo
+                        </span>
+                        <span>取り消す</span>
+                    </h4>
+                </button>
+                <button id="__redo_-" class="doaihd">
+                    <h4>
+                        <span class="gglmats">
+                            redo
+                        </span>
+                        <span>やり直す</span>
+                    </h4>
+                </button>
+                <div id="save_wrap">
+                    <h4 id="sv_msg"></h4>
+                    <button id="save_data_norm">保存</button>
+                </div>
+            </div>
+
+            <div style="width: 100%; height: 100%;">
+                <div id="motd-at-pp">
+                    <div id="-motd-dec-w">
+                        <div class="motd-dec-b protected" style="background-color: #000000; color: white;">
+                            <p>黒</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #0000AA; color: white;">
+                            <p>暗い青</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #00AA00; color: white;">
+                            <p>暗い緑</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #00AAAA; color: white;">
+                            <p style="font-size:14px;">暗い水色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #AA0000; color: white;">
+                            <p>暗い赤</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #AA00AA; color: white;">
+                            <p>暗い紫</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #FFAA00;">
+                            <p>金色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #AAAAAA; color: white;">
+                            <p>灰色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #555555; color: white;">
+                            <p style="font-size:14px;">暗い灰色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #5555FF; color: white;">
+                            <p>青色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #55FF55;">
+                            <p>緑色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #55FFFF;">
+                            <p>水色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #FF5555;">
+                            <p>赤色</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #FF55FF;">
+                            <p>ピンク</p>
+                        </div>
+                        <div class="motd-dec-b protected" style="background-color: #FFFF55;">
+                            <p>黄色</p>
+                        </div>
+
+                        <div class="motd-dec-b protected gccx" style="background-color: rgba(255,0,0,0.3);">
+                            <p>Mark1</p>
+                        </div>
+                        <div class="motd-dec-b protected gccx" style="background-color: rgba(0,255,0,0.3);">
+                            <p>Mark2</p>
+                        </div>
+                        <div class="motd-dec-b protected gccx" style="background-color: rgba(0,0,255,0.3);">
+                            <p>Mark3</p>
+                        </div>
+                        <div class="motd-dec-b protected gccx" style="background-color: rgba(0,0,0,0.6);">
+                            <p>Mark4</p>
+                        </div>
+                        <div class="motd-dec-b protected gccx" style="background-color: rgb(255, 255, 255);color: black;">
+                            <p>横線</p>
+                        </div>
+                    </div>
+                    <div id="motd-www">
+                        <div id="-motd-dec-wp" style="height: 100%;">
+                            <div class="motd-dec-b protected" style="background-color: #00ca8d; color: white;">
+                                <p style="font-size:16px;">大 lvl.1</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #00ca8d; color: white;">
+                                <p style="font-size:18px;">大 lvl.2</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #00ca8d; color: white;">
+                                <p style="font-size:20px;">大 lvl.3</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
+                                <p style="font-weight:bold">太字</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
+                                <p style="text-decoration:underline">下線</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
+                                <p style="font-style:italic">italic</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
+                                <p style="text-decoration:line-through">中線</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #94ca00; color: white;">
+                                <p class="MCOBF" style="font-family: monospace; font-size:18px;">obf</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #41b3ff; color: white;">
+                                <p style="font-family: monospace; font-size:18px;">改行</p>
+                            </div>
+                            <div class="motd-dec-b protected" style="background-color: #ff008c; color: white;">
+                                <p style="font-size: 80%; font-weight: bolder;">リセット</p>
+                            </div>
+                        </div>
+
+                        <div id="-motd-dec-wp-r" style="height: 100%;">
+                            <div id="manageFileb" class="motd-dec-e protected" style="background-color: #b86200; color: white;">
+                                <p style="font-size:12px;">クラウド</p>
+                            </div>
+                            <div id="addImageb" class="motd-dec-e protected" style="background-color: #c3916a; color: white;">
+                                <p style="font-size:16px;">写真</p>
+                            </div>
+                            <div id="addVideob" class="motd-dec-e protected" style="background-color: #c3916a; color: white;">
+                                <p style="font-size:16px;">動画</p>
+                            </div>
+                            <div id="addLinkb" class="motd-dec-e protected" style="background-color: #5555ee; color: white;">
+                                <p style="font-size:16px;">リンク</p>
+                            </div>
+                            <div id="smthElse" class="motd-dec-e protected" style="background-color: #810077; color: white;">
+                                <p style="font-size:16px;">その他</p>
+                            </div>
+                            <div id="editorSettings" class="motd-dec-e protected" style="background-color: #000000; color: white;">
+                                <p style="font-size:16px;">設定</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="editsplitter">
+                    <div class="editorE" id="aoidjoi" style="display: flex;">
+                        <span class="s9uiahd"></span>
+                        <blockquote id="main-editor-cd"></blockquote>
+                        <blockquote id="main-editor-linen"></blockquote>
+                        <blockquote id="main-editor" contenteditable="plaintext-only" class="ohwdahuoi" spellcheck="false" autocomplete="off"></blockquote>
+                    </div>
+
+                    <div class="editorE" id="--ppo">
+                        <div id="preview_posbtnwrapper" class="flxxt protected">
+                            <button id="pvzoom_in" class="preview_posbtn realshadow flxxt">
+                                <span class="gglmats jioojsdia">zoom_in</span>
+                            </button>
+                            <button id="pvzoom_out" class="preview_posbtn realshadow flxxt">
+                                <span class="gglmats jioojsdia">zoom_out</span>
+                            </button>
+                            <button id="pvarrow_upward" class="preview_posbtn realshadow flxxt">
+                                <span class="gglmats jioojsdia">arrow_upward</span>
+                            </button>
+                            <button id="pvarrow_downward" class="preview_posbtn realshadow flxxt">
+                                <span class="gglmats jioojsdia">arrow_downward</span>
+                            </button>
+                            <button id="pvarrow_power_settings_new" class="preview_posbtn realshadow flxxt">
+                                <span class="gglmats jioojsdia">power_settings_new</span>
+                            </button>
+                        </div>
+                        <p id="preview-device-name" class="protected">Dimentions: iPhone 14 Pro Max</p>
+                        <div id="promax-container">
+                            <div id="article-preview" class="previewer iphone-12-pro-max protected">
+                                <shishiji-mx-overlay-n class="protected"></shishiji-mx-overlay-n>
+                                <shishiji-yd-popup-n id="shishiji-popup-container-n" class="flxxt">
+                                    <div id="shishiji-popup-container-cn">
+                                        <!--popup window content-->
+                                    </div>
+                                </shishiji-yd-popup-n>
+                                <div id="overview-options" style="width: var(--previewer-width); pointer-events: none; position: absolute; top: 20px; z-index: 3002;">
+                                    <div id="overview-gogow-w">
+                                        <aoish-s class="flxxt" style="background-image: url(/resources/button/map.png);"></aoish-s>
+                                    </div>
+                                    <div class="overview-option" id="overview-share-c">
+                                        <aoish-s class="flxxt" style="background-image: url(/resources/button/share.png);"></aoish-s>
+                                    </div>
+                                </div>
+
+                                <div id="ovv-tg-a">
+                                    <div id="overview-close-w" class="flxxt">
+                                        <aoish-s class="flxxt" id="overview-close-c"></aoish-s>
+                                    </div>
+                                    <div id="ovv-tg-b">
+                                        <div class="ovv-tg-bwr">
+                                            <button id="ovv-t-description-sd" class="ovv-tg-be tg-nonuse">
+                                                <h4>概要</h4>
+                                            </button>
+                                        </div>
+                                        <div class="ovv-tg-bwr">
+                                            <button id="ovv-t-details-sd" class="ovv-tg-be tg-nonuse">
+                                                <h4>詳細</h4>
+                                            </button>
+                                        </div>
+                                        <div class="ovv-tg-bwr">
+                                            <button id="ovv-t-else-sd" class="ovv-tg-be tg-nonuse">
+                                                <h4>Misc</h4>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="shishiji-overview" style="top:0px;display:block;width:100%;height:calc(100% - 20px);position:relative;box-shadow: inset 0 15px 10px -10px rgba(0, 0, 0, 0.5);" class="protected eaeeaea eafa">
+                                    <div id="overview-context">
+                                        <div class="headwrapsalan">
+                                            <img id="--art-header" class="article-image article header" alt="">
+                                        </div>
+                                        <div class="article titleC">
+                                            <div class="titleW">
+                                                <img id="--art-icon" class="article-image" style="width: 48px" alt="" aria-label="">
+                                                <h1 id="ctx-title" style="margin: 5px;">${f(d.article.title)}</h1>
+                                            </div>
+                                        </div>
+                                        <div id="event-something-to-do" class="flxxt">
+                                            <div class="something-play realshadow flxxt" id="dvd4"><span>共有</span></div>
+                                            <div class="something-play realshadow flxxt" id="dvd1"><span>マップで表示</span></div>
+                                            <div class="something-play realshadow flxxt" id="dvd2"><span>お気に入り</span></div>
+                                            <div class="something-play realshadow flxxt" id="dvd3"><span>投票</span></div>
+                                        </div>
+                                        <div id="ctx-article" class="article">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

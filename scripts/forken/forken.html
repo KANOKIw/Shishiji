@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/scripts/forken/forkenj.css">
+    <title>59th 獅子児祭 Diverge</title>
+    <link rel="icon" href="images/favicon.ico">
+    <script>
+        (function(d) {
+          var config = {
+            kitId: 'gun5tqp',
+            scriptTimeout: 3000,
+            async: true
+          },
+          h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+        })(document);
+    </script>
+</head>
+<body style="background-color: rgb(21, 32, 43);">
+
+
+    <div id="toppage" style="height: 100vh;">
+        <!-- <p class="title-sentence">SETAGAYA GAKUEN</p> -->
+        <p class="title-sentence">SHISHIJI FES 2024</p>
+        <div id="info">
+        <p class="headline2-5">
+            2024/9/15（日）<br>
+            2024/9/16（月）
+        </p>
+        <p class="headline3">9:00 - 16:00</p>
+
+        <a href="info/"><p class="headline2-5" style="margin-top: 3vh;"><u>Access</u></p></a>
+        </div>
+
+
+        <div id="sns-itiran" style="margin-top: 10vh;">
+            <a href="https://www.instagram.com/shishijifes_official/" target="_blank"><img src="images/insw.png" alt=""></a>
+            <a href="https://twitter.com/shishijifes" target="_blank"><img src="images/twiw.png" alt=""></a>
+            <a href="https://www.youtube.com/@shishijifes./shorts" target="_blank"><img src="images/youw.png" alt=""></a>
+            <a href="https://www.tiktok.com/@shishijifes_official" target="_blank"><img src="images/tikw.png" alt=""></a>
+        </div>
+    </div>
+
+    <div class="ad-pare">
+        <a class="ad-place" id="subgod">
+            
+        </a>
+    </div>
+    <script>
+const adData = [
+    {
+        img: "/scripts/forken/images/ad-red.png",
+        url: ""
+    },
+    {
+        img: "/scripts/forken/images/ad-yellow.png",
+        url: ""
+    },
+    {
+        img: "/scripts/forken/images/ad-green.png",
+        url: ""
+    },
+    {
+        img: "/scripts/forken/images/ad-blue.png",
+        url: ""
+    }
+];
+const interval = (5)*1000;
+
+function suffle(arr){
+    for (var i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+const _adData = suffle(adData);
+var lastImgElm = null;
+var idx = -1;
+
+const chman = ()=>{
+    idx >= _adData.length-1 ? idx = -1 : void(0);
+    
+    const n = ++idx;
+    const imgElm = document.createElement("img");
+
+    imgElm.setAttribute("src", _adData[n].img);
+    imgElm.classList.add("hello_youtube");
+    document.getElementById("subgod").setAttribute("href", _adData[n].url);
+
+    document.getElementById("subgod").appendChild(imgElm);
+
+    if (lastImgElm){
+        +function(_lelm){
+            _lelm.classList.add("see_you_next_time");
+            setTimeout(()=>_lelm.remove(), 1000);
+        }(lastImgElm);
+    }
+    lastImgElm = imgElm;
+};
+
+chman();
+setInterval(chman, interval);
+    </script>
+
+    <div id="info">
+        <p class="headline1">Information</p>
+        <p class="text">ご案内</p>
+        <p class="headline2" style="margin-top: 4vh;">Date</p>
+        <p class="text">開催日時</p>
+        <p class="headline3">
+            2024/9/15（日）<br>
+            2024/9/16（月）
+        </p>
+        <p class="headline3">9:00 - 16:00</p>
+        <p class="headline2" style="margin-top: 3vh;">Access</p>
+        <p class="text">アクセス</p>
+        <p class="headline3">世田谷学園 中学校 高等学校</p><br>
+        <p class="text">
+            〒154-0005 東京都世田谷区三宿1-16-31<br>
+            &thinsp;TEL : 03-3411-8661&emsp;FAX : 03-3487-9113<br>
+            ■東急田園都市線・世田谷線／三軒茶屋駅 北口Ｂ 徒歩約10分<br>
+            ■小田急線・京王井の頭線／下北沢駅 徒歩約25分<br>
+            ■京王井の頭線／池ノ上駅 徒歩約20分<br>
+            ■バス／三宿停留所下車 徒歩約5分<br>
+        </p>
+        <img src="images/accessmap.jpg" id="touchable">
+    </div>
+
+
+
+
+
+</body>
+</html>

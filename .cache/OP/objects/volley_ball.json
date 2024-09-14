@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "バレーボール部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#cbc500",
+        "content": "§z世田学生と一緒にソフトバレーボールをしましょう！\n\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.png"
+        },
+        "venue": "アリーナ(体育館)",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 484,
+            "y": 1325
+        },
+        "images": {
+            "icon": "image_1.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "volley_ball"
+}

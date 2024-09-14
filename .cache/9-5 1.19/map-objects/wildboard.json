@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "ワールドボードゲーム",
+        "subtitle": "",
+        "core_grade": "4年生",
+        "theme_color": "#000000",
+        "content": "ワールドボードゲームでは世界のボードゲームの§r§b展示§rと§r§d人数限定§rで§b体験§rを行います。\n1回約15〜20分で楽しめるボードゲームを用意していますので是非来てください。\n§0§r§v§v§z§eボードゲーム体験の案内§r§v当日教室にて整理券を配布します。順番に案内します\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "6D, 後ろ側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "wildboard"
+}

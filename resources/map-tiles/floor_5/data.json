@@ -1,0 +1,9 @@
+{
+    "tile_width": 1000,
+    "tile_height": 1000,
+    "xrange": 2,
+    "yrange": 2,
+    "width": 1000,
+    "height": 1000,
+    "format": "tile_{0}_{1}.png"
+}

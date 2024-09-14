@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CreateUser",
+            "request": "launch",
+            "mainClass": "CreateUser",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "TestDatabaseDriver",
+            "request": "launch",
+            "mainClass": "TestDatabaseDriver",
+            "projectName": ""
+        },
+        {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "chrome",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Launch via NPM",
+            "request": "launch",
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
+            "runtimeExecutable": "npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "type": "java",
+            "name": "jjj",
+            "request": "launch",
+            "mainClass": "jjj",
+            "projectName": "Bungeecord_25f17ad4"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}

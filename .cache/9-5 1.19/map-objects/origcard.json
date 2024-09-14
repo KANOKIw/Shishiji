@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "オリジナルカードゲーム対戦会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "\n§r§v§z当団体では、僕達が趣向を凝らしたオリジナル§r§zのカードゲーム、§r§z§c§lヒーローカードゲーム\n§r§zの対戦会を実施しております。\n§v必ず楽しませるので、ぜひお越しください。\n§v詳しくは下記のルールとサンプル画像をチェックしてみてください。\n∫:IMG-S=image_3.png-W=100;∫\n∫:IMG-S=image_4.png-W=100;∫\n∫:IMG-S=image_2.jpg-W=100;∫\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "6D, 黒板側",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "origcard"
+}

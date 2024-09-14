@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "生物部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#96d35f",
+        "content": "§z生き物の展示とみんなが楽しめる簡単な参加型の実験を行います！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_3.jpeg"
+        },
+        "venue": "生物講義室・実験室（放光館４階)",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 548,
+            "y": 143
+        },
+        "images": {
+            "icon": "image_2.webp"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "seibutsubu"
+}

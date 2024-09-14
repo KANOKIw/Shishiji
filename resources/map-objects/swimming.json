@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "Aqua Riders(水泳部)",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§b§a§b§l§y§b透明なボールに飛び込んで水面を駆け抜けろ！§r§z§v§b§y§l\n§z§l§r透明なボールに入って、水上を歩く感覚を楽しめる新体験‼§v\n\n整理券を配布中！受付で整理券をGETしてこのチャンスを逃すな！§v\n\n水泳部が誇る自慢のアトラクション！§v\n\n未知のスリルを今すぐ体験せよ！！！∫:IMG-S=image_1.jpeg-W=100;∫∫:VIDEO-S=video_0.MP4-W=100;∫\n",
+        "crowd_status": 2,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_2.jpeg"
+        },
+        "venue": "武道館階段前",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 699,
+            "y": 1314
+        },
+        "images": {
+            "icon": "image_4.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "swimming"
+}

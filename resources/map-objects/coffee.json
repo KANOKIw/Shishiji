@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "コーヒーカップ",
+        "subtitle": "",
+        "core_grade": "4年生",
+        "theme_color": "#000000",
+        "content": "§z私たちは昨年好評だった§v§y§3コーヒーカップ\n§r§zをやります！§v§z陸上部員が本気で回しますので§v是非、おこしください\n∫:IMG-S=image_0.jpeg-W=100;∫\n",
+        "crowd_status": 0,
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_3.jpeg"
+        },
+        "venue": "4F",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1322,
+            "y": 262
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "coffee"
+}

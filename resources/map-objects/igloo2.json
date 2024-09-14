@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "Seta impossible",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#1a0a52",
+        "content": "§yや§rばい今日も寝落ちしてしまった！小テストで満点取らないと親にスマホ没収されるのに！そんな君は休み時間中に先生のカバンから模範解答をこっそり盗み出そうと考えた。幸い、先生は一コマ前の質問対応をしていてカバンに注目していない。今がチャンスだ！先生に見つからないように模範解答を奪取せよ！\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.jpeg"
+        },
+        "venue": "3A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1476,
+            "y": 244
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "3F"
+    },
+    "discriminator": "igloo2"
+}

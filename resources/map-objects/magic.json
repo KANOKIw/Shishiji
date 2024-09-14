@@ -1,0 +1,36 @@
+{
+    "article": {
+        "title": "Magic life",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§y§lお客様全員に不思議な体験を。§v§v§r§z我らマジック同好会は毎年1000人以上のお客様に来て頂いており、「面白かった」「すごかった」と多くの嬉しい評価をいただいております。§v§zそして今回のサロンマジック(通常よりも大掛かりなマジック)では例年よりも上をいく最高のマジックを披露します！！！ぜひご覧あれ！！!\n",
+        "crowd_status": 0,
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "4E",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 1159,
+            "y": 274
+        },
+        "images": {
+            "icon": "image_2.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "4F"
+    },
+    "discriminator": "magic"
+}

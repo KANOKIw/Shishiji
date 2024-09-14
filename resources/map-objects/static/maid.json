@@ -1,0 +1,22 @@
+{
+    "object": {
+        "type": {
+            "event": "drink",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 470,
+            "y": 1200
+        },
+        "images": {
+            "icon": "icon.png"
+        },
+        "size": {
+            "width": 75,
+            "height": 75
+        },
+        "floor": "3F",
+        "open_screen": "drink_screen"
+    },
+    "discriminator": "maid"
+}

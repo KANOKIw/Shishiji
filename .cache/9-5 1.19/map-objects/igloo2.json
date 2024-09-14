@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "３ネンアグミ",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#1a0a52",
+        "content": "謎の組織に薬を飲まされ、ヴァンパイアになってしまったあなた、組織を追いかけ、遂に人間に戻るための薬の場所を突き止めた。薬の場所は古い研究所、窓から差し込む光を避けながら、研究所の謎を解き、薬を見つけて、人間に戻ろう！",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_6.png"
+        },
+        "venue": "3A",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_7.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "igloo2"
+}

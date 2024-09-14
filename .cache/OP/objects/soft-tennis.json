@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "ソフトテニス部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#2bff01",
+        "content": "§zソフトテニスの体験を行います！\n§v優しい先輩がボールの打ち方を丁寧に教えます！\n§v初心者でも楽しめる内容なので是非お越しください！\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.jpeg"
+        },
+        "venue": "野球部室内練習場",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 2459,
+            "y": 2043
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "soft-tennis"
+}

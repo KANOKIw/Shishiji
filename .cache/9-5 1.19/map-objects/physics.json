@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "物理部",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#767cb9",
+        "content": "\n§y§a§lセタゴラスイッチ2024§r\n\n§v§l展示場所：放光館4階 物理実験室・講義室§r\n§v 放光館1階から、もしくは本館(発心館)３階の渡り廊下を通り、\n放光館の階段を上ってください。\n§v§v物理部では、生徒が身近にあるもので創作した\n§vピタゴラ装置『§l§eセタゴラスイッチ§r』を実演。\n§v装置が動いているのを、目の前で観ることができます！\n§v§vその他にも、人気ゲームの§l§eイライラ棒§rの体験や、\n新展示の§l§eマーブルコースター§rの展示もしています。\n§v§v§z§b§l物理部のSNS§r\n\n§v#:LINK-H=https://youtube.com/@shishiji.physics?si=lMXW_wzQIVLJtIuX-T=YouTube;#\n§v#:LINK-H=https://x.com/setagakuphysics?s=21&t=1RxbnXoDaQn5RWblstgueQ-T=X(旧Twitter);#\n§v#:LINK-H=https://www.instagram.com/shishiji.physics?igsh=OHlsdXViZXZ2ZHBk&utm_source=qr-T=Instagram;#\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_1.png"
+        },
+        "venue": "物理実験室",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_0.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "physics"
+}

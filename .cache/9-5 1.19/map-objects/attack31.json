@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "アタック31",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#000000",
+        "content": "§y§e§n§l卓球🏓§r§y§o§e§nのストラックアウトが登場！！\n§r§v§b§z２種類の難易度のストラックアウトに挑戦して完全制覇を目指そう！\n§v§z⭐️自由台もあるよ⭐️\n",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "Handwritten",
+        "custom_tr": [],
+        "images": {
+            "header": "image_4.jpeg"
+        },
+        "venue": "卓球場",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 0,
+            "y": 0
+        },
+        "images": {
+            "icon": "image_3.png"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "attack31"
+}

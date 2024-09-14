@@ -1,0 +1,47 @@
+[
+    {
+        "title": "シルバーに到達する",
+        "required_pt": 5000,
+        "reward": {
+            "image": "/resources/rewards/tickets/pen_fusen_ex.png",
+            "description": "ペンまたは付箋交換券(先着順)",
+            "moredetails": "ペンまたは付箋を受付にて交換することができます。在庫がなくなり次第終了とさせていただきます。",
+            "use_coords": {
+                "x": 1367,
+                "y": 416,
+                "floor": "1F"
+            }
+        },
+        "mission_id": "penfusener"
+    },
+    {
+        "title": "ゴールドに到達する",
+        "required_pt": 10000,
+        "reward": {
+            "image": "/resources/rewards/tickets/bag_ex.png",
+            "description": "バッグ交換券(先着順)",
+            "moredetails": "ざふまるバッグを受付にて交換することができます。在庫がなくなり次第終了とさせていただきます。",
+            "use_coords": {
+                "x": 1367,
+                "y": 416,
+                "floor": "1F"
+            }
+        },
+        "mission_id": "bagger"
+    },
+    {
+        "title": "プラチナに到達する",
+        "required_pt": 20000,
+        "reward": {
+            "image": "/resources/rewards/tickets/jet-skipper.png",
+            "description": "ジェットコースターファストパス",
+            "moredetails": "ジェットコースターの待機列を無視してすぐに乗ることができます。",
+            "use_coords": {
+                "x": 820,
+                "y": 894,
+                "floor": "1F"
+            }
+        },
+        "mission_id": "jetcoaster"
+    }
+]

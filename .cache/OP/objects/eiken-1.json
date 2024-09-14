@@ -1,0 +1,39 @@
+{
+    "article": {
+        "title": "映画研究同好会",
+        "subtitle": "",
+        "core_grade": "...",
+        "theme_color": "#004d00",
+        "content": "§z自分たちで作った映画を§v公開しています！§v世田谷学園の映画制作技術を§vぜひご覧あれ！\n§v§r§z",
+        "crowd_status": {
+            "level": 0,
+            "estimated": 0
+        },
+        "font_family": "",
+        "custom_tr": [],
+        "images": {
+            "header": "image_0.JPG"
+        },
+        "venue": "放光館ホール",
+        "schedule": ""
+    },
+    "object": {
+        "type": {
+            "event": "org",
+            "behavior": "dynamic"
+        },
+        "coordinate": {
+            "x": 515,
+            "y": 232
+        },
+        "images": {
+            "icon": "image_1.jpeg"
+        },
+        "size": {
+            "width": 50,
+            "height": 50
+        },
+        "floor": "1F"
+    },
+    "discriminator": "eiken-1"
+}
