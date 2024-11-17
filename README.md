@@ -1,2 +1,1 @@
-# 獅子祭2024 
-## webアプリ
+# Shishijifes 2024 - Web App
