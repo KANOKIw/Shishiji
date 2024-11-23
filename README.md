@@ -20,3 +20,7 @@ This code is available to everyone under the standard [MIT license](https://gith
 For those who are related to, or interested in this project.
 
 * [How to build and run from the source](https://github.com/KANOKIw/Shishiji/wiki/How-to-Build-and-Run-from-the-source)
+
+## Minecraft
+
+There are some interesting and functional Spigot Plugins among the repository.
