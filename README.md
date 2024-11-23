@@ -23,4 +23,4 @@ For those who are related to, or interested in this project.
 
 ## Minecraft
 
-There are several interesting and functional Spigot Plugins among the repository. Also unique worlds exists out there.
+There are several interesting and functional Spigot Plugins among the repository. Also unique worlds exist out there.
