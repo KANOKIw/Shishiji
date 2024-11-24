@@ -20,3 +20,11 @@ This code is available to everyone under the standard [MIT license](https://gith
 For those who are related to, or interested in this project.
 
 * [How to build and run from the source](https://github.com/KANOKIw/Shishiji/wiki/How-to-Build-and-Run-from-the-source)
+
+## Extensions
+
+You may wonder why the extension directory exists. Two extensions in This directory were made specifically for development purposes. Nevertheless, its usage can be observed in the aforementioned section on [Inheriting](#inheriting).
+
+## Minecraft
+
+There are several interesting and functional Spigot Plugins among the repository. Also unique worlds exist out there.
