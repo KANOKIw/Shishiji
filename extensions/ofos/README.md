@@ -1,6 +1,6 @@
-# Open Specific Files on Startup
+# Open specific files on startup
 
-## Setting
+## setting
 
 * command palette
     create config file:
@@ -14,7 +14,7 @@
         "enabled": true,
         "startupfiles": [
             "app.ts",
-            // open all files in the directory
+            // open all files within the directory
             "src/main/*",
             // exclude server dir, app dir, user/control dir
             "src/sub/*^[server app user/control]"

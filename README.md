@@ -1,6 +1,6 @@
 # Shishiji Fstival Web Application - Diverge - Open Source
 
-[![Engaged model](https://github.com/KANOKIw/Shishiji/raw/main/resources/img/engaged-model-cropped.svg)](https://shishijifes.com)
+[![Engaged Model](https://github.com/KANOKIw/Shishiji/raw/main/resources/img/engaged-model-cropped.svg)](https://shishijifes.com)
 
 ## The Repository
 
@@ -23,7 +23,7 @@ For those who are related to, or interested in this project.
 
 ## Extensions
 
-You may wonder why the directory [extensions](/extensions) exists. Two extensions in This directory were made specifically for development purposes. Nevertheless, its usage can be observed in the aforementioned section on [Inheriting](#inheriting).
+You may wonder why the directory [extensions](/extensions) exists. Two extensions within This directory were made specifically for development purposes. Nevertheless, its usage can be observed in the aforementioned section on [Inheriting](#inheriting).
 
 ## Minecraft
 
