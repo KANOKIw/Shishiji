@@ -1,6 +1,6 @@
 # Shishiji Fstival Web Application - Diverge - Open Source
 
-[![Engaged model](https://kanokiw.com/assets/room/void/958532359.svg)](https://shishijifes.com)
+[![Engaged model](/resources/img/engaged-model-cropped.svg)](https://shishijifes.com)
 
 ## The Repository
 
