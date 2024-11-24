@@ -1,6 +1,7 @@
 # Open Specific Files on Startup
 
 ## Setting
+
 * command palette
     create config file:
     `ofos.createConfigFIle`
