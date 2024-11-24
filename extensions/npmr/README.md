@@ -1,6 +1,7 @@
 # npm ready
 
 ## install npm dependencies
+
 * command palette
     * Install npm dependencies in this workspace
         `npmr.do_workspace_directory`
