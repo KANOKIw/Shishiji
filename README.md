@@ -4,7 +4,7 @@
 
 ## The Repository
 
-This repository is where we (Setagayagakuen Shishiji-festival IT department) developed the [Diverge](https://shishijifes.com). Specifically developed by the Web App development group. 
+This repository is where we ([Setagayagakuen](https://www.setagayagakuen.ac.jp) [Shishiji-festival](https://shishijifes.setagayagakuen.ac.jp) IT department) developed the [Diverge](https://shishijifes.com). Specifically developed by the Web App development group. 
 This code is available to everyone under the standard [MIT license](https://github.com/KANOKIw/Shishiji/blob/main/LICENSE) to help students improve the experience of school festivals.
 
 ## Diverge
@@ -13,7 +13,7 @@ This code is available to everyone under the standard [MIT license](https://gith
   <img alt="shishijifes app in action" src="https://github.com/KANOKIw/Shishiji/raw/main/resources/img/engaged-model-harvested.png">
 </p>
 
-[Diverge](https://shishijifes.com), designed specifically for Shishijifes (Setagayagakuen school festival), provides comprehensive maps of all floors and detailed introductions to individual classroom exhibits and organizational booths. This structure ensures that visitors can easily navigate and familiarize themselves with Shishijifes. Moreover, the application was developed to enhance the overall atmosphere and engagement of Shishijifes. By actively participating in various activities during the festival, users can accumulate in-app points, which may be exchanged for rewards. Additionally, the app enables real-time tracking of live events, further enriching the user experience. Efforts have also been made to ensure that the app is user-friendly not only for visitors but also for the students organizing the event. To this end, a web-based editing application has been developed, allowing participating groups to freely design and customize their articles. This system is aimed at making Shishijifes more convenient and enjoyable for everyone involved.
+[Diverge](https://shishijifes.com), designed specifically for [Shishijifes](https://shishijifes.setagayagakuen.ac.jp) (the school festival of [Setagayagakuen](https://www.setagayagakuen.ac.jp)), provides comprehensive maps of all floors and detailed introductions to individual classroom exhibits and organizational booths. This structure ensures that visitors can easily navigate and familiarize themselves with [Shishijifes](https://shishijifes.setagayagakuen.ac.jp). Moreover, the application was developed to enhance the overall atmosphere and engagement of [Shishijifes](https://shishijifes.setagayagakuen.ac.jp). By actively participating in various activities during the festival, users can accumulate in-app points, which may be exchanged for rewards. Additionally, the app enables real-time tracking of live events, further enriching the user experience. Efforts have also been made to ensure that the app is user-friendly not only for visitors but also for the students organizing the event. To this end, a web-based editing application has been developed, allowing participating groups to freely design and customize their articles. This system is aimed at making [Shishijifes](https://shishijifes.setagayagakuen.ac.jp) more convenient and enjoyable for everyone involved.
 
 ## Inheriting
 
