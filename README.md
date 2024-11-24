@@ -23,7 +23,7 @@ For those who are related to, or interested in this project.
 
 ## Extensions
 
-You may wonder why the directory [extensions](/extensions) exists. Two extensions within This directory were made specifically for development purposes. Nevertheless, its usage can be observed in the aforementioned section on [Inheriting](#inheriting).
+You may wonder why the directory [extensions](/extensions) exists. Two extensions within this directory were made specifically for development purposes. Nevertheless, its usage can be observed in the aforementioned section on [Inheriting](#inheriting).
 
 ## Minecraft
 
