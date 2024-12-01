@@ -118,14 +118,13 @@ function reduceOverview(){
     $("#overview-context").removeClass("fadein");
 
     $(".tg-active").removeClass("tg-active");
-    $("#dvd2").removeClass("ihateky");
     $("#theme-meta").attr("content", "#15202b");
 
     OverView.reduceCoro.forEach(e => e());
     OverView.reduceCoro.length = 0;
     
     Intervals.reduceOverview = setTimeout(() => {
-        OverView.status = "closed";
+        $("#dvd2").removeClass("ihateky");
         $("#ev_property").empty();
         $("#--art-header").attr("src", "");
         kk
@@ -133,6 +132,7 @@ function reduceOverview(){
         .removeClass("reducedown")
         .scrollTop(0)
         .hide();
+        OverView.status = "closed";
     }, 150);
 
     delParam(ParamName.ARTICLE_ID);
