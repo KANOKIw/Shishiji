@@ -27,4 +27,4 @@ You may wonder why the directory [extensions](/extensions) exists. Two extension
 
 ## Minecraft
 
-There are several interesting, functional Spigot Plugins and mcfunctions (language `mcfunction` has been set to linguist-vendored) within the directory [minecraft](/minecraft). Also unique worlds exist out there.
+There are several interesting, functional Spigot Plugins and datapacks (language `mcfunction` has been set to linguist-vendored) within the directory [minecraft](/minecraft). Also unique worlds exist out there.
